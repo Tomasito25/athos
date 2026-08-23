@@ -49,10 +49,21 @@ class AthosHandler(SimpleHTTPRequestHandler):
 
     def send_head(self):
         # ATHOS es una aplicación de una sola página: /orar/regla no es un
-        # archivo, así que se entrega index.html y el enrutador hace el resto.
-        target = self.translate_path(self.path)
-        if not os.path.exists(target) and "." not in Path(self.path.split("?")[0]).name:
-            self.path = "/index.html"
+        # archivo, así que se entrega el index.html que la contiene y el
+        # enrutador hace el resto. Se busca hacia arriba para que también
+        # funcione publicada en una subcarpeta (…/athos/orar/regla).
+        ruta = self.path.split("?")[0]
+        destino = self.translate_path(self.path)
+        if not os.path.exists(destino) and "." not in Path(ruta).name:
+            partes = [p for p in ruta.split("/") if p]
+            while True:
+                candidato = "/" + "/".join([*partes, "index.html"])
+                if os.path.exists(self.translate_path(candidato)):
+                    self.path = candidato
+                    break
+                if not partes:
+                    break
+                partes.pop()
         return super().send_head()
 
     def end_headers(self):
@@ -84,7 +95,11 @@ def main() -> int:
     args = parser.parse_args()
 
     root = Path(args.dir).resolve()
-    if not (root / "index.html").exists():
+    if not root.is_dir():
+        print(f"No existe la carpeta {root}.", file=sys.stderr)
+        return 1
+    # Puede no haber index.html en la raíz si ATHOS cuelga de una subcarpeta.
+    if not (root / "index.html").exists() and not any(root.glob("*/index.html")):
         print(
             f"No encuentro la aplicación compilada en {root}.\n"
             "Ejecuta ./run.sh, que la compila si hace falta.",

@@ -29,9 +29,9 @@ export function PageHead({
   return (
     <header className="page-head">
       {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
-      <div className="row row--between" style={{ alignItems: 'flex-start', gap: 'var(--sp-4)' }}>
+      <div className="page-head__row">
         <h1 className="page-head__title display">{title}</h1>
-        {actions ? <div className="btn-row">{actions}</div> : null}
+        {actions ? <div className="page-head__actions">{actions}</div> : null}
       </div>
       {subtitle ? <p className="page-head__sub">{subtitle}</p> : null}
     </header>

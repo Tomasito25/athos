@@ -15,7 +15,7 @@ import {
   promptInstall,
 } from '@/lib/pwa';
 import { Button, Notice, PageHead, Panel, Section } from '@/components/ui';
-import { IconInstall } from '@/components/icons';
+import { IconInstall, IconUpload } from '@/components/icons';
 import { useUi } from '@/stores/ui';
 import type { BeforeInstallPromptEvent } from '@/stores/ui';
 import es from '@/locales/es';
@@ -46,9 +46,47 @@ export function InstallPage() {
   const guideKey = installGuideKey(platform, browser);
   const guide = GUIDES[guideKey];
 
+  // Sin contexto seguro no hay instalación posible, y conviene decirlo antes
+  // de que el usuario busque un botón que no va a aparecer.
+  const secure = typeof window !== 'undefined' && window.isSecureContext;
+  const href = typeof window !== 'undefined' ? window.location.href : '';
+
+  const compartir = async () => {
+    const datos = { title: 'ATHOS', text: 'Oración · Tradición · Vida', url: href };
+    if (navigator.share) {
+      try {
+        await navigator.share(datos);
+        return;
+      } catch {
+        /* El usuario canceló: no es un error. */
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(href);
+      toast(es.install.copied);
+    } catch {
+      toast(href);
+    }
+  };
+
   return (
     <div className="page page--reading">
       <PageHead title={es.install.title} subtitle={es.install.subtitle} />
+
+      {!secure && !standalone ? (
+        <div className="stack" style={{ marginBottom: 'var(--sp-5)' }}>
+          <Notice variant="warn">
+            <div>
+              <p style={{ fontWeight: 600 }}>{es.install.insecureTitle}</p>
+              <p style={{ marginTop: 'var(--sp-2)' }}>{es.install.insecureText}</p>
+              <p style={{ marginTop: 'var(--sp-2)' }}>{es.install.insecureHow}</p>
+            </div>
+          </Notice>
+          <p className="muted text-sm">
+            {es.install.currentUrl}: <code>{href}</code>
+          </p>
+        </div>
+      ) : null}
 
       {standalone ? (
         <Notice>{es.install.installed}</Notice>
@@ -79,12 +117,19 @@ export function InstallPage() {
             >
               {es.settings.install}
             </Button>
-          ) : (
+          ) : secure ? (
             <p className="muted text-sm" style={{ marginTop: 'var(--sp-3)' }}>
               Tu navegador no ofrece el botón de instalación automática aquí. Sigue las
               instrucciones de abajo.
             </p>
-          )}
+          ) : null}
+
+          <Button block style={{ marginTop: 'var(--sp-3)' }} onClick={compartir}>
+            <IconUpload size={16} /> {es.install.share}
+          </Button>
+          <p className="field__hint" style={{ marginTop: 'var(--sp-2)' }}>
+            {es.install.shareHint}
+          </p>
         </Panel>
       )}
 

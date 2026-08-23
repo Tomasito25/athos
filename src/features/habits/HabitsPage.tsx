@@ -168,22 +168,16 @@ export function HabitsPage() {
                       <td key={date} style={{ padding: 1, textAlign: 'center' }}>
                         <button
                           type="button"
+                          className={`habit-cell habit-cell--${range}`}
                           aria-label={`${habit.name}, ${date}: ${done ? 'hecho' : 'sin marcar'}`}
                           aria-pressed={done}
                           onClick={async () => {
                             await toggleHabit(habit.id, date);
                             entries.reload();
                           }}
-                          style={{
-                            width: range === 'ano' ? 6 : 14,
-                            height: 14,
-                            borderRadius: 2,
-                            background: done ? 'var(--gold)' : 'var(--surface-sunken)',
-                            border: '1px solid var(--line)',
-                            display: 'block',
-                            margin: '0 auto',
-                          }}
-                        />
+                        >
+                          <span aria-hidden="true" data-done={done} />
+                        </button>
                       </td>
                     );
                   })}

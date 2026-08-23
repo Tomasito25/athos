@@ -370,6 +370,15 @@ const es = {
     firefox: 'Firefox',
     firefoxSteps: 'Firefox de escritorio no instala aplicaciones web. ATHOS funcionará igualmente en la pestaña, incluso sin conexión. En Firefox para Android puedes usar «Añadir a pantalla de inicio».',
     why: 'Al instalarla, ATHOS se abre en su propia ventana, sin la barra del navegador, y arranca más rápido.',
+    insecureTitle: 'Aquí no se puede instalar',
+    insecureText:
+      'Los navegadores sólo permiten instalar una aplicación web servida por HTTPS. Esta página se está sirviendo por HTTP sin cifrar, así que ATHOS funcionará mientras la tengas abierta, pero no podrá instalarse ni guardarse para usarla sin conexión.',
+    insecureHow:
+      'Para instalarla en el móvil, ábrela desde una dirección HTTPS. En el ordenador donde tienes ATHOS: «./run.sh --tunel» da una dirección temporal, y «./deploy.sh» la publica de forma permanente.',
+    share: 'Enviar el enlace',
+    shareHint: 'Compártelo contigo mismo para abrirlo en el teléfono.',
+    copied: 'Enlace copiado',
+    currentUrl: 'Estás en',
   },
 
   prayerMode: {

@@ -261,10 +261,10 @@ function RuleItemRow({
     <div className="list-item" style={{ gap: 'var(--sp-3)' }}>
       <button
         type="button"
+        className="check-btn"
         onClick={onToggle}
         aria-pressed={done}
         aria-label={`${done ? 'Desmarcar' : 'Marcar'} ${item.title}`}
-        style={{ display: 'flex', flex: 'none' }}
       >
         <CheckCircle done={done} />
       </button>

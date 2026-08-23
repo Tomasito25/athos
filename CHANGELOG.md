@@ -2,6 +2,33 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.1.0]
+
+### Añadido
+
+- **Lanzador de escritorio**: `run.sh` e `install.sh` con icono en el Escritorio
+  y entrada en el menú; `server.py` sirve la aplicación por HTTP, que es lo que
+  necesita una PWA. Adaptado a KDE Plasma y a GNOME.
+- **Acceso desde el móvil**: `run.sh --movil` muestra la dirección en la red
+  local con código QR, y `run.sh --tunel` abre un túnel HTTPS desde el que el
+  teléfono sí puede instalar ATHOS.
+- **Publicación**: `deploy.sh` prepara la carpeta para cualquier alojamiento
+  estático con HTTPS y publica en GitHub Pages. ATHOS puede colgar de una
+  subcarpeta mediante `ATHOS_BASE`.
+- **Pantallas de arranque de iOS**: diez tamaños enlazados con su media query.
+
+### Corregido
+
+- Los campos de formulario medían 15 px, y iOS ampliaba la página al enfocarlos.
+- Controles pequeños con puntero táctil: botones, segmentados, casillas de la
+  regla de oración (24 px de área) y celdas de hábitos (14 px).
+- El selector de calendario desbordaba la pantalla a 360 px de ancho.
+- `run.sh --stop` no detenía el servidor: `setsid cmd &` devuelve el PID de
+  setsid, no el del proceso servidor.
+- La variable `ATHOS_BROWSER` se ignoraba si el navegador no estaba en la lista
+  de familias conocidas.
+- Dos elementos de navegación compartían nombre accesible.
+
 ## [1.0.0]
 
 Primera versión.

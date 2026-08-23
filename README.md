@@ -36,6 +36,41 @@ clic y se abre como cualquier otro programa. Para quitarlo, `./install.sh --unin
 > La primera vez, GNOME puede mostrar el icono como archivo de texto. Clic
 > derecho → **«Permitir ejecución»** (o «Allow Launching») y queda listo.
 
+### En el móvil
+
+Un teléfono sólo puede **instalar** una aplicación web servida por **HTTPS**.
+De ahí las dos formas:
+
+```bash
+./run.sh --movil    # verla en el teléfono, en tu misma red (HTTP)
+./run.sh --tunel    # instalarla en el teléfono (HTTPS temporal)
+```
+
+- `--movil` muestra un **código QR** con la dirección de este equipo en la red
+  local. El teléfono podrá usar ATHOS, pero no instalarla ni guardarla sin
+  conexión, porque la conexión no va cifrada.
+- `--tunel` abre un túnel de Cloudflare con HTTPS de verdad —te pedirá permiso
+  para descargar `cloudflared`, que no necesita cuenta— y da una dirección
+  desde la que el teléfono **sí puede instalarla**. Una vez instalada, ATHOS
+  vive en el teléfono y sigue funcionando cuando cierres el túnel y apagues el
+  ordenador.
+
+En ambos casos sólo se sirven los archivos de la aplicación. Tu diario, tus
+reglas y tus hábitos viven en el navegador de cada dispositivo y no viajan por
+la red.
+
+Para tenerla de forma **permanente** en el móvil, publícala en un alojamiento
+con HTTPS:
+
+```bash
+./deploy.sh                              # deja dist/ listo para Netlify, Vercel…
+./deploy.sh --base /athos/ --github      # publica en GitHub Pages
+```
+
+`deploy.sh` añade el `.nojekyll` y el `404.html` que GitHub Pages necesita, y
+ATHOS puede colgar de una subcarpeta (`usuario.github.io/athos/`) sin tocar
+nada más.
+
 ### Otras opciones
 
 ```bash
@@ -341,6 +376,15 @@ Verificado en Brave 151 (Chromium) sobre el servidor de `run.sh`:
   pinta y permite navegar a rutas profundas como `/leer/salterio/50`, que
   muestra el salmo entero.
 - IndexedDB: 43 oraciones, 151 salmos, 60 santos y 31 084 versículos.
+
+Y en emulación de teléfono (360×740, 375×667, 393×852 y apaisado 740×360, con
+puntero táctil), recorriendo las 25 pantallas de la aplicación: sin desbordes
+horizontales, sin campos por debajo de 16 px y sin controles por debajo de
+40 px.
+
+También verificado publicada en una subcarpeta (`/athos/`): manifest sin
+errores, Service Worker con el ámbito correcto y enlaces profundos
+funcionando.
 
 ---
 

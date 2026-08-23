@@ -1,7 +1,7 @@
 {
   "name": "athos",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "ATHOS — Oración · Tradición · Vida. PWA ortodoxa offline-first.",
   "type": "module",
   "license": "AGPL-3.0-or-later",
@@ -19,7 +19,8 @@
     "test:watch": "vitest",
     "icons": "node scripts/generate-icons.mjs",
     "build:bible": "node scripts/build-bible.mjs",
-    "check": "npm run lint && npm run typecheck && npm run test && npm run build"
+    "check": "npm run lint && npm run typecheck && npm run test && npm run build",
+    "deploy": "./deploy.sh"
   },
   "dependencies": {
     "dexie": "^4.4.5",
@@ -46,6 +47,7 @@
     "fake-indexeddb": "^6.2.5",
     "globals": "^17.11.0",
     "jsdom": "^30.0.1",
+    "qrcode": "^1.5.4",
     "sharp": "^0.35.3",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.67.0",

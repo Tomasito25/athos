@@ -8,7 +8,15 @@ const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 
   version: string;
 };
 
+/**
+ * Ruta base de la que cuelga la aplicación. Por defecto la raíz del dominio;
+ * con ATHOS_BASE=/athos/ se puede publicar en una subcarpeta, como hace
+ * GitHub Pages en `usuario.github.io/athos/`.
+ */
+const base = process.env.ATHOS_BASE || '/';
+
 export default defineConfig({
+  base,
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version),
     __BUILD_DATE__: JSON.stringify(new Date().toISOString().slice(0, 10)),
@@ -44,15 +52,15 @@ export default defineConfig({
       strategies: 'generateSW',
       manifestFilename: 'manifest.webmanifest',
       manifest: {
-        id: '/',
+        id: base,
         name: 'ATHOS — Oración · Tradición · Vida',
         short_name: 'ATHOS',
         description:
           'Horologion digital, libro de oración, biblioteca ortodoxa, calendario litúrgico y diario espiritual. Funciona sin conexión.',
         lang: 'es',
         dir: 'ltr',
-        start_url: '/?source=pwa',
-        scope: '/',
+        start_url: `${base}?source=pwa`,
+        scope: base,
         display: 'standalone',
         display_override: ['window-controls-overlay', 'standalone', 'minimal-ui'],
         orientation: 'any',
@@ -60,17 +68,17 @@ export default defineConfig({
         background_color: '#14100C',
         categories: ['books', 'lifestyle', 'education'],
         icons: [
-          { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
-          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
-          { src: '/icons/maskable-192.png', sizes: '192x192', type: 'image/png', purpose: 'maskable' },
-          { src: '/icons/maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
-          { src: '/icons/icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
+          { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+          { src: 'icons/maskable-192.png', sizes: '192x192', type: 'image/png', purpose: 'maskable' },
+          { src: 'icons/maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+          { src: 'icons/icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
         ],
         shortcuts: [
-          { name: 'Oraciones', short_name: 'Orar', url: '/orar/oraciones?source=shortcut', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
-          { name: 'Regla de oración', short_name: 'Regla', url: '/orar/regla?source=shortcut', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
-          { name: 'Oración de Jesús', short_name: 'Jesús', url: '/orar/oracion-de-jesus?source=shortcut', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
-          { name: 'Calendario', short_name: 'Calendario', url: '/calendario?source=shortcut', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
+          { name: 'Oraciones', short_name: 'Orar', url: `${base}orar/oraciones?source=shortcut`, icons: [{ src: 'icons/icon-192.png', sizes: '192x192' }] },
+          { name: 'Regla de oración', short_name: 'Regla', url: `${base}orar/regla?source=shortcut`, icons: [{ src: 'icons/icon-192.png', sizes: '192x192' }] },
+          { name: 'Oración de Jesús', short_name: 'Jesús', url: `${base}orar/oracion-de-jesus?source=shortcut`, icons: [{ src: 'icons/icon-192.png', sizes: '192x192' }] },
+          { name: 'Calendario', short_name: 'Calendario', url: `${base}calendario?source=shortcut`, icons: [{ src: 'icons/icon-192.png', sizes: '192x192' }] },
         ],
       },
       workbox: {
@@ -93,14 +101,14 @@ export default defineConfig({
           'icons/icon.svg',
         ],
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
-        navigateFallback: '/index.html',
+        navigateFallback: `${base}index.html`,
         navigateFallbackDenylist: [/^\/api\//],
         cleanupOutdatedCaches: true,
         clientsClaim: false,
         skipWaiting: false,
         runtimeCaching: [
           {
-            urlPattern: ({ url }) => url.pathname.startsWith('/fonts/'),
+            urlPattern: ({ url }) => url.pathname.startsWith(`${base}fonts/`),
             handler: 'CacheFirst',
             options: {
               cacheName: 'athos-fonts-v1',
@@ -109,7 +117,7 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: ({ url }) => url.pathname.startsWith('/content/'),
+            urlPattern: ({ url }) => url.pathname.startsWith(`${base}content/`),
             handler: 'StaleWhileRevalidate',
             options: {
               cacheName: 'athos-content-v1',

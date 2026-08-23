@@ -90,4 +90,7 @@ export const routes: RouteObject[] = [
   },
 ];
 
-export const router = createBrowserRouter(routes);
+export const router = createBrowserRouter(routes, {
+  // Permite publicar ATHOS en una subcarpeta (usuario.github.io/athos/).
+  basename: import.meta.env.BASE_URL,
+});

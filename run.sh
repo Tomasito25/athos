@@ -16,6 +16,8 @@ mkdir -p "$DATA_DIR"
 
 OPEN_BROWSER=1
 ACTION="run"
+BIND_HOST="127.0.0.1"
+SHOW_QR=0
 
 for arg in "$@"; do
   case "$arg" in
@@ -23,16 +25,31 @@ for arg in "$@"; do
     --stop)    ACTION="stop" ;;
     --status)  ACTION="status" ;;
     --rebuild) ACTION="rebuild" ;;
+    --movil|--móvil|--lan)
+      # Accesible desde el teléfono, en la misma red.
+      BIND_HOST="0.0.0.0"; SHOW_QR=1; OPEN_BROWSER=0 ;;
+    --tunel|--túnel|--https)
+      ACTION="tunel"; SHOW_QR=1; OPEN_BROWSER=0 ;;
     -h|--help)
       cat <<'HELP'
 Uso: run.sh [opciones]
 
   (sin opciones)   Arranca el servidor y abre ATHOS
   --no-browser     Sólo arranca el servidor (ábrelo tú en el navegador)
+  --movil          Accesible desde el teléfono en tu misma red, con código QR
+  --tunel          Dirección HTTPS pública temporal: permite INSTALARLA en el móvil
   --rebuild        Vuelve a compilar antes de arrancar
   --status         Indica si ATHOS está corriendo
   --stop           Detiene el servidor
   --help           Muestra esta ayuda
+
+Sobre el móvil:
+  --movil    sirve ATHOS en tu red local por HTTP. El teléfono podrá usarla,
+             pero NO instalarla ni guardarla sin conexión: los navegadores
+             sólo permiten instalar una aplicación web servida por HTTPS.
+  --tunel    levanta un túnel con HTTPS de verdad, así que el teléfono sí
+             puede instalarla. La dirección es temporal y pública mientras
+             el túnel esté abierto.
 
 Variables de entorno:
   ATHOS_PORT       Puerto local (por defecto 8788)
@@ -64,6 +81,44 @@ notice() {
 }
 
 port_open() { (exec 3<>"/dev/tcp/127.0.0.1/$PORT") >/dev/null 2>&1; }
+
+lan_ip() {
+  ip -4 route get 1.1.1.1 2>/dev/null | grep -oP 'src \K[\d.]+' | head -1 \
+    || ip -4 addr show scope global 2>/dev/null | grep -oP 'inet \K[\d.]+' | head -1
+}
+
+copiar_al_portapapeles() {
+  if command -v wl-copy >/dev/null 2>&1; then printf '%s' "$1" | wl-copy 2>/dev/null && return 0; fi
+  if command -v xclip  >/dev/null 2>&1; then printf '%s' "$1" | xclip -selection clipboard 2>/dev/null && return 0; fi
+  if command -v xsel   >/dev/null 2>&1; then printf '%s' "$1" | xsel --clipboard 2>/dev/null && return 0; fi
+  return 1
+}
+
+mostrar_qr() {
+  local url="$1" node_bin=""
+  if command -v node >/dev/null 2>&1; then node_bin=node
+  elif [[ -x "$HOME/.local/node/bin/node" ]]; then node_bin="$HOME/.local/node/bin/node"
+  fi
+  if [[ -n "$node_bin" && -f "$APP_DIR/scripts/qr.mjs" ]]; then
+    "$node_bin" "$APP_DIR/scripts/qr.mjs" "$url" 2>/dev/null && return 0
+  fi
+  return 1
+}
+
+anunciar_url() {
+  local url="$1" nota="${2:-}" ancho linea
+  ancho=$(( ${#url} + 4 ))
+  linea="$(printf '─%.0s' $(seq 1 "$ancho"))"
+  echo
+  echo "  ┌${linea}┐"
+  printf '  │  %s  │\n' "$url"
+  echo "  └${linea}┘"
+  [[ -n "$nota" ]] && echo "  $nota"
+  copiar_al_portapapeles "$url" && echo "  (copiada al portapapeles)"
+  echo
+  mostrar_qr "$url" || echo "  Apunta con la cámara del móvil o teclea la dirección."
+  echo
+}
 is_athos()  { command -v curl >/dev/null 2>&1 && curl -fsS --max-time 2 "$URL" 2>/dev/null | grep -q "ATHOS"; }
 
 # Quién escucha en el puerto, por si el archivo de PID se perdió.
@@ -95,6 +150,37 @@ stop_running() {
   return "$stopped"
 }
 
+cloudflared_bin() {
+  command -v cloudflared 2>/dev/null && return 0
+  [[ -x "$DATA_DIR/cloudflared" ]] && { echo "$DATA_DIR/cloudflared"; return 0; }
+  return 1
+}
+
+descargar_cloudflared() {
+  local dest="$DATA_DIR/cloudflared"
+  local url="https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64"
+  cat <<MSG
+
+Para dar al móvil una dirección HTTPS hace falta 'cloudflared', un programa
+de Cloudflare que abre un túnel temporal. No requiere cuenta.
+
+  Se descargaría de: $url
+  Se guardaría en:   $dest
+  Tamaño: unos 35 MB. No se instala nada en el sistema.
+
+MSG
+  read -r -p "¿Descargarlo ahora? [s/N] " respuesta
+  case "$respuesta" in
+    s|S|si|Si|sí|Sí|y|Y) ;;
+    *) echo "De acuerdo, no se descarga nada."; return 1 ;;
+  esac
+  command -v curl >/dev/null 2>&1 || { echo "Falta curl." >&2; return 1; }
+  echo "Descargando…"
+  curl -fL# -o "$dest.tmp" "$url" || { rm -f "$dest.tmp"; echo "La descarga falló." >&2; return 1; }
+  chmod +x "$dest.tmp" && mv "$dest.tmp" "$dest"
+  echo "$dest"
+}
+
 case "$ACTION" in
   stop)
     if stop_running; then echo "ATHOS detenido."; else echo "No había ningún servidor de ATHOS en marcha."; fi
@@ -103,6 +189,62 @@ case "$ACTION" in
     if port_open && is_athos; then echo "ATHOS está corriendo en $URL"; else echo "ATHOS no está corriendo."; fi
     exit 0 ;;
 esac
+
+if [[ "$ACTION" == "tunel" ]]; then
+  command -v python3 >/dev/null 2>&1 || fail "Falta python3."
+  [[ -f "$APP_DIR/dist/index.html" ]] || fail "ATHOS no está compilada. Ejecuta ./run.sh primero."
+
+  CF="$(cloudflared_bin || true)"
+  if [[ -z "$CF" ]]; then
+    CF="$(descargar_cloudflared)" || exit 1
+    CF="$(echo "$CF" | tail -1)"
+  fi
+
+  if ! port_open; then
+    rm -f "$PID_FILE"
+    setsid python3 "$APP_DIR/server.py" --port "$PORT" --dir "$APP_DIR/dist" \
+      --host 127.0.0.1 --pid-file "$PID_FILE" >"$LOG_FILE" 2>&1 &
+    for _ in $(seq 1 100); do port_open && break; sleep 0.05; done
+    port_open || fail "No se pudo arrancar el servidor. Revisa $LOG_FILE"
+  fi
+
+  echo "Abriendo el túnel… (Ctrl+C para cerrarlo)"
+  TUNEL_LOG="$DATA_DIR/tunel.log"
+  : > "$TUNEL_LOG"
+  "$CF" tunnel --no-autoupdate --url "http://127.0.0.1:$PORT" >"$TUNEL_LOG" 2>&1 &
+  TUNEL_PID=$!
+  trap 'kill "$TUNEL_PID" 2>/dev/null || true' EXIT INT TERM
+
+  PUBLIC_URL=""
+  for _ in $(seq 1 60); do
+    PUBLIC_URL="$(grep -oE 'https://[a-z0-9-]+\.trycloudflare\.com' "$TUNEL_LOG" | head -1 || true)"
+    [[ -n "$PUBLIC_URL" ]] && break
+    kill -0 "$TUNEL_PID" 2>/dev/null || break
+    sleep 1
+  done
+
+  if [[ -z "$PUBLIC_URL" ]]; then
+    echo "No se obtuvo dirección pública. Detalle en $TUNEL_LOG" >&2
+    exit 1
+  fi
+
+  anunciar_url "$PUBLIC_URL" "HTTPS: el móvil SÍ puede instalar ATHOS desde aquí."
+  cat <<'MSG'
+  En el teléfono:
+    · Android (Chrome):  menú ⋮ → «Instalar aplicación»
+    · iPhone (Safari):   Compartir → «Añadir a pantalla de inicio»
+
+  Una vez instalada, ATHOS guarda todo en el teléfono y sigue funcionando
+  cuando cierres este túnel y apagues el ordenador.
+
+  La dirección es pública mientras el túnel esté abierto: sólo se sirven los
+  archivos de la aplicación, nunca tus datos, que viven en cada dispositivo.
+
+  Ctrl+C para cerrar el túnel.
+MSG
+  wait "$TUNEL_PID"
+  exit 0
+fi
 
 command -v python3 >/dev/null 2>&1 || fail "Falta python3. Instálalo con: sudo apt install python3"
 
@@ -149,6 +291,13 @@ fi
 # ---------------------------------------------------------------------------
 # Servidor
 # ---------------------------------------------------------------------------
+if [[ "$BIND_HOST" != "127.0.0.1" ]] && port_open; then
+  # El servidor en marcha sólo escucha en localhost: hay que rearrancarlo
+  # para que el móvil pueda llegar.
+  echo "Reiniciando el servidor para que sea accesible desde la red…"
+  stop_running >/dev/null || true
+fi
+
 STARTED_HERE=0
 if port_open; then
   if is_athos; then
@@ -160,7 +309,7 @@ Ciérralo o usa otro puerto:  ATHOS_PORT=8899 ./run.sh"
 else
   rm -f "$PID_FILE"
   setsid python3 "$APP_DIR/server.py" --port "$PORT" --dir "$APP_DIR/dist" \
-    --pid-file "$PID_FILE" >"$LOG_FILE" 2>&1 &
+    --host "$BIND_HOST" --pid-file "$PID_FILE" >"$LOG_FILE" 2>&1 &
   STARTED_HERE=1
   for _ in $(seq 1 100); do port_open && break; sleep 0.05; done
   SERVER_PID="$(cat "$PID_FILE" 2>/dev/null || listener_pid)"
@@ -173,6 +322,26 @@ stop_server() {
     rm -f "$PID_FILE"
   fi
 }
+
+if [[ "$SHOW_QR" == 1 ]]; then
+  IP="$(lan_ip)"
+  [[ -n "$IP" ]] || fail "No he podido averiguar la dirección de este equipo en la red."
+  anunciar_url "http://${IP}:${PORT}/" "Abre esa dirección en el navegador del teléfono."
+  cat <<'MSG'
+  Ojo: al ir por HTTP y no por HTTPS, el teléfono podrá USAR ATHOS pero no
+  instalarla ni guardarla para usarla sin conexión. Para eso:
+
+      ./run.sh --tunel
+
+  Sólo se sirven los archivos de la aplicación. Tus datos (diario, reglas,
+  hábitos) viven en el navegador de cada dispositivo y no viajan por la red.
+
+  Ctrl+C para detener el servidor.
+MSG
+  trap 'stop_running >/dev/null' EXIT INT TERM
+  while port_open; do sleep 1; done
+  exit 0
+fi
 
 if [[ "$OPEN_BROWSER" == 0 ]]; then
   echo "ATHOS en ${URL} · Ctrl+C para detener."

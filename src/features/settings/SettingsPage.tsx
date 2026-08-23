@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { CALENDAR_STYLE_LABELS, CALENDAR_STYLE_NOTE } from '@/lib/calendar/liturgical';
-import { DEFAULT_SETTINGS, useSettings } from '@/stores/settings';
+import { useSettings } from '@/stores/settings';
 import { SUPPORTED_LANGUAGES } from '@/lib/i18n';
 import {
   Button,
@@ -197,9 +197,6 @@ export function SettingsPage() {
         los hábitos. Para eso, <Link to="/configuracion/datos">{es.settings.data}</Link>.
       </p>
 
-      <p className="sr-only">
-        Valores por defecto: tema {DEFAULT_SETTINGS.theme}, escala {DEFAULT_SETTINGS.fontScale}.
-      </p>
     </div>
   );
 }

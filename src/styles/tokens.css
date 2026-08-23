@@ -1,0 +1,197 @@
+/* ============================================================
+   ATHOS — sistema de diseño
+   Paleta inspirada en la iconografía bizantina, el pergamino,
+   la madera de los monasterios y el oro envejecido.
+   El dorado se usa exclusivamente como acento.
+   ============================================================ */
+
+:root {
+  /* ---- Escala tipográfica --------------------------------- */
+  --font-serif: 'EB Garamond', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia,
+    'Times New Roman', serif;
+  --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, sans-serif;
+  --font-body: var(--font-ui);
+
+  --user-font-scale: 1;
+  --user-line-height: 1.65;
+
+  --text-xs: calc(0.75rem * var(--user-font-scale));
+  --text-sm: calc(0.8125rem * var(--user-font-scale));
+  --text-base: calc(0.9375rem * var(--user-font-scale));
+  --text-md: calc(1.0625rem * var(--user-font-scale));
+  --text-lg: calc(1.25rem * var(--user-font-scale));
+  --text-xl: calc(1.5rem * var(--user-font-scale));
+  --text-2xl: calc(1.875rem * var(--user-font-scale));
+  --text-3xl: calc(2.375rem * var(--user-font-scale));
+
+  --tracking-wide: 0.08em;
+  --tracking-wider: 0.16em;
+  --tracking-widest: 0.28em;
+
+  /* ---- Espaciado ------------------------------------------ */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4rem;
+
+  --radius-sm: 3px;
+  --radius: 5px;
+  --radius-lg: 8px;
+
+  /* ---- Estructura ----------------------------------------- */
+  --sidebar-w: 17rem;
+  --bottom-nav-h: 4.25rem;
+  --topbar-h: 3.5rem;
+  --measure: 34rem;        /* ancho cómodo de lectura */
+  --measure-wide: 46rem;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur-fast: 130ms;
+  --dur: 220ms;
+  --dur-slow: 420ms;
+}
+
+/* ------------------------------------------------------------
+   Modo claro — marfil, pergamino, madera
+   ------------------------------------------------------------ */
+:root,
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --bg: #f2e9d8;
+  --bg-deep: #e8dcc6;
+  --surface: #fbf6ec;
+  --surface-2: #f4ebd9;
+  --surface-sunken: #ece0c9;
+
+  --ink: #2a2018;
+  --ink-strong: #180f09;
+  --ink-soft: #55483a;
+  --ink-muted: #8a7761;
+  --ink-faint: #a3907a;
+
+  --line: #dccdb0;
+  --line-soft: #e7dbc4;
+  --line-strong: #c6b28d;
+
+  --gold: #9a761f;
+  --gold-soft: #b99442;
+  --gold-wash: rgba(154, 118, 31, 0.1);
+
+  --red: #7b2418;
+  --red-soft: #9d3a2a;
+  --red-wash: rgba(123, 36, 24, 0.09);
+
+  --blue: #1f3a5f;
+  --blue-soft: #38577f;
+  --blue-wash: rgba(31, 58, 95, 0.09);
+
+  --green: #2c4634;
+  --green-soft: #446a4f;
+  --green-wash: rgba(44, 70, 52, 0.09);
+
+  --purple: #4a2f52;
+
+  --shadow-sm: 0 1px 2px rgba(42, 32, 24, 0.07);
+  --shadow: 0 2px 10px rgba(42, 32, 24, 0.09);
+  --shadow-lg: 0 12px 40px rgba(42, 32, 24, 0.16);
+
+  --paper: #f7f0e0;
+  --paper-ink: #2b2119;
+
+  --scrim: rgba(30, 22, 15, 0.42);
+}
+
+/* ------------------------------------------------------------
+   Modo oscuro — negro cálido, madera casi negra, azul noche
+   ------------------------------------------------------------ */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg: #100d0a;
+  --bg-deep: #0a0806;
+  --surface: #1a1510;
+  --surface-2: #221b15;
+  --surface-sunken: #14100c;
+
+  --ink: #e6dac6;
+  --ink-strong: #f6eede;
+  --ink-soft: #c2b199;
+  --ink-muted: #92806a;
+  --ink-faint: #6d5e4c;
+
+  --line: #332a20;
+  --line-soft: #261f18;
+  --line-strong: #4a3d2d;
+
+  --gold: #c9a24a;
+  --gold-soft: #a9853a;
+  --gold-wash: rgba(201, 162, 74, 0.12);
+
+  --red: #b2503c;
+  --red-soft: #8e3c2c;
+  --red-wash: rgba(178, 80, 60, 0.13);
+
+  --blue: #6d92c0;
+  --blue-soft: #4a6d99;
+  --blue-wash: rgba(109, 146, 192, 0.13);
+
+  --green: #6d9c7c;
+  --green-soft: #4d7359;
+  --green-wash: rgba(109, 156, 124, 0.13);
+
+  --purple: #9c7aa8;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.7);
+
+  --paper: #171208;
+  --paper-ink: #e3d6bd;
+
+  --scrim: rgba(0, 0, 0, 0.68);
+}
+
+/* ------------------------------------------------------------
+   Alto contraste (accesibilidad)
+   ------------------------------------------------------------ */
+:root[data-contrast='high'][data-theme='light'] {
+  --ink: #14100b;
+  --ink-soft: #241c14;
+  --ink-muted: #4a3d2f;
+  --line: #8a7758;
+  --line-strong: #4a3d2f;
+  --surface: #fffdf7;
+  --bg: #f5efe2;
+  --gold: #6f5310;
+  --red: #5e1a11;
+  --blue: #142842;
+}
+
+:root[data-contrast='high'][data-theme='dark'] {
+  --ink: #fdf7ea;
+  --ink-soft: #ece0c9;
+  --ink-muted: #c3b299;
+  --line: #6a5844;
+  --line-strong: #93805f;
+  --surface: #16110c;
+  --bg: #060403;
+  --gold: #e5c072;
+  --red: #d9765f;
+  --blue: #9ab9e2;
+}
+
+/* Interfaz completamente en serif, si el usuario lo prefiere */
+:root[data-ui-font='serif'] {
+  --font-body: var(--font-serif);
+}

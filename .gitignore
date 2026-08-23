@@ -1,0 +1,16 @@
+node_modules/
+dist/
+dist-ssr/
+dev-dist/
+coverage/
+*.local
+.DS_Store
+.env
+.env.*
+!.env.example
+*.log
+.vite/
+.eslintcache
+
+# Entrada de compilación del corpus bíblico (se descarga con build:bible)
+scripts/data/

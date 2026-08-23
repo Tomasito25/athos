@@ -1,0 +1,251 @@
+/**
+ * Base de datos: siembra, datos del usuario y respeto por lo que el usuario
+ * ya tiene guardado.
+ */
+import { beforeEach, describe, expect, it } from 'vitest';
+import { AthosDatabase, db, getSetting, setSetting } from '@/db/db';
+import { BUILT_IN_HABITS, seedContent, seedUserDefaults } from '@/db/seed';
+import {
+  completionsOn,
+  deleteRule,
+  favoriteId,
+  isFavorite,
+  listFavorites,
+  listHabits,
+  listRules,
+  prayerStats,
+  recordVisit,
+  ruleItems,
+  ruleProgress,
+  saveJournalEntry,
+  saveNote,
+  saveSession,
+  toggleFavorite,
+  toggleHabit,
+  toggleRuleItem,
+} from '@/db/user';
+import { CONTENT_VERSION } from '@/content';
+
+async function reset() {
+  await db.delete();
+  await db.open();
+}
+
+beforeEach(async () => {
+  await reset();
+});
+
+describe('esquema', () => {
+  it('declara todas las tablas de la especificación', () => {
+    const fresh = new AthosDatabase('athos-esquema');
+    const names = fresh.tables.map((t) => t.name);
+    for (const table of [
+      'prayers',
+      'bible_books',
+      'bible_chapters',
+      'bible_verses',
+      'psalms',
+      'saints',
+      'feasts',
+      'liturgical_readings',
+      'liturgies',
+      'akathists',
+      'canons',
+      'church_fathers',
+      'monasteries',
+      'icons',
+      'daily_rules',
+      'rule_items',
+      'habits',
+      'journal_entries',
+      'favorites',
+      'bookmarks',
+      'notes',
+      'settings',
+    ]) {
+      expect(names).toContain(table);
+    }
+    fresh.close();
+  });
+});
+
+describe('siembra del contenido', () => {
+  it('escribe el contenido y registra su versión', async () => {
+    expect(await seedContent()).toBe(true);
+    expect(await db.prayers.count()).toBeGreaterThan(20);
+    expect(await db.saints.count()).toBeGreaterThan(30);
+    expect(await db.monasteries.count()).toBe(20);
+    // 66 libros del canon corto más los 12 deuterocanónicos de la Septuaginta.
+    expect(await db.bible_books.count()).toBe(78);
+    expect(await db.bible_books.filter((b) => b.deuterocanonical === true).count()).toBe(12);
+    expect(await getSetting('content.version', 0)).toBe(CONTENT_VERSION);
+  });
+
+  it('no vuelve a sembrar si la versión no ha cambiado', async () => {
+    await seedContent();
+    expect(await seedContent()).toBe(false);
+  });
+
+  it('una nueva siembra no toca los datos del usuario', async () => {
+    await seedContent();
+    await seedUserDefaults();
+    await saveJournalEntry({
+      id: 'entrada-1',
+      date: '2026-08-23',
+      title: 'Prueba',
+      body: 'Texto',
+      tags: [],
+      favorite: false,
+    });
+
+    await seedContent(true);
+
+    expect(await db.journal_entries.count()).toBe(1);
+    expect((await db.journal_entries.get('entrada-1'))?.title).toBe('Prueba');
+  });
+});
+
+describe('valores iniciales del usuario', () => {
+  it('crea los hábitos y las reglas una sola vez', async () => {
+    expect(await seedUserDefaults()).toBe(true);
+    expect(await db.habits.count()).toBe(BUILT_IN_HABITS.length);
+    expect((await listRules()).length).toBe(2);
+    expect(await seedUserDefaults()).toBe(false);
+  });
+
+  it('si el usuario borra una regla, no reaparece', async () => {
+    await seedUserDefaults();
+    await deleteRule('regla-manana');
+    await seedUserDefaults();
+    expect((await listRules()).map((r) => r.id)).not.toContain('regla-manana');
+  });
+
+  it('al borrar una regla se llevan sus pasos y su historial', async () => {
+    await seedUserDefaults();
+    await toggleRuleItem('2026-08-23', 'regla-manana', 'rm-1');
+    await deleteRule('regla-manana');
+    expect(await db.rule_items.where('ruleId').equals('regla-manana').count()).toBe(0);
+    expect(await db.rule_completions.where('ruleId').equals('regla-manana').count()).toBe(0);
+  });
+});
+
+describe('favoritos', () => {
+  it('alterna y persiste', async () => {
+    const entry = {
+      kind: 'prayer' as const,
+      refId: 'comienzo-habitual',
+      title: 'Comienzo habitual',
+      path: '/orar/oraciones/comienzo-habitual',
+    };
+    expect(await toggleFavorite(entry)).toBe(true);
+    expect(await isFavorite('prayer', 'comienzo-habitual')).toBe(true);
+    expect((await listFavorites('prayer')).length).toBe(1);
+
+    expect(await toggleFavorite(entry)).toBe(false);
+    expect(await isFavorite('prayer', 'comienzo-habitual')).toBe(false);
+  });
+
+  it('la clave evita duplicados entre tipos distintos', () => {
+    expect(favoriteId('prayer', 'x')).not.toBe(favoriteId('psalm', 'x'));
+  });
+});
+
+describe('regla de oración', () => {
+  it('el progreso se guarda por fecha', async () => {
+    await seedUserDefaults();
+    const rule = (await listRules())[0];
+    const items = await ruleItems(rule.id);
+
+    await toggleRuleItem('2026-08-23', rule.id, items[0].id);
+    await toggleRuleItem('2026-08-23', rule.id, items[1].id);
+
+    const hoy = await ruleProgress('2026-08-23', rule);
+    expect(hoy.completed.size).toBe(2);
+    expect(hoy.ratio).toBeCloseTo(2 / items.length);
+
+    const otroDia = await ruleProgress('2026-08-24', rule);
+    expect(otroDia.completed.size).toBe(0);
+  });
+
+  it('marcar dos veces desmarca', async () => {
+    await seedUserDefaults();
+    const rule = (await listRules())[0];
+    const items = await ruleItems(rule.id);
+    await toggleRuleItem('2026-08-23', rule.id, items[0].id);
+    expect(await toggleRuleItem('2026-08-23', rule.id, items[0].id)).toBe(false);
+    expect(await completionsOn('2026-08-23')).toHaveLength(0);
+  });
+});
+
+describe('hábitos', () => {
+  it('se marcan y desmarcan por día', async () => {
+    await seedUserDefaults();
+    expect(await toggleHabit('biblia', '2026-08-23')).toBe(true);
+    expect(await toggleHabit('biblia', '2026-08-23')).toBe(false);
+    expect(await db.habit_entries.count()).toBe(0);
+  });
+
+  it('sólo se listan los activos cuando se pide', async () => {
+    await seedUserDefaults();
+    const activos = await listHabits(true);
+    expect(activos.every((h) => h.active)).toBe(true);
+    expect(activos.length).toBeLessThan((await listHabits()).length);
+  });
+});
+
+describe('oración de Jesús', () => {
+  it('acumula las estadísticas del día y de la semana', async () => {
+    await saveSession({
+      startedAt: '2026-08-23T07:00:00.000Z',
+      endedAt: '2026-08-23T07:10:00.000Z',
+      count: 100,
+      target: 100,
+      durationMs: 600_000,
+      mode: 'jesus-prayer',
+      formulaId: 'jesus-prayer-es',
+    });
+    await saveSession({
+      startedAt: '2026-08-20T07:00:00.000Z',
+      endedAt: '2026-08-20T07:05:00.000Z',
+      count: 33,
+      target: 33,
+      durationMs: 300_000,
+      mode: 'chotki',
+      formulaId: 'chotki',
+    });
+
+    const stats = await prayerStats('2026-08-23');
+    expect(stats.today).toBe(100);
+    expect(stats.week).toBe(133);
+    expect(stats.total).toBe(133);
+    expect(stats.sessions).toBe(2);
+  });
+});
+
+describe('notas e historial', () => {
+  it('guarda notas ligadas a un texto', async () => {
+    const note = await saveNote({
+      targetKind: 'prayer',
+      targetId: 'comienzo-habitual',
+      targetTitle: 'Comienzo habitual',
+      path: '/orar/oraciones/comienzo-habitual',
+      body: 'Rezar más despacio.',
+    });
+    expect(note.id).toBeTruthy();
+    expect(note.createdAt).toBe(note.updatedAt);
+  });
+
+  it('el historial no repite la misma ruta', async () => {
+    await recordVisit({ path: '/leer/salterio/50', title: 'Salmo 50', kind: 'Salterio' });
+    await recordVisit({ path: '/leer/salterio/50', title: 'Salmo 50', kind: 'Salterio' });
+    expect(await db.history.count()).toBe(1);
+  });
+});
+
+describe('ajustes', () => {
+  it('guarda y recupera valores arbitrarios', async () => {
+    await setSetting('prueba', { a: 1 });
+    expect(await getSetting('prueba', null)).toEqual({ a: 1 });
+    expect(await getSetting('inexistente', 'defecto')).toBe('defecto');
+  });
+});

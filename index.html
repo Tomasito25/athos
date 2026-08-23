@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+    <title>ATHOS — Oración · Tradición · Vida</title>
+    <meta
+      name="description"
+      content="ATHOS reúne oraciones, Biblia, Salterio, calendario ortodoxo, santos, ayuno, Divina Liturgia, Padres de la Iglesia, Monte Athos y diario espiritual en una aplicación instalable que funciona sin conexión."
+    />
+    <meta name="author" content="Proyecto ATHOS" />
+    <meta name="application-name" content="ATHOS" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#F4EDE0" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#14100C" media="(prefers-color-scheme: dark)" />
+
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <!-- iOS: modo aplicación independiente -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="ATHOS" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ATHOS" />
+    <meta property="og:title" content="ATHOS — Oración · Tradición · Vida" />
+    <meta
+      property="og:description"
+      content="Horologion digital, libro de oración, biblioteca ortodoxa y calendario litúrgico. Sin cuenta, sin rastreo, funciona sin conexión."
+    />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:image" content="/icons/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- La preferencia de tema se aplica antes del primer pintado para evitar destellos -->
+    <script>
+      (function () {
+        try {
+          var raw = localStorage.getItem('athos.appearance');
+          var s = raw ? JSON.parse(raw) : null;
+          var theme = (s && s.state && s.state.theme) || 'system';
+          var dark =
+            theme === 'dark' ||
+            (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          var root = document.documentElement;
+          root.dataset.theme = dark ? 'dark' : 'light';
+          if (s && s.state) {
+            if (s.state.fontScale) root.style.setProperty('--user-font-scale', String(s.state.fontScale));
+            if (s.state.lineHeight) root.style.setProperty('--user-line-height', String(s.state.lineHeight));
+            if (s.state.highContrast) root.dataset.contrast = 'high';
+            if (s.state.serifUi) root.dataset.uiFont = 'serif';
+          }
+        } catch (e) {
+          document.documentElement.dataset.theme = 'light';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <div id="root">
+      <div class="boot-screen" role="status" aria-live="polite">
+        <div class="boot-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 96" width="44" height="66">
+            <g fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round">
+              <path d="M32 6v84" />
+              <path d="M16 20h32" />
+              <path d="M8 38h48" />
+              <path d="M14 66l36-16" />
+            </g>
+          </svg>
+        </div>
+        <p class="boot-word">ATHOS</p>
+      </div>
+    </div>
+    <noscript>
+      <div style="padding: 2rem; font-family: Georgia, serif">
+        <h1>ATHOS</h1>
+        <p>ATHOS necesita JavaScript para funcionar sin conexión. Por favor, actívalo.</p>
+      </div>
+    </noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

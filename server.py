@@ -76,6 +76,11 @@ def main() -> int:
     parser.add_argument("--port", type=int, default=8788)
     parser.add_argument("--dir", default=str(Path(__file__).resolve().parent / "dist"))
     parser.add_argument("--host", default="127.0.0.1")
+    parser.add_argument(
+        "--pid-file",
+        help="Archivo donde escribir el PID real. `setsid cmd &` devuelve el PID "
+        "de setsid, no el de este proceso, así que lo escribe él mismo.",
+    )
     args = parser.parse_args()
 
     root = Path(args.dir).resolve()
@@ -89,11 +94,16 @@ def main() -> int:
 
     handler = partial(AthosHandler, directory=str(root))
     with ThreadingHTTPServer((args.host, args.port), handler) as httpd:
+        if args.pid_file:
+            Path(args.pid_file).write_text(str(os.getpid()), encoding="utf-8")
         print(f"ATHOS servido en http://{args.host}:{args.port}/")
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:
             print("\nATHOS detenido.")
+        finally:
+            if args.pid_file:
+                Path(args.pid_file).unlink(missing_ok=True)
     return 0
 
 

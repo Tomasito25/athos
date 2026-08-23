@@ -44,17 +44,55 @@ HELP
   esac
 done
 
+# Cuando ATHOS se abre con doble clic no hay terminal donde ver un error,
+# así que los fallos se avisan en pantalla.
+has_tty() { [[ -t 2 ]]; }
+fail() {
+  local msg="$1"
+  echo "$msg" >&2
+  if ! has_tty; then
+    if command -v kdialog >/dev/null 2>&1; then kdialog --title ATHOS --error "$msg" >/dev/null 2>&1 || true
+    elif command -v zenity >/dev/null 2>&1; then zenity --error --title=ATHOS --text="$msg" >/dev/null 2>&1 || true
+    elif command -v notify-send >/dev/null 2>&1; then notify-send -u critical "ATHOS" "$msg" >/dev/null 2>&1 || true
+    fi
+  fi
+  exit 1
+}
+notice() {
+  echo "$1"
+  has_tty || command -v notify-send >/dev/null 2>&1 && notify-send -a ATHOS "ATHOS" "$1" >/dev/null 2>&1 || true
+}
+
 port_open() { (exec 3<>"/dev/tcp/127.0.0.1/$PORT") >/dev/null 2>&1; }
 is_athos()  { command -v curl >/dev/null 2>&1 && curl -fsS --max-time 2 "$URL" 2>/dev/null | grep -q "ATHOS"; }
 
-stop_running() {
-  if [[ -f "$PID_FILE" ]] && kill -0 "$(cat "$PID_FILE")" 2>/dev/null; then
-    kill "$(cat "$PID_FILE")" 2>/dev/null || true
-    rm -f "$PID_FILE"
-    return 0
+# Quién escucha en el puerto, por si el archivo de PID se perdió.
+listener_pid() {
+  if command -v ss >/dev/null 2>&1; then
+    ss -ltnpH "sport = :$PORT" 2>/dev/null | grep -o 'pid=[0-9]*' | head -1 | cut -d= -f2
+  elif command -v lsof >/dev/null 2>&1; then
+    lsof -tiTCP:"$PORT" -sTCP:LISTEN 2>/dev/null | head -1
   fi
-  rm -f "$PID_FILE"
-  return 1
+}
+
+stop_running() {
+  local stopped=1 pid
+  if [[ -f "$PID_FILE" ]]; then
+    pid="$(cat "$PID_FILE")"
+    if [[ -n "$pid" ]] && kill -0 "$pid" 2>/dev/null; then
+      kill "$pid" 2>/dev/null && stopped=0
+    fi
+    rm -f "$PID_FILE"
+  fi
+  if [[ "$stopped" != 0 ]] && port_open; then
+    pid="$(listener_pid)"
+    if [[ -n "$pid" ]] && kill -0 "$pid" 2>/dev/null; then
+      kill "$pid" 2>/dev/null && stopped=0
+    fi
+  fi
+  # Esperar a que el puerto quede libre de verdad.
+  for _ in $(seq 1 40); do port_open || break; sleep 0.05; done
+  return "$stopped"
 }
 
 case "$ACTION" in
@@ -66,7 +104,7 @@ case "$ACTION" in
     exit 0 ;;
 esac
 
-command -v python3 >/dev/null 2>&1 || { echo "Falta python3 (sudo apt install python3)" >&2; exit 1; }
+command -v python3 >/dev/null 2>&1 || fail "Falta python3. Instálalo con: sudo apt install python3"
 
 # ---------------------------------------------------------------------------
 # Compilación, sólo si hace falta
@@ -83,24 +121,21 @@ find_node() {
 build() {
   local extra_path
   if ! extra_path="$(find_node)"; then
-    cat >&2 <<'MSG'
-ATHOS no está compilada y no encuentro Node para compilarla.
+    fail "ATHOS no está compilada y no encuentro Node para compilarla.
 
 Instálalo sin tocar el sistema:
   curl -o /tmp/node.tar.xz https://nodejs.org/dist/v24.19.0/node-v24.19.0-linux-x64.tar.xz
   mkdir -p ~/.local && tar -xf /tmp/node.tar.xz -C ~/.local
   mv ~/.local/node-v24.19.0-linux-x64 ~/.local/node
 
-Y vuelve a ejecutar ./run.sh
-MSG
-    exit 1
+Y vuelve a abrir ATHOS."
   fi
   [[ -n "$extra_path" ]] && export PATH="$extra_path:$PATH"
 
-  echo "Compilando ATHOS (sólo la primera vez)…"
+  notice "Compilando ATHOS… (sólo la primera vez, tarda un minuto)"
   cd "$APP_DIR"
-  [[ -d node_modules ]] || npm install --no-audit --no-fund
-  npm run build
+  [[ -d node_modules ]] || npm install --no-audit --no-fund || fail "Falló la instalación de dependencias."
+  npm run build || fail "Falló la compilación. Ejecuta ./run.sh desde una terminal para ver el detalle."
   cd - >/dev/null
 }
 
@@ -119,19 +154,17 @@ if port_open; then
   if is_athos; then
     echo "ATHOS ya se estaba sirviendo en ${URL}"
   else
-    cat >&2 <<MSG
-El puerto ${PORT} está ocupado por otro programa.
-Ciérralo o usa otro puerto:  ATHOS_PORT=8899 ./run.sh
-MSG
-    exit 1
+    fail "El puerto ${PORT} está ocupado por otro programa.
+Ciérralo o usa otro puerto:  ATHOS_PORT=8899 ./run.sh"
   fi
 else
-  setsid python3 "$APP_DIR/server.py" --port "$PORT" --dir "$APP_DIR/dist" >"$LOG_FILE" 2>&1 &
-  SERVER_PID=$!
-  echo "$SERVER_PID" > "$PID_FILE"
+  rm -f "$PID_FILE"
+  setsid python3 "$APP_DIR/server.py" --port "$PORT" --dir "$APP_DIR/dist" \
+    --pid-file "$PID_FILE" >"$LOG_FILE" 2>&1 &
   STARTED_HERE=1
   for _ in $(seq 1 100); do port_open && break; sleep 0.05; done
-  port_open || { echo "No se pudo arrancar el servidor. Revisa $LOG_FILE" >&2; exit 1; }
+  SERVER_PID="$(cat "$PID_FILE" 2>/dev/null || listener_pid)"
+  port_open || fail "No se pudo arrancar el servidor. Revisa $LOG_FILE"
 fi
 
 stop_server() {
@@ -169,6 +202,8 @@ kind_of() {
   echo other
 }
 BROWSER_KIND="$(kind_of "$BROWSER_BIN")"
+# Un navegador indicado a mano se respeta aunque no se reconozca su familia.
+[[ -n "${ATHOS_BROWSER:-}" && "$BROWSER_KIND" == "other" ]] && BROWSER_KIND="manual"
 
 prepare_gecko_profile() {
   local prof="$DATA_DIR/gecko-profile"
@@ -215,11 +250,14 @@ case "$BROWSER_KIND" in
       --no-first-run --no-default-browser-check --disable-features=Translate \
       >/dev/null 2>&1 || true
     ;;
+  manual)
+    "$BROWSER_BIN" "$URL" >/dev/null 2>&1 || true
+    ;;
   *)
     if command -v xdg-open >/dev/null 2>&1; then
       xdg-open "$URL" >/dev/null 2>&1 || true
     else
-      echo "No se encontró navegador. Abre manualmente: $URL"
+      fail "No se encontró ningún navegador. Abre manualmente: $URL"
     fi
     ;;
 esac

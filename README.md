@@ -13,6 +13,46 @@ Sin cuenta · Sin rastreo · Sin publicidad · Tus datos en tu dispositivo
 
 ---
 
+## Cómo se usa
+
+```bash
+cd athos && ./run.sh
+```
+
+Eso compila la aplicación si hace falta, arranca el servidor local y abre ATHOS
+en su propia ventana. Para usarla sólo hace falta **python3**; Node se necesita
+únicamente para compilar, y `run.sh` lo busca solo en `~/.local/node` si no está
+en el PATH.
+
+### Icono en el escritorio
+
+```bash
+cd athos && ./install.sh
+```
+
+Crea un icono en el Escritorio y una entrada en el menú de aplicaciones: doble
+clic y se abre como cualquier otro programa. Para quitarlo, `./install.sh --uninstall`.
+
+> La primera vez, GNOME puede mostrar el icono como archivo de texto. Clic
+> derecho → **«Permitir ejecución»** (o «Allow Launching») y queda listo.
+
+### Otras opciones
+
+```bash
+./run.sh --no-browser   # sólo el servidor, lo abres tú
+./run.sh --status       # ¿está corriendo?
+./run.sh --stop         # detenerlo
+./run.sh --rebuild      # recompilar y arrancar
+ATHOS_PORT=8899 ./run.sh
+```
+
+> **No abras `dist/index.html` con doble clic.** Un archivo `file://` no es un
+> contexto seguro, así que el Service Worker no se registra y la aplicación no
+> funcionaría sin conexión. ATHOS necesita servirse por HTTP, y de eso se encarga
+> `run.sh`.
+
+---
+
 ## Qué es ATHOS
 
 ATHOS reúne en un solo lugar lo que un cristiano ortodoxo usa a diario:
@@ -67,7 +107,12 @@ para tu plataforma concreta y detección de si ya está instalada.
 
 ## Desarrollo
 
-Requiere **Node 20 o superior**.
+Sólo si vas a tocar el código. Requiere **Node 20 o superior**; en este equipo
+está en `~/.local/node`, así que antepón:
+
+```bash
+export PATH="$HOME/.local/node/bin:$PATH"
+```
 
 ```bash
 npm install
@@ -92,9 +137,9 @@ npm run icons        # regenera iconos, favicon, OG y splash desde el SVG maestr
 npm run build:bible  # convierte una Biblia USFX a los JSON de public/content
 ```
 
-> El Service Worker sólo se registra en la compilación de producción. Para
-> probar el funcionamiento sin conexión usa `npm run build && npm run preview`
-> y desconecta la red en las herramientas de desarrollo.
+> El Service Worker sólo se registra en la compilación de producción, no en
+> `npm run dev`. Para probar el funcionamiento sin conexión usa `./run.sh` y
+> desconecta la red en las herramientas de desarrollo.
 
 ---
 
@@ -284,6 +329,18 @@ Lo que está diseñado pero aún no implementado, dicho sin rodeos:
   aplicación siga viva. Sin servidor no hay push, y así se dice en la interfaz.
 - **Capturas de pantalla** en el manifest, para la interfaz de instalación
   enriquecida de Chrome.
+
+## Comprobado
+
+Verificado en Brave 151 (Chromium) sobre el servidor de `run.sh`:
+
+- Service Worker registrado y activo, con **172 de 172 entradas recuperables**
+  del precaché, incluidos los 67 archivos del texto bíblico y la tipografía.
+- Manifest leído por el navegador **sin errores de parseo**.
+- Con la red del navegador **completamente cortada**: la aplicación recarga,
+  pinta y permite navegar a rutas profundas como `/leer/salterio/50`, que
+  muestra el salmo entero.
+- IndexedDB: 43 oraciones, 151 salmos, 60 santos y 31 084 versículos.
 
 ---
 

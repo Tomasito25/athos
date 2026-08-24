@@ -110,13 +110,18 @@ ATHOS reúne en un solo lugar lo que un cristiano ortodoxo usa a diario:
   búsqueda sin conexión, marcadores y notas.
 - **Salterio** — los ciento cincuenta salmos en la **numeración de los Setenta**,
   la litúrgica, repartidos en los veinte kathismata del Horologion.
-- **Lecturas del día** — Evangelio y Epístola de cada jornada del año, más los
-  propios de Maitines, Vísperas y las Horas, tomados del leccionario bizantino.
+- **Lecturas del día** — Evangelio y Epístola de cada jornada del año con **el
+  texto exacto de la perícopa**, no el capítulo entero, más los propios de
+  Maitines, Vísperas y las Horas.
+- **Estudio** — itinerarios con lecciones y un catálogo de las obras que forman
+  la tradición, con qué son y por qué importan.
 - **Calendario litúrgico** — Pascua calculada con el cómputo juliano, ciclo
   móvil completo, ciclo fijo, santos, fiestas y tono del Octoecos. Calendario
   nuevo o juliano, a elección.
 - **Ayuno** — motor de reglas que resuelve cualquier día del año, con el detalle
   de lo permitido y el aviso de que las normas varían según la tradición.
+- **Santos** — más de 160 conmemoraciones con su vida escrita, repartidas por
+  los doce meses del año.
 - **Biblioteca** — Divina Liturgia y demás oficios, akathistos, cánones, Padres
   de la Iglesia, los veinte monasterios del Monte Athos e iconografía con
   reproducciones de obras históricas.
@@ -290,8 +295,26 @@ Regenerar ambas:
 ./scripts/build-lectionary.sh 2024 2060
 ```
 
-Las referencias se traducen al español y llevan resuelto el libro y el capítulo,
-de modo que cada lectura se abre directamente en la Biblia.
+Las referencias se traducen al español y ATHOS las analiza para mostrar **sólo
+los versículos que se leen**: si el Evangelio del día es «Marcos 3, 6-12», el
+texto empieza en el versículo 6. Las perícopas que saltan de capítulo o que son
+compuestas se marcan y, cuando no se pueden recortar con seguridad, se remite
+al capítulo entero antes que arriesgarse a cortar mal.
+
+### Estudio
+
+Dos cosas distintas en una sección:
+
+- **Itinerarios** con lecciones breves: los primeros pasos en la fe, el Símbolo
+  de la Fe artículo por artículo, los siete Concilios Ecuménicos, la Divina
+  Liturgia explicada y la oración del corazón con los avisos que la propia
+  tradición le pone. Cada lección enlaza sus lecturas dentro de ATHOS y se puede
+  marcar como leída.
+- **Catálogo de obras**: del Horologion a la Filocalia, con qué es cada libro,
+  por qué importa y si ATHOS tiene su texto, un fragmento o sólo la ficha.
+
+Las explicaciones son material de estudio redactado para ATHOS: no son textos
+litúrgicos ni patrísticos, y así se dice.
 
 ### Iconografía
 
@@ -381,12 +404,13 @@ ATHOS distingue tres estados en cada texto: **completo**, **parcial** y
 | Biblia | Completa (RV1909). Los deuterocanónicos figuran con ficha; su texto es pendiente |
 | Salterio | Completo, 150 salmos. El Salmo 151 es pendiente |
 | Oraciones | 45 oraciones; 4 fichas pendientes (Gran Canon, canon de Comunión, Akáthistos) |
-| Santos | 60 conmemoraciones. El Menaion completo es pendiente |
+| Santos | 162 conmemoraciones con su vida, en 147 días del año. El Menaion completo es pendiente |
 | Lecturas del día | **Completas**: los 365 días de 2024 a 2045, en calendario nuevo y juliano, del leccionario bizantino de tradición eslava |
 | Oficios | Estructura completa y partes cantadas; oraciones sacerdotales pendientes |
 | Akathistos y cánones | Fichas completas; la mayoría de los textos, pendientes |
 | Padres | 12 autores con biografía y obras; pasajes breves verificados |
 | Monte Athos | Los 20 monasterios y 6 artículos, completos |
+| Estudio | 5 itinerarios con 37 lecciones y 17 obras catalogadas |
 | Iconografía | 13 fichas con **reproducciones de obras históricas** de Wikimedia Commons, con autor, datación y licencia comprobados |
 
 Esto no es un descuido: es la regla del proyecto. **Antes que un texto
@@ -424,8 +448,6 @@ Lo que está diseñado pero aún no implementado, dicho sin rodeos:
   interfaz está escrito en un componente, pero sólo existe el archivo español.
 - **Notificaciones**: se programan en el dispositivo y sólo suenan mientras la
   aplicación siga viva. Sin servidor no hay push, y así se dice en la interfaz.
-- **Capturas de pantalla** en el manifest, para la interfaz de instalación
-  enriquecida de Chrome.
 
 ## Comprobado
 
@@ -437,7 +459,9 @@ Verificado en Brave 151 (Chromium) sobre el servidor de `run.sh`:
 - Con la red del navegador **completamente cortada**: la aplicación recarga,
   pinta y permite navegar a rutas profundas como `/leer/salterio/50`, que
   muestra el salmo entero.
-- IndexedDB: 43 oraciones, 151 salmos, 60 santos y 31 084 versículos.
+- IndexedDB: 43 oraciones, 151 salmos, 162 santos y 31 084 versículos.
+- Manifest con **capturas reales** de la aplicación, tomadas con
+  `scripts/screenshots.mjs` sobre un navegador sin ventana.
 
 Y en emulación de teléfono (360×740, 375×667, 393×852 y apaisado 740×360, con
 puntero táctil), recorriendo las 25 pantallas de la aplicación: sin desbordes

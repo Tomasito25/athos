@@ -255,6 +255,18 @@ const es = {
     allSaints: 'Todos los santos',
   },
 
+  study: {
+    title: 'Estudio',
+    subtitle: 'Itinerarios y obras para aprender despacio',
+    courses: 'Itinerarios',
+    works: 'Obras',
+    lesson: 'Lección {{n}}',
+    readNow: 'Léelo ahora en ATHOS',
+    openInAthos: 'Abrir en ATHOS',
+    markRead: 'Marcar como leída',
+    progress: '{{done}} de {{total}} lecciones',
+  },
+
   library: {
     title: 'Biblioteca',
     liturgy: 'Divina Liturgia',
@@ -263,6 +275,7 @@ const es = {
     fathers: 'Padres de la Iglesia',
     athos: 'Monte Athos',
     icons: 'Iconografía',
+    study: 'Estudio',
     offices: 'Oficios',
     works: 'Obras',
     monasteries: 'Los veinte monasterios',

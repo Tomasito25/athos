@@ -68,6 +68,9 @@ export const routes: RouteObject[] = [
       { path: 'biblioteca/athos', lazy: page(() => import('@/features/athos/AthosPage'), 'AthosPage') },
       { path: 'biblioteca/athos/monasterio/:monasteryId', lazy: page(() => import('@/features/athos/MonasteryPage'), 'MonasteryPage') },
       { path: 'biblioteca/athos/:articleId', lazy: page(() => import('@/features/athos/AthosArticlePage'), 'AthosArticlePage') },
+      { path: 'biblioteca/estudio', lazy: page(() => import('@/features/study/StudyPage'), 'StudyPage') },
+      { path: 'biblioteca/estudio/obra/:workId', lazy: page(() => import('@/features/study/WorkPage'), 'StudyWorkPage') },
+      { path: 'biblioteca/estudio/:courseId', lazy: page(() => import('@/features/study/CoursePage'), 'CoursePage') },
       { path: 'biblioteca/iconos', lazy: page(() => import('@/features/icons/IconsPage'), 'IconsPage') },
       { path: 'biblioteca/iconos/:iconId', lazy: page(() => import('@/features/icons/IconPage'), 'IconPage') },
 

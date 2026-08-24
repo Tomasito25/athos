@@ -46,6 +46,12 @@ export function ReadHub() {
             title={es.library.fathers}
             meta="Crisóstomo, Basilio, Isaac el Sirio, Palamás…"
           />
+          <ListRow
+            to="/biblioteca/estudio"
+            leading={<IconBook size={20} style={{ color: 'var(--gold)' }} />}
+            title={es.study.title}
+            meta="Itinerarios de estudio y catálogo de obras"
+          />
         </div>
       </Section>
 

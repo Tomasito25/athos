@@ -1,20 +1,20 @@
 /**
  * Lecturas del día.
  *
- * Muestra las perícopas señaladas y, cuando la referencia puede resolverse
- * dentro de la traducción incorporada, el texto completo. Si la entrada del
- * leccionario no existe, se dice, en lugar de mostrar un hueco mudo.
+ * Muestra el texto exacto de cada perícopa —los versículos que se leen, no el
+ * capítulo entero—, y para las referencias compuestas que no se pueden recortar
+ * con seguridad, remite a la Biblia. Si el leccionario no tiene entrada para el
+ * día, se dice, en lugar de mostrar un hueco mudo.
  */
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLiturgicalDay, useToday } from '@/hooks/useLiturgicalDay';
-import { useAsync } from '@/hooks/useAsync';
-import { getChapter } from '@/db/bible';
 import { parseReference } from '@/lib/reference';
 import { LECTIONARY_COVERAGE_NOTE } from '@/content/lectionary';
 import { addDaysIso } from '@/lib/calendar/jdn';
 import { formatLongDate } from '@/lib/format';
-import { Button, Loading, Notice, PageHead, Panel, Section, SourceNote } from '@/components/ui';
+import { Button, Notice, PageHead, Panel, Section, SourceNote } from '@/components/ui';
+import { PericopeText } from '@/components/PericopeText';
 import { IconChevronLeft, IconChevronRight } from '@/components/icons';
 import type { ReadingKind, ReadingRef } from '@/types';
 import es from '@/locales/es';
@@ -38,17 +38,13 @@ const ETIQUETAS: Record<ReadingKind, string> = {
 /** En la Liturgia se leen la Epístola y el Evangelio; lo demás es de otros oficios. */
 const DE_LA_LITURGIA: ReadingKind[] = ['evangelio', 'epistola'];
 
-function ReadingBlock({ reading }: { reading: ReadingRef }) {
-  const [expanded, setExpanded] = useState(false);
+function ReadingBlock({ reading, abierta = false }: { reading: ReadingRef; abierta?: boolean }) {
+  const [expanded, setExpanded] = useState(abierta);
   // El leccionario generado ya trae el libro y el capítulo resueltos; si no,
   // se intenta deducirlos de la referencia escrita.
   const target = reading.passageId
     ? { bookId: reading.passageId.split('.')[0], chapter: Number(reading.passageId.split('.')[1]) }
     : parseReference(reading.reference);
-  const verses = useAsync(
-    () => (expanded && target ? getChapter(target.bookId, target.chapter) : Promise.resolve([])),
-    [expanded, target?.bookId, target?.chapter],
-  );
 
   const label = ETIQUETAS[reading.kind] ?? 'Lectura';
 
@@ -62,37 +58,21 @@ function ReadingBlock({ reading }: { reading: ReadingRef }) {
         {reading.reference}
       </p>
 
-      {target ? (
-        <div className="btn-row">
-          <Button size="sm" onClick={() => setExpanded((value) => !value)}>
-            {expanded ? 'Ocultar el capítulo' : 'Leer el capítulo'}
-          </Button>
+      <div className="btn-row">
+        <Button size="sm" onClick={() => setExpanded((value) => !value)}>
+          {expanded ? 'Ocultar el texto' : 'Leer el pasaje'}
+        </Button>
+        {target ? (
           <Link className="btn btn--sm btn--ghost" to={`/leer/biblia/${target.bookId}/${target.chapter}`}>
-            Abrir en la Biblia
+            Ver el capítulo
           </Link>
-        </div>
-      ) : (
-        <p className="muted text-sm">
-          La referencia no se puede abrir automáticamente: busca el pasaje en la Biblia.
-        </p>
-      )}
+        ) : null}
+      </div>
 
       {expanded ? (
-        verses.loading ? (
-          <Loading />
-        ) : (
-          <div className="prose book-surface" style={{ marginTop: 'var(--sp-4)' }}>
-            <p className="rubric">
-              Se muestra el capítulo completo; la perícopa señalada es {reading.reference}.
-            </p>
-            {verses.data?.map((verse) => (
-              <p key={verse.id}>
-                <span className="verse-num">{verse.verse}</span>
-                {verse.text}
-              </p>
-            ))}
-          </div>
-        )
+        <div style={{ marginTop: 'var(--sp-4)' }}>
+          <PericopeText reference={reading.reference} />
+        </div>
       ) : null}
     </Panel>
   );
@@ -132,7 +112,11 @@ export function ReadingsPage() {
             {day.readings.readings
               .filter((r) => DE_LA_LITURGIA.includes(r.kind))
               .map((reading) => (
-                <ReadingBlock key={`${reading.kind}-${reading.reference}`} reading={reading} />
+                <ReadingBlock
+                  key={`${reading.kind}-${reading.reference}`}
+                  reading={reading}
+                  abierta
+                />
               ))}
           </div>
 

@@ -11,6 +11,7 @@ const SECTIONS = [
   { to: '/biblioteca/padres', title: es.library.fathers, text: 'Crisóstomo, Basilio, Isaac el Sirio, Máximo, Palamás, Silvano.', Icon: IconBook },
   { to: '/biblioteca/athos', title: es.library.athos, text: ATHOS_INTRO, Icon: IconMonastery },
   { to: '/biblioteca/iconos', title: es.library.icons, text: 'Los iconos que la Iglesia venera y lo que significan.', Icon: IconCandle },
+  { to: '/biblioteca/estudio', title: es.library.study, text: 'Itinerarios para estudiar despacio y el catálogo de las obras que forman la tradición.', Icon: IconBook },
 ];
 
 export function LibraryHub() {

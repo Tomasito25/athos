@@ -74,6 +74,14 @@ export default defineConfig({
           { src: 'icons/maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
           { src: 'icons/icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
         ],
+        // Capturas reales de la aplicación, tomadas con scripts/screenshots.
+        // Chrome las usa para la ficha de instalación enriquecida.
+        screenshots: [
+          { src: 'icons/screenshot-mobile.png', sizes: '540x1170', type: 'image/png', form_factor: 'narrow', label: 'El oficio que toca a esta hora, el santo del día y el ayuno' },
+          { src: 'icons/screenshot-mobile-2.png', sizes: '540x1170', type: 'image/png', form_factor: 'narrow', label: 'El oficio de la mañana, con las fórmulas en griego' },
+          { src: 'icons/screenshot-desktop.png', sizes: '1280x800', type: 'image/png', form_factor: 'wide', label: 'ATHOS en escritorio' },
+          { src: 'icons/screenshot-desktop-2.png', sizes: '1280x800', type: 'image/png', form_factor: 'wide', label: 'El calendario litúrgico' },
+        ],
         shortcuts: [
           { name: 'Oraciones', short_name: 'Orar', url: `${base}orar/oraciones?source=shortcut`, icons: [{ src: 'icons/icon-192.png', sizes: '192x192' }] },
           { name: 'Regla de oración', short_name: 'Regla', url: `${base}orar/regla?source=shortcut`, icons: [{ src: 'icons/icon-192.png', sizes: '192x192' }] },

@@ -73,10 +73,21 @@ describe.skipIf(!built)('manifest', () => {
     }
   });
 
-  it('no declara capturas de pantalla inexistentes', () => {
-    const screenshots = (manifest.screenshots ?? []) as Array<{ src: string }>;
+  it('las capturas existen y miden lo que declaran', () => {
+    const screenshots = (manifest.screenshots ?? []) as Array<{
+      src: string;
+      sizes: string;
+      form_factor: string;
+    }>;
+    // Chrome pide al menos una estrecha y una ancha para la ficha enriquecida.
+    expect(screenshots.some((s) => s.form_factor === 'narrow')).toBe(true);
+    expect(screenshots.some((s) => s.form_factor === 'wide')).toBe(true);
+
     for (const shot of screenshots) {
-      expect(existsSync(resolve(dist, shot.src.replace(/^\//, '')))).toBe(true);
+      const archivo = shot.src.replace(/^\//, '');
+      expect(existsSync(resolve(dist, archivo)), `falta ${archivo}`).toBe(true);
+      const [width, height] = shot.sizes.split('x').map(Number);
+      expect(pngSize(archivo), archivo).toEqual({ width, height });
     }
   });
 });

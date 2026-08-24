@@ -121,3 +121,23 @@
   font-size: 0.86em;
   white-space: nowrap;
 }
+
+/* Marca de capítulo dentro de una perícopa que salta de uno a otro. */
+.chapter-mark {
+  display: inline-block;
+  min-width: 1.4em;
+  margin-inline-end: 0.3em;
+  font-family: var(--font-serif);
+  font-size: 1.35em;
+  line-height: 1;
+  color: var(--red);
+}
+
+/* Versión breve, para el resumen de Inicio. */
+.prose--compact {
+  font-size: var(--text-base);
+}
+
+.prose--compact p + p {
+  margin-top: 0.5em;
+}

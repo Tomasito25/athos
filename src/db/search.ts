@@ -10,6 +10,7 @@ import { normalize, score, snippet, stripTags, tokenize } from '@/lib/text';
 import { db } from './db';
 import { formatReference } from './bible';
 import { BOOKS_BY_ID } from '@/content/bible';
+import { STUDY_COURSES, STUDY_WORKS } from '@/content/study';
 
 export const KIND_LABELS: Record<SearchKind, string> = {
   prayer: 'Oraciones',
@@ -23,6 +24,7 @@ export const KIND_LABELS: Record<SearchKind, string> = {
   monastery: 'Monasterios',
   icon: 'Iconos',
   athos: 'Monte Athos',
+  study: 'Estudio',
 };
 
 /** Orden en que se presentan los grupos de resultados. */
@@ -36,6 +38,7 @@ const KIND_ORDER: SearchKind[] = [
   'canon',
   'father',
   'athos',
+  'study',
   'monastery',
   'icon',
 ];
@@ -237,6 +240,59 @@ export async function searchAll(query: string, options: SearchOptions = {}): Pro
           subtitle: i.place,
           snippet: snippet(i.meaning, tokens),
           path: `/biblioteca/iconos/${i.id}`,
+          score: s,
+        });
+      }
+    }
+  }
+
+  /* ---- Estudio ---- */
+  if (wanted.has('study')) {
+    for (const curso of STUDY_COURSES) {
+      const cuerpo = `${curso.subtitle} ${curso.lessons
+        .map((l) => `${l.title} ${l.body.join(' ')}`)
+        .join(' ')}`;
+      const s = score(tokens, cuerpo, curso.title);
+      if (s > 0) {
+        push('study', {
+          id: curso.id,
+          kind: 'study',
+          title: curso.title,
+          subtitle: curso.subtitle,
+          snippet: snippet(cuerpo, tokens),
+          path: `/biblioteca/estudio/${curso.id}`,
+          score: s,
+        });
+      }
+      // Las lecciones se buscan por separado: son la unidad útil.
+      for (const leccion of curso.lessons) {
+        const texto = leccion.body.join(' ');
+        const sl = score(tokens, texto, leccion.title);
+        if (sl > 0) {
+          push('study', {
+            id: `${curso.id}/${leccion.id}`,
+            kind: 'study',
+            title: leccion.title,
+            subtitle: curso.title,
+            snippet: snippet(texto, tokens),
+            path: `/biblioteca/estudio/${curso.id}#${leccion.id}`,
+            score: sl,
+          });
+        }
+      }
+    }
+
+    for (const obra of STUDY_WORKS) {
+      const cuerpo = `${obra.author} ${obra.what} ${obra.why}`;
+      const s = score(tokens, cuerpo, obra.title);
+      if (s > 0) {
+        push('study', {
+          id: obra.id,
+          kind: 'study',
+          title: obra.title,
+          subtitle: `${obra.author} · ${obra.century}`,
+          snippet: snippet(obra.what, tokens),
+          path: obra.path ?? `/biblioteca/estudio/obra/${obra.id}`,
           score: s,
         });
       }

@@ -7,6 +7,7 @@
  * la ficha queda marcada como pendiente y no se inventa el texto.
  */
 import type { Saint, SaintCategory, SourceMeta, TextBlock } from '@/types';
+import { MORE_SAINTS } from './saints-more';
 
 const bio: SourceMeta = {
   source: 'Reseña histórica redactada para ATHOS a partir de fuentes hagiográficas comunes',
@@ -127,7 +128,12 @@ const troparia: Record<string, TextBlock[]> = {
   ],
 };
 
-export const SAINTS: Saint[] = seeds.map((s) => ({
+/** Primera tanda y ampliación, ordenadas por su día del calendario. */
+const allSeeds: SaintSeed[] = [...seeds, ...MORE_SAINTS].sort((a, b) =>
+  a.day === b.day ? a.name.localeCompare(b.name, 'es') : a.day.localeCompare(b.day),
+);
+
+export const SAINTS: Saint[] = allSeeds.map((s) => ({
   id: s.id,
   name: s.name,
   fullName: s.fullName,
@@ -172,5 +178,8 @@ export function saintsOnDay(monthDay: string): Saint[] {
 }
 
 export const SAINTS_COVERAGE_NOTE =
-  'El santoral de ATHOS reúne una selección de conmemoraciones. El Menaion completo puede ' +
-  'añadirse importando datos desde Configuración → Datos.';
+  `El santoral de ATHOS reúne ${SAINTS.length} conmemoraciones con su vida escrita. El Menaion ` +
+  'completo tiene varias por día y puede añadirse importando datos desde Configuración → Datos.';
+
+/** Días del año que ya tienen alguna conmemoración incorporada. */
+export const SAINT_DAYS = new Set(SAINTS.map((s) => s.day));

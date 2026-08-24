@@ -13,6 +13,7 @@ import { SEASON_LABELS } from '@/lib/calendar/liturgical';
 import { formatLongDate, greeting, toneLabel } from '@/lib/format';
 import { ButtonLink, ListRow, Panel, ProgressBlocks, Rule, Section, Tag } from '@/components/ui';
 import { OfficeInvitation } from '@/features/office/OfficeInvitation';
+import { PericopeText } from '@/components/PericopeText';
 import { IconCandle, IconChotki, IconScroll, OrthodoxCross } from '@/components/icons';
 import { WEEKDAYS } from '@/lib/format';
 import { isFastDay } from '@/lib/calendar/fasting';
@@ -121,25 +122,35 @@ export function HomePage() {
 
       <Rule />
 
-      {/* ---------- Lecturas ---------- */}
-      <Section title={es.home.readings} action={{ label: 'Ver', to: '/leer/lecturas' }} id="lecturas">
-        <Panel variant="quiet">
-          <div className="stack stack--tight">
-            <div>
-              <p className="eyebrow">{es.home.gospel}</p>
-              <p className="display" style={{ fontSize: 'var(--text-md)' }}>
-                {gospel?.reference ?? es.app.pending}
-              </p>
+      {/* ---------- El Evangelio del día ---------- */}
+      <Section title={es.home.gospel} action={{ label: 'Lecturas', to: '/leer/lecturas' }} id="evangelio">
+        {gospel ? (
+          <Link to="/leer/lecturas" className="panel" style={{ display: 'block', textDecoration: 'none' }}>
+            <p className="display" style={{ fontSize: 'var(--text-lg)' }}>
+              {gospel.reference}
+            </p>
+            {gospel.note ? <p className="rubric">{gospel.note}</p> : null}
+            <div style={{ marginTop: 'var(--sp-3)' }}>
+              <PericopeText reference={gospel.reference} compact maxVerses={4} />
             </div>
-            <hr />
-            <div>
-              <p className="eyebrow">{es.home.epistle}</p>
-              <p className="display" style={{ fontSize: 'var(--text-md)' }}>
-                {epistle?.reference ?? es.app.pending}
-              </p>
-            </div>
-          </div>
-        </Panel>
+            <p className="section__action" style={{ marginTop: 'var(--sp-2)', paddingInline: 0 }}>
+              Leer entero
+            </p>
+          </Link>
+        ) : (
+          <Panel variant="quiet">
+            <p className="muted text-sm">{es.app.pending}</p>
+          </Panel>
+        )}
+
+        {epistle ? (
+          <Panel variant="quiet" style={{ marginTop: 'var(--sp-3)' }}>
+            <p className="eyebrow">{es.home.epistle}</p>
+            <p className="display" style={{ fontSize: 'var(--text-md)', marginTop: 'var(--sp-1)' }}>
+              {epistle.reference}
+            </p>
+          </Panel>
+        ) : null}
       </Section>
 
       {/* ---------- Regla de oración ---------- */}

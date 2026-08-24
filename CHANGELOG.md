@@ -2,6 +2,22 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.4.0]
+
+### Añadido
+
+- **El Evangelio del día muestra el texto exacto**: sólo los versículos de la
+  perícopa, no el capítulo entero. El analizador entiende las más de mil
+  referencias del leccionario, incluidos los cruces de capítulo y los tramos
+  sueltos; lo que no puede recortar con seguridad remite al capítulo.
+- Inicio muestra los primeros versículos del Evangelio, no sólo la cita.
+- **102 santos nuevos con su vida**, hasta 162 repartidos por los doce meses.
+- **Sección de estudio**: cinco itinerarios con treinta y siete lecciones
+  —primeros pasos, el Credo, los siete Concilios, la Liturgia explicada y la
+  oración del corazón— y un catálogo de diecisiete obras. Con progreso por
+  lección y búsqueda global.
+- **Capturas reales en el manifest**, tomadas con `scripts/screenshots.mjs`.
+
 ## [1.3.0]
 
 ### Añadido

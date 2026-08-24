@@ -672,7 +672,8 @@ export type SearchKind =
   | 'canon'
   | 'monastery'
   | 'icon'
-  | 'athos';
+  | 'athos'
+  | 'study';
 
 export interface SearchResult {
   id: string;

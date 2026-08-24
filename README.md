@@ -247,10 +247,16 @@ Brian Glass—, que la implementa por completo, la ejecuta en local y guarda el
 resultado para veintidós años (2024-2045). Así el cálculo es el de la fuente, y
 la aplicación sigue funcionando sin conexión y sin depender de ningún servidor.
 
-Regenerar la tabla:
+Se generan **dos tablas**, una por calendario: en el juliano las fiestas fijas
+—y sus lecturas— caen trece días más tarde, mientras que la Pascua y todo el
+ciclo móvil coinciden, porque son la misma jornada para toda la Iglesia
+ortodoxa. La del calendario que no uses no se descarga.
+
+Regenerar ambas:
 
 ```bash
-./scripts/build-lectionary.sh
+./scripts/build-lectionary.sh          # 2024-2045
+./scripts/build-lectionary.sh 2024 2060
 ```
 
 Las referencias se traducen al español y llevan resuelto el libro y el capítulo,
@@ -345,7 +351,7 @@ ATHOS distingue tres estados en cada texto: **completo**, **parcial** y
 | Salterio | Completo, 150 salmos. El Salmo 151 es pendiente |
 | Oraciones | 45 oraciones; 4 fichas pendientes (Gran Canon, canon de Comunión, Akáthistos) |
 | Santos | 60 conmemoraciones. El Menaion completo es pendiente |
-| Lecturas del día | **Completas**: los 365 días, del leccionario bizantino de tradición eslava |
+| Lecturas del día | **Completas**: los 365 días de 2024 a 2045, en calendario nuevo y juliano, del leccionario bizantino de tradición eslava |
 | Oficios | Estructura completa y partes cantadas; oraciones sacerdotales pendientes |
 | Akathistos y cánones | Fichas completas; la mayoría de los textos, pendientes |
 | Padres | 12 autores con biografía y obras; pasajes breves verificados |

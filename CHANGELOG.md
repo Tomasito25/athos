@@ -2,6 +2,32 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.2.0]
+
+### Añadido
+
+- **Lecturas de todos los días del año.** Evangelio y Epístola de cada jornada,
+  más los propios de Maitines, Vísperas y las Horas, del leccionario bizantino
+  de tradición eslava. Se generan ejecutando en local
+  [orthocal](https://github.com/brianglass/orthocal-python) (MIT, de Brian
+  Glass), que implementa el cómputo completo —salto lucano incluido—, y se
+  guardan para 2024-2045 en los dos calendarios. Reproducible con
+  `scripts/build-lectionary.sh`.
+- Cada lectura lleva resuelto el libro y el capítulo, así que se abre
+  directamente en la Biblia.
+- **Trece reproducciones de iconos** de Wikimedia Commons, con su autor,
+  datación, licencia y enlace al origen. Ninguna generada por ordenador;
+  `scripts/fetch-icons.py` comprueba la licencia contra la API de Commons y
+  cada imagen se verificó a la vista.
+
+### Retirado
+
+- **Diario espiritual y hábitos.** Con ellos se van la pantalla de Seguridad, el
+  bloqueo por PIN y el cifrado, que sólo servían al diario. Favoritos,
+  marcadores y notas se mantienen.
+- Al actualizar, lo que hubiera en el diario y los hábitos queda archivado y
+  puede descargarse una vez desde Configuración → Datos antes de borrarse.
+
 ## [1.1.0]
 
 ### Añadido

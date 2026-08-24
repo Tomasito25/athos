@@ -167,6 +167,60 @@ describe.skipIf(!hayLeccionario)('leccionario diario', () => {
   });
 });
 
+const rutaJuliano = resolve(raiz, 'public/content/lectionary/lectionary-juliano.json');
+const hayJuliano = existsSync(rutaJuliano);
+const juliano: Archivo | null = hayJuliano
+  ? (JSON.parse(readFileSync(rutaJuliano, 'utf-8')) as Archivo)
+  : null;
+
+const refDe = (datos: Archivo, iso: string, tipo: string) => {
+  const [a, m, d] = iso.split('-');
+  const indice = datos.years[a]?.[`${m}-${d}`];
+  return indice === undefined
+    ? undefined
+    : datos.readings[indice].find((r) => r.kind === tipo)?.reference;
+};
+
+describe.skipIf(!hayJuliano || !hayLeccionario)('leccionario del calendario juliano', () => {
+  it('se declara como juliano y cubre los mismos años', () => {
+    expect(juliano!.calendar).toBe('juliano');
+    expect(Object.keys(juliano!.years)).toEqual(Object.keys(leccionario!.years));
+  });
+
+  it('la Pascua cae el mismo día civil en ambos calendarios', () => {
+    // La Pascua es una sola jornada para toda la Iglesia ortodoxa.
+    for (const pascua of ['2025-04-20', '2026-04-12', '2027-05-02']) {
+      expect(refDe(juliano!, pascua, 'evangelio'), pascua).toBe('Juan 1, 1-17');
+      expect(refDe(leccionario!, pascua, 'evangelio'), pascua).toBe('Juan 1, 1-17');
+    }
+  });
+
+  it('las fiestas fijas se desplazan trece días', () => {
+    // Natividad: 25 de diciembre juliano = 7 de enero civil.
+    expect(refDe(juliano!, '2027-01-07', 'evangelio')).toBe(
+      refDe(leccionario!, '2026-12-25', 'evangelio'),
+    );
+    // Teofanía: 6 de enero juliano = 19 de enero civil.
+    expect(refDe(juliano!, '2027-01-19', 'evangelio')).toBe(
+      refDe(leccionario!, '2027-01-06', 'evangelio'),
+    );
+  });
+
+  it('difiere del gregoriano en buena parte del año', () => {
+    let distintos = 0;
+    for (const [anio, dias] of Object.entries(leccionario!.years)) {
+      for (const [md, indice] of Object.entries(dias)) {
+        const otro = juliano!.years[anio]?.[md];
+        if (otro === undefined) continue;
+        const a = leccionario!.readings[indice].map((r) => r.reference).join('|');
+        const b = juliano!.readings[otro].map((r) => r.reference).join('|');
+        if (a !== b) distintos += 1;
+      }
+    }
+    expect(distintos).toBeGreaterThan(3000);
+  });
+});
+
 describe('iconografía', () => {
   it('las imágenes tienen procedencia completa', () => {
     const conImagen = ICONS.filter((i) => i.image);

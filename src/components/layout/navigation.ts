@@ -3,9 +3,7 @@ import type { ComponentType, SVGProps } from 'react';
 import {
   IconBook,
   IconCalendar,
-  IconHabits,
   IconHome,
-  IconJournal,
   IconLibrary,
   IconMore,
   IconPray,
@@ -32,8 +30,6 @@ export const PRIMARY_NAV: NavItem[] = [
 ];
 
 export const PERSONAL_NAV: NavItem[] = [
-  { to: '/diario', label: es.journal.title, icon: IconJournal },
-  { to: '/habitos', label: es.habits.title, icon: IconHabits },
   { to: '/favoritos', label: es.favorites.title, icon: IconStar },
 ];
 
@@ -45,5 +41,5 @@ export const MORE_NAV: NavItem = { to: '/mas', label: es.nav.more, icon: IconMor
 
 export const SIDEBAR_GROUPS: Array<{ label?: string; items: NavItem[] }> = [
   { items: PRIMARY_NAV },
-  { label: es.nav.personal, items: PERSONAL_NAV },
+  { label: es.favorites.title, items: PERSONAL_NAV },
 ];

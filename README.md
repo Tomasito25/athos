@@ -4,8 +4,8 @@
 
 **Oración · Tradición · Vida**
 
-Horologion digital, libro de oración, biblioteca ortodoxa, calendario litúrgico
-y diario espiritual, en una aplicación web instalable que funciona sin conexión.
+Horologion digital, libro de oración, biblioteca ortodoxa y calendario
+litúrgico, en una aplicación web instalable que funciona sin conexión.
 
 Sin cuenta · Sin rastreo · Sin publicidad · Tus datos en tu dispositivo
 
@@ -55,9 +55,9 @@ De ahí las dos formas:
   vive en el teléfono y sigue funcionando cuando cierres el túnel y apagues el
   ordenador.
 
-En ambos casos sólo se sirven los archivos de la aplicación. Tu diario, tus
-reglas y tus hábitos viven en el navegador de cada dispositivo y no viajan por
-la red.
+En ambos casos sólo se sirven los archivos de la aplicación. Tu regla de
+oración, tus favoritos y tus notas viven en el navegador de cada dispositivo y
+no viajan por la red.
 
 Para tenerla de forma **permanente** en el móvil, publícala en un alojamiento
 con HTTPS:
@@ -102,16 +102,17 @@ ATHOS reúne en un solo lugar lo que un cristiano ortodoxo usa a diario:
   búsqueda sin conexión, marcadores y notas.
 - **Salterio** — los ciento cincuenta salmos en la **numeración de los Setenta**,
   la litúrgica, repartidos en los veinte kathismata del Horologion.
+- **Lecturas del día** — Evangelio y Epístola de cada jornada del año, más los
+  propios de Maitines, Vísperas y las Horas, tomados del leccionario bizantino.
 - **Calendario litúrgico** — Pascua calculada con el cómputo juliano, ciclo
   móvil completo, ciclo fijo, santos, fiestas y tono del Octoecos. Calendario
   nuevo o juliano, a elección.
 - **Ayuno** — motor de reglas que resuelve cualquier día del año, con el detalle
   de lo permitido y el aviso de que las normas varían según la tradición.
 - **Biblioteca** — Divina Liturgia y demás oficios, akathistos, cánones, Padres
-  de la Iglesia, los veinte monasterios del Monte Athos e iconografía.
-- **Diario espiritual** — privado, con bloqueo por PIN y cifrado AES-GCM opcional.
-- **Hábitos** — registro sin rachas destacadas, sin medallas y sin comparación
-  con nadie.
+  de la Iglesia, los veinte monasterios del Monte Athos e iconografía con
+  reproducciones de obras históricas.
+- **Favoritos, marcadores y notas** — sobre cualquier oración, salmo o pasaje.
 
 ### Qué **no** hace
 
@@ -233,12 +234,46 @@ Verificado contra las fechas publicadas de la Pascua ortodoxa entre 2018 y 2034,
 y comprobado para el intervalo 1900-2200: siempre en domingo y siempre entre el
 22 de marzo y el 25 de abril julianos.
 
+### Lecturas del día
+
+El leccionario bizantino no se puede calcular con una tabla sencilla: intervienen
+el salto lucano, las semanas que se añaden o se omiten según la fecha de la
+Pascua, los domingos antes y después de las grandes fiestas y los propios del
+Menaion.
+
+ATHOS **no reimplementa esa lógica**. Usa
+[orthocal](https://github.com/brianglass/orthocal-python) —licencia MIT, de
+Brian Glass—, que la implementa por completo, la ejecuta en local y guarda el
+resultado para veintidós años (2024-2045). Así el cálculo es el de la fuente, y
+la aplicación sigue funcionando sin conexión y sin depender de ningún servidor.
+
+Regenerar la tabla:
+
+```bash
+./scripts/build-lectionary.sh
+```
+
+Las referencias se traducen al español y llevan resuelto el libro y el capítulo,
+de modo que cada lectura se abre directamente en la Biblia.
+
+### Iconografía
+
+Las reproducciones proceden de **Wikimedia Commons** y son fotografías o
+escaneos de obras concretas: el Pantocrátor del Sinaí del siglo VI, la
+Theotokos de Vladímir, la Trinidad de Rubliov, los mosaicos de la Capilla
+Palatina… **Ninguna imagen está generada por ordenador.**
+
+`scripts/fetch-icons.py` comprueba la licencia contra la API de Commons antes de
+descargar nada y rechaza los archivos sin autoría ni fecha documentadas; cada
+imagen se verificó además a la vista, una por una. La aplicación muestra el
+autor, la datación, la licencia y un enlace a la página de origen.
+
 ### Funcionamiento sin conexión
 
 | Capa | Qué guarda |
 | --- | --- |
-| **Precaché del Service Worker** | Aplicación, tipografía latina y **la Biblia completa** (172 entradas, ~6 MB) |
-| **Caché en tiempo de ejecución** | Subconjuntos griego y cirílico de las fuentes; corpus adicional |
+| **Precaché del Service Worker** | Aplicación, tipografía latina, **la Biblia completa**, el leccionario de 22 años y las miniaturas de los iconos (182 entradas, ~7,8 MB) |
+| **Caché en tiempo de ejecución** | Subconjuntos griego y cirílico de las fuentes, imágenes grandes de los iconos y el leccionario juliano |
 | **IndexedDB** | Corpus sembrado, texto bíblico indexado y **todos los datos del usuario** |
 
 Tras el primer arranque, ATHOS indexa la Escritura en segundo plano (31 084
@@ -254,9 +289,8 @@ Dexie sobre IndexedDB, esquema versionado. Tablas de contenido —`prayers`,
 `bible_books`, `bible_chapters`, `bible_verses`, `psalms`, `saints`, `feasts`,
 `liturgical_readings`, `liturgies`, `akathists`, `canons`, `church_fathers`,
 `monasteries`, `athos_articles`, `icons`— y tablas del usuario —`daily_rules`,
-`rule_items`, `rule_completions`, `habits`, `habit_entries`, `journal_entries`,
-`favorites`, `bookmarks`, `notes`, `history`, `jesus_prayer_sessions`,
-`reading_progress`, `settings`.
+`rule_items`, `rule_completions`, `favorites`, `bookmarks`, `notes`, `history`,
+`jesus_prayer_sessions`, `reading_progress`, `settings`.
 
 La siembra del contenido es idempotente y **sólo escribe en las tablas de
 contenido**: los datos del usuario nunca se sobrescriben.
@@ -268,19 +302,11 @@ contenido**: los datos del usuario nunca se sobrescriben.
 Todo permanece en el dispositivo. La única petición de red que hace ATHOS es la
 descarga inicial de sus propios recursos.
 
-El diario puede protegerse con PIN y cifrarse. Lo que eso significa, exactamente:
-
-- El PIN **no se guarda**: se almacena un resumen SHA-256 con sal.
-- Con el cifrado activo, el cuerpo de las entradas se cifra con **AES-GCM** y una
-  clave derivada del PIN mediante **PBKDF2-SHA256, 310 000 iteraciones**.
-- La clave existe **sólo en memoria** mientras el diario está desbloqueado.
-- **Si olvidas el PIN, las entradas cifradas se pierden.** No hay recuperación.
-- Los títulos, fechas y etiquetas **no** se cifran: hacen falta para ordenar y buscar.
-- Un PIN corto no resiste a alguien con acceso al dispositivo y tiempo. Protege
-  de una mirada casual, no de un ataque decidido.
-
-El desbloqueo biométrico **está detectado pero no implementado**: la pantalla de
-Seguridad lo indica en lugar de fingir que funciona.
+ATHOS no incluye diario ni registro de hábitos: se retiraron a propósito para
+que la aplicación sea un libro de oración y una biblioteca, no un cuaderno
+personal. Lo que guarda —la regla de oración, los favoritos, los marcadores, las
+notas y las sesiones de oración— vive en el dispositivo y puede exportarse en
+cualquier momento.
 
 ---
 
@@ -319,12 +345,12 @@ ATHOS distingue tres estados en cada texto: **completo**, **parcial** y
 | Salterio | Completo, 150 salmos. El Salmo 151 es pendiente |
 | Oraciones | 45 oraciones; 4 fichas pendientes (Gran Canon, canon de Comunión, Akáthistos) |
 | Santos | 60 conmemoraciones. El Menaion completo es pendiente |
-| Leccionario | Ciclo móvil y grandes fiestas. El ciclo diario completo es pendiente |
+| Lecturas del día | **Completas**: los 365 días, del leccionario bizantino de tradición eslava |
 | Oficios | Estructura completa y partes cantadas; oraciones sacerdotales pendientes |
 | Akathistos y cánones | Fichas completas; la mayoría de los textos, pendientes |
 | Padres | 12 autores con biografía y obras; pasajes breves verificados |
 | Monte Athos | Los 20 monasterios y 6 artículos, completos |
-| Iconografía | 12 fichas completas; **sin imágenes**, a la espera de licencias comprobadas |
+| Iconografía | 13 fichas con **reproducciones de obras históricas** de Wikimedia Commons, con autor, datación y licencia comprobados |
 
 Esto no es un descuido: es la regla del proyecto. **Antes que un texto
 aproximado, una ficha honesta.**
@@ -357,7 +383,6 @@ Lo que está diseñado pero aún no implementado, dicho sin rodeos:
 - **Sincronización** (WebDAV / Nextcloud / servidor propio). La arquitectura la
   contempla —exportación e importación versionadas, datos del usuario separados—
   pero no hay código de sincronización.
-- **Desbloqueo biométrico** (WebAuthn). Se detecta la capacidad; falta el flujo.
 - **Traducciones**: la internacionalización está montada y ningún texto de
   interfaz está escrito en un componente, pero sólo existe el archivo español.
 - **Notificaciones**: se programan en el dispositivo y sólo suenan mientras la

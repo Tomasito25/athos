@@ -11,7 +11,8 @@ import {
   type AthosBackup,
   type ImportMode,
 } from '@/db/backup';
-import { requestPersistentStorage, storageEstimate } from '@/db/db';
+import { ARCHIVE_KEY, db, requestPersistentStorage, storageEstimate } from '@/db/db';
+import type { PersonalArchive } from '@/db/db';
 import { bibleIndexStatus, clearBibleIndex, indexWholeBible } from '@/db/bible';
 import { ensurePsalterBuilt } from '@/db/psalter';
 import { resetContent } from '@/db/seed';
@@ -43,6 +44,11 @@ export function DataPage() {
     [],
   );
   const index = useAsync(() => bibleIndexStatus(), []);
+  // Lo que quedó del diario y los hábitos al retirarlos de ATHOS.
+  const archivo = useAsync(async () => {
+    const registro = await db.settings.get(ARCHIVE_KEY);
+    return (registro?.value as PersonalArchive | undefined) ?? null;
+  }, []);
 
   const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
   const [pending, setPending] = useState<{ backup: AthosBackup; errors: string[] } | null>(null);
@@ -78,12 +84,57 @@ export function DataPage() {
     <div className="page page--reading">
       <PageHead title={es.settings.data} />
 
+      {archivo.data ? (
+        <Section title="Diario y hábitos retirados">
+          <Panel>
+            <Notice variant="warn">
+              <div>
+                <p>
+                  ATHOS ya no incluye diario ni hábitos. Lo que tenías guardado se ha conservado
+                  aquí para que puedas llevártelo; después se borrará.
+                </p>
+                <p style={{ marginTop: 'var(--sp-2)' }}>
+                  {archivo.data.journal_entries.length} entrada(s) de diario ·{' '}
+                  {archivo.data.habit_entries.length} registro(s) de hábitos.
+                </p>
+              </div>
+            </Notice>
+            <div className="btn-row" style={{ marginTop: 'var(--sp-3)' }}>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  downloadFile(
+                    `athos-diario-${toIsoDate(new Date())}.json`,
+                    JSON.stringify(archivo.data, null, 2),
+                    'application/json',
+                  );
+                  toast('Descargado');
+                }}
+              >
+                <IconDownload size={16} /> Descargar
+              </Button>
+              <Button
+                variant="danger"
+                onClick={async () => {
+                  if (!confirm('¿Borrar definitivamente el diario y los hábitos archivados?')) return;
+                  await db.settings.delete(ARCHIVE_KEY);
+                  archivo.reload();
+                  toast('Archivo borrado');
+                }}
+              >
+                Borrar definitivamente
+              </Button>
+            </div>
+          </Panel>
+        </Section>
+      ) : null}
+
       <Section title={es.settings.exportData}>
         <Panel>
           <p className="muted text-sm">
-            Se exportan el diario, las reglas, los hábitos, las notas, los favoritos, las sesiones de
-            oración y las preferencias. El contenido religioso no se exporta: forma parte de la
-            aplicación.
+            Se exportan las reglas de oración, las notas, los marcadores, los favoritos, las
+            sesiones de oración y las preferencias. El contenido religioso no se exporta: forma
+            parte de la aplicación.
           </p>
           <div className="btn-row" style={{ marginTop: 'var(--sp-3)' }}>
             <Button onClick={exportJson}>

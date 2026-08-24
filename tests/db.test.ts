@@ -4,24 +4,21 @@
  */
 import { beforeEach, describe, expect, it } from 'vitest';
 import { AthosDatabase, db, getSetting, setSetting } from '@/db/db';
-import { BUILT_IN_HABITS, seedContent, seedUserDefaults } from '@/db/seed';
+import { seedContent, seedUserDefaults } from '@/db/seed';
 import {
   completionsOn,
   deleteRule,
   favoriteId,
   isFavorite,
   listFavorites,
-  listHabits,
   listRules,
   prayerStats,
   recordVisit,
   ruleItems,
   ruleProgress,
-  saveJournalEntry,
   saveNote,
   saveSession,
   toggleFavorite,
-  toggleHabit,
   toggleRuleItem,
 } from '@/db/user';
 import { CONTENT_VERSION } from '@/content';
@@ -56,8 +53,6 @@ describe('esquema', () => {
       'icons',
       'daily_rules',
       'rule_items',
-      'habits',
-      'journal_entries',
       'favorites',
       'bookmarks',
       'notes',
@@ -89,27 +84,26 @@ describe('siembra del contenido', () => {
   it('una nueva siembra no toca los datos del usuario', async () => {
     await seedContent();
     await seedUserDefaults();
-    await saveJournalEntry({
-      id: 'entrada-1',
-      date: '2026-08-23',
-      title: 'Prueba',
-      body: 'Texto',
-      tags: [],
-      favorite: false,
+    await toggleFavorite({
+      kind: 'psalm',
+      refId: '50',
+      title: 'Salmo 50',
+      path: '/leer/salterio/50',
     });
+    await toggleRuleItem('2026-08-23', 'regla-manana', 'rm-1');
 
     await seedContent(true);
 
-    expect(await db.journal_entries.count()).toBe(1);
-    expect((await db.journal_entries.get('entrada-1'))?.title).toBe('Prueba');
+    expect(await db.favorites.count()).toBe(1);
+    expect(await db.rule_completions.count()).toBe(1);
   });
 });
 
 describe('valores iniciales del usuario', () => {
-  it('crea los hábitos y las reglas una sola vez', async () => {
+  it('crea la regla de oración inicial una sola vez', async () => {
     expect(await seedUserDefaults()).toBe(true);
-    expect(await db.habits.count()).toBe(BUILT_IN_HABITS.length);
     expect((await listRules()).length).toBe(2);
+    expect(await db.rule_items.count()).toBe(12);
     expect(await seedUserDefaults()).toBe(false);
   });
 
@@ -174,22 +168,6 @@ describe('regla de oración', () => {
     await toggleRuleItem('2026-08-23', rule.id, items[0].id);
     expect(await toggleRuleItem('2026-08-23', rule.id, items[0].id)).toBe(false);
     expect(await completionsOn('2026-08-23')).toHaveLength(0);
-  });
-});
-
-describe('hábitos', () => {
-  it('se marcan y desmarcan por día', async () => {
-    await seedUserDefaults();
-    expect(await toggleHabit('biblia', '2026-08-23')).toBe(true);
-    expect(await toggleHabit('biblia', '2026-08-23')).toBe(false);
-    expect(await db.habit_entries.count()).toBe(0);
-  });
-
-  it('sólo se listan los activos cuando se pide', async () => {
-    await seedUserDefaults();
-    const activos = await listHabits(true);
-    expect(activos.every((h) => h.active)).toBe(true);
-    expect(activos.length).toBeLessThan((await listHabits()).length);
   });
 });
 

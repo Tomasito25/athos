@@ -31,7 +31,7 @@ export function IconsPage() {
         <div className="grid">
           {list.map((icon) => (
             <Link key={icon.id} className="card" to={`/biblioteca/iconos/${icon.id}`}>
-              <IconPlate name={icon.name} image={icon.image} />
+              <IconPlate name={icon.name} image={icon.thumb ?? icon.image} />
               <span className="card__title">{icon.name}</span>
               <span className="card__text">{ICON_CATEGORY_LABELS[icon.category]}</span>
             </Link>

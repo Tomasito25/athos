@@ -9,6 +9,7 @@
 import type { CalendarStyle, CivilDate, Feast, LiturgicalDay, LiturgicalSeason } from '@/types';
 import { FIXED_FEASTS, MOVABLE_FEASTS } from '@/content/feasts';
 import { findReading } from '@/content/lectionary';
+import { lookupReadings } from '@/db/lectionary';
 import { saintsOnDay } from '@/content/saints';
 import { fastingFor } from './fasting';
 import {
@@ -117,7 +118,7 @@ export function computeLiturgicalDay(iso: string, style: CalendarStyle = 'nuevo'
     feasts,
     saints,
     fasting,
-    readings: findReading(paschaOffset, nextPaschaOffset, md),
+    readings: readingsFor(iso, style, paschaOffset, nextPaschaOffset, md),
   };
 }
 
@@ -130,6 +131,43 @@ export function monthOfLiturgicalDays(year: number, month: number, style: Calend
     days.push(computeLiturgicalDay(iso, style));
   }
   return days;
+}
+
+/**
+ * Lecturas del día: primero el leccionario generado desde orthocal, que cubre
+ * el año entero; si aún no está cargado, la tabla incorporada, que sólo tiene
+ * el ciclo móvil y las grandes fiestas.
+ */
+function readingsFor(
+  iso: string,
+  style: CalendarStyle,
+  paschaOffset: number,
+  nextPaschaOffset: number,
+  md: string,
+): LiturgicalDay['readings'] {
+  const completo = lookupReadings(iso, style);
+  if (completo?.length) {
+    return {
+      id: `orthocal:${iso}`,
+      key: iso,
+      readings: completo,
+      status: 'complete',
+      meta: {
+        source: 'orthocal — leccionario bizantino de tradición eslava',
+        author: 'Cómputo de orthocal, de Brian Glass',
+        translator: 'Referencias traducidas al español para ATHOS',
+        tradition: 'Rito bizantino, uso eslavo',
+        language: 'es',
+        license: 'cc-by-sa-4.0',
+        copyright:
+          'Cálculo del leccionario: orthocal-python, licencia MIT. Traducción de las referencias: ATHOS, CC BY-SA 4.0.',
+        dateAdded: '2026-01-01',
+        notes:
+          'Generado con scripts/build-lectionary.sh, que ejecuta orthocal en local. El texto de los pasajes es el de la Reina-Valera 1909.',
+      },
+    };
+  }
+  return findReading(paschaOffset, nextPaschaOffset, md);
 }
 
 /** Fiesta principal del día, si la hay. */

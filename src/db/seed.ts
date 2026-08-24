@@ -21,7 +21,7 @@ import {
   RV1909,
   SAINTS,
 } from '@/content';
-import type { Habit, PrayerRule, RuleItem } from '@/types';
+import type { PrayerRule, RuleItem } from '@/types';
 import { db, getSetting, setSetting } from './db';
 
 const CONTENT_VERSION_KEY = 'content.version';
@@ -74,21 +74,7 @@ export async function seedContent(force = false): Promise<boolean> {
   return true;
 }
 
-/* ---------- Hábitos y regla de oración iniciales ---------- */
-
-export const BUILT_IN_HABITS: Habit[] = [
-  { id: 'oracion-manana', name: 'Oración de la mañana', order: 1, active: true, cadence: 'daily', builtIn: true },
-  { id: 'oracion-noche', name: 'Oración de la noche', order: 2, active: true, cadence: 'daily', builtIn: true },
-  { id: 'regla', name: 'Regla de oración', order: 3, active: true, cadence: 'daily', builtIn: true },
-  { id: 'oracion-jesus', name: 'Oración de Jesús', order: 4, active: true, cadence: 'daily', builtIn: true },
-  { id: 'biblia', name: 'Lectura de la Escritura', order: 5, active: true, cadence: 'daily', builtIn: true },
-  { id: 'salterio', name: 'Salterio', order: 6, active: false, cadence: 'daily', builtIn: true },
-  { id: 'lectura-espiritual', name: 'Lectura espiritual', order: 7, active: true, cadence: 'daily', builtIn: true },
-  { id: 'ayuno', name: 'Ayuno', order: 8, active: true, cadence: 'daily', builtIn: true, description: 'Marca los días en que has guardado el ayuno prescrito.' },
-  { id: 'liturgia', name: 'Divina Liturgia', order: 9, active: true, cadence: 'weekly', builtIn: true },
-  { id: 'confesion', name: 'Confesión', order: 10, active: true, cadence: 'occasional', builtIn: true },
-  { id: 'comunion', name: 'Comunión', order: 11, active: true, cadence: 'occasional', builtIn: true },
-];
+/* ---------- Regla de oración inicial ---------- */
 
 const now = () => new Date().toISOString();
 
@@ -119,15 +105,14 @@ function defaultRules(): { rules: PrayerRule[]; items: RuleItem[] } {
 }
 
 /**
- * Crea los hábitos y la regla de oración iniciales una sola vez.
- * Si el usuario los borra, no vuelven a aparecer.
+ * Crea la regla de oración inicial una sola vez.
+ * Si el usuario la borra, no vuelve a aparecer.
  */
 export async function seedUserDefaults(): Promise<boolean> {
   if (await getSetting<boolean>(DEFAULTS_KEY, false)) return false;
 
   const { rules, items } = defaultRules();
-  await db.transaction('rw', [db.habits, db.daily_rules, db.rule_items, db.settings], async () => {
-    await db.habits.bulkPut(BUILT_IN_HABITS);
+  await db.transaction('rw', [db.daily_rules, db.rule_items, db.settings], async () => {
     await db.daily_rules.bulkPut(rules);
     await db.rule_items.bulkPut(items);
   });

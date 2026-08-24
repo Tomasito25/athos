@@ -16,22 +16,48 @@ import { addDaysIso } from '@/lib/calendar/jdn';
 import { formatLongDate } from '@/lib/format';
 import { Button, Loading, Notice, PageHead, Panel, Section, SourceNote } from '@/components/ui';
 import { IconChevronLeft, IconChevronRight } from '@/components/icons';
-import type { ReadingRef } from '@/types';
+import type { ReadingKind, ReadingRef } from '@/types';
 import es from '@/locales/es';
+
+/** Cómo se llama cada tipo de lectura en la pantalla. */
+const ETIQUETAS: Record<ReadingKind, string> = {
+  evangelio: 'Evangelio',
+  epistola: 'Epístola',
+  'evangelio-maitines': 'Evangelio de Maitines',
+  'evangelio-pasion': 'Evangelio de la Pasión',
+  visperas: 'Vísperas',
+  horas: 'Horas',
+  maitines: 'Maitines',
+  'bendicion-aguas': 'Bendición de las aguas',
+  'procesion-cruz': 'Procesión de la Cruz',
+  at: 'Antiguo Testamento',
+  salmo: 'Salmo',
+  otra: 'Lectura',
+};
+
+/** En la Liturgia se leen la Epístola y el Evangelio; lo demás es de otros oficios. */
+const DE_LA_LITURGIA: ReadingKind[] = ['evangelio', 'epistola'];
 
 function ReadingBlock({ reading }: { reading: ReadingRef }) {
   const [expanded, setExpanded] = useState(false);
-  const target = parseReference(reading.reference);
+  // El leccionario generado ya trae el libro y el capítulo resueltos; si no,
+  // se intenta deducirlos de la referencia escrita.
+  const target = reading.passageId
+    ? { bookId: reading.passageId.split('.')[0], chapter: Number(reading.passageId.split('.')[1]) }
+    : parseReference(reading.reference);
   const verses = useAsync(
     () => (expanded && target ? getChapter(target.bookId, target.chapter) : Promise.resolve([])),
     [expanded, target?.bookId, target?.chapter],
   );
 
-  const label = reading.kind === 'evangelio' ? es.home.gospel : reading.kind === 'epistola' ? es.home.epistle : 'Lectura';
+  const label = ETIQUETAS[reading.kind] ?? 'Lectura';
 
   return (
     <Panel>
-      <p className="eyebrow">{label}</p>
+      <p className="eyebrow">
+        {label}
+        {reading.note ? ` · ${reading.note}` : ''}
+      </p>
       <p className="display" style={{ fontSize: 'var(--text-lg)', margin: 'var(--sp-1) 0 var(--sp-3)' }}>
         {reading.reference}
       </p>
@@ -103,10 +129,24 @@ export function ReadingsPage() {
             </p>
           ) : null}
           <div className="stack">
-            {day.readings.readings.map((reading) => (
-              <ReadingBlock key={`${reading.kind}-${reading.reference}`} reading={reading} />
-            ))}
+            {day.readings.readings
+              .filter((r) => DE_LA_LITURGIA.includes(r.kind))
+              .map((reading) => (
+                <ReadingBlock key={`${reading.kind}-${reading.reference}`} reading={reading} />
+              ))}
           </div>
+
+          {day.readings.readings.some((r) => !DE_LA_LITURGIA.includes(r.kind)) ? (
+            <Section title="Otros oficios del día">
+              <div className="stack">
+                {day.readings.readings
+                  .filter((r) => !DE_LA_LITURGIA.includes(r.kind))
+                  .map((reading) => (
+                    <ReadingBlock key={`${reading.kind}-${reading.reference}`} reading={reading} />
+                  ))}
+              </div>
+            </Section>
+          ) : null}
           {day.readings.meta ? <SourceNote meta={day.readings.meta} status={day.readings.status} /> : null}
         </>
       ) : (

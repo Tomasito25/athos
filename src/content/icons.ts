@@ -1,13 +1,17 @@
 /**
  * Iconografía.
  *
- * ATHOS no incluye imágenes cuya situación de derechos no haya podido
- * comprobarse. Cada ficha describe el icono, su historia y su significado —que
- * es información documentada— y, mientras no haya una imagen con licencia
- * verificada, se muestra una placa ornamental en su lugar. Nunca una imagen
- * ajena sin permiso.
+ * Las reproducciones proceden de Wikimedia Commons y son fotografías o
+ * escaneos de obras históricas concretas: ninguna está generada por ordenador.
+ * De cada una se guarda el autor, la datación, la licencia y la página de la
+ * que procede, y ATHOS lo muestra junto al icono.
+ *
+ * `scripts/fetch-icons.py` comprueba la licencia antes de descargar nada y
+ * rechaza los archivos sin autoría ni fecha documentadas. Si una ficha no
+ * tiene imagen verificable, se queda sin ella y se muestra una placa
+ * ornamental: nunca una imagen ajena sin permiso.
  */
-import type { IconCategory, OrthodoxIcon, SourceMeta } from '@/types';
+import type { IconCategory, ImageCredit, OrthodoxIcon, SourceMeta } from '@/types';
 
 const meta: SourceMeta = {
   source: 'Reseñas redactadas para ATHOS a partir de la literatura iconográfica común',
@@ -15,7 +19,121 @@ const meta: SourceMeta = {
   language: 'es',
   license: 'cc-by-sa-4.0',
   dateAdded: '2026-01-01',
-  notes: 'Las imágenes no se incluyen mientras no se disponga de reproducciones con licencia comprobada.',
+  notes:
+    'Las reproducciones proceden de Wikimedia Commons, con su licencia comprobada una a una. Ninguna imagen está generada por ordenador.',
+};
+
+const COMMONS = 'Wikimedia Commons';
+
+/**
+ * Procedencia de cada reproducción, comprobada contra la API de Commons y
+ * verificada visualmente una por una.
+ */
+const CREDITOS: Record<string, ImageCredit & { archivo: string }> = {
+  pantocrator: {
+    author: 'Autor desconocido',
+    date: 'siglo VI',
+    license: 'Dominio público',
+    source: COMMONS,
+    page: 'https://commons.wikimedia.org/wiki/File:Christ_Icon_Sinai_6th_century.jpg',
+    archivo: 'pantocrator',
+  },
+  acheiropoietos: {
+    author: 'Simón Ushakov',
+    date: '1658',
+    license: 'Dominio público',
+    source: COMMONS,
+    page: 'https://commons.wikimedia.org/wiki/File:Simon_Ushakov_-_%D0%A1%D0%BF%D0%B0%D1%81_%D0%9D%D0%B5%D1%80%D1%83%D0%BA%D0%BE%D1%82%D0%B2%D0%BE%D1%80%D0%BD%D1%8B%D0%B9_-_Google_Art_Project.jpg',
+    archivo: 'acheiropoietos',
+  },
+  vladimir: {
+    author: 'Autor desconocido, taller constantinopolitano',
+    date: 'siglo XII',
+    license: 'Dominio público',
+    source: COMMONS,
+    page: 'https://commons.wikimedia.org/wiki/File:Vladimirskaya.jpg',
+    archivo: 'vladimir',
+  },
+  portaitissa: {
+    author: 'Autor desconocido; la tradición la atribuye a san Lucas',
+    date: 'reproducción de la Portaítissa de Ivirón',
+    license: 'Dominio público',
+    source: COMMONS,
+    page: 'https://commons.wikimedia.org/wiki/File:Iveron.jpg',
+    archivo: 'portaitissa',
+  },
+  trikherousa: {
+    author: 'Autor desconocido; la tradición la vincula a san Juan Damasceno',
+    date: 'entre los siglos VIII y XIV',
+    license: 'Dominio público',
+    source: COMMONS,
+    page: 'https://commons.wikimedia.org/wiki/File:VergineTricherusa.jpg',
+    archivo: 'trikherousa',
+  },
+  glykofilousa: {
+    author: 'Autor desconocido',
+    date: 'siglo XIV',
+    license: 'Dominio público',
+    source: COMMONS,
+    page: 'https://commons.wikimedia.org/wiki/File:Virgin_of_Tenderness,_Athena_(14th_Century).jpg',
+    archivo: 'glykofilousa',
+  },
+  'trinidad-rublev': {
+    author: 'Andréi Rubliov',
+    date: '1425-1427',
+    license: 'Dominio público',
+    source: COMMONS,
+    page: 'https://commons.wikimedia.org/wiki/File:Angelsatmamre-trinity-rublev-1410.jpg',
+    archivo: 'trinidad-rublev',
+  },
+  anastasis: {
+    author: 'Autor desconocido, San Salvador de Chora',
+    date: 'siglo XIV',
+    license: 'Dominio público',
+    source: COMMONS,
+    page: 'https://commons.wikimedia.org/wiki/File:Chora_Anastasis1.jpg',
+    archivo: 'anastasis',
+  },
+  'transfiguracion-icono': {
+    author: 'Autor desconocido, monasterio de Santa Catalina del Sinaí',
+    date: 'hacia 600',
+    license: 'Dominio público',
+    source: COMMONS,
+    page: 'https://commons.wikimedia.org/wiki/File:Transfiguration-Sinai.jpg',
+    archivo: 'transfiguracion-icono',
+  },
+  'natividad-icono': {
+    author: 'Maestro de la Capilla Palatina de Palermo',
+    date: 'hacia 1150',
+    license: 'Dominio público',
+    source: COMMONS,
+    page: 'https://commons.wikimedia.org/wiki/File:Meister_der_Palastkapelle_in_Palermo_001.jpg',
+    archivo: 'natividad-icono',
+  },
+  'entrada-jerusalen': {
+    author: 'Maestro de la Capilla Palatina de Palermo',
+    date: 'hacia 1150',
+    license: 'Dominio público',
+    source: COMMONS,
+    page: 'https://commons.wikimedia.org/wiki/File:Meister_der_Palastkapelle_in_Palermo_002.jpg',
+    archivo: 'entrada-jerusalen',
+  },
+  deesis: {
+    author: 'Mosaico anónimo del siglo XIII; fotografía de Myrabella',
+    date: 'siglo XIII',
+    license: 'Dominio público',
+    source: COMMONS,
+    page: 'https://commons.wikimedia.org/wiki/File:Christ_Pantocrator_Deesis_mosaic_Hagia_Sophia.jpg',
+    archivo: 'deesis',
+  },
+  'panselinos-protaton': {
+    author: 'Émile Gilliéron, copia del fresco de Manuel Panselinos',
+    date: '1880-1881',
+    license: 'Dominio público',
+    source: COMMONS,
+    page: 'https://commons.wikimedia.org/wiki/File:Manuel_Panselinos,_Protaton,_Agios_Neilos_-_copy_by_E_Gilli%C3%A9ron_(Athens,_Byz_Mus_22932).jpg',
+    archivo: 'panselinos-protaton',
+  },
 };
 
 export const ICON_CATEGORY_LABELS: Record<IconCategory, string> = {
@@ -148,12 +266,22 @@ const seeds: IconSeed[] = [
       'Deesis significa «súplica». Los dos intercesores no miran al fiel sino a Cristo. Es la imagen de la Iglesia orante, y por eso ocupa el lugar central de la fila principal del iconostasio.',
   },
   {
+    id: 'entrada-jerusalen',
+    name: 'La Entrada en Jerusalén',
+    category: 'fiestas',
+    place: 'Capilla Palatina de Palermo',
+    history:
+      'El mosaico de la Capilla Palatina, hacia 1150, es obra de mosaístas bizantinos trabajando para la corte normanda de Sicilia.',
+    meaning:
+      'Cristo entra sentado de lado sobre el pollino, con la mirada vuelta hacia los discípulos y no hacia la ciudad que lo aclama. Los niños tienden sus mantos en el suelo; al fondo, la puerta de Jerusalén. El Domingo de Ramos abre la Semana Santa.',
+  },
+  {
     id: 'panselinos-protaton',
-    name: 'Frescos del Protaton',
+    name: 'San Nilo, del Protaton',
     category: 'historicos',
     place: 'Karyés, Monte Athos',
     history:
-      'Pintados hacia 1290 y atribuidos a Manuel Panselinos, son la obra maestra de la llamada escuela macedonia.',
+      'Los frescos del Protaton, pintados hacia 1290 y atribuidos a Manuel Panselinos, son la obra maestra de la llamada escuela macedonia. La reproducción que aquí se muestra no es una fotografía del fresco, sino la copia que Émile Gilliéron hizo en 1880 de la figura de san Nilo; se conserva en el Museo Bizantino de Atenas.',
     meaning:
       'Figuras monumentales, modelado casi escultórico y una fuerza dramática que rompe con el hieratismo anterior. Marcaron la pintura athonita durante siglos.',
   },
@@ -163,17 +291,28 @@ export const ICONS: OrthodoxIcon[] = seeds.map((s) => ({
   id: s.id,
   name: s.name,
   category: s.category,
-  image: undefined,
+  image: CREDITOS[s.id] ? `content/icons/${CREDITOS[s.id].archivo}.webp` : undefined,
+  thumb: CREDITOS[s.id] ? `content/icons/${CREDITOS[s.id].archivo}-mini.webp` : undefined,
+  credit: CREDITOS[s.id]
+    ? {
+        author: CREDITOS[s.id].author,
+        date: CREDITOS[s.id].date,
+        license: CREDITOS[s.id].license,
+        source: CREDITOS[s.id].source,
+        page: CREDITOS[s.id].page,
+      }
+    : undefined,
   history: s.history,
   meaning: s.meaning,
   feastDay: s.feastDay,
   place: s.place,
-  status: 'partial',
+  status: CREDITOS[s.id] ? 'complete' : 'partial',
   meta,
   searchText: `${s.name} ${s.place ?? ''} ${s.history} ${s.meaning}`.toLowerCase(),
 }));
 
 export const ICONS_NOTE =
-  'Las fichas describen cada icono y su significado. Las reproducciones no se incluyen ' +
-  'mientras no se disponga de imágenes con licencia comprobada: ATHOS prefiere una placa ' +
-  'vacía a una imagen usada sin derecho.';
+  'Las reproducciones proceden de Wikimedia Commons: son fotografías y escaneos de obras ' +
+  'históricas concretas, con su autor, su datación y su licencia comprobados uno a uno. ' +
+  'Ninguna imagen está generada por ordenador. Si una ficha no tiene imagen es porque no ' +
+  'se ha encontrado una reproducción verificable, y en su lugar se muestra una placa.';

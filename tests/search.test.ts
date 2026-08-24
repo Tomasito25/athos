@@ -137,26 +137,4 @@ describe('búsqueda global', () => {
     expect(resultado.groups.every((g) => g.kind === 'prayer')).toBe(true);
   });
 
-  it('nunca devuelve el cuerpo de una entrada cifrada del diario', async () => {
-    await db.journal_entries.put({
-      id: 'cifrada',
-      date: '2026-08-23',
-      title: 'Nota',
-      body: 'texto-secreto-en-claro',
-      tags: [],
-      favorite: false,
-      createdAt: '2026-08-23T00:00:00.000Z',
-      updatedAt: '2026-08-23T00:00:00.000Z',
-      encryption: {
-        algorithm: 'AES-GCM',
-        kdf: 'PBKDF2-SHA256',
-        iterations: 310000,
-        salt: 's',
-        iv: 'i',
-      },
-    });
-    const resultado = await searchAll('secreto');
-    expect(resultado.groups.find((g) => g.kind === 'journal')).toBeUndefined();
-    await db.journal_entries.clear();
-  });
 });

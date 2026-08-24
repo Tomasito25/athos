@@ -8,10 +8,7 @@
 import type {
   Bookmark,
   Favorite,
-  Habit,
-  HabitEntry,
   JesusPrayerSession,
-  JournalEntry,
   Note,
   PrayerRule,
   RuleCompletion,
@@ -32,9 +29,6 @@ export interface AthosBackup {
     daily_rules: PrayerRule[];
     rule_items: RuleItem[];
     rule_completions: RuleCompletion[];
-    habits: Habit[];
-    habit_entries: HabitEntry[];
-    journal_entries: JournalEntry[];
     favorites: Favorite[];
     bookmarks: Bookmark[];
     notes: Note[];
@@ -51,9 +45,6 @@ export async function exportBackup(sections?: BackupSection[]): Promise<AthosBac
       'daily_rules',
       'rule_items',
       'rule_completions',
-      'habits',
-      'habit_entries',
-      'journal_entries',
       'favorites',
       'bookmarks',
       'notes',
@@ -73,9 +64,6 @@ export async function exportBackup(sections?: BackupSection[]): Promise<AthosBac
       daily_rules: await take('daily_rules', () => db.daily_rules.toArray()),
       rule_items: await take('rule_items', () => db.rule_items.toArray()),
       rule_completions: await take('rule_completions', () => db.rule_completions.toArray()),
-      habits: await take('habits', () => db.habits.toArray()),
-      habit_entries: await take('habit_entries', () => db.habit_entries.toArray()),
-      journal_entries: await take('journal_entries', () => db.journal_entries.toArray()),
       favorites: await take('favorites', () => db.favorites.toArray()),
       bookmarks: await take('bookmarks', () => db.bookmarks.toArray()),
       notes: await take('notes', () => db.notes.toArray()),
@@ -107,12 +95,6 @@ const VALIDATORS: Record<BackupSection, (row: unknown) => boolean> = {
   daily_rules: (r) => hasStringId(r) && typeof (r as PrayerRule).name === 'string',
   rule_items: (r) => hasStringId(r) && typeof (r as RuleItem).ruleId === 'string',
   rule_completions: (r) => hasStringId(r) && typeof (r as RuleCompletion).date === 'string',
-  habits: (r) => hasStringId(r) && typeof (r as Habit).name === 'string',
-  habit_entries: (r) => hasStringId(r) && typeof (r as HabitEntry).habitId === 'string',
-  journal_entries: (r) =>
-    hasStringId(r) &&
-    typeof (r as JournalEntry).date === 'string' &&
-    Array.isArray((r as JournalEntry).tags),
   favorites: (r) => hasStringId(r) && typeof (r as Favorite).kind === 'string',
   bookmarks: (r) => hasStringId(r) && typeof (r as Bookmark).kind === 'string',
   notes: (r) => hasStringId(r) && typeof (r as Note).body === 'string',
@@ -177,9 +159,6 @@ export async function importBackup(
     daily_rules: db.daily_rules,
     rule_items: db.rule_items,
     rule_completions: db.rule_completions,
-    habits: db.habits,
-    habit_entries: db.habit_entries,
-    journal_entries: db.journal_entries,
     favorites: db.favorites,
     bookmarks: db.bookmarks,
     notes: db.notes,
@@ -187,7 +166,7 @@ export async function importBackup(
     settings: db.settings,
   } as const;
 
-  await db.transaction('rw', Object.values(tables), async () => {
+  await db.transaction('rw', Object.values(tables) as Parameters<typeof db.transaction>[1][], async () => {
     for (const [section, table] of Object.entries(tables) as Array<
       [BackupSection, (typeof tables)[BackupSection]]
     >) {
@@ -211,16 +190,6 @@ export function backupToMarkdown(backup: AthosBackup): string {
     `Exportado el ${new Date(backup.exportedAt).toLocaleString('es')}`,
     '',
   ];
-
-  if (backup.data.journal_entries.length) {
-    lines.push('## Diario espiritual', '');
-    for (const entry of [...backup.data.journal_entries].sort((a, b) => a.date.localeCompare(b.date))) {
-      lines.push(`### ${entry.date} — ${entry.title || 'Sin título'}`, '');
-      if (entry.encryption) lines.push('_Entrada cifrada; no se exporta en claro._', '');
-      else lines.push(entry.body, '');
-      if (entry.tags.length) lines.push(`Etiquetas: ${entry.tags.map((t) => `#${t}`).join(' ')}`, '');
-    }
-  }
 
   if (backup.data.daily_rules.length) {
     lines.push('## Reglas de oración', '');
@@ -249,15 +218,6 @@ export function backupToMarkdown(backup: AthosBackup): string {
     }
   }
 
-  if (backup.data.habits.length) {
-    lines.push('## Hábitos', '');
-    for (const habit of backup.data.habits) {
-      const done = backup.data.habit_entries.filter((e) => e.habitId === habit.id && e.done).length;
-      lines.push(`- ${habit.name}: ${done} día(s) registrados`);
-    }
-    lines.push('');
-  }
-
   return lines.join('\n');
 }
 
@@ -281,9 +241,6 @@ export async function wipeUserData(): Promise<void> {
       db.daily_rules,
       db.rule_items,
       db.rule_completions,
-      db.habits,
-      db.habit_entries,
-      db.journal_entries,
       db.favorites,
       db.bookmarks,
       db.notes,
@@ -297,9 +254,6 @@ export async function wipeUserData(): Promise<void> {
         db.daily_rules.clear(),
         db.rule_items.clear(),
         db.rule_completions.clear(),
-        db.habits.clear(),
-        db.habit_entries.clear(),
-        db.journal_entries.clear(),
         db.favorites.clear(),
         db.bookmarks.clear(),
         db.notes.clear(),

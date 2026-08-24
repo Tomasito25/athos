@@ -68,10 +68,7 @@ export const routes: RouteObject[] = [
       { path: 'biblioteca/iconos', lazy: page(() => import('@/features/icons/IconsPage'), 'IconsPage') },
       { path: 'biblioteca/iconos/:iconId', lazy: page(() => import('@/features/icons/IconPage'), 'IconPage') },
 
-      /* ---------------- Vida personal ---------------- */
-      { path: 'diario', lazy: page(() => import('@/features/journal/JournalPage'), 'JournalPage') },
-      { path: 'diario/:entryId', lazy: page(() => import('@/features/journal/JournalEntryPage'), 'JournalEntryPage') },
-      { path: 'habitos', lazy: page(() => import('@/features/habits/HabitsPage'), 'HabitsPage') },
+      /* ---------------- Personal ---------------- */
       { path: 'favoritos', lazy: page(() => import('@/features/favorites/FavoritesPage'), 'FavoritesPage') },
       { path: 'buscar', lazy: page(() => import('@/features/search/SearchPage'), 'SearchPage') },
       { path: 'mas', lazy: page(() => import('@/features/more/MorePage'), 'MorePage') },
@@ -80,7 +77,6 @@ export const routes: RouteObject[] = [
       { path: 'configuracion', lazy: page(() => import('@/features/settings/SettingsPage'), 'SettingsPage') },
       { path: 'configuracion/instalar', lazy: page(() => import('@/features/settings/InstallPage'), 'InstallPage') },
       { path: 'configuracion/datos', lazy: page(() => import('@/features/settings/DataPage'), 'DataPage') },
-      { path: 'configuracion/seguridad', lazy: page(() => import('@/features/settings/SecurityPage'), 'SecurityPage') },
       { path: 'configuracion/notificaciones', lazy: page(() => import('@/features/settings/NotificationsPage'), 'NotificationsPage') },
       { path: 'configuracion/fuentes', lazy: page(() => import('@/features/settings/SourcesPage'), 'SourcesPage') },
       { path: 'configuracion/acerca-de', lazy: page(() => import('@/features/settings/AboutPage'), 'AboutPage') },

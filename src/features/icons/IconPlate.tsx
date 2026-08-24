@@ -5,15 +5,29 @@
  * tabla ornamental con el nombre: honesta y digna, en lugar de una imagen
  * rota o de una imagen ajena usada sin derecho.
  */
-export function IconPlate({ name, image }: { name: string; image?: string }) {
+export function IconPlate({
+  name,
+  image,
+  eager = false,
+}: {
+  name: string;
+  image?: string;
+  eager?: boolean;
+}) {
   if (image) {
     return (
       <img
-        src={image}
+        src={`${import.meta.env.BASE_URL}${image}`}
         alt={name}
-        loading="lazy"
+        loading={eager ? 'eager' : 'lazy'}
         decoding="async"
-        style={{ width: '100%', borderRadius: 'var(--radius-sm)', border: '1px solid var(--line)' }}
+        style={{
+          width: '100%',
+          borderRadius: 'var(--radius-sm)',
+          border: '1px solid var(--line-strong)',
+          background: 'var(--surface-sunken)',
+          boxShadow: 'var(--shadow-sm)',
+        }}
       />
     );
   }

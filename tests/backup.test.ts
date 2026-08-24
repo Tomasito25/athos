@@ -12,7 +12,7 @@ import {
   wipeUserData,
   type AthosBackup,
 } from '@/db/backup';
-import { saveJournalEntry, toggleFavorite, toggleHabit } from '@/db/user';
+import { saveBookmark, saveNote, toggleFavorite } from '@/db/user';
 
 beforeEach(async () => {
   await db.delete();
@@ -21,21 +21,25 @@ beforeEach(async () => {
 });
 
 async function poblado() {
-  await saveJournalEntry({
-    id: 'e1',
-    date: '2026-08-23',
-    title: 'Domingo',
-    body: 'Hoy he vuelto a empezar.',
-    tags: ['gratitud', 'oración'],
-    favorite: false,
-  });
   await toggleFavorite({
     kind: 'psalm',
     refId: '50',
     title: 'Salmo 50',
     path: '/leer/salterio/50',
   });
-  await toggleHabit('biblia', '2026-08-23');
+  await saveBookmark({
+    kind: 'bible',
+    refId: 'JHN.1',
+    title: 'Juan 1',
+    path: '/leer/biblia/JHN/1',
+  });
+  await saveNote({
+    targetKind: 'psalm',
+    targetId: '50',
+    targetTitle: 'Salmo 50',
+    path: '/leer/salterio/50',
+    body: 'Rezarlo más despacio.',
+  });
 }
 
 describe('exportación', () => {
@@ -45,9 +49,9 @@ describe('exportación', () => {
 
     expect(backup.format).toBe(BACKUP_FORMAT);
     expect(backup.version).toBe(BACKUP_VERSION);
-    expect(backup.data.journal_entries).toHaveLength(1);
     expect(backup.data.favorites).toHaveLength(1);
-    expect(backup.data.habit_entries).toHaveLength(1);
+    expect(backup.data.bookmarks).toHaveLength(1);
+    expect(backup.data.notes).toHaveLength(1);
     expect(backup.data.daily_rules.length).toBeGreaterThan(0);
     expect(Object.keys(backup.data)).not.toContain('prayers');
   });
@@ -59,39 +63,19 @@ describe('exportación', () => {
 
   it('permite exportar sólo algunas secciones', async () => {
     await poblado();
-    const backup = await exportBackup(['journal_entries']);
-    expect(backup.data.journal_entries).toHaveLength(1);
-    expect(backup.data.favorites).toHaveLength(0);
+    const backup = await exportBackup(['favorites']);
+    expect(backup.data.favorites).toHaveLength(1);
+    expect(backup.data.notes).toHaveLength(0);
   });
 
-  it('el Markdown es legible y recoge el diario', async () => {
+  it('el Markdown es legible y recoge lo guardado', async () => {
     await poblado();
     const markdown = backupToMarkdown(await exportBackup());
     expect(markdown).toContain('# ATHOS');
-    expect(markdown).toContain('Hoy he vuelto a empezar.');
-    expect(markdown).toContain('#gratitud');
+    expect(markdown).toContain('Salmo 50');
+    expect(markdown).toContain('Rezarlo más despacio.');
   });
 
-  it('el Markdown no revela el contenido de una entrada cifrada', async () => {
-    await saveJournalEntry({
-      id: 'e2',
-      date: '2026-08-23',
-      title: 'Cifrada',
-      body: 'BASE64CIFRADO==',
-      tags: [],
-      favorite: false,
-      encryption: {
-        algorithm: 'AES-GCM',
-        kdf: 'PBKDF2-SHA256',
-        iterations: 310000,
-        salt: 's',
-        iv: 'i',
-      },
-    });
-    const markdown = backupToMarkdown(await exportBackup());
-    expect(markdown).not.toContain('BASE64CIFRADO');
-    expect(markdown).toContain('cifrada');
-  });
 });
 
 describe('validación', () => {
@@ -121,10 +105,10 @@ describe('validación', () => {
     const result = validateBackup({
       format: BACKUP_FORMAT,
       version: BACKUP_VERSION,
-      data: { journal_entries: [{ id: 'x' }] },
+      data: { notes: [{ id: 'x' }] },
     });
     expect(result.valid).toBe(false);
-    expect(result.errors.join(' ')).toContain('journal_entries');
+    expect(result.errors.join(' ')).toContain('notes');
   });
 
   it('detecta una sección que no es una lista', () => {
@@ -143,47 +127,44 @@ describe('importación', () => {
     const backup = await exportBackup();
 
     await wipeUserData();
-    expect(await db.journal_entries.count()).toBe(0);
+    expect(await db.favorites.count()).toBe(0);
 
     await importBackup(backup, 'replace');
-    expect(await db.journal_entries.count()).toBe(1);
-    expect((await db.journal_entries.get('e1'))?.title).toBe('Domingo');
     expect(await db.favorites.count()).toBe(1);
+    expect(await db.notes.count()).toBe(1);
+    expect(await db.bookmarks.count()).toBe(1);
   });
 
   it('combinar conserva lo que ya había', async () => {
     await poblado();
-    const backup = await exportBackup(['journal_entries']);
+    const backup = await exportBackup(['notes']);
 
-    await saveJournalEntry({
-      id: 'e-local',
-      date: '2026-08-24',
-      title: 'Local',
-      body: '',
-      tags: [],
-      favorite: false,
+    await saveNote({
+      targetKind: 'prayer',
+      targetId: 'local',
+      targetTitle: 'Local',
+      path: '/x',
+      body: 'Nota local',
     });
 
     await importBackup(backup, 'merge');
-    expect(await db.journal_entries.count()).toBe(2);
+    expect(await db.notes.count()).toBe(2);
   });
 
   it('reemplazar sustituye la sección entera', async () => {
     await poblado();
-    const backup = await exportBackup(['journal_entries']);
+    const backup = await exportBackup(['notes']);
 
-    await saveJournalEntry({
-      id: 'e-local',
-      date: '2026-08-24',
-      title: 'Local',
-      body: '',
-      tags: [],
-      favorite: false,
+    await saveNote({
+      targetKind: 'prayer',
+      targetId: 'local',
+      targetTitle: 'Local',
+      path: '/x',
+      body: 'Nota local',
     });
 
     await importBackup(backup, 'replace');
-    expect(await db.journal_entries.count()).toBe(1);
-    expect(await db.journal_entries.get('e-local')).toBeUndefined();
+    expect(await db.notes.count()).toBe(1);
   });
 
   it('se niega a importar una copia inválida', async () => {
@@ -198,7 +179,7 @@ describe('importación', () => {
     await importBackup(antes, 'replace');
     const despues = await exportBackup();
 
-    expect(despues.data.journal_entries).toEqual(antes.data.journal_entries);
+    expect(despues.data.notes).toEqual(antes.data.notes);
     expect(despues.data.favorites).toEqual(antes.data.favorites);
     expect(despues.data.rule_items).toEqual(antes.data.rule_items);
   });
@@ -225,9 +206,9 @@ describe('borrado', () => {
 
     await wipeUserData();
 
-    expect(await db.journal_entries.count()).toBe(0);
     expect(await db.favorites.count()).toBe(0);
-    expect(await db.habit_entries.count()).toBe(0);
+    expect(await db.notes.count()).toBe(0);
+    expect(await db.bookmarks.count()).toBe(0);
     expect(await db.prayers.count()).toBe(1);
   });
 });

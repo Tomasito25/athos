@@ -16,7 +16,6 @@ import {
   IconBell,
   IconInfo,
   IconInstall,
-  IconLock,
   IconMoon,
   IconScroll,
   IconSun,
@@ -170,7 +169,6 @@ export function SettingsPage() {
         <div className="list">
           <ListRow to="/configuracion/instalar" leading={<IconInstall size={20} />} title={es.settings.install} />
           <ListRow to="/configuracion/notificaciones" leading={<IconBell size={20} />} title={es.settings.notifications} />
-          <ListRow to="/configuracion/seguridad" leading={<IconLock size={20} />} title={es.settings.security} />
           <ListRow to="/configuracion/datos" leading={<IconScroll size={20} />} title={es.settings.data} />
           <ListRow to="/configuracion/fuentes" leading={<IconInfo size={20} />} title={es.settings.sources} />
           <ListRow to="/configuracion/acerca-de" leading={<IconInfo size={20} />} title={es.settings.about} />

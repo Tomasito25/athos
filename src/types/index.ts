@@ -283,8 +283,22 @@ export interface FastingPeriod {
    Lecturas
    ============================================================ */
 
+export type ReadingKind =
+  | 'evangelio'
+  | 'epistola'
+  | 'evangelio-maitines'
+  | 'evangelio-pasion'
+  | 'visperas'
+  | 'horas'
+  | 'maitines'
+  | 'bendicion-aguas'
+  | 'procesion-cruz'
+  | 'at'
+  | 'salmo'
+  | 'otra';
+
 export interface ReadingRef {
-  kind: 'evangelio' | 'epistola' | 'at' | 'salmo';
+  kind: ReadingKind;
   reference: string;
   /** Identificador interno del pasaje, cuando el texto está incorporado. */
   passageId?: string;
@@ -416,13 +430,27 @@ export interface AthosArticle {
 
 export type IconCategory = 'cristo' | 'theotokos' | 'santos' | 'fiestas' | 'historicos';
 
+/** Procedencia de una reproducción: sin esto, la imagen no se muestra. */
+export interface ImageCredit {
+  /** Autor de la obra o de la fotografía, tal como consta en la fuente. */
+  author: string;
+  /** Datación de la obra. */
+  date: string;
+  license: string;
+  source: string;
+  /** Página de la que procede, para poder comprobarlo. */
+  page: string;
+}
+
 export interface OrthodoxIcon {
   id: string;
   name: string;
   category: IconCategory;
-  /** Ruta local o URL. Vacío mientras no haya una imagen con derechos comprobados. */
+  /** Ruta local. Vacío mientras no haya una imagen con derechos comprobados. */
   image?: string;
-  imageCredit?: string;
+  /** Versión reducida para la rejilla. */
+  thumb?: string;
+  credit?: ImageCredit;
   history: string;
   meaning: string;
   feastDay?: string;
@@ -471,61 +499,6 @@ export interface RuleCompletion {
   itemId: string;
   completedAt: string;
   count?: number;
-}
-
-export type HabitId =
-  | 'oracion-manana'
-  | 'oracion-noche'
-  | 'biblia'
-  | 'salterio'
-  | 'oracion-jesus'
-  | 'regla'
-  | 'ayuno'
-  | 'lectura-espiritual'
-  | 'liturgia'
-  | 'confesion'
-  | 'comunion';
-
-export interface Habit {
-  id: HabitId | string;
-  name: string;
-  description?: string;
-  order: number;
-  active: boolean;
-  /** `daily` se espera cada día; `occasional` no penaliza los huecos. */
-  cadence: 'daily' | 'weekly' | 'occasional';
-  builtIn: boolean;
-}
-
-export interface HabitEntry {
-  /** `${habitId}|${date}` */
-  id: string;
-  habitId: string;
-  date: string;
-  done: boolean;
-  note?: string;
-  updatedAt: string;
-}
-
-export interface JournalEntry {
-  id: string;
-  date: string;
-  title: string;
-  body: string;
-  tags: string[];
-  favorite: boolean;
-  createdAt: string;
-  updatedAt: string;
-  /** Si está presente, `body` contiene texto cifrado en base64, no texto legible. */
-  encryption?: EncryptionEnvelope;
-}
-
-export interface EncryptionEnvelope {
-  algorithm: 'AES-GCM';
-  kdf: 'PBKDF2-SHA256';
-  iterations: number;
-  salt: string;
-  iv: string;
 }
 
 export type FavoriteKind =
@@ -665,8 +638,7 @@ export type SearchKind =
   | 'canon'
   | 'monastery'
   | 'icon'
-  | 'athos'
-  | 'journal';
+  | 'athos';
 
 export interface SearchResult {
   id: string;

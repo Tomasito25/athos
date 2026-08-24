@@ -23,7 +23,6 @@ export const KIND_LABELS: Record<SearchKind, string> = {
   monastery: 'Monasterios',
   icon: 'Iconos',
   athos: 'Monte Athos',
-  journal: 'Diario',
 };
 
 /** Orden en que se presentan los grupos de resultados. */
@@ -39,13 +38,11 @@ const KIND_ORDER: SearchKind[] = [
   'athos',
   'monastery',
   'icon',
-  'journal',
 ];
 
 export interface SearchOptions {
   limitPerGroup?: number;
   kinds?: SearchKind[];
-  includeJournal?: boolean;
 }
 
 export interface SearchOutcome {
@@ -240,25 +237,6 @@ export async function searchAll(query: string, options: SearchOptions = {}): Pro
           subtitle: i.place,
           snippet: snippet(i.meaning, tokens),
           path: `/biblioteca/iconos/${i.id}`,
-          score: s,
-        });
-      }
-    }
-  }
-
-  /* ---- Diario del usuario ---- */
-  if (wanted.has('journal') && options.includeJournal !== false) {
-    for (const e of await db.journal_entries.toArray()) {
-      if (e.encryption) continue; // no se busca dentro de lo cifrado
-      const s = score(tokens, `${e.title} ${e.body} ${e.tags.join(' ')}`, e.title);
-      if (s > 0) {
-        push('journal', {
-          id: e.id,
-          kind: 'journal',
-          title: e.title || 'Entrada sin título',
-          subtitle: e.date,
-          snippet: snippet(e.body, tokens),
-          path: `/diario/${e.id}`,
           score: s,
         });
       }

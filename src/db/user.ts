@@ -1,6 +1,6 @@
 /**
- * Datos del usuario: favoritos, marcadores, notas, historial, regla de oración,
- * hábitos, diario y sesiones de la oración de Jesús.
+ * Datos del usuario: favoritos, marcadores, notas, historial, regla de oración
+ * y sesiones de la oración de Jesús.
  *
  * Todo permanece en el dispositivo. Ninguna de estas funciones sale a la red.
  */
@@ -8,11 +8,8 @@ import type {
   Bookmark,
   Favorite,
   FavoriteKind,
-  Habit,
-  HabitEntry,
   HistoryEntry,
   JesusPrayerSession,
-  JournalEntry,
   Note,
   PrayerRule,
   RuleCompletion,
@@ -246,78 +243,6 @@ export async function ruleStreak(today = toIsoDate(new Date())): Promise<number>
     cursor.setDate(cursor.getDate() - 1);
   }
   return streak;
-}
-
-/* ============================================================
-   Hábitos
-   ============================================================ */
-
-export async function listHabits(activeOnly = false): Promise<Habit[]> {
-  const habits = await db.habits.orderBy('order').toArray();
-  return activeOnly ? habits.filter((h) => h.active) : habits;
-}
-
-export const saveHabit = (habit: Habit) => db.habits.put(habit);
-
-export async function deleteHabit(id: string): Promise<void> {
-  await db.transaction('rw', [db.habits, db.habit_entries], async () => {
-    await db.habits.delete(id);
-    await db.habit_entries.where('habitId').equals(id).delete();
-  });
-}
-
-const habitEntryId = (habitId: string, date: string) => `${habitId}|${date}`;
-
-export async function toggleHabit(habitId: string, date: string): Promise<boolean> {
-  const id = habitEntryId(habitId, date);
-  const existing = await db.habit_entries.get(id);
-  const done = !existing?.done;
-  const entry: HabitEntry = { id, habitId, date, done, updatedAt: now() };
-  if (done) await db.habit_entries.put(entry);
-  else await db.habit_entries.delete(id);
-  return done;
-}
-
-export async function setHabit(habitId: string, date: string, done: boolean): Promise<void> {
-  const id = habitEntryId(habitId, date);
-  if (done) await db.habit_entries.put({ id, habitId, date, done, updatedAt: now() });
-  else await db.habit_entries.delete(id);
-}
-
-export async function habitEntriesBetween(from: string, to: string): Promise<HabitEntry[]> {
-  return db.habit_entries.where('date').between(from, to, true, true).toArray();
-}
-
-export async function habitEntriesOn(date: string): Promise<HabitEntry[]> {
-  return db.habit_entries.where('date').equals(date).toArray();
-}
-
-/* ============================================================
-   Diario
-   ============================================================ */
-
-export async function listJournal(): Promise<JournalEntry[]> {
-  return (await db.journal_entries.toArray()).sort((a, b) => b.date.localeCompare(a.date));
-}
-
-export async function getJournalEntry(id: string): Promise<JournalEntry | undefined> {
-  return db.journal_entries.get(id);
-}
-
-export async function saveJournalEntry(
-  input: Omit<JournalEntry, 'createdAt' | 'updatedAt'> & { createdAt?: string },
-): Promise<JournalEntry> {
-  const stamp = now();
-  const entry: JournalEntry = { ...input, createdAt: input.createdAt ?? stamp, updatedAt: stamp };
-  await db.journal_entries.put(entry);
-  return entry;
-}
-
-export const deleteJournalEntry = (id: string) => db.journal_entries.delete(id);
-
-export async function journalTags(): Promise<string[]> {
-  const entries = await db.journal_entries.toArray();
-  return [...new Set(entries.flatMap((e) => e.tags))].sort((a, b) => a.localeCompare(b, 'es'));
 }
 
 /* ============================================================

@@ -31,11 +31,22 @@ export function IconPage() {
     <article className="page page--reading">
       <PageHead eyebrow={ICON_CATEGORY_LABELS[item.category]} title={item.name} subtitle={item.place} />
 
-      <div style={{ maxWidth: '18rem', margin: '0 auto var(--sp-5)' }}>
-        <IconPlate name={item.name} image={item.image} />
-      </div>
+      <figure style={{ maxWidth: '22rem', margin: '0 auto var(--sp-5)' }}>
+        <IconPlate name={item.name} image={item.image} eager />
+        {item.credit ? (
+          <figcaption className="source-note" style={{ marginTop: 'var(--sp-2)', borderTop: 'none', paddingTop: 0 }}>
+            {item.credit.author}
+            {item.credit.date ? `, ${item.credit.date}` : ''}. {item.credit.license} ·{' '}
+            <a href={item.credit.page} target="_blank" rel="noreferrer noopener">
+              {item.credit.source}
+            </a>
+          </figcaption>
+        ) : null}
+      </figure>
 
-      {!item.image ? <Notice variant="pending">Imagen pendiente de incorporar con licencia comprobada.</Notice> : null}
+      {!item.image ? (
+        <Notice variant="pending">Imagen pendiente de incorporar con licencia comprobada.</Notice>
+      ) : null}
 
       <div className="tag-row" style={{ margin: 'var(--sp-4) 0' }}>
         <Tag tone="gold">{ICON_CATEGORY_LABELS[item.category]}</Tag>

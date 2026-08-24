@@ -60,6 +60,32 @@ ATHOS incorpora únicamente pasajes breves de uso común y verificables —entre
 ellos la Homilía catequética pascual de san Juan Crisóstomo, que se lee en todas
 las iglesias ortodoxas en la noche de Pascua— y mantiene la ficha del resto.
 
+## Lecturas del día
+
+El leccionario diario procede de
+[orthocal-python](https://github.com/brianglass/orthocal-python), de Brian
+Glass, **licencia MIT**. ATHOS ejecuta ese código en local para generar las
+lecturas de veintidós años y las guarda como dato; las referencias se traducen
+al español. Corresponde a la **tradición eslava**, que es la que orthocal usa
+por defecto.
+
+El texto de los pasajes es el de la Reina-Valera 1909, ya descrita arriba.
+
+## Iconografía: reproducciones
+
+Las imágenes proceden de **Wikimedia Commons**. Son fotografías o escaneos de
+obras históricas concretas, **ninguna generada por ordenador**. De cada una se
+guarda el autor, la datación, la licencia y la página de origen, y la aplicación
+lo muestra junto al icono.
+
+`scripts/fetch-icons.py` consulta la API de Commons y comprueba la licencia
+antes de descargar; rechaza los archivos sin autoría ni fecha documentadas.
+Cada imagen se verificó además visualmente, una por una, para confirmar que
+representa lo que la ficha describe.
+
+Si alguna reproducción estuviera mal atribuida en Commons, o su licencia
+cambiara, abre una incidencia y se retirará.
+
 ## Santoral, fiestas y calendario
 
 Los nombres, rangos y fechas de las fiestas son datos del calendario litúrgico
@@ -92,13 +118,11 @@ El mapa de la península es **esquemático**: sitúa cada monasterio en su costa
 lo largo de la península para orientarse, pero **no son coordenadas
 topográficas**, y así se indica al pie del mapa.
 
-## Iconografía
+## Iconografía: textos de las fichas
 
-Las fichas describen cada icono, su historia y su significado, bajo CC BY-SA 4.0.
-
-**No se incluye ninguna imagen.** Mientras no se disponga de reproducciones con
-licencia comprobada, se muestra una placa ornamental con el nombre del icono.
-ATHOS prefiere una placa vacía a una imagen ajena usada sin derecho.
+Las descripciones de cada icono, su historia y su significado son textos
+redactados para ATHOS, bajo CC BY-SA 4.0. Las reproducciones se describen más
+arriba.
 
 ---
 

@@ -12,7 +12,7 @@ import { dayRuleProgress, listHistory } from '@/db/user';
 import { SEASON_LABELS } from '@/lib/calendar/liturgical';
 import { formatLongDate, greeting, toneLabel } from '@/lib/format';
 import { ButtonLink, ListRow, Panel, ProgressBlocks, Rule, Section, Tag } from '@/components/ui';
-import { IconCandle, IconChotki, IconJournal, IconScroll, OrthodoxCross } from '@/components/icons';
+import { IconCandle, IconChotki, IconScroll, OrthodoxCross } from '@/components/icons';
 import { WEEKDAYS } from '@/lib/format';
 import { isFastDay } from '@/lib/calendar/fasting';
 import es from '@/locales/es';
@@ -145,7 +145,7 @@ export function HomePage() {
             <>
               <ProgressBlocks value={rule.data.ratio} />
               <p className="muted text-sm" style={{ marginTop: 'var(--sp-2)' }}>
-                {es.habits.doneCount
+                {es.rule.doneCount
                   .replace('{{done}}', String(rule.data.done))
                   .replace('{{total}}', String(rule.data.total))}
               </p>
@@ -179,12 +179,6 @@ export function HomePage() {
             leading={<IconScroll size={20} style={{ color: 'var(--gold)' }} />}
             title={es.home.psalter}
             meta="Los ciento cincuenta salmos en kathismata"
-          />
-          <ListRow
-            to="/diario"
-            leading={<IconJournal size={20} style={{ color: 'var(--gold)' }} />}
-            title={es.home.journal}
-            meta="Privado, en este dispositivo"
           />
           <ListRow
             to="/biblioteca/athos"

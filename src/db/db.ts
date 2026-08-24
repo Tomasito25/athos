@@ -21,11 +21,8 @@ import type {
   ChurchFather,
   Favorite,
   Feast,
-  Habit,
-  HabitEntry,
   HistoryEntry,
   JesusPrayerSession,
-  JournalEntry,
   LiturgicalReading,
   Monastery,
   Note,
@@ -64,9 +61,6 @@ export class AthosDatabase extends Dexie {
   daily_rules!: EntityTable<PrayerRule, 'id'>;
   rule_items!: EntityTable<RuleItem, 'id'>;
   rule_completions!: EntityTable<RuleCompletion, 'id'>;
-  habits!: EntityTable<Habit, 'id'>;
-  habit_entries!: EntityTable<HabitEntry, 'id'>;
-  journal_entries!: EntityTable<JournalEntry, 'id'>;
   favorites!: EntityTable<Favorite, 'id'>;
   bookmarks!: EntityTable<Bookmark, 'id'>;
   notes!: EntityTable<Note, 'id'>;
@@ -112,7 +106,61 @@ export class AthosDatabase extends Dexie {
       reading_progress: 'id, kind, refId',
       settings: 'key',
     });
+
+    /**
+     * Versión 2 — se retiran el diario y los hábitos.
+     *
+     * Antes de eliminar las tablas, lo que hubiera dentro se guarda en un
+     * único registro de `settings`. La aplicación ofrece descargarlo una vez
+     * y luego lo borra: nadie debe perder un diario espiritual porque una
+     * actualización decidiera por él.
+     */
+    this.version(2)
+      .stores({
+        habits: null,
+        habit_entries: null,
+        journal_entries: null,
+      })
+      .upgrade(async (tx) => {
+        const leer = async (nombre: string): Promise<unknown[]> => {
+          try {
+            return await tx.table(nombre).toArray();
+          } catch {
+            return [];
+          }
+        };
+
+        const archivo = {
+          journal_entries: await leer('journal_entries'),
+          habits: await leer('habits'),
+          habit_entries: await leer('habit_entries'),
+          archivedAt: new Date().toISOString(),
+        };
+
+        const hayAlgo =
+          archivo.journal_entries.length > 0 ||
+          archivo.habit_entries.length > 0 ||
+          archivo.habits.some((h) => !(h as { builtIn?: boolean }).builtIn);
+
+        if (hayAlgo) {
+          await tx.table('settings').put({
+            key: ARCHIVE_KEY,
+            value: archivo,
+            updatedAt: archivo.archivedAt,
+          });
+        }
+      });
   }
+}
+
+/** Clave donde queda lo que había en el diario y los hábitos al retirarlos. */
+export const ARCHIVE_KEY = 'archivo.vida-personal';
+
+export interface PersonalArchive {
+  journal_entries: unknown[];
+  habits: unknown[];
+  habit_entries: unknown[];
+  archivedAt: string;
 }
 
 export const db = new AthosDatabase();
@@ -122,9 +170,6 @@ export const USER_TABLES = [
   'daily_rules',
   'rule_items',
   'rule_completions',
-  'habits',
-  'habit_entries',
-  'journal_entries',
   'favorites',
   'bookmarks',
   'notes',

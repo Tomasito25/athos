@@ -56,7 +56,7 @@ export default defineConfig({
         name: 'ATHOS — Oración · Tradición · Vida',
         short_name: 'ATHOS',
         description:
-          'Horologion digital, libro de oración, biblioteca ortodoxa, calendario litúrgico y diario espiritual. Funciona sin conexión.',
+          'Horologion digital, libro de oración, biblioteca ortodoxa y calendario litúrgico con las lecturas de cada día. Funciona sin conexión.',
         lang: 'es',
         dir: 'ltr',
         start_url: `${base}?source=pwa`,
@@ -86,14 +86,19 @@ export default defineConfig({
         // el primer momento: código, tipografía latina y el texto bíblico completo.
         // Los subconjuntos griego y cirílico de las fuentes se cachean al usarse.
         globPatterns: [
-          '**/*.{js,css,html,ico,svg,png,webp}',
+          '**/*.{js,css,html,ico,svg,png}',
           'fonts/*-latin.woff2',
           'fonts/*-latin-ext.woff2',
           'content/**/*.json',
+          // De los iconos se precachea la miniatura; la imagen grande se
+          // guarda al abrirla, para no cargar la instalación con 2 MB.
+          'content/icons/*-mini.webp',
         ],
         // Los iconos declarados en el manifest los añade el propio plugin;
         // excluirlos del glob evita entradas duplicadas en el precaché.
         globIgnores: [
+          // El leccionario juliano sólo se descarga si se elige ese calendario.
+          'content/lectionary/lectionary-juliano.json',
           'icons/icon-192.png',
           'icons/icon-512.png',
           'icons/maskable-192.png',

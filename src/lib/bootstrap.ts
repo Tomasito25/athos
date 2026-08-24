@@ -12,6 +12,7 @@ import { seedContent, seedUserDefaults } from '@/db/seed';
 import { requestPersistentStorage } from '@/db/db';
 import { ensurePsalterBuilt } from '@/db/psalter';
 import { bibleIndexStatus, indexWholeBible } from '@/db/bible';
+import { loadLectionary } from '@/db/lectionary';
 
 const idle = (task: () => void, timeout = 4000) => {
   if ('requestIdleCallback' in window) {
@@ -33,10 +34,17 @@ export async function bootstrap(): Promise<void> {
     .matchMedia('(prefers-color-scheme: dark)')
     .addEventListener('change', () => applySettingsToDocument(useSettings.getState()));
 
-  useSettings.subscribe((state) => applySettingsToDocument(state));
+  useSettings.subscribe((state) => {
+    applySettingsToDocument(state);
+    void loadLectionary(state.calendarStyle);
+  });
 
   await seedContent();
   await seedUserDefaults();
+
+  // Las lecturas del día son lo primero que se ve en Inicio: se piden ya, sin
+  // bloquear el render, y la pantalla se actualiza en cuanto llegan.
+  void loadLectionary(settings.calendarStyle);
 
   // Sin bloquear el arranque.
   idle(() => {

@@ -5,6 +5,7 @@ import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
 import {
   deleteRuleItem,
+  listUserPrayers,
   newId,
   reorderRuleItems,
   ruleItems,
@@ -35,19 +36,21 @@ const SCOPES: Array<{ value: RuleScope; label: string }> = [
 
 const TIMES: Array<{ value: RuleTime; label: string }> = [
   { value: 'manana', label: es.rule.morning },
+  { value: 'mediodia', label: es.rule.midday },
   { value: 'noche', label: es.rule.evening },
-  { value: 'dia', label: es.rule.day },
 ];
 
 const LINK_KINDS: Array<{ value: RuleItem['linkKind'] | ''; label: string }> = [
   { value: '', label: es.rule.linkNone },
   { value: 'prayer', label: es.prayers.title },
+  { value: 'user-prayer', label: es.office.myPrayers },
   { value: 'psalm', label: es.psalter.title },
+  { value: 'jesus-prayer', label: es.jesusPrayer.title },
+  { value: 'komboskini', label: es.jesusPrayer.chotki },
   { value: 'bible', label: es.bible.title },
   { value: 'akathist', label: es.library.akathists },
   { value: 'canon', label: es.library.canons },
   { value: 'office', label: es.library.liturgy },
-  { value: 'jesus-prayer', label: es.jesusPrayer.title },
 ];
 
 export function RuleEditorPage() {
@@ -266,6 +269,7 @@ function ItemDialogForm({
 }) {
   const [draft, setDraft] = useState<RuleItem>(item);
   const prayers = useAsync(() => db.prayers.orderBy('order').toArray(), []);
+  const propias = useAsync(() => listUserPrayers(), []);
 
   const update = (patch: Partial<RuleItem>) => setDraft({ ...draft, ...patch });
 
@@ -340,6 +344,35 @@ function ItemDialogForm({
           </Field>
         ) : null}
 
+        {draft.linkKind === 'user-prayer' ? (
+          <Field label={es.office.myPrayers} hint="Se escriben en Orar → Mis oraciones.">
+            {(id) => (
+              <select
+                id={id}
+                className="select"
+                value={draft.linkId ?? ''}
+                onChange={(event) => {
+                  const elegida = propias.data?.find((p) => p.id === event.target.value);
+                  update({ linkId: event.target.value, title: draft.title || elegida?.title || '' });
+                }}
+              >
+                <option value="">—</option>
+                {(propias.data ?? []).map((oracion) => (
+                  <option key={oracion.id} value={oracion.id}>
+                    {oracion.title}
+                  </option>
+                ))}
+              </select>
+            )}
+          </Field>
+        ) : null}
+
+        {draft.linkKind === 'komboskini' ? (
+          <p className="field__hint">
+            El paso mostrará un contador de nudos dentro del oficio. Indica abajo cuántos.
+          </p>
+        ) : null}
+
         {draft.linkKind === 'psalm' ? (
           <Field label={es.psalter.psalm.replace('{{n}}', '')} hint="Numeración de los Setenta (1–151)">
             {(id) => (
@@ -356,7 +389,10 @@ function ItemDialogForm({
           </Field>
         ) : null}
 
-        <Field label={es.rule.target} hint="Déjalo vacío si el paso no se cuenta.">
+        <Field
+          label={draft.linkKind === 'komboskini' ? es.jesusPrayer.knots : es.rule.target}
+          hint="Déjalo vacío si el paso no se cuenta."
+        >
           {(id) => (
             <input
               id={id}

@@ -11,6 +11,7 @@ import {
 import { Link } from 'react-router-dom';
 import { IconCheck, IconChevronRight, IconClose, IconStar, IconStarFilled } from '@/components/icons';
 import type { ContentStatus, LicenseId, SourceMeta, TextBlock } from '@/types';
+import { useSettings } from '@/stores/settings';
 import es from '@/locales/es';
 
 /* ---------------- Encabezado de página ---------------- */
@@ -446,6 +447,33 @@ export function FavoriteButton({
 
 /* ---------------- Texto litúrgico ---------------- */
 
+/** Repeticiones de una fórmula: «tres veces», «doce veces»… */
+const VECES: Record<number, string> = {
+  2: 'dos veces',
+  3: 'tres veces',
+  12: 'doce veces',
+  40: 'cuarenta veces',
+};
+
+const veces = (n: number) => VECES[n] ?? `${n} veces`;
+
+/** El griego y su transliteración, debajo del español. */
+function GreekLines({ block }: { block: TextBlock }) {
+  const modo = useSettings((s) => s.greekMode);
+  if (modo === 'oculto' || !block.greek) return null;
+
+  return (
+    <span className="greek">
+      <span className="greek__original" lang="el">
+        {block.greek}
+      </span>
+      {modo === 'ambos' && block.roman ? (
+        <span className="greek__roman">{block.roman}</span>
+      ) : null}
+    </span>
+  );
+}
+
 /**
  * Presenta un texto litúrgico respetando la distinción entre rúbricas
  * (indicaciones, en rojo) y texto orante.
@@ -496,7 +524,15 @@ export function Blocks({
               </p>
             );
           default:
-            return <p key={key} dangerouslySetInnerHTML={{ __html: block.content }} />;
+            return (
+              <p key={key}>
+                <span dangerouslySetInnerHTML={{ __html: block.content }} />
+                {block.times && block.times > 1 ? (
+                  <em className="repeat"> ({veces(block.times)})</em>
+                ) : null}
+                <GreekLines block={block} />
+              </p>
+            );
         }
       })}
     </div>

@@ -975,3 +975,57 @@ input[type='range']:focus-visible::-webkit-slider-thumb {
   outline: 2px solid var(--gold);
   outline-offset: 2px;
 }
+
+/* ---------------- Invitación al oficio de la hora ---------------- */
+/* Lo primero que se ve al abrir ATHOS: qué toca rezar ahora. */
+.office-invite {
+  display: grid;
+  justify-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-6) var(--sp-4) var(--sp-5);
+  margin-block: var(--sp-4);
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at 50% 0%, var(--gold-wash), transparent 62%),
+    var(--surface);
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+
+.office-invite:hover {
+  border-color: var(--gold-soft);
+  box-shadow: var(--shadow);
+}
+
+.office-invite__mark {
+  color: var(--gold);
+  opacity: 0.9;
+}
+
+.office-invite__name {
+  font-size: var(--text-xl);
+  color: var(--ink-strong);
+  line-height: 1.2;
+}
+
+.office-invite__greek {
+  font-family: var(--font-serif);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  letter-spacing: 0.03em;
+}
+
+.office-invite__progress {
+  width: 100%;
+  max-width: 18rem;
+  margin-top: var(--sp-2);
+}
+
+.office-invite__button {
+  margin-top: var(--sp-3);
+  min-width: min(100%, 14rem);
+}

@@ -21,7 +21,8 @@ import {
   IconSun,
 } from '@/components/icons';
 import type { CalendarStyle } from '@/types';
-import type { MeasureChoice, ThemeChoice } from '@/stores/settings';
+import type { GreekMode, MeasureChoice, ThemeChoice } from '@/stores/settings';
+import { GREEK_NOTE } from '@/content/greek';
 import es from '@/locales/es';
 
 export function SettingsPage() {
@@ -118,7 +119,62 @@ export function SettingsPage() {
             />
           </div>
 
+          <div style={{ marginTop: 'var(--sp-4)' }}>
+            <Field label={es.office.greekMode} hint={GREEK_NOTE}>
+              {() => (
+                <Segmented
+                  value={settings.greekMode}
+                  label={es.office.greekMode}
+                  options={[
+                    { value: 'ambos' as GreekMode, label: es.office.greekBoth },
+                    { value: 'griego' as GreekMode, label: es.office.greekOnly },
+                    { value: 'oculto' as GreekMode, label: es.office.greekHidden },
+                  ]}
+                  onChange={(value) => settings.set('greekMode', value)}
+                />
+              )}
+            </Field>
+          </div>
+
           <p className="source-note">{es.settings.reducedMotion}</p>
+        </Panel>
+      </Section>
+
+      <Section title={es.office.title}>
+        <Panel>
+          <p className="muted text-sm">{es.office.threeTimes}</p>
+          <div className="stack" style={{ marginTop: 'var(--sp-4)' }}>
+            {(
+              [
+                ['manana', es.office.morning],
+                ['mediodia', es.office.midday],
+                ['noche', es.office.night],
+              ] as const
+            ).map(([clave, etiqueta]) => (
+              <Field key={clave} label={`${etiqueta} · desde las ${settings.officeHours[clave]}:00`}>
+                {(id) => (
+                  <input
+                    id={id}
+                    type="range"
+                    min={0}
+                    max={23}
+                    step={1}
+                    value={settings.officeHours[clave]}
+                    onChange={(event) =>
+                      settings.set('officeHours', {
+                        ...settings.officeHours,
+                        [clave]: Number(event.target.value),
+                      })
+                    }
+                  />
+                )}
+              </Field>
+            ))}
+          </div>
+          <p className="field__hint" style={{ marginTop: 'var(--sp-3)' }}>
+            Al abrir ATHOS se propone el oficio que corresponda a la hora. El de la noche se
+            extiende hasta el de la mañana.
+          </p>
         </Panel>
       </Section>
 

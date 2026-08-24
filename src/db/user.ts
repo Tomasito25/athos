@@ -15,6 +15,8 @@ import type {
   RuleCompletion,
   RuleItem,
   RuleScope,
+  RuleTime,
+  UserPrayer,
 } from '@/types';
 import { db } from './db';
 import { toIsoDate } from '@/lib/calendar/jdn';
@@ -134,6 +136,12 @@ export async function listRules(): Promise<PrayerRule[]> {
   return db.daily_rules.orderBy('order').toArray();
 }
 
+/** Oficio que corresponde a un momento del día. */
+export async function ruleForTime(time: RuleTime): Promise<PrayerRule | undefined> {
+  const todas = await listRules();
+  return todas.find((r) => r.time === time);
+}
+
 export async function rulesForScope(scope: RuleScope): Promise<PrayerRule[]> {
   const all = await listRules();
   const specific = all.filter((r) => r.scope === scope);
@@ -246,7 +254,37 @@ export async function ruleStreak(today = toIsoDate(new Date())): Promise<number>
 }
 
 /* ============================================================
-   Oración de Jesús y chotki
+   Oraciones propias del usuario
+   ============================================================ */
+
+export async function listUserPrayers(): Promise<UserPrayer[]> {
+  return (await db.user_prayers.toArray()).sort((a, b) => a.title.localeCompare(b.title, 'es'));
+}
+
+export async function getUserPrayer(id: string): Promise<UserPrayer | undefined> {
+  return db.user_prayers.get(id);
+}
+
+export async function saveUserPrayer(
+  input: Omit<UserPrayer, 'createdAt' | 'updatedAt'> & { createdAt?: string },
+): Promise<UserPrayer> {
+  const stamp = now();
+  const prayer: UserPrayer = { ...input, createdAt: input.createdAt ?? stamp, updatedAt: stamp };
+  await db.user_prayers.put(prayer);
+  return prayer;
+}
+
+export async function deleteUserPrayer(id: string): Promise<void> {
+  await db.transaction('rw', [db.user_prayers, db.rule_items], async () => {
+    await db.user_prayers.delete(id);
+    // Los pasos que la usaban quedan con su título, pero sin enlace roto.
+    const pasos = await db.rule_items.filter((i) => i.linkKind === 'user-prayer' && i.linkId === id).toArray();
+    await db.rule_items.bulkPut(pasos.map((i) => ({ ...i, linkKind: undefined, linkId: undefined })));
+  });
+}
+
+/* ============================================================
+   Oración de Jesús y komboskini
    ============================================================ */
 
 export async function saveSession(session: Omit<JesusPrayerSession, 'id'>): Promise<void> {

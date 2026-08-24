@@ -21,6 +21,7 @@ import {
   RV1909,
   SAINTS,
 } from '@/content';
+import { DAILY_OFFICES } from '@/content/hours';
 import type { PrayerRule, RuleItem } from '@/types';
 import { db, getSetting, setSetting } from './db';
 
@@ -74,44 +75,72 @@ export async function seedContent(force = false): Promise<boolean> {
   return true;
 }
 
-/* ---------- Regla de oración inicial ---------- */
+/* ---------- Los tres oficios del día ---------- */
 
 const now = () => new Date().toISOString();
 
-function defaultRules(): { rules: PrayerRule[]; items: RuleItem[] } {
+/**
+ * Construye los tres oficios a partir de su definición.
+ * Cada paso guarda su propio texto cuando no procede de la biblioteca, de modo
+ * que el oficio se lee entero aunque el usuario reordene o quite piezas.
+ */
+function defaultOffices(): { rules: PrayerRule[]; items: RuleItem[] } {
   const stamp = now();
-  const rules: PrayerRule[] = [
-    { id: 'regla-manana', name: 'Regla de la mañana', scope: 'diario', time: 'manana', order: 1, createdAt: stamp, updatedAt: stamp },
-    { id: 'regla-noche', name: 'Regla de la noche', scope: 'diario', time: 'noche', order: 2, createdAt: stamp, updatedAt: stamp },
-  ];
+  const rules: PrayerRule[] = [];
+  const items: RuleItem[] = [];
 
-  const items: RuleItem[] = [
-    { id: 'rm-1', ruleId: 'regla-manana', order: 1, title: 'Señal de la Cruz y silencio', note: 'Antes de hablar, callar.' },
-    { id: 'rm-2', ruleId: 'regla-manana', order: 2, title: 'Comienzo habitual', linkKind: 'prayer', linkId: 'comienzo-habitual' },
-    { id: 'rm-3', ruleId: 'regla-manana', order: 3, title: 'Al levantarse del sueño', linkKind: 'prayer', linkId: 'al-despertar' },
-    { id: 'rm-4', ruleId: 'regla-manana', order: 4, title: 'Salmo 50', linkKind: 'psalm', linkId: '50' },
-    { id: 'rm-5', ruleId: 'regla-manana', order: 5, title: 'Símbolo de la Fe', linkKind: 'prayer', linkId: 'simbolo-de-la-fe' },
-    { id: 'rm-6', ruleId: 'regla-manana', order: 6, title: 'Oración de Jesús', linkKind: 'jesus-prayer', target: 33 },
+  DAILY_OFFICES.forEach((office, indice) => {
+    const ruleId = `oficio-${office.time}`;
+    rules.push({
+      id: ruleId,
+      name: office.name,
+      scope: 'diario',
+      time: office.time,
+      order: indice + 1,
+      createdAt: stamp,
+      updatedAt: stamp,
+    });
 
-    { id: 'rn-1', ruleId: 'regla-noche', order: 1, title: 'Examen del día', linkKind: 'prayer', linkId: 'examen-del-dia' },
-    { id: 'rn-2', ruleId: 'regla-noche', order: 2, title: 'Comienzo habitual', linkKind: 'prayer', linkId: 'comienzo-habitual' },
-    { id: 'rn-3', ruleId: 'regla-noche', order: 3, title: 'Oración antes del sueño', linkKind: 'prayer', linkId: 'damasceno-noche' },
-    { id: 'rn-4', ruleId: 'regla-noche', order: 4, title: 'Perdón antes de dormir', linkKind: 'prayer', linkId: 'perdon-nocturno' },
-    { id: 'rn-5', ruleId: 'regla-noche', order: 5, title: 'A la Santísima Theotokos', linkKind: 'prayer', linkId: 'theotokos-noche' },
-    { id: 'rn-6', ruleId: 'regla-noche', order: 6, title: 'Oración de Jesús', linkKind: 'jesus-prayer', target: 12 },
-  ];
+    office.steps.forEach((step, posicion) => {
+      items.push({
+        id: `${ruleId}-${step.id}`,
+        ruleId,
+        order: posicion + 1,
+        title: step.title,
+        note: step.note,
+        blocks: step.blocks,
+        target: step.target,
+        linkKind:
+          step.kind === 'prayer'
+            ? 'prayer'
+            : step.kind === 'psalm'
+              ? 'psalm'
+              : step.kind === 'jesus-prayer'
+                ? 'jesus-prayer'
+                : step.kind === 'komboskini'
+                  ? 'komboskini'
+                  : undefined,
+        linkId:
+          step.kind === 'prayer'
+            ? step.prayerId
+            : step.kind === 'psalm'
+              ? String(step.psalm)
+              : undefined,
+      });
+    });
+  });
 
   return { rules, items };
 }
 
 /**
- * Crea la regla de oración inicial una sola vez.
- * Si el usuario la borra, no vuelve a aparecer.
+ * Crea los tres oficios del día una sola vez.
+ * Si el usuario los borra, no vuelven a aparecer.
  */
 export async function seedUserDefaults(): Promise<boolean> {
   if (await getSetting<boolean>(DEFAULTS_KEY, false)) return false;
 
-  const { rules, items } = defaultRules();
+  const { rules, items } = defaultOffices();
   await db.transaction('rw', [db.daily_rules, db.rule_items, db.settings], async () => {
     await db.daily_rules.bulkPut(rules);
     await db.rule_items.bulkPut(items);

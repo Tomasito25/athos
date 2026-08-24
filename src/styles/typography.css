@@ -88,3 +88,36 @@
   background: var(--paper);
   color: var(--paper-ink);
 }
+
+/* ---------------- Griego litúrgico ---------------- */
+/* El español manda; el griego acompaña, en un tono más bajo. */
+.greek {
+  display: block;
+  margin-top: 0.45em;
+  padding-inline-start: 0.9em;
+  border-inline-start: 2px solid var(--gold-wash);
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+
+.greek__original {
+  display: block;
+  color: var(--ink-soft);
+  font-family: var(--font-serif);
+}
+
+.greek__roman {
+  display: block;
+  margin-top: 0.15em;
+  color: var(--ink-faint);
+  font-family: var(--font-ui);
+  font-size: 0.85em;
+  font-style: italic;
+  letter-spacing: 0.01em;
+}
+
+.repeat {
+  color: var(--red);
+  font-size: 0.86em;
+  white-space: nowrap;
+}

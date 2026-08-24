@@ -239,8 +239,12 @@ function itemLink(item: RuleItem): string | null {
       return `/biblioteca/canones/${item.linkId}`;
     case 'office':
       return `/biblioteca/liturgia/${item.linkId}`;
+    case 'user-prayer':
+      return '/orar/mis-oraciones';
     case 'jesus-prayer':
       return `/orar/oracion-de-jesus${item.target ? `?objetivo=${item.target}` : ''}`;
+    case 'komboskini':
+      return '/orar/komboskini';
     default:
       return null;
   }

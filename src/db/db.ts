@@ -36,6 +36,7 @@ import type {
   RuleItem,
   Saint,
   SettingRecord,
+  UserPrayer,
 } from '@/types';
 
 export class AthosDatabase extends Dexie {
@@ -67,6 +68,7 @@ export class AthosDatabase extends Dexie {
   history!: EntityTable<HistoryEntry, 'id'>;
   jesus_prayer_sessions!: EntityTable<JesusPrayerSession, 'id'>;
   reading_progress!: EntityTable<ReadingProgress, 'id'>;
+  user_prayers!: EntityTable<UserPrayer, 'id'>;
   settings!: EntityTable<SettingRecord, 'key'>;
 
   constructor(name = 'athos') {
@@ -150,6 +152,29 @@ export class AthosDatabase extends Dexie {
           });
         }
       });
+
+    /**
+     * Versión 3 — tres oficios diarios y oraciones propias del usuario.
+     *
+     * Las dos reglas que ATHOS creaba por defecto (mañana y noche) dan paso a
+     * los tres oficios: mañana, mediodía y noche. Se retiran sólo esas dos,
+     * que las había puesto la aplicación; cualquier regla creada por el
+     * usuario se queda donde está.
+     */
+    this.version(3)
+      .stores({
+        user_prayers: 'id, title, updatedAt',
+      })
+      .upgrade(async (tx) => {
+        const reglas = tx.table('daily_rules');
+        const pasos = tx.table('rule_items');
+        for (const id of ['regla-manana', 'regla-noche']) {
+          await reglas.delete(id);
+          await pasos.where('ruleId').equals(id).delete();
+        }
+        // Así el sembrado vuelve a ejecutarse y crea los tres oficios.
+        await tx.table('settings').delete('user.defaultsCreated');
+      });
   }
 }
 
@@ -176,6 +201,7 @@ export const USER_TABLES = [
   'history',
   'jesus_prayer_sessions',
   'reading_progress',
+  'user_prayers',
   'settings',
 ] as const;
 

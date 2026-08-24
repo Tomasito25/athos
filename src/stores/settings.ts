@@ -12,6 +12,9 @@ import type { CalendarStyle } from '@/types';
 export type ThemeChoice = 'light' | 'dark' | 'system';
 export type MeasureChoice = 'narrow' | 'normal' | 'wide';
 
+/** Cómo se muestran las fórmulas que ATHOS trae también en griego. */
+export type GreekMode = 'oculto' | 'griego' | 'ambos';
+
 export interface SettingsState {
   theme: ThemeChoice;
   fontScale: number;
@@ -20,9 +23,13 @@ export interface SettingsState {
   paperMode: boolean;
   serifUi: boolean;
   highContrast: boolean;
+  greekMode: GreekMode;
 
   calendarStyle: CalendarStyle;
   language: string;
+
+  /** Hora a la que empieza cada oficio. La noche se extiende hasta la mañana. */
+  officeHours: { manana: number; mediodia: number; noche: number };
 
   jesusPrayerVibration: boolean;
   jesusPrayerSound: boolean;
@@ -46,8 +53,10 @@ export const DEFAULT_SETTINGS = {
   paperMode: false,
   serifUi: false,
   highContrast: false,
+  greekMode: 'ambos' as GreekMode,
   calendarStyle: 'nuevo' as CalendarStyle,
   language: 'es',
+  officeHours: { manana: 5, mediodia: 12, noche: 19 },
   jesusPrayerVibration: true,
   jesusPrayerSound: false,
   jesusPrayerKeepAwake: true,

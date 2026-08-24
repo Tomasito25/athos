@@ -12,6 +12,7 @@ import { dayRuleProgress, listHistory } from '@/db/user';
 import { SEASON_LABELS } from '@/lib/calendar/liturgical';
 import { formatLongDate, greeting, toneLabel } from '@/lib/format';
 import { ButtonLink, ListRow, Panel, ProgressBlocks, Rule, Section, Tag } from '@/components/ui';
+import { OfficeInvitation } from '@/features/office/OfficeInvitation';
 import { IconCandle, IconChotki, IconScroll, OrthodoxCross } from '@/components/icons';
 import { WEEKDAYS } from '@/lib/format';
 import { isFastDay } from '@/lib/calendar/fasting';
@@ -53,6 +54,9 @@ export function HomePage() {
           {JESUS_PRAYER}
         </p>
       </header>
+
+      {/* Lo primero al abrir: el oficio que toca a esta hora. */}
+      <OfficeInvitation />
 
       <Rule />
 
@@ -139,8 +143,8 @@ export function HomePage() {
       </Section>
 
       {/* ---------- Regla de oración ---------- */}
-      <Section title={es.home.rule} action={{ label: 'Abrir', to: '/orar/regla' }} id="regla">
-        <Link to="/orar/regla" className="panel" style={{ textDecoration: 'none', display: 'block' }}>
+      <Section title={es.home.rule} action={{ label: 'Abrir', to: '/orar' }} id="regla">
+        <Link to="/orar" className="panel" style={{ textDecoration: 'none', display: 'block' }}>
           {rule.data && rule.data.total > 0 ? (
             <>
               <ProgressBlocks value={rule.data.ratio} />

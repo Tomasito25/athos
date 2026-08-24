@@ -92,12 +92,20 @@ ATHOS_PORT=8899 ./run.sh
 
 ATHOS reúne en un solo lugar lo que un cristiano ortodoxo usa a diario:
 
+- **Tres oficios al día** — mañana, mediodía y noche, con la estructura del
+  Horologion: comienzo habitual, Trisagio, salmos propios de cada hora, Símbolo
+  de la Fe y despedida. **Al abrir ATHOS aparece el que toca a esta hora**, con
+  un botón para empezar.
+- **Fórmulas en griego** — el Trisagio, el «Kyrie eleison», el Padre Nuestro y
+  las demás, con su texto griego y su transliteración debajo del español.
+- **Oraciones propias** — escribe las tuyas y añádelas a cualquier oficio, junto
+  a las de la biblioteca.
 - **Oraciones** — libro de oración estructurado en dieciocho categorías, de las
   oraciones de la mañana a la preparación para la Comunión.
-- **Regla de oración** — reglas propias, editables y reordenables, con reglas
-  distintas para días normales, domingos, fiestas y periodos de ayuno.
-- **Oración de Jesús y chotki** — contador con objetivos, temporizador,
-  vibración, historial y estadísticas.
+- **Regla de oración** — además de los tres oficios, reglas propias para
+  domingos, fiestas y periodos de ayuno.
+- **Oración de Jesús y komboskini** — contador con objetivos, temporizador,
+  vibración, historial y estadísticas, y un contador dentro del propio oficio.
 - **Biblia** — texto completo de la Reina-Valera 1909 (dominio público), con
   búsqueda sin conexión, marcadores y notas.
 - **Salterio** — los ciento cincuenta salmos en la **numeración de los Setenta**,
@@ -233,6 +241,29 @@ Es la parte más delicada, y por eso la más probada.
 Verificado contra las fechas publicadas de la Pascua ortodoxa entre 2018 y 2034,
 y comprobado para el intervalo 1900-2200: siempre en domingo y siempre entre el
 22 de marzo y el 25 de abril julianos.
+
+### Los tres oficios
+
+ATHOS propone tres momentos, y al abrirse muestra el que corresponde a la hora:
+
+| Oficio | Griego | Qué es |
+| --- | --- | --- |
+| **Mañana** | Ἑωθιναὶ Προσευχαί | Las oraciones matutinas del libro de oración |
+| **Mediodía** | Ὥρα Ἕκτη | La Hora Sexta, a las doce, en memoria de la Crucifixión |
+| **Noche** | Μικρὸν Ἀπόδειπνον | Las Pequeñas Completas, antes del descanso |
+
+La **estructura** es la del Horologion —el orden de las oraciones y los salmos
+de cada hora son datos documentados—: la Hora Sexta lleva los salmos 53, 54 y
+90; las Pequeñas Completas, el 50, el 69 y el 142. Los **textos** son los que
+ATHOS ha podido verificar; lo que falta, como el tropario propio de la Hora
+Sexta, figura como pendiente en vez de rellenarse con una redacción propia.
+
+Cada oficio se reza de corrido, como un libro. Los pasos se marcan para saber
+por dónde ibas si te interrumpen, no para puntuar a nadie. Puedes cambiar el
+orden, quitar pasos y añadir los tuyos —de la biblioteca, del Salterio, de tus
+propias oraciones, o un contador de komboskini— desde el editor del oficio.
+
+Las horas de cada oficio se ajustan en Configuración.
 
 ### Lecturas del día
 

@@ -2,6 +2,31 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.3.0]
+
+### Añadido
+
+- **Tres oficios diarios**: mañana, mediodía y noche, con la estructura del
+  Horologion. El del mediodía sigue la Hora Sexta (salmos 53, 54 y 90) y el de
+  la noche las Pequeñas Completas (50, 69 y 142).
+- **La pantalla de inicio propone el oficio de la hora**, con su nombre griego y
+  un botón para empezar; si ya se había empezado, ofrece continuar.
+- **Fórmulas en griego** con transliteración: Trisagio, Kyrie eleison, Christe
+  eleison, Padre Nuestro, Rey Celestial, Theotoke Parthene, Axion estin, la
+  oración de Jesús y la despedida. Se eligen en Configuración → Aspecto.
+- **Oraciones propias**: se escriben en Orar → Mis oraciones y se añaden a
+  cualquier oficio como una más. Entran en la copia de seguridad.
+- **Komboskini** como paso del oficio, con contador incrustado que no obliga a
+  salir de la oración. La sección pasa a llamarse por su nombre griego.
+- Las repeticiones («tres veces», «cuarenta veces») se muestran en su sitio.
+- Horas de cada oficio ajustables en Configuración.
+- La barra superior indica en qué sección estás.
+
+### Cambiado
+
+- Las dos reglas que ATHOS creaba por defecto dan paso a los tres oficios. Las
+  reglas creadas por el usuario se conservan intactas.
+
 ## [1.2.0]
 
 ### Añadido

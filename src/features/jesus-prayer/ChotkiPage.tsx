@@ -63,8 +63,9 @@ export function ChotkiPage() {
   return (
     <div className="page page--reading">
       <PageHead
-        title={es.jesusPrayer.chotki}
-        subtitle="La cuerda de oración. Cada nudo, una oración."
+        eyebrow="Κομποσκοίνι"
+        title={es.jesusPrayer.chotkiAlt}
+        subtitle="La cuerda de oración: komboskini en griego, chotki en eslavo. Cada nudo, una oración."
       />
 
       <div

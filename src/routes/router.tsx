@@ -28,9 +28,12 @@ export const routes: RouteObject[] = [
       { path: 'orar/oraciones', lazy: page(() => import('@/features/prayers/PrayersPage'), 'PrayersPage') },
       { path: 'orar/oraciones/categoria/:categoryId', lazy: page(() => import('@/features/prayers/PrayerCategoryPage'), 'PrayerCategoryPage') },
       { path: 'orar/oraciones/:prayerId', lazy: page(() => import('@/features/prayers/PrayerPage'), 'PrayerPage') },
+      { path: 'orar/oficio/:time', lazy: page(() => import('@/features/office/OfficePage'), 'OfficePage') },
+      { path: 'orar/mis-oraciones', lazy: page(() => import('@/features/office/MyPrayersPage'), 'MyPrayersPage') },
       { path: 'orar/regla', lazy: page(() => import('@/features/rule/RulePage'), 'RulePage') },
       { path: 'orar/regla/editar/:ruleId', lazy: page(() => import('@/features/rule/RuleEditorPage'), 'RuleEditorPage') },
       { path: 'orar/oracion-de-jesus', lazy: page(() => import('@/features/jesus-prayer/JesusPrayerPage'), 'JesusPrayerPage') },
+      { path: 'orar/komboskini', lazy: page(() => import('@/features/jesus-prayer/ChotkiPage'), 'ChotkiPage') },
       { path: 'orar/chotki', lazy: page(() => import('@/features/jesus-prayer/ChotkiPage'), 'ChotkiPage') },
 
       /* ---------------- Leer ---------------- */

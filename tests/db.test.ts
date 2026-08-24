@@ -90,7 +90,7 @@ describe('siembra del contenido', () => {
       title: 'Salmo 50',
       path: '/leer/salterio/50',
     });
-    await toggleRuleItem('2026-08-23', 'regla-manana', 'rm-1');
+    await toggleRuleItem('2026-08-23', 'oficio-manana', 'oficio-manana-m-inicio');
 
     await seedContent(true);
 
@@ -100,26 +100,42 @@ describe('siembra del contenido', () => {
 });
 
 describe('valores iniciales del usuario', () => {
-  it('crea la regla de oración inicial una sola vez', async () => {
+  it('crea los tres oficios del día una sola vez', async () => {
     expect(await seedUserDefaults()).toBe(true);
-    expect((await listRules()).length).toBe(2);
-    expect(await db.rule_items.count()).toBe(12);
+    const reglas = await listRules();
+    expect(reglas.map((r) => r.time)).toEqual(['manana', 'mediodia', 'noche']);
+    expect(await db.rule_items.count()).toBeGreaterThan(30);
     expect(await seedUserDefaults()).toBe(false);
   });
 
-  it('si el usuario borra una regla, no reaparece', async () => {
+  it('cada oficio trae sus pasos, con texto o con enlace', async () => {
     await seedUserDefaults();
-    await deleteRule('regla-manana');
-    await seedUserDefaults();
-    expect((await listRules()).map((r) => r.id)).not.toContain('regla-manana');
+    for (const regla of await listRules()) {
+      const pasos = await ruleItems(regla.id);
+      expect(pasos.length, regla.name).toBeGreaterThan(8);
+      for (const paso of pasos) {
+        expect(paso.title.length, `${regla.name}: paso sin título`).toBeGreaterThan(2);
+        // O trae su propio texto, o apunta a algo, o es un contador.
+        const tieneContenido =
+          Boolean(paso.blocks?.length) || Boolean(paso.linkKind) || Boolean(paso.target);
+        expect(tieneContenido, `${regla.name}: ${paso.title}`).toBe(true);
+      }
+    }
   });
 
-  it('al borrar una regla se llevan sus pasos y su historial', async () => {
+  it('si el usuario borra un oficio, no reaparece', async () => {
     await seedUserDefaults();
-    await toggleRuleItem('2026-08-23', 'regla-manana', 'rm-1');
-    await deleteRule('regla-manana');
-    expect(await db.rule_items.where('ruleId').equals('regla-manana').count()).toBe(0);
-    expect(await db.rule_completions.where('ruleId').equals('regla-manana').count()).toBe(0);
+    await deleteRule('oficio-manana');
+    await seedUserDefaults();
+    expect((await listRules()).map((r) => r.id)).not.toContain('oficio-manana');
+  });
+
+  it('al borrar un oficio se llevan sus pasos y su historial', async () => {
+    await seedUserDefaults();
+    await toggleRuleItem('2026-08-23', 'oficio-manana', 'oficio-manana-m-inicio');
+    await deleteRule('oficio-manana');
+    expect(await db.rule_items.where('ruleId').equals('oficio-manana').count()).toBe(0);
+    expect(await db.rule_completions.where('ruleId').equals('oficio-manana').count()).toBe(0);
   });
 });
 

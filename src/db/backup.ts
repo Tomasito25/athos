@@ -14,6 +14,7 @@ import type {
   RuleCompletion,
   RuleItem,
   SettingRecord,
+  UserPrayer,
 } from '@/types';
 import { db } from './db';
 
@@ -33,6 +34,7 @@ export interface AthosBackup {
     bookmarks: Bookmark[];
     notes: Note[];
     jesus_prayer_sessions: JesusPrayerSession[];
+    user_prayers: UserPrayer[];
     settings: SettingRecord[];
   };
 }
@@ -49,6 +51,7 @@ export async function exportBackup(sections?: BackupSection[]): Promise<AthosBac
       'bookmarks',
       'notes',
       'jesus_prayer_sessions',
+      'user_prayers',
       'settings',
     ],
   );
@@ -70,6 +73,7 @@ export async function exportBackup(sections?: BackupSection[]): Promise<AthosBac
       jesus_prayer_sessions: await take('jesus_prayer_sessions', () =>
         db.jesus_prayer_sessions.toArray(),
       ),
+      user_prayers: await take('user_prayers', () => db.user_prayers.toArray()),
       settings: await take('settings', () =>
         // Los ajustes internos de siembra no se exportan.
         db.settings.filter((s) => !s.key.startsWith('content.')).toArray(),
@@ -99,6 +103,7 @@ const VALIDATORS: Record<BackupSection, (row: unknown) => boolean> = {
   bookmarks: (r) => hasStringId(r) && typeof (r as Bookmark).kind === 'string',
   notes: (r) => hasStringId(r) && typeof (r as Note).body === 'string',
   jesus_prayer_sessions: (r) => hasStringId(r) && typeof (r as JesusPrayerSession).count === 'number',
+  user_prayers: (r) => hasStringId(r) && typeof (r as UserPrayer).title === 'string',
   settings: (r) => isObject(r) && typeof r.key === 'string',
 };
 
@@ -163,6 +168,7 @@ export async function importBackup(
     bookmarks: db.bookmarks,
     notes: db.notes,
     jesus_prayer_sessions: db.jesus_prayer_sessions,
+    user_prayers: db.user_prayers,
     settings: db.settings,
   } as const;
 
@@ -202,6 +208,14 @@ export function backupToMarkdown(backup: AthosBackup): string {
         lines.push(`${item.order}. ${item.title}${item.target ? ` — ${item.target} veces` : ''}`);
       }
       lines.push('');
+    }
+  }
+
+  if (backup.data.user_prayers?.length) {
+    lines.push('## Mis oraciones', '');
+    for (const oracion of backup.data.user_prayers) {
+      lines.push(`### ${oracion.title}`, '', oracion.body, '');
+      if (oracion.greek) lines.push(oracion.greek, '');
     }
   }
 
@@ -247,6 +261,7 @@ export async function wipeUserData(): Promise<void> {
       db.history,
       db.jesus_prayer_sessions,
       db.reading_progress,
+      db.user_prayers,
       db.settings,
     ],
     async () => {
@@ -260,6 +275,7 @@ export async function wipeUserData(): Promise<void> {
         db.history.clear(),
         db.jesus_prayer_sessions.clear(),
         db.reading_progress.clear(),
+        db.user_prayers.clear(),
         db.settings.clear(),
       ]);
     },

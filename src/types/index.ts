@@ -49,6 +49,12 @@ export interface TextBlock {
   content: string;
   /** Número de versículo, estrofa u oda, cuando aplica. */
   ref?: string;
+  /** Original griego, para las fórmulas que se rezan también en su lengua. */
+  greek?: string;
+  /** Transliteración del griego, para quien no lee el alfabeto. */
+  roman?: string;
+  /** Veces que se repite la fórmula. */
+  times?: number;
 }
 
 /* ============================================================
@@ -465,7 +471,9 @@ export interface OrthodoxIcon {
    ============================================================ */
 
 export type RuleScope = 'diario' | 'domingo' | 'fiesta' | 'ayuno';
-export type RuleTime = 'manana' | 'noche' | 'dia';
+
+/** Los tres momentos del oficio diario. */
+export type RuleTime = 'manana' | 'mediodia' | 'noche';
 
 export interface PrayerRule {
   id: string;
@@ -482,12 +490,26 @@ export interface RuleItem {
   ruleId: string;
   order: number;
   title: string;
-  /** Enlace opcional a un texto de la biblioteca. */
-  linkKind?: 'prayer' | 'psalm' | 'bible' | 'akathist' | 'canon' | 'office' | 'jesus-prayer';
+  /** Enlace opcional a un texto de la biblioteca o del propio usuario. */
+  linkKind?:
+    | 'prayer'
+    | 'user-prayer'
+    | 'psalm'
+    | 'bible'
+    | 'akathist'
+    | 'canon'
+    | 'office'
+    | 'jesus-prayer'
+    | 'komboskini';
   linkId?: string;
-  /** Repeticiones objetivo, p. ej. 33 oraciones de Jesús. */
+  /** Repeticiones objetivo, p. ej. 33 oraciones de Jesús o nudos del komboskini. */
   target?: number;
   note?: string;
+  /**
+   * Texto propio del paso, cuando no procede de la biblioteca: las piezas del
+   * oficio (comienzo, trisagio, despedida) y lo que el usuario escriba.
+   */
+  blocks?: TextBlock[];
 }
 
 /** Un ítem completado en una fecha concreta. */
@@ -499,6 +521,17 @@ export interface RuleCompletion {
   itemId: string;
   completedAt: string;
   count?: number;
+}
+
+/** Una oración escrita o pegada por el propio usuario. */
+export interface UserPrayer {
+  id: string;
+  title: string;
+  body: string;
+  /** Texto griego opcional, para quien quiera rezarla en su lengua. */
+  greek?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type FavoriteKind =
@@ -513,7 +546,8 @@ export type FavoriteKind =
   | 'monastery'
   | 'icon'
   | 'athos-article'
-  | 'bible-chapter';
+  | 'bible-chapter'
+  | 'user-prayer';
 
 export interface Favorite {
   /** `${kind}:${refId}` */

@@ -15,6 +15,8 @@ import {
   promptInstall,
 } from '@/lib/pwa';
 import { Button, Notice, PageHead, Panel, Section } from '@/components/ui';
+import { QrCode } from '@/components/QrCode';
+import { resolvePhoneUrl, type PhoneUrl } from '@/lib/phone-url';
 import { IconInstall, IconUpload } from '@/components/icons';
 import { useUi } from '@/stores/ui';
 import type { BeforeInstallPromptEvent } from '@/stores/ui';
@@ -40,6 +42,19 @@ export function InstallPage() {
     });
     return stop;
   }, [setInstallEvent]);
+
+  // La dirección que hay que darle al teléfono: la publicada si ATHOS está en
+  // un dominio, y si no la de este ordenador en la red local.
+  const [phone, setPhone] = useState<PhoneUrl | null>(null);
+  useEffect(() => {
+    let vigente = true;
+    resolvePhoneUrl(window.location).then((r) => {
+      if (vigente) setPhone(r);
+    });
+    return () => {
+      vigente = false;
+    };
+  }, []);
 
   const platform = detectPlatform();
   const browser = detectBrowser();
@@ -72,6 +87,62 @@ export function InstallPage() {
   return (
     <div className="page page--reading">
       <PageHead title={es.install.title} subtitle={es.install.subtitle} />
+
+      {/* ---- Llevarla al teléfono ---- */}
+      {!standalone ? (
+        <Panel style={{ marginBottom: 'var(--sp-5)' }}>
+          <p className="panel__title">{es.install.toPhone}</p>
+
+          {phone?.url ? (
+            <>
+              <div
+                className="row"
+                style={{ gap: 'var(--sp-4)', alignItems: 'flex-start', marginTop: 'var(--sp-3)' }}
+              >
+                <QrCode value={phone.url} size={168} />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p className="text-sm">{es.install.scanIt}</p>
+                  <p className="muted text-sm" style={{ marginTop: 'var(--sp-2)' }}>
+                    <code style={{ overflowWrap: 'anywhere' }}>{phone.url}</code>
+                  </p>
+                  <div className="btn-row" style={{ marginTop: 'var(--sp-3)' }}>
+                    <Button
+                      size="sm"
+                      onClick={async () => {
+                        try {
+                          await navigator.clipboard.writeText(phone.url!);
+                          toast(es.install.copied);
+                        } catch {
+                          toast(phone.url!);
+                        }
+                      }}
+                    >
+                      {es.install.copyLink}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {phone.reason === 'lan' ? (
+                <>
+                  <p className="muted text-sm" style={{ marginTop: 'var(--sp-3)' }}>
+                    {es.install.lanSame}
+                  </p>
+                  {!phone.installable ? (
+                    <div style={{ marginTop: 'var(--sp-3)' }}>
+                      <Notice variant="warn">{es.install.lanOnly}</Notice>
+                    </div>
+                  ) : null}
+                </>
+              ) : null}
+            </>
+          ) : phone ? (
+            <p className="muted text-sm" style={{ marginTop: 'var(--sp-3)' }}>
+              {es.install.noLan}
+            </p>
+          ) : null}
+        </Panel>
+      ) : null}
 
       {!secure && !standalone ? (
         <div className="stack" style={{ marginBottom: 'var(--sp-5)' }}>

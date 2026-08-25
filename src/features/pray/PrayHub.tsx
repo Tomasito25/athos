@@ -94,16 +94,14 @@ export function PrayHub() {
             meta="Escribe las tuyas y añádelas a cualquier oficio"
           />
           <ListRow
-            to="/orar/oracion-de-jesus"
-            leading={<IconChotki size={20} style={{ color: 'var(--gold)' }} />}
-            title={es.jesusPrayer.title}
-            meta={stats.data?.today ? `Hoy: ${stats.data.today}` : es.jesusPrayer.text}
-          />
-          <ListRow
             to="/orar/komboskini"
             leading={<IconChotki size={20} style={{ color: 'var(--gold)' }} />}
             title={es.jesusPrayer.chotkiAlt}
-            meta="La cuerda de oración, nudo a nudo"
+            meta={
+              stats.data?.today
+                ? `La cuerda de oración, nudo a nudo · Hoy: ${stats.data.today}`
+                : 'La cuerda de oración, nudo a nudo'
+            }
           />
           <ListRow
             to="/orar/regla"

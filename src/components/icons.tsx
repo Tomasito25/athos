@@ -319,3 +319,159 @@ export const IconMore = (props: IconProps) => (
     <circle cx="19" cy="12" r="1.3" fill="currentColor" stroke="none" />
   </Svg>
 );
+
+/* ============================================================
+   Iconos de los momentos de oración
+   ============================================================ */
+
+/** La puerta de casa, y también las puertas reales del iconostasio. */
+export const IconDoor = (props: IconProps) => (
+  <Svg {...props}>
+    <path d="M5 21V8a7 7 0 0114 0v13" />
+    <path d="M3 21h18" />
+    <circle cx="15" cy="14" r="1" fill="currentColor" stroke="none" />
+  </Svg>
+);
+
+/** La prósfora: el pan redondo con su sello cuadrado. */
+export const IconBread = (props: IconProps) => (
+  <Svg {...props}>
+    <circle cx="12" cy="12" r="8.5" />
+    <rect x="8.5" y="8.5" width="7" height="7" rx="0.5" />
+    <path d="M12 8.5v7M8.5 12h7" />
+  </Svg>
+);
+
+/** El cáliz. */
+export const IconChalice = (props: IconProps) => (
+  <Svg {...props}>
+    <path d="M6.5 4h11l-1 5.5A4.6 4.6 0 0112 13a4.6 4.6 0 01-4.5-3.5z" />
+    <path d="M12 13v5M8.5 21h7" />
+    <path d="M9.5 18h5" />
+  </Svg>
+);
+
+/** La cruz ortodoxa de tres travesaños. */
+export const IconCross = (props: IconProps) => (
+  <Svg {...props}>
+    <path d="M12 3v18" />
+    <path d="M8.5 6.5h7" />
+    <path d="M6 10.5h12" />
+    <path d="M8 16.5l8-2.5" />
+  </Svg>
+);
+
+/** El camino que se estrecha hacia el horizonte. */
+export const IconPath = (props: IconProps) => (
+  <Svg {...props}>
+    <path d="M6 21l4-16M18 21l-4-16" />
+    <path d="M12 18.5v-2.5M12 12.5v-2.5M12 6.5v-1" />
+  </Svg>
+);
+
+/** Los otros. */
+export const IconPeople = (props: IconProps) => (
+  <Svg {...props}>
+    <circle cx="9" cy="8" r="3" />
+    <path d="M3.5 20a5.5 5.5 0 0111 0" />
+    <path d="M16 5.5a3 3 0 010 5.5" />
+    <path d="M17.5 14.5a5.5 5.5 0 013 5.5" />
+  </Svg>
+);
+
+/** La mano que bendice. */
+export const IconBlessing = (props: IconProps) => (
+  <Svg {...props}>
+    <path d="M7 12V5.5a1.5 1.5 0 013 0V11" />
+    <path d="M10 10.5V4.5a1.5 1.5 0 013 0V11" />
+    <path d="M13 10.5V6a1.5 1.5 0 013 0v6" />
+    <path d="M16 9.5a1.5 1.5 0 013 0V15a6 6 0 01-6 6h-1a6 6 0 01-6-6v-1l-1.6-2.2a1.5 1.5 0 012.4-1.8L7 12" />
+  </Svg>
+);
+
+/** La sepultura: la cruz sobre el túmulo. */
+export const IconTomb = (props: IconProps) => (
+  <Svg {...props}>
+    <path d="M12 4v9M9.5 7h5" />
+    <path d="M3.5 20c2-3 5-4.5 8.5-4.5S18.5 17 20.5 20z" />
+  </Svg>
+);
+
+/** El aceite del santo óleo. */
+export const IconHealing = (props: IconProps) => (
+  <Svg {...props}>
+    <path d="M10 3h4v3h-4z" />
+    <path d="M9 6h6l1 12a3 3 0 01-3 3h-2a3 3 0 01-3-3z" />
+    <path d="M12 11v5M9.5 13.5h5" />
+  </Svg>
+);
+
+/** El escudo de la fe. */
+export const IconShield = (props: IconProps) => (
+  <Svg {...props}>
+    <path d="M12 3l7.5 3v5.5c0 4.5-3 8.2-7.5 9.5-4.5-1.3-7.5-5-7.5-9.5V6z" />
+    <path d="M12 8v6M9 11h6" />
+  </Svg>
+);
+
+/** Lo hondo: «desde lo hondo clamé a Ti». */
+export const IconDeep = (props: IconProps) => (
+  <Svg {...props}>
+    <path d="M3 9c2.2 0 2.2 2 4.5 2S9.7 9 12 9s2.2 2 4.5 2S18.7 9 21 9" />
+    <path d="M3 14c2.2 0 2.2 2 4.5 2s2.2-2 4.5-2 2.2 2 4.5 2 2.2-2 4.5-2" />
+    <path d="M3 19c2.2 0 2.2 2 4.5 2s2.2-2 4.5-2 2.2 2 4.5 2 2.2-2 4.5-2" />
+    <path d="M12 3v3" />
+  </Svg>
+);
+
+/** El templo: la cúpula con su cruz. */
+export const IconChurch = (props: IconProps) => (
+  <Svg {...props}>
+    <path d="M12 2v3M10.5 3.5h3" />
+    <path d="M8 11a4 4 0 018 0" />
+    <path d="M8 11v10M16 11v10" />
+    <path d="M4 21V13l4-2M20 21v-8l-4-2" />
+    <path d="M3 21h18" />
+    <path d="M12 21v-5a1.6 1.6 0 00-1.6 1.6V21z" />
+  </Svg>
+);
+
+/** El trabajo de las manos. */
+export const IconWork = (props: IconProps) => (
+  <Svg {...props}>
+    <rect x="3" y="7.5" width="18" height="12" rx="2" />
+    <path d="M9 7.5V6a2 2 0 012-2h2a2 2 0 012 2v1.5" />
+    <path d="M3 12.5h18" />
+  </Svg>
+);
+
+/** La espiga: acción de gracias por lo recibido. */
+export const IconWheat = (props: IconProps) => (
+  <Svg {...props}>
+    <path d="M12 21V9" />
+    <path d="M12 9c0-2 1.2-3.5 3-4-.2 2-1.2 3.5-3 4z" />
+    <path d="M12 9c0-2-1.2-3.5-3-4 .2 2 1.2 3.5 3 4z" />
+    <path d="M12 14c0-2 1.2-3.5 3-4-.2 2-1.2 3.5-3 4z" />
+    <path d="M12 14c0-2-1.2-3.5-3-4 .2 2 1.2 3.5 3 4z" />
+  </Svg>
+);
+
+/** La familia: el grande y el pequeño. */
+export const IconFamily = (props: IconProps) => (
+  <Svg {...props}>
+    <circle cx="8" cy="6.5" r="2.5" />
+    <path d="M3.5 20a4.5 4.5 0 019 0" />
+    <circle cx="16.5" cy="11" r="2" />
+    <path d="M13 20a3.5 3.5 0 017 0" />
+  </Svg>
+);
+
+/** El ramo de olivo: por los que nos hacen daño. */
+export const IconBranch = (props: IconProps) => (
+  <Svg {...props}>
+    <path d="M5 21c0-8 4-13 11-15" />
+    <path d="M13 5.5c1.6-.6 3.2-.2 4 1-1.4 1-3 1-4-1z" />
+    <path d="M10 9.5c1.6-.6 3.2-.2 4 1-1.4 1-3 1-4-1z" />
+    <path d="M7.5 14c1.6-.6 3.2-.2 4 1-1.4 1-3 1-4-1z" />
+  </Svg>
+);

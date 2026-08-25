@@ -52,6 +52,42 @@ export const MOMENT_GROUPS: MomentGroup[] = [
   },
 ];
 
+/**
+ * El icono de cada momento.
+ *
+ * Se nombra aquí, junto al momento, y no en la pantalla: así el menú y
+ * cualquier otro sitio que enseñe momentos usan el mismo signo. Los iconos son
+ * de trazo fino, como los de toda la aplicación, y varios son ortodoxos de
+ * suyo: la prósfora con su sello, el cáliz, la cruz de tres travesaños, la
+ * cúpula con su cruz.
+ */
+export const MOMENT_ICONS: Record<PrayerCategoryId, string> = {
+  manana: 'sun',
+  'salir-de-casa': 'door',
+  'antes-trabajar': 'work',
+  'antes-estudiar': 'book',
+  'antes-comer': 'bread',
+  'despues-comer': 'chalice',
+  'antes-viajar': 'path',
+  noche: 'moon',
+  'al-pecar': 'cross',
+  arrepentimiento: 'candle',
+  tentacion: 'shield',
+  angustia: 'deep',
+  'accion-de-gracias': 'wheat',
+  familia: 'family',
+  amigos: 'people',
+  enemigos: 'branch',
+  enfermedad: 'healing',
+  'padre-espiritual': 'blessing',
+  difuntos: 'tomb',
+  templo: 'church',
+  escritura: 'scroll',
+  confesion: 'cross',
+  comunion: 'chalice',
+  otras: 'pray',
+};
+
 /** Cada momento con su ficha, en el orden en que aparece en el menú. */
 export const MOMENTS_IN_ORDER: PrayerCategoryId[] = MOMENT_GROUPS.flatMap((g) => g.moments);
 

@@ -6,7 +6,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { PRAYERS, PRAYER_CATEGORIES } from '@/content/prayers';
-import { MOMENTS_IN_ORDER, MOMENT_GROUPS, momentById, momentNow } from '@/content/moments';
+import { MOMENTS_IN_ORDER, MOMENT_GROUPS, MOMENT_ICONS, momentById, momentNow } from '@/content/moments';
 import type { PrayerCategoryId } from '@/types';
 
 const categorias = new Set(PRAYER_CATEGORIES.map((c) => c.id));
@@ -47,6 +47,23 @@ describe('el menú de momentos', () => {
       expect(momentById(id)?.id).toBe(id);
     }
     expect(momentById('inexistente')).toBeUndefined();
+  });
+});
+
+describe('el signo de cada momento', () => {
+  it('los veinticuatro tienen icono', () => {
+    for (const id of MOMENTS_IN_ORDER) {
+      expect(MOMENT_ICONS[id], id).toBeTruthy();
+    }
+    expect(Object.keys(MOMENT_ICONS).sort()).toEqual([...MOMENTS_IN_ORDER].sort());
+  });
+
+  it('dentro de un mismo grupo no se repite ninguno', () => {
+    // Dos tarjetas contiguas con el mismo signo se leen como un descuido.
+    for (const grupo of MOMENT_GROUPS) {
+      const signos = grupo.moments.map((id) => MOMENT_ICONS[id]);
+      expect(new Set(signos).size, `${grupo.name}: ${signos.join(', ')}`).toBe(signos.length);
+    }
   });
 });
 

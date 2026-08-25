@@ -37,6 +37,31 @@ EXTRA_TYPES = {
 # Los recursos con huella en el nombre pueden cachearse para siempre.
 IMMUTABLE_PREFIXES = ("/assets/", "/fonts/")
 
+# Lo único que este servidor responde por su cuenta, además de archivos.
+HOST_ENDPOINT = "/__athos/host.json"
+
+
+def lan_url(port: int) -> str | None:
+    """
+    La dirección de este ordenador en la red local.
+
+    Se averigua abriendo un socket UDP hacia fuera y preguntando qué interfaz
+    habría usado. No se envía ni un byte: UDP no establece conexión, y sirve
+    igual aunque no haya salida a internet.
+    """
+    import socket
+
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+            s.settimeout(0.4)
+            s.connect(("1.1.1.1", 53))
+            ip = s.getsockname()[0]
+    except OSError:
+        return None
+    if not ip or ip.startswith("127."):
+        return None
+    return f"http://{ip}:{port}"
+
 
 class AthosHandler(SimpleHTTPRequestHandler):
     """Servidor estático con reserva a index.html para las rutas de la aplicación."""
@@ -46,6 +71,28 @@ class AthosHandler(SimpleHTTPRequestHandler):
     def guess_type(self, path):  # noqa: D102 - firma heredada
         suffix = Path(str(path)).suffix.lower()
         return EXTRA_TYPES.get(suffix) or super().guess_type(path)
+
+    def do_GET(self):  # noqa: N802 - firma heredada
+        """
+        Responde la dirección de red local, para que la pantalla de instalación
+        pueda dibujar un código QR que el teléfono sí pueda abrir.
+
+        Sin esto el QR llevaría a 127.0.0.1, que en un teléfono no es este
+        ordenador sino el propio teléfono. Es información que ya está en la
+        máquina del usuario y no sale de ella.
+        """
+        if self.path.split("?")[0] == HOST_ENDPOINT:
+            import json
+
+            url = lan_url(self.server.server_address[1])
+            cuerpo = json.dumps({"lan": url, "secure": False}).encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(cuerpo)))
+            self.end_headers()
+            self.wfile.write(cuerpo)
+            return
+        super().do_GET()
 
     def send_head(self):
         # ATHOS es una aplicación de una sola página: /orar/regla no es un

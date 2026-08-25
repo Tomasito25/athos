@@ -2,6 +2,43 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.6.0]
+
+### Corregido
+
+- **La epístola se lee entera, siempre.** Fallaban 25 lecturas por dos causas:
+  «Judas 1-10» se tomaba por diez capítulos cuando Judas tiene uno solo, y las
+  referencias que cruzan de un libro a otro —«1 Corintios 5, 6-8; Gálatas 3,
+  13-14»— no se entendían. El analizador ahora reconoce los libros de un
+  capítulo, la notación de punto que arrastra el leccionario, los tramos que
+  cruzan de capítulo a medio escribir y las referencias de varios libros, que
+  se muestran uno tras otro con su encabezado. **Epístola: 4012 de 4012.**
+- **El Evangelio también, 4048 de 4048**: `findBook` declaraba nombres
+  alternativos pero no los consultaba, y por eso «Matt» —la abreviatura inglesa
+  que orthocal deja sin traducir en los Evangelios de la Pasión— no resolvía.
+
+### Añadido
+
+- **Los momentos, en rejilla y con su signo.** Veinticuatro tarjetas en dos o
+  cinco columnas según la pantalla, cada una con un icono de trazo fino: la
+  prósfora con su sello, el cáliz, la cruz de tres travesaños, la cúpula con su
+  cruz, el ramo de olivo por los enemigos.
+- **Código QR en la pantalla de instalación.** Se apunta con la cámara del
+  móvil y ATHOS se abre allí, sin teclear una dirección ni abrir un terminal.
+  Cuando se usa el lanzador local, el servidor dice su dirección en la red para
+  que el código no lleve a 127.0.0.1, que en un teléfono no es este ordenador.
+  Si esa dirección es HTTP, se advierte de que desde ella se podrá usar ATHOS
+  pero no instalarla, y se indica cómo conseguir una que sí valga.
+- **Rediseño visual**: superficies con relieve, filete dorado bajo los títulos,
+  listas con cuerpo propio en vez de renglones sueltos, marca dorada al costado
+  de la fila señalada, botón principal en degradado y píldora tras el icono
+  activo de la barra inferior. Sin tocar la tipografía ni la paleta bizantina.
+
+### Quitado
+
+- La fila de la oración de Jesús en Orar. El komboskini se queda, y lleva la
+  cuenta del día que antes mostraba aquélla.
+
 ## [1.5.0]
 
 ### Añadido

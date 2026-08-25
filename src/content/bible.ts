@@ -112,10 +112,10 @@ const SEED: BookSeed[] = [
   { id: 'DAN', name: 'Daniel', abbr: 'Dn', testament: 'at', section: 'profetas', chapters: 12 },
   { id: '4MA', name: '4 Macabeos', abbr: '4 M', testament: 'at', section: 'historicos', chapters: 18, deutero: true },
   // --- Evangelios ---
-  { id: 'MAT', name: 'Evangelio según San Mateo', abbr: 'Mt', testament: 'nt', section: 'evangelios', chapters: 28 },
-  { id: 'MRK', name: 'Evangelio según San Marcos', abbr: 'Mc', testament: 'nt', section: 'evangelios', chapters: 16 },
-  { id: 'LUK', name: 'Evangelio según San Lucas', abbr: 'Lc', testament: 'nt', section: 'evangelios', chapters: 24 },
-  { id: 'JHN', name: 'Evangelio según San Juan', abbr: 'Jn', testament: 'nt', section: 'evangelios', chapters: 21 },
+  { id: 'MAT', name: 'Evangelio según San Mateo', abbr: 'Mt', testament: 'nt', section: 'evangelios', chapters: 28, alt: ['Mateo', 'Matt', 'Matthew', 'San Mateo'] },
+  { id: 'MRK', name: 'Evangelio según San Marcos', abbr: 'Mc', testament: 'nt', section: 'evangelios', chapters: 16, alt: ['Marcos', 'Mark', 'San Marcos'] },
+  { id: 'LUK', name: 'Evangelio según San Lucas', abbr: 'Lc', testament: 'nt', section: 'evangelios', chapters: 24, alt: ['Lucas', 'Luke', 'San Lucas'] },
+  { id: 'JHN', name: 'Evangelio según San Juan', abbr: 'Jn', testament: 'nt', section: 'evangelios', chapters: 21, alt: ['Juan', 'John', 'San Juan'] },
   // --- Hechos ---
   { id: 'ACT', name: 'Hechos de los Apóstoles', abbr: 'Hch', testament: 'nt', section: 'hechos', chapters: 28 },
   // --- Epístolas ---
@@ -168,14 +168,25 @@ export const DEUTEROCANON_NOTE =
   'los libros deuterocanónicos de la Septuaginta. Su ficha se mantiene para que el canon ' +
   'ortodoxo aparezca completo; el texto puede añadirse desde Configuración → Datos.';
 
-/** Resuelve nombres y abreviaturas a un identificador de libro. */
+/**
+ * Resuelve nombres y abreviaturas a un identificador de libro.
+ *
+ * Se prueba primero lo exacto —identificador, nombre, abreviatura y nombres
+ * alternativos— y sólo después la coincidencia parcial, para que «Juan» dé el
+ * Evangelio y no la primera epístola que lo lleve en el nombre.
+ *
+ * Los nombres alternativos existían en el modelo pero no se consultaban aquí:
+ * por eso el leccionario no resolvía «Matt», la abreviatura inglesa que
+ * orthocal deja sin traducir en los Evangelios de la Pasión.
+ */
 export function findBook(query: string): BibleBook | undefined {
   const q = query.trim().toLowerCase();
-  return BIBLE_BOOKS.find(
+  const exacto = BIBLE_BOOKS.find(
     (b) =>
       b.id.toLowerCase() === q ||
       b.name.toLowerCase() === q ||
       b.abbr.toLowerCase() === q ||
-      b.name.toLowerCase().includes(q),
+      (b.alternateNames ?? []).some((alt) => alt.toLowerCase() === q),
   );
+  return exacto ?? BIBLE_BOOKS.find((b) => b.name.toLowerCase().includes(q));
 }

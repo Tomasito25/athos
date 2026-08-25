@@ -358,6 +358,17 @@ const es = {
   },
 
   install: {
+    toPhone: 'Llévala al teléfono',
+    scanIt: 'Apunta con la cámara del móvil a este código y ATHOS se abrirá allí.',
+    lanOnly:
+      'Esta dirección es la de tu red local. Desde el teléfono podrás usar ATHOS entera, pero no ' +
+      'instalarla: los navegadores sólo instalan aplicaciones servidas por HTTPS. Para instalarla ' +
+      'en el móvil, publícala con ./deploy.sh y usa la dirección que te dé.',
+    lanSame: 'El teléfono tiene que estar en la misma red wifi que este ordenador.',
+    noLan:
+      'No se ha podido averiguar la dirección de este ordenador en la red. Arranca ATHOS con ' +
+      './run.sh --movil, que la muestra en el terminal junto a su código QR.',
+    copyLink: 'Copiar la dirección',
     title: 'Instalar ATHOS',
     subtitle: 'ATHOS puede instalarse como una aplicación normal y funcionar sin conexión.',
     installed: 'ATHOS ya está instalada en este dispositivo.',

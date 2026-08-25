@@ -3,7 +3,8 @@
  *
  * Es la portada de las oraciones: en vez de una lista de títulos, la pregunta
  * que trae al que abre la aplicación —¿qué hora es, qué me pasa?—. Arriba, el
- * momento que corresponde a esta hora; debajo, todos los demás agrupados.
+ * momento que corresponde a esta hora; debajo, los demás en rejilla, cada uno
+ * con su signo, para poder abarcarlos de un vistazo.
  */
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
@@ -14,6 +15,8 @@ import { ButtonLink, ListRow, PageHead, Panel, Section, Tag } from '@/components
 import { IconPray } from '@/components/icons';
 import { PRAYER_CATEGORIES, PRAYER_LICENSE_NOTE } from '@/content/prayers';
 import { ANY_HOUR, MOMENT_GROUPS, momentById, momentNow } from '@/content/moments';
+import { MomentIcon } from './MomentIcon';
+import type { PrayerCategoryId } from '@/types';
 import es from '@/locales/es';
 
 export function PrayersPage() {
@@ -31,27 +34,27 @@ export function PrayersPage() {
     return map;
   }, [prayers.data]);
 
+  const cuenta = (id: PrayerCategoryId) => {
+    const n = porCategoria.get(id) ?? 0;
+    return n === 1 ? '1 oración' : `${n} oraciones`;
+  };
+
   return (
     <div className="page">
       <PageHead title={es.prayers.title} subtitle={es.prayers.chooseMoment} />
 
       {/* ---- Lo que toca ahora ---- */}
-      {momento ? (
-        <Link
-          to={`/orar/oraciones/categoria/${momento.id}`}
-          className="panel"
-          style={{ textDecoration: 'none', display: 'block', borderColor: 'var(--gold)' }}
-        >
+      {momento && ahora ? (
+        <Link to={`/orar/oraciones/categoria/${momento.id}`} className="now-card">
           <div className="row row--between" style={{ alignItems: 'flex-start' }}>
-            <div style={{ minWidth: 0 }}>
-              <p className="eyebrow">{es.prayers.rightNow}</p>
-              <p className="panel__title" style={{ marginTop: 'var(--sp-1)' }}>
-                {momento.name}
-              </p>
-              <p className="muted text-sm">{momento.description}</p>
-            </div>
+            <p className="eyebrow">{es.prayers.rightNow}</p>
             <Tag tone="gold">{es.prayers.now}</Tag>
           </div>
+          <p className="now-card__name">{momento.name}</p>
+          <p className="now-card__text">{momento.description}</p>
+          <span className="now-card__icon">
+            <MomentIcon id={ahora} size={64} />
+          </span>
         </Link>
       ) : (
         <Panel variant="quiet">
@@ -77,24 +80,24 @@ export function PrayersPage() {
         </Section>
       ) : null}
 
-      {/* ---- Todos los momentos ---- */}
+      {/* ---- Todos los momentos, en rejilla ---- */}
       {MOMENT_GROUPS.map((grupo) => (
         <Section key={grupo.id} title={grupo.name}>
-          <p className="muted text-sm" style={{ marginTop: 'calc(-1 * var(--sp-2))' }}>
+          <p className="muted text-sm" style={{ margin: 'calc(-1 * var(--sp-2)) 0 var(--sp-3)' }}>
             {grupo.description}
           </p>
-          <div className="list">
+          <div className="moment-grid">
             {grupo.moments.map((id) => {
               const categoria = PRAYER_CATEGORIES.find((c) => c.id === id);
               if (!categoria) return null;
               return (
-                <ListRow
-                  key={id}
-                  to={`/orar/oraciones/categoria/${id}`}
-                  title={categoria.name}
-                  meta={categoria.description}
-                  trailing={<span className="pill-count">{porCategoria.get(id) ?? 0}</span>}
-                />
+                <Link key={id} to={`/orar/oraciones/categoria/${id}`} className="moment">
+                  <span className="moment__icon">
+                    <MomentIcon id={id} />
+                  </span>
+                  <span className="moment__name">{categoria.name}</span>
+                  <span className="moment__count">{cuenta(id)}</span>
+                </Link>
               );
             })}
           </div>

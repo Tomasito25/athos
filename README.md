@@ -408,7 +408,7 @@ ATHOS distingue tres estados en cada texto: **completo**, **parcial** y
 | Salterio | Completo, 150 salmos. El Salmo 151 es pendiente |
 | Oraciones | 79 oraciones en 24 momentos, ninguno vacío; 4 fichas pendientes (Gran Canon, canon de Comunión, Akáthistos, oración de Manasés) |
 | Santos | 162 conmemoraciones con su vida, en 147 días del año. El Menaion completo es pendiente |
-| Lecturas del día | **Completas**: los 365 días de 2024 a 2045, en calendario nuevo y juliano, del leccionario bizantino de tradición eslava |
+| Lecturas del día | **Completas**: los 365 días de 2024 a 2045, en calendario nuevo y juliano, del leccionario bizantino de tradición eslava. Evangelio y Epístola se recortan al versículo exacto en el 100 % de los casos; las lecturas compuestas de Vísperas y los libros deuterocanónicos remiten al capítulo |
 | Oficios | Estructura completa y partes cantadas; oraciones sacerdotales pendientes |
 | Akathistos y cánones | Fichas completas; la mayoría de los textos, pendientes |
 | Padres | 12 autores con biografía y obras; pasajes breves verificados |

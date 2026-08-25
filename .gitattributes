@@ -1,0 +1,11 @@
+# Los scripts tienen que conservar finales de línea Unix aunque se clonen en
+# Windows: con CRLF, bash no encuentra el intérprete y run.sh no arranca.
+*.sh text eol=lf
+server.py text eol=lf
+
+# El corpus y las capturas no son texto que convenga diferenciar línea a línea.
+*.json -diff
+*.png binary
+*.webp binary
+*.ico binary
+*.woff2 binary

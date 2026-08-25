@@ -16,6 +16,10 @@ Sin cuenta · Sin rastreo · Sin publicidad · Tus datos en tu dispositivo
 ## Cómo se usa
 
 ```bash
+git clone https://github.com/TU-USUARIO/athos.git
+```
+
+```bash
 cd athos && ./run.sh
 ```
 

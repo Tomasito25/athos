@@ -1,0 +1,49 @@
+# Comprueba ATHOS en cada empujón y en cada propuesta de cambio.
+#
+# Es lo mismo que `npm run check` en local: lint, tipos, pruebas y compilación.
+# No publica nada; para eso está deploy.sh.
+name: Comprobar
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  comprobar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      # Las pruebas del servidor local arrancan server.py de verdad.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Tipos
+        run: npm run typecheck
+
+      - name: Pruebas
+        run: npm run test
+
+      - name: Compilación
+        run: npm run build
+
+      # Que ATHOS siga funcionando colgada de una subcarpeta, que es como la
+      # sirve GitHub Pages.
+      - name: Compilación en subcarpeta
+        run: ATHOS_BASE=/athos/ npm run build -- --outDir dist-subcarpeta

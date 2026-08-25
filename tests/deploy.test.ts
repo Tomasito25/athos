@@ -168,3 +168,58 @@ describe('scripts de uso', () => {
     expect(server).toContain('Service-Worker-Allowed');
   });
 });
+
+
+describe('el repositorio se puede clonar y compilar', () => {
+  it('el candado de dependencias va a la par de package.json', () => {
+    // Si no concuerdan, `npm ci` se niega a instalar: se rompen la integración
+    // continua y el primer intento de cualquiera que clone el repositorio.
+    const pkg = JSON.parse(leer('package.json')) as { version: string; name: string };
+    const lock = JSON.parse(leer('package-lock.json')) as {
+      version: string;
+      name: string;
+      packages: Record<string, { version?: string }>;
+    };
+    expect(lock.name).toBe(pkg.name);
+    expect(lock.version).toBe(pkg.version);
+    expect(lock.packages['']?.version).toBe(pkg.version);
+  });
+
+  it('la integración continua comprueba lo mismo que se comprueba en local', () => {
+    const ci = leer('.github/workflows/ci.yml');
+    for (const orden of ['npm ci', 'npm run lint', 'npm run typecheck', 'npm run test', 'npm run build']) {
+      expect(ci, orden).toContain(orden);
+    }
+    // Y también que siga funcionando colgada de una subcarpeta.
+    expect(ci).toContain('ATHOS_BASE=/athos/');
+    // Las pruebas del servidor arrancan server.py: hace falta Python.
+    expect(ci).toContain('setup-python');
+  });
+
+  it('la integración continua no publica nada por su cuenta', () => {
+    const ci = leer('.github/workflows/ci.yml');
+    // Se miran las órdenes que ejecuta, no el texto del archivo: en un
+    // comentario puede aparecer «deploy.sh» sin que se ejecute nada.
+    const ordenes = [...ci.matchAll(/^\s*(?:- )?run:\s*(.+)$/gm)].map((m) => m[1]);
+    expect(ordenes.length).toBeGreaterThan(3);
+    for (const orden of ordenes) {
+      expect(orden, orden).not.toMatch(/deploy\.sh|gh-pages|git push/);
+    }
+    // Y sin permiso de escritura, tampoco podría aunque quisiera.
+    expect(ci).toContain('contents: read');
+    expect(ci).not.toMatch(/contents:\s*write/);
+  });
+
+  it('los scripts conservan finales de línea Unix al clonarse', () => {
+    // Con CRLF, bash no encuentra el intérprete y run.sh no arranca.
+    const attr = leer('.gitattributes');
+    expect(attr).toContain('*.sh text eol=lf');
+    expect(attr).toContain('server.py text eol=lf');
+  });
+
+  it('la carpeta compilada nunca se sube', () => {
+    const ignore = leer('.gitignore');
+    expect(ignore).toMatch(/^dist\/$/m);
+    expect(ignore).toMatch(/^dist-\*\/$/m);
+  });
+});

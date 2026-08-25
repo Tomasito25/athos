@@ -2,6 +2,26 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.7.1]
+
+### Corregido
+
+- **`package-lock.json` se había quedado en la versión 1.5.0.** `npm ci` —lo
+  que usa la integración continua y cualquiera que clone el repositorio— se
+  niega a instalar si el candado y `package.json` no concuerdan. Comprobado
+  ejecutándolo de verdad sobre una copia limpia.
+
+### Añadido
+
+- **Integración continua** (`.github/workflows/ci.yml`): en cada empujón y cada
+  propuesta de cambio pasa lint, tipos, pruebas y compilación, incluida la
+  compilación en subcarpeta. No publica nada; para eso está `deploy.sh`.
+- **`.gitattributes`**: los scripts conservan finales de línea Unix aunque se
+  clonen en Windows. Con CRLF, `bash` no encuentra el intérprete y `run.sh` no
+  arranca.
+- El README empieza por donde tiene que empezar un repositorio público: cómo
+  clonarlo.
+
 ## [1.7.0]
 
 ### Corregido

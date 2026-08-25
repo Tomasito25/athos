@@ -25,7 +25,7 @@ export function KathismaPage() {
   if (!kathisma) {
     return (
       <div className="page">
-        <Empty title="Ese kathisma no existe" text="El Salterio se divide en veinte kathismata." />
+        <Empty title="Ese kathisma no existe" text="El Salterio se divide en veinte kathismata." heading />
       </div>
     );
   }

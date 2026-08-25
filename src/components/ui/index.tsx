@@ -391,13 +391,35 @@ export function Dialog({
 
 /* ---------------- Estados ---------------- */
 
-export function Empty({ title, text, action }: { title: string; text?: string; action?: ReactNode }) {
+/**
+ * Un hueco explicado.
+ *
+ * Cuando el vacío ES la página —una dirección que no existe, un texto que no
+ * está incorporado— hay que pasarle `heading`, para que el título salga como
+ * encabezado de primer nivel. Sin él, esas pantallas se quedaban sin ninguno y
+ * quien navega con lector de pantalla no encontraba dónde empieza el contenido.
+ */
+export function Empty({
+  title,
+  text,
+  action,
+  heading = false,
+}: {
+  title: string;
+  text?: string;
+  action?: ReactNode;
+  heading?: boolean;
+}) {
   return (
     <div className="empty">
       <span aria-hidden="true" style={{ color: 'var(--gold)', opacity: 0.5, fontSize: '1.4rem' }}>
         ✤
       </span>
-      <p className="empty__title">{title}</p>
+      {heading ? (
+        <h1 className="empty__title">{title}</h1>
+      ) : (
+        <p className="empty__title">{title}</p>
+      )}
       {text ? <p className="empty__text">{text}</p> : null}
       {action}
     </div>

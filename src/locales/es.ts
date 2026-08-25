@@ -309,6 +309,9 @@ const es = {
     bibleNotIndexed: 'La Biblia todavía no está indexada, así que no aparece en los resultados.',
     indexNow: 'Indexar ahora',
     shortcut: 'Ctrl/⌘ + K',
+    recent: 'Lo último que has leído',
+    whereTitle: 'Dónde busca',
+    whereText: 'Escribe dos letras y ATHOS busca a la vez en todo esto. También puedes entrar directamente.',
   },
 
   settings: {

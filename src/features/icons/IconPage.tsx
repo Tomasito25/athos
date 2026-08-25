@@ -20,7 +20,7 @@ export function IconPage() {
   if (!icon.data) {
     return (
       <div className="page">
-        <Empty title="Ese icono no está en la lista" />
+        <Empty title="Ese icono no está en la lista" heading />
       </div>
     );
   }

@@ -22,7 +22,7 @@ export function PrayerPage() {
   if (!prayer.data) {
     return (
       <div className="page">
-        <Empty title="Esta oración no está incorporada" />
+        <Empty title="Esta oración no está incorporada" heading />
       </div>
     );
   }

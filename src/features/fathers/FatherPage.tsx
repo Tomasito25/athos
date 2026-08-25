@@ -18,7 +18,7 @@ export function FatherPage() {
   if (!father.data) {
     return (
       <div className="page">
-        <Empty title="Ese Padre no está incorporado" />
+        <Empty title="Ese Padre no está incorporado" heading />
       </div>
     );
   }

@@ -19,7 +19,7 @@ export function SaintPage() {
   if (!saint.data) {
     return (
       <div className="page">
-        <Empty title="Ese santo no está incorporado" text={es.app.pending} />
+        <Empty title="Ese santo no está incorporado" text={es.app.pending} heading />
       </div>
     );
   }

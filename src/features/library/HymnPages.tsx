@@ -63,7 +63,7 @@ export function HymnDetail({
   if (!hymn.data) {
     return (
       <div className="page">
-        <Empty title="Ese himno no está incorporado" text={es.app.pending} />
+        <Empty title="Ese himno no está incorporado" text={es.app.pending} heading />
       </div>
     );
   }

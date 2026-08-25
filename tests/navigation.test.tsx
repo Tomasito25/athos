@@ -176,3 +176,82 @@ describe('modo oración', () => {
     await waitFor(() => expect(document.documentElement.dataset.prayerMode).toBeUndefined());
   });
 });
+
+/* ============================================================
+   Un encabezado por pantalla
+   ------------------------------------------------------------
+   Toda página necesita un h1: es por donde entra quien navega
+   con lector de pantalla. Faltaba en la portada —que enseña la
+   oración de Jesús y ningún título— y en las diecisiete
+   pantallas de «esto no existe», que ocupan la página entera.
+   ============================================================ */
+const PANTALLAS = [
+  '/',
+  '/orar',
+  '/orar/oraciones',
+  '/orar/oraciones/todas',
+  '/orar/oraciones/categoria/manana',
+  '/orar/oraciones/efren-sirio',
+  '/orar/mis-oraciones',
+  '/orar/regla',
+  '/orar/oracion-de-jesus',
+  '/orar/komboskini',
+  '/leer',
+  '/leer/biblia',
+  '/leer/salterio',
+  '/leer/salterio/50',
+  '/leer/lecturas',
+  '/calendario',
+  '/calendario/santos',
+  '/calendario/ayuno',
+  '/calendario/fiestas',
+  '/biblioteca',
+  '/biblioteca/estudio',
+  '/biblioteca/iconos',
+  '/biblioteca/padres',
+  '/favoritos',
+  '/buscar',
+  '/mas',
+  '/configuracion',
+  '/configuracion/instalar',
+  '/configuracion/fuentes',
+  '/configuracion/acerca-de',
+];
+
+/** Direcciones que no llevan a ninguna parte: también son una pantalla. */
+const INEXISTENTES = [
+  '/calendario/santos/no-existe',
+  '/orar/oraciones/no-existe',
+  '/orar/oraciones/categoria/no-existe',
+  '/leer/salterio/999',
+  '/leer/biblia/NADA',
+  '/biblioteca/estudio/no-existe',
+  '/biblioteca/estudio/obra/no-existe',
+  '/biblioteca/padres/no-existe',
+  '/biblioteca/iconos/no-existe',
+  '/biblioteca/athos/monasterio/no-existe',
+  '/ruta/que/no/existe',
+];
+
+describe('cada pantalla tiene un encabezado', () => {
+  it.each(PANTALLAS)('%s', async (ruta) => {
+    const { unmount } = renderAt(ruta);
+    await waitFor(() => expect(document.querySelectorAll('h1').length).toBeGreaterThan(0), {
+      timeout: 5000,
+    });
+    // Ni ninguno ni dos: exactamente uno.
+    expect(document.querySelectorAll('h1').length, ruta).toBe(1);
+    unmount();
+  });
+
+  it.each(INEXISTENTES)('%s dice que no existe, con encabezado', async (ruta) => {
+    const { unmount } = renderAt(ruta);
+    await waitFor(() => expect(document.querySelectorAll('h1').length).toBeGreaterThan(0), {
+      timeout: 5000,
+    });
+    expect(document.querySelectorAll('h1').length, ruta).toBe(1);
+    // Y lo dice con palabras, no con una pantalla en blanco.
+    expect(document.body.textContent?.length ?? 0, ruta).toBeGreaterThan(20);
+    unmount();
+  });
+});

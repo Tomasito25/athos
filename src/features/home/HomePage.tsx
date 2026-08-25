@@ -36,6 +36,10 @@ export function HomePage() {
     <div className="page page--reading">
       {/* ---------- La oración, antes que nada ---------- */}
       <header style={{ paddingTop: 'var(--sp-6)', textAlign: 'center' }}>
+        {/* La portada enseña la oración, no un título; pero toda página
+            necesita su encabezado de primer nivel, y aquí va para quien
+            navega con lector de pantalla. */}
+        <h1 className="sr-only">ATHOS · Inicio</h1>
         <p className="eyebrow" style={{ marginBottom: 'var(--sp-4)' }}>
           {greeting()}
         </p>

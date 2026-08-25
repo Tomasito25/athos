@@ -20,7 +20,7 @@ export function PsalmPage() {
   if (!psalm.data) {
     return (
       <div className="page">
-        <Empty title="Ese salmo no existe" text="El Salterio va del 1 al 151." />
+        <Empty title="Ese salmo no existe" text="El Salterio va del 1 al 151." heading />
       </div>
     );
   }

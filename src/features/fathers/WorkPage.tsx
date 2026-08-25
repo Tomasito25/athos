@@ -18,7 +18,7 @@ export function WorkPage() {
   if (!work) {
     return (
       <div className="page">
-        <Empty title="Esa obra no está incorporada" text={es.app.pending} />
+        <Empty title="Esa obra no está incorporada" text={es.app.pending} heading />
       </div>
     );
   }

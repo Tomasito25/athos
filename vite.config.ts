@@ -15,6 +15,16 @@ const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 
  */
 const base = process.env.ATHOS_BASE || '/';
 
+/**
+ * Dirección pública completa, cuando se conoce.
+ *
+ * Las etiquetas Open Graph necesitan una dirección absoluta: una relativa como
+ * `icons/og-image.png` no la resuelve ningún servicio que enseñe el enlace. Con
+ * ATHOS_URL=https://usuario.github.io se reescriben a absolutas; sin ella se
+ * quedan como están, que es lo correcto mientras no se sepa el dominio.
+ */
+const siteUrl = (process.env.ATHOS_URL || '').replace(/\/+$/, '');
+
 export default defineConfig({
   base,
   define: {
@@ -46,6 +56,20 @@ export default defineConfig({
   },
   plugins: [
     react(),
+    {
+      // Open Graph con direcciones absolutas, si se sabe cuál es el sitio.
+      name: 'athos-og-absoluto',
+      transformIndexHtml(html: string) {
+        if (!siteUrl) return html;
+        const raiz = `${siteUrl}${base}`;
+        return html
+          .replace('content="icons/og-image.png"', `content="${raiz}icons/og-image.png"`)
+          .replace(
+            '<meta property="og:type" content="website" />',
+            `<meta property="og:url" content="${raiz}" />\n    <meta property="og:type" content="website" />`,
+          );
+      },
+    },
     VitePWA({
       registerType: 'prompt',
       injectRegister: null,
@@ -85,7 +109,7 @@ export default defineConfig({
         shortcuts: [
           { name: 'Oraciones', short_name: 'Orar', url: `${base}orar/oraciones?source=shortcut`, icons: [{ src: 'icons/icon-192.png', sizes: '192x192' }] },
           { name: 'Regla de oración', short_name: 'Regla', url: `${base}orar/regla?source=shortcut`, icons: [{ src: 'icons/icon-192.png', sizes: '192x192' }] },
-          { name: 'Oración de Jesús', short_name: 'Jesús', url: `${base}orar/oracion-de-jesus?source=shortcut`, icons: [{ src: 'icons/icon-192.png', sizes: '192x192' }] },
+          { name: 'Komboskini', short_name: 'Komboskini', url: `${base}orar/komboskini?source=shortcut`, icons: [{ src: 'icons/icon-192.png', sizes: '192x192' }] },
           { name: 'Calendario', short_name: 'Calendario', url: `${base}calendario?source=shortcut`, icons: [{ src: 'icons/icon-192.png', sizes: '192x192' }] },
         ],
       },

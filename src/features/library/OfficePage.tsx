@@ -18,7 +18,7 @@ export function OfficePage() {
   if (!office.data) {
     return (
       <div className="page">
-        <Empty title="Ese oficio no está incorporado" />
+        <Empty title="Ese oficio no está incorporado" heading />
       </div>
     );
   }

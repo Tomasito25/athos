@@ -11,7 +11,7 @@ export function BookPage() {
   if (!book) {
     return (
       <div className="page">
-        <Empty title="Ese libro no existe" />
+        <Empty title="Ese libro no existe" heading />
       </div>
     );
   }

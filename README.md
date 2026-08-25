@@ -440,6 +440,27 @@ La licencia del código **no** cubre el contenido religioso de terceros.
 
 ---
 
+## Publicar
+
+```bash
+./deploy.sh --base /NOMBRE-DEL-REPO/ --github
+```
+
+Antes de publicar, el script pasa el lint, los tipos y las pruebas: una
+versión rota en una dirección que la gente ya tiene guardada cuesta más de
+arreglar que los dos minutos que tardan. Con `--sin-pruebas` se salta, a
+propósito y no por descuido.
+
+Para cualquier otro alojamiento, `./deploy.sh` deja la carpeta `dist/` lista
+para arrastrarla a Netlify, Cloudflare Pages o Vercel. Si conoces la dirección
+definitiva, pásala con `--url https://…` para que las etiquetas Open Graph
+salgan absolutas; sin ella se quedan relativas, que es lo correcto mientras no
+se sepa el dominio.
+
+**Sólo desde HTTPS puede instalarse en un teléfono.** Por la red local
+(`./run.sh --movil`) ATHOS se usa entera, pero el navegador no la instalará, y
+la propia aplicación lo dice en Configuración → Instalar.
+
 ## Pendiente
 
 Lo que está diseñado pero aún no implementado, dicho sin rodeos:
@@ -456,24 +477,37 @@ Lo que está diseñado pero aún no implementado, dicho sin rodeos:
 
 Verificado en Brave 151 (Chromium) sobre el servidor de `run.sh`:
 
-- Service Worker registrado y activo, con **172 de 172 entradas recuperables**
-  del precaché, incluidos los 67 archivos del texto bíblico y la tipografía.
-- Manifest leído por el navegador **sin errores de parseo**.
+- Service Worker registrado y activo, con **193 entradas de precaché**,
+  incluidos los 67 archivos del texto bíblico y la tipografía.
+- Manifest leído por el navegador **sin errores de parseo**, con **capturas
+  reales** de la aplicación tomadas con `scripts/screenshots.mjs`.
 - Con la red del navegador **completamente cortada**: la aplicación recarga,
   pinta y permite navegar a rutas profundas como `/leer/salterio/50`, que
   muestra el salmo entero.
 - IndexedDB: 79 oraciones, 151 salmos, 162 santos y 31 084 versículos.
-- Manifest con **capturas reales** de la aplicación, tomadas con
-  `scripts/screenshots.mjs` sobre un navegador sin ventana.
+- **Las 49 pantallas** recorridas una por una: ninguna en blanco, sin errores
+  de JavaScript, sin enlaces muertos, sin imágenes rotas y sin desbordes
+  horizontales.
+- **Un encabezado por pantalla**, comprobado en las cuarenta y una rutas de la
+  aplicación y en las once direcciones que no llevan a ninguna parte.
 
 Y en emulación de teléfono (360×740, 375×667, 393×852 y apaisado 740×360, con
-puntero táctil), recorriendo las 25 pantallas de la aplicación: sin desbordes
-horizontales, sin campos por debajo de 16 px y sin controles por debajo de
-40 px.
+puntero táctil): sin desbordes horizontales, sin campos por debajo de 16 px y
+sin controles por debajo de 40 px.
 
-También verificado publicada en una subcarpeta (`/athos/`): manifest sin
-errores, Service Worker con el ámbito correcto y enlaces profundos
-funcionando.
+### Publicada en una subcarpeta
+
+Lo que hace GitHub Pages al servir un proyecto en `usuario.github.io/repo/`.
+Compilado con `./deploy.sh --base /athos/` y servido de verdad:
+
+- La aplicación arranca en `/athos/` y pinta.
+- Service Worker registrado, activo y **con ámbito `/athos/`**.
+- `start_url`, `scope` e `id` del manifest dentro de la subcarpeta; el icono y
+  la captura que declara **existen y se descargan**.
+- Enlaces profundos (`/athos/leer/salterio/50`, `/athos/orar/oraciones`,
+  `/athos/biblioteca/estudio`, `/athos/calendario`) sirviendo su contenido.
+- **Sin conexión**, navegación completa dentro de la subcarpeta.
+- **Ningún enlace ni recurso absoluto se sale de `/athos/`.**
 
 ---
 

@@ -24,7 +24,7 @@ export function PrayerCategoryPage() {
   if (!category) {
     return (
       <div className="page">
-        <Empty title="Ese momento no existe" text="Vuelve al menú y elige otro." />
+        <Empty title="Ese momento no existe" text="Vuelve al menú y elige otro." heading />
         <div className="btn-row">
           <ButtonLink to="/orar/oraciones">{es.prayers.chooseMoment}</ButtonLink>
         </div>

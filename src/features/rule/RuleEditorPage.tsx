@@ -61,7 +61,7 @@ export function RuleEditorPage() {
   if (!rule.data) {
     return (
       <div className="page">
-        <Empty title="Esta regla ya no existe" />
+        <Empty title="Esta regla ya no existe" heading />
       </div>
     );
   }

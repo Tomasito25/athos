@@ -14,3 +14,6 @@ coverage/
 
 # Entrada de compilación del corpus bíblico (se descarga con build:bible)
 scripts/data/
+
+# Compilaciones alternativas de deploy.sh
+dist-*/

@@ -37,7 +37,7 @@ export function CoursePage() {
   if (!curso) {
     return (
       <div className="page">
-        <Empty title="Ese itinerario no existe" />
+        <Empty title="Ese itinerario no existe" heading />
       </div>
     );
   }

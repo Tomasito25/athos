@@ -31,10 +31,10 @@ await ev(`(async()=>{for(const r of await navigator.serviceWorker.getRegistratio
  localStorage.clear(); await new Promise(res=>{const q=indexedDB.deleteDatabase('athos');q.onsuccess=res;q.onerror=res;q.onblocked=res;});return 1})()`);
 
 const capturas = [
-  { archivo: 'screenshot-mobile.png',  w: 540,  h: 1170, movil: true,  ruta: '/',                 tema: 'dark'  },
-  { archivo: 'screenshot-mobile-2.png',w: 540,  h: 1170, movil: true,  ruta: '/orar/oficio/manana', tema: 'dark' },
-  { archivo: 'screenshot-desktop.png', w: 1280, h: 800,  movil: false, ruta: '/',                 tema: 'light' },
-  { archivo: 'screenshot-desktop-2.png', w: 1280, h: 800, movil: false, ruta: '/calendario',      tema: 'light' },
+  { archivo: 'screenshot-mobile.png',   w: 540,  h: 1170, movil: true,  ruta: '/',                 tema: 'dark'  },
+  { archivo: 'screenshot-mobile-2.png', w: 540,  h: 1170, movil: true,  ruta: '/orar/oraciones',   tema: 'dark'  },
+  { archivo: 'screenshot-desktop.png',  w: 1280, h: 800,  movil: false, ruta: '/',                 tema: 'light' },
+  { archivo: 'screenshot-desktop-2.png',w: 1280, h: 800,  movil: false, ruta: '/orar/oraciones',   tema: 'light' },
 ];
 
 for (const c of capturas) {
@@ -42,6 +42,8 @@ for (const c of capturas) {
   if (c.movil) await send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:5});
   await send('Page.navigate',{url:'http://127.0.0.1:8788'+c.ruta});
   await new Promise(r=>setTimeout(r,7000));
+  await ev(`(async()=>{for(const r of await navigator.serviceWorker.getRegistrations())await r.unregister();
+    for(const k of await caches.keys())await caches.delete(k);return 1})()`);
   // Fuera los avisos efímeros: no deben salir en la ficha de la tienda.
   await ev(`document.documentElement.dataset.theme = '${c.tema}';
     document.querySelectorAll('.toast-region').forEach(t => t.remove()); 1`);

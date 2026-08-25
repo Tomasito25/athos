@@ -13,6 +13,8 @@ BASE="/"
 DESTINO="dist"
 MODO="preparar"
 RAMA="gh-pages"
+SITIO=""
+PRUEBAS="si"
 
 uso() {
   cat <<'HELP'
@@ -24,6 +26,9 @@ Uso: deploy.sh [opciones]
   --github             Publica en la rama gh-pages del repositorio actual.
   --rama <nombre>      Rama de publicación (por defecto gh-pages).
   --salida <carpeta>   Carpeta de salida (por defecto dist).
+  --url https://…      Dirección pública del sitio, para las etiquetas Open
+                       Graph. Con --github se deduce del remoto.
+  --sin-pruebas        No comprobar la aplicación antes de publicar.
   --help               Esta ayuda.
 
 Ejemplos:
@@ -43,6 +48,8 @@ while [[ $# -gt 0 ]]; do
     --salida) DESTINO="$2"; shift 2 ;;
     --rama)   RAMA="$2"; shift 2 ;;
     --github) MODO="github"; shift ;;
+    --url)    SITIO="${2%/}"; shift 2 ;;
+    --sin-pruebas) PRUEBAS="no"; shift ;;
     -h|--help) uso; exit 0 ;;
     *) echo "Opción desconocida: $1 (usa --help)" >&2; exit 2 ;;
   esac
@@ -62,8 +69,29 @@ command -v npm >/dev/null 2>&1 || { echo "Falta Node. Mira el README." >&2; exit
 cd "$APP_DIR"
 [[ -d node_modules ]] || npm install --no-audit --no-fund
 
-echo "Compilando con base $BASE …"
-ATHOS_BASE="$BASE" npm run build -- --outDir "$DESTINO"
+# Antes de publicar nada, que la aplicación esté sana. Publicar una versión
+# rota en una dirección que la gente ya tiene guardada cuesta más de arreglar
+# que los dos minutos que tardan las pruebas.
+if [[ "$MODO" == "github" && "$PRUEBAS" == "si" ]]; then
+  echo "Comprobando la aplicación antes de publicar …"
+  npm run lint
+  npm run typecheck
+  npm run test
+  echo
+fi
+
+# Open Graph necesita direcciones absolutas. Al publicar en GitHub Pages se
+# deduce del remoto; en los demás casos se puede pasar con --url.
+if [[ "$MODO" == "github" && -z "$SITIO" ]]; then
+  R="$(git -C "$APP_DIR" remote get-url origin 2>/dev/null || true)"
+  if [[ -n "$R" ]]; then
+    U="$(sed -E 's#.*github.com[:/]([^/]+)/([^/.]+)(\.git)?#\1#' <<<"$R")"
+    [[ -n "$U" ]] && SITIO="https://$U.github.io"
+  fi
+fi
+
+echo "Compilando con base $BASE${SITIO:+ y sitio $SITIO} …"
+ATHOS_BASE="$BASE" ATHOS_URL="$SITIO" npm run build -- --outDir "$DESTINO"
 
 # GitHub Pages ignora lo que empieza por guion bajo si no encuentra esto.
 touch "$DESTINO/.nojekyll"
@@ -105,11 +133,12 @@ git -C "$APP_DIR" rev-parse --git-dir >/dev/null 2>&1 || {
 
 REMOTO="$(git -C "$APP_DIR" remote get-url origin 2>/dev/null || true)"
 [[ -n "$REMOTO" ]] || {
-  cat >&2 <<'MSG'
+  ACTUAL="$(git -C "$APP_DIR" branch --show-current 2>/dev/null || echo main)"
+  cat >&2 <<MSG
 No hay un remoto 'origin' configurado. Crea el repositorio en GitHub y:
 
   git remote add origin https://github.com/TU-USUARIO/athos.git
-  git push -u origin main
+  git push -u origin $ACTUAL
 
 Después vuelve a ejecutar este script.
 MSG

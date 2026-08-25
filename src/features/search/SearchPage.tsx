@@ -1,9 +1,31 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { searchAll, type SearchOutcome } from '@/db/search';
-import { Empty, Loading, Notice, PageHead, Section } from '@/components/ui';
+import { searchAll, KIND_LABELS, type SearchOutcome } from '@/db/search';
+import { listHistory } from '@/db/user';
+import { useAsync } from '@/hooks/useAsync';
+import { Empty, ListRow, Loading, Notice, PageHead, Section } from '@/components/ui';
 import { highlight, tokenize } from '@/lib/text';
+import type { SearchKind } from '@/types';
 import es from '@/locales/es';
+
+/**
+ * A dónde lleva cada cosa que se puede buscar.
+ *
+ * La búsqueda vacía enseñaba un campo y nada más, que es un callejón sin
+ * salida: quien llega no sabe qué hay dentro. Esto dice qué se puede buscar y
+ * deja entrar a cada sitio directamente.
+ */
+const DONDE_BUSCA: Array<{ kind: SearchKind; path: string }> = [
+  { kind: 'prayer', path: '/orar/oraciones' },
+  { kind: 'bible', path: '/leer/biblia' },
+  { kind: 'psalm', path: '/leer/salterio' },
+  { kind: 'saint', path: '/calendario/santos' },
+  { kind: 'office', path: '/biblioteca/liturgia' },
+  { kind: 'father', path: '/biblioteca/padres' },
+  { kind: 'study', path: '/biblioteca/estudio' },
+  { kind: 'athos', path: '/biblioteca/athos' },
+  { kind: 'icon', path: '/biblioteca/iconos' },
+];
 
 /** Resultados completos de la búsqueda, agrupados por categoría. */
 export function SearchPage() {
@@ -35,6 +57,8 @@ export function SearchPage() {
 
   const tokens = tokenize(query);
   const visible = trimmed.length < 2 ? null : outcome;
+  const enBlanco = trimmed.length < 2;
+  const historial = useAsync(() => listHistory(6), []);
 
   return (
     <div className="page">
@@ -62,6 +86,37 @@ export function SearchPage() {
 
       {visible && visible.total === 0 ? (
         <Empty title={es.search.noResults.replace('{{query}}', query)} />
+      ) : null}
+
+      {/* Sin nada escrito, la pantalla no se queda muda. */}
+      {enBlanco ? (
+        <>
+          {historial.data && historial.data.length > 0 ? (
+            <Section title={es.search.recent}>
+              <div className="list">
+                {historial.data.map((entrada) => (
+                  <ListRow
+                    key={entrada.id}
+                    to={entrada.path}
+                    title={entrada.title}
+                    meta={entrada.kind}
+                  />
+                ))}
+              </div>
+            </Section>
+          ) : null}
+
+          <Section title={es.search.whereTitle}>
+            <p className="muted text-sm" style={{ margin: 'calc(-1 * var(--sp-2)) 0 var(--sp-3)' }}>
+              {es.search.whereText}
+            </p>
+            <div className="list">
+              {DONDE_BUSCA.map(({ kind, path }) => (
+                <ListRow key={kind} to={path} title={KIND_LABELS[kind]} />
+              ))}
+            </div>
+          </Section>
+        </>
       ) : null}
 
       {visible?.groups.map((group) => (

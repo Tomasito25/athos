@@ -17,7 +17,7 @@ export function AthosArticlePage() {
   if (!article.data) {
     return (
       <div className="page">
-        <Empty title="Ese artículo no existe" />
+        <Empty title="Ese artículo no existe" heading />
       </div>
     );
   }

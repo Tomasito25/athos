@@ -114,6 +114,44 @@ describe('scripts de uso', () => {
     expect(leer('run.sh')).toMatch(/no.*instalar|NO instalarla/i);
   });
 
+  it('deploy.sh comprueba la aplicación antes de publicarla', () => {
+    // Publicar una versión rota en una dirección que la gente ya tiene
+    // guardada cuesta más de arreglar que los dos minutos de las pruebas.
+    const sh = leer('deploy.sh');
+    const bloque = sh.slice(sh.indexOf('MODO" == "github" && "$PRUEBAS"'));
+    expect(bloque).toContain('npm run lint');
+    expect(bloque).toContain('npm run typecheck');
+    expect(bloque).toContain('npm run test');
+    // Y se puede saltar a propósito, no por descuido.
+    expect(sh).toContain('--sin-pruebas');
+  });
+
+  it('deploy.sh no inventa el nombre de la rama', () => {
+    // Decía «git push -u origin main» en un repositorio que está en master.
+    const sh = leer('deploy.sh');
+    expect(sh).toContain('branch --show-current');
+    expect(sh).not.toMatch(/git push -u origin main/);
+  });
+
+  it('las etiquetas Open Graph pueden hacerse absolutas', () => {
+    // Una dirección relativa en og:image no la resuelve ningún servicio que
+    // muestre una vista previa del enlace.
+    const config = leer('vite.config.ts');
+    expect(config).toContain('ATHOS_URL');
+    expect(config).toContain('og:url');
+    expect(leer('deploy.sh')).toContain('ATHOS_URL=');
+  });
+
+  it('el acceso directo del sistema apunta a algo que sigue en el menú', () => {
+    const config = leer('vite.config.ts');
+    const atajos = [...config.matchAll(/url: `\$\{base\}([^?`]+)/g)].map((m) => m[1]);
+    const rutas = leer('src/routes/router.tsx');
+    for (const atajo of atajos) {
+      expect(rutas, `atajo a ${atajo}`).toContain(`path: '${atajo}'`);
+    }
+    expect(atajos).not.toContain('orar/oracion-de-jesus');
+  });
+
   it('deploy.sh prepara GitHub Pages correctamente', () => {
     const deploy = leer('deploy.sh');
     // Sin .nojekyll, GitHub ignora lo que empieza por guion bajo.

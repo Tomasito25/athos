@@ -19,7 +19,7 @@ export function MonasteryPage() {
   if (!monastery.data) {
     return (
       <div className="page">
-        <Empty title="Ese monasterio no está en la lista" />
+        <Empty title="Ese monasterio no está en la lista" heading />
       </div>
     );
   }

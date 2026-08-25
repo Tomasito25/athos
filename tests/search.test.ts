@@ -1,8 +1,10 @@
 /** Búsqueda global sin conexión y utilidades de texto. */
 import { beforeAll, describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { db } from '@/db/db';
 import { seedContent } from '@/db/seed';
-import { searchAll } from '@/db/search';
+import { KIND_LABELS, searchAll } from '@/db/search';
 import { highlight, normalize, score, snippet, tokenize } from '@/lib/text';
 
 beforeAll(async () => {
@@ -137,4 +139,27 @@ describe('búsqueda global', () => {
     expect(resultado.groups.every((g) => g.kind === 'prayer')).toBe(true);
   });
 
+});
+
+
+describe('la búsqueda en blanco no es un callejón sin salida', () => {
+  const leer = (r: string) => readFileSync(resolve(process.cwd(), r), 'utf-8');
+
+  it('todo lo que ofrece lleva a una ruta que existe', () => {
+    const pagina = leer('src/features/search/SearchPage.tsx');
+    const rutas = leer('src/routes/router.tsx');
+    const ofrecidas = [...pagina.matchAll(/path: '(\/[^']+)'/g)].map((m) => m[1]);
+    expect(ofrecidas.length).toBeGreaterThan(5);
+    for (const ruta of ofrecidas) {
+      expect(rutas, `la búsqueda ofrece ${ruta}`).toContain(`path: '${ruta.slice(1)}'`);
+    }
+  });
+
+  it('lo que ofrece se nombra con la etiqueta de su grupo', () => {
+    // Así el nombre de la pantalla y el del grupo de resultados coinciden.
+    const pagina = leer('src/features/search/SearchPage.tsx');
+    for (const m of pagina.matchAll(/kind: '([a-z]+)'/g)) {
+      expect(Object.keys(KIND_LABELS), m[1]).toContain(m[1]);
+    }
+  });
 });

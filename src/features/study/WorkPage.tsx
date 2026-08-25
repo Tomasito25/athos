@@ -12,7 +12,7 @@ export function StudyWorkPage() {
   if (!obra) {
     return (
       <div className="page">
-        <Empty title="Esa obra no está en el catálogo" />
+        <Empty title="Esa obra no está en el catálogo" heading />
       </div>
     );
   }

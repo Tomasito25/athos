@@ -2,6 +2,50 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.7.0]
+
+### Corregido
+
+- **Faltaban encabezados de primer nivel.** La portada enseña la oración de
+  Jesús y ningún título, y las diecisiete pantallas de «esto no existe» —un
+  santo que no está, un salmo fuera de rango, una dirección inventada— eran
+  todas un párrafo suelto. Quien navega con lector de pantalla no encontraba
+  dónde empieza el contenido. Ahora cada pantalla tiene exactamente uno, y
+  cuarenta y una pruebas lo comprueban, once de ellas sobre direcciones que no
+  llevan a ninguna parte.
+- El acceso directo del sistema apuntaba a la oración de Jesús, que ya no
+  figura en el menú de Orar. Ahora apunta al komboskini, y una prueba exige que
+  todos los accesos directos correspondan a una ruta real.
+- `deploy.sh` decía `git push -u origin main` en un repositorio que está en
+  `master`. Ahora usa la rama en la que estés.
+
+### Añadido
+
+- **`deploy.sh --github` comprueba antes de publicar**: lint, tipos y pruebas.
+  Publicar una versión rota en una dirección que la gente ya tiene guardada
+  cuesta más de arreglar que los dos minutos que tardan. Con `--sin-pruebas` se
+  salta, a propósito y no por descuido.
+- **Open Graph con direcciones absolutas.** `og:image` era relativa y no la
+  resuelve ningún servicio que muestre una vista previa del enlace. Con
+  `--url https://…` —deducida sola al publicar en GitHub Pages— se reescriben
+  absolutas y se añade `og:url`; sin ella se quedan relativas, que es lo
+  correcto mientras no se sepa el dominio.
+- **La búsqueda en blanco ya no es un callejón sin salida.** Enseñaba un campo
+  y nada más. Ahora, sin escribir nada, ofrece lo último que has leído y la
+  lista de todo aquello en lo que busca —oraciones, Biblia, Salterio, santos,
+  liturgia, Padres, estudio, Monte Athos e iconos—, y desde ahí se entra
+  directamente. Una prueba exige que cada entrada lleve a una ruta real.
+- Capturas del manifest rehechas con el diseño nuevo.
+
+### Comprobado
+
+- Las **49 pantallas** recorridas una por una: ninguna en blanco, sin errores
+  de JavaScript, sin enlaces muertos ni imágenes rotas, sin desbordes.
+- **Publicada en una subcarpeta** (`/athos/`), servida de verdad: Service
+  Worker con ámbito correcto, manifest con sus rutas dentro, icono y captura
+  que existen, enlaces profundos, navegación sin conexión y ningún recurso
+  absoluto saliéndose de la subcarpeta.
+
 ## [1.6.1]
 
 ### Corregido

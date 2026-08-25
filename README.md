@@ -57,7 +57,65 @@ porque no hay servidor.
 - **Oración de Jesús y komboskini**, con contador, temporizador e historial.
 
 ---
+## Contribuir
 
+ATHOS es software libre y agradece la ayuda. Hay cuatro maneras de darla, de
+más útil a menos:
+
+**Textos litúrgicos en español con licencia comprobada.** Es lo que más falta y
+lo que más cuesta conseguir. Qué está incorporado y qué no, la aplicación lo
+dice en todo momento en **Configuración → Fuentes**: cualquier ficha marcada
+como *pendiente de incorporar* es una contribución esperando a alguien.
+
+**Correcciones al calendario y al ayuno.** Si una fecha, un tono o un grado de
+ayuno no cuadra con tu jurisdicción, díselo — con la fuente que lo respalde.
+Las diferencias entre tradiciones son reales y ATHOS quiere reflejarlas, no
+aplanarlas.
+
+**Traducciones de la interfaz.** Ningún texto está escrito dentro de un
+componente: todos viven en `src/locales/`. Traducir consiste en copiar el
+archivo español y traducirlo. Los idiomas que ya existen son los archivos que
+haya en esa carpeta.
+
+**Código.** Errores, accesibilidad, rendimiento. `CONTRIBUTING.md` explica los
+criterios; el más importante es que nada se dé por bueno sin una prueba que lo
+respalde.
+
+### La regla que no se negocia
+
+**Aquí no se inventa un texto litúrgico.** Toda aportación de contenido tiene
+que traer su procedencia completa —título, autor, traductor, fuente,
+tradición, idioma, licencia y derechos— y decir con claridad si es un texto
+tradicional, una traducción con licencia o algo redactado para ATHOS. Lo
+tercero se acepta; lo tercero disfrazado de lo primero, no.
+
+Si un texto se incorporó por error y tienes derechos sobre él, escríbelo en una
+incidencia: **se retira primero y se discute después**.
+
+### Cómo empezar
+
+```bash
+git clone https://github.com/Tomasito25/athos.git
+cd athos && ./run.sh
+```
+
+Sólo hace falta **python3** para usarla; Node únicamente para compilar, y
+`run.sh` lo encuentra solo si está en `~/.local/node`. Antes de proponer un
+cambio:
+
+```bash
+npm run check
+```
+
+Eso pasa el lint, los tipos, las pruebas y la compilación — lo mismo que
+comprueba GitHub en cada empujón.
+
+Lo largo está en **[CONTRIBUTING.md](CONTRIBUTING.md)**: qué licencias se
+aceptan, cómo se distingue una rúbrica de una oración, y qué hacer con el
+calendario litúrgico, que es la parte más delicada del proyecto.
+
+**[Abrir una incidencia](https://github.com/Tomasito25/athos/issues)** ·
+**[Ver las abiertas](https://github.com/Tomasito25/athos/issues)**
 ## La regla de la casa
 
 **Aquí no se inventa un texto litúrgico.** Cuando una oración, un himno o una
@@ -80,6 +138,6 @@ licencia y derechos. Se puede consultar entera en **Configuración → Fuentes**
 
 Código bajo [AGPL-3.0-or-later](LICENSE). El contenido religioso conserva cada
 uno su propia licencia, declarada en su ficha y visible en la aplicación; ver
-[NOTICE.md](NOTICE.md). Reina-Valera 1909, dominio público. EB Garamond e
+[NOTICE.md](NOTICE.md). Reina-Valera 1909 (La OSB no la he podido encontrar en español), dominio público. EB Garamond e
 Inter, SIL Open Font License 1.1. **La licencia del código no cubre el
 contenido religioso de terceros.**

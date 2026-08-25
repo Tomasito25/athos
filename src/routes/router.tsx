@@ -26,6 +26,7 @@ export const routes: RouteObject[] = [
       /* ---------------- Orar ---------------- */
       { path: 'orar', lazy: page(() => import('@/features/pray/PrayHub'), 'PrayHub') },
       { path: 'orar/oraciones', lazy: page(() => import('@/features/prayers/PrayersPage'), 'PrayersPage') },
+      { path: 'orar/oraciones/todas', lazy: page(() => import('@/features/prayers/AllPrayersPage'), 'AllPrayersPage') },
       { path: 'orar/oraciones/categoria/:categoryId', lazy: page(() => import('@/features/prayers/PrayerCategoryPage'), 'PrayerCategoryPage') },
       { path: 'orar/oraciones/:prayerId', lazy: page(() => import('@/features/prayers/PrayerPage'), 'PrayerPage') },
       { path: 'orar/oficio/:time', lazy: page(() => import('@/features/office/OfficePage'), 'OfficePage') },

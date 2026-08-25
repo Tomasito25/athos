@@ -18,9 +18,10 @@ export * from './athos';
 export * from './study';
 export * from './greek';
 export * from './hours';
+export * from './moments';
 
 /**
  * Versión del corpus. Al incrementarla, ATHOS vuelve a sembrar las tablas de
  * contenido en la próxima apertura, sin tocar los datos del usuario.
  */
-export const CONTENT_VERSION = 4;
+export const CONTENT_VERSION = 5;

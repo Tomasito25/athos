@@ -2,6 +2,39 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.5.0]
+
+### Añadido
+
+- **Menú de momentos**: las oraciones ya no se abren por un índice de títulos,
+  sino por la circunstancia en que hacen falta —al despertar, al salir de casa,
+  antes y después de comer, al caer en el pecado, en la angustia y la tristeza,
+  al entrar en el templo, antes de leer la Escritura, antes de confesar y de
+  comulgar—. Veinticuatro momentos repartidos en cuatro grupos: el día, el
+  alma, los demás, ante Dios.
+- **El momento de la hora, destacado arriba**. En las horas que no tienen un
+  momento propio no se inventa ninguno: se ofrece la oración de Jesús.
+- **36 oraciones nuevas**, hasta 79, y **ningún momento vacío**: la oración de
+  los ancianos de Óptina, los troparios de compunción de las Completas, el
+  versículo de san Juan Casiano contra los pensamientos, «Bajo tu compasión»
+  (papiro del siglo III), el tropario del domingo de la Ortodoxia, las
+  bendiciones de la mesa de la tarde y de Pascua, la conmemoración de los vivos
+  y de los difuntos, y las guías prácticas para quien llega nuevo: cómo se hace
+  la señal de la cruz, qué se hace dentro del templo, cómo es la confesión y
+  cómo se prepara la comunión.
+- **Todas las oraciones** en pantalla aparte, con el buscador.
+
+### Corregido
+
+- **Las fichas de los textos redactados por ATHOS declaraban derechos que no
+  eran suyos**: heredaban de la plantilla el aviso «texto litúrgico
+  tradicional, de dominio público en su original griego o eslavo». Cuatro
+  textos —el examen del día, la oración antes del trabajo, la guía de examen
+  antes de la confesión y la oración por la paz— se presentaban así. Ahora la
+  fuente, los derechos y la primera línea de las notas de todo lo que ATHOS
+  escribe se fijan después de los datos de cada ficha, de modo que ya no se
+  pueden perder al escribirla, y tres pruebas lo vigilan.
+
 ## [1.4.0]
 
 ### Añadido

@@ -85,7 +85,7 @@ export function PrayHub() {
             to="/orar/oraciones"
             leading={<IconPray size={20} style={{ color: 'var(--gold)' }} />}
             title={es.prayers.title}
-            meta={`${PRAYER_CATEGORIES.length} categorías, del despertar a la preparación para la comunión`}
+            meta={`${PRAYER_CATEGORIES.length} momentos, del despertar a la preparación para la comunión`}
           />
           <ListRow
             to="/orar/mis-oraciones"

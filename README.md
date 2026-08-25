@@ -100,8 +100,11 @@ ATHOS reúne en un solo lugar lo que un cristiano ortodoxo usa a diario:
   las demás, con su texto griego y su transliteración debajo del español.
 - **Oraciones propias** — escribe las tuyas y añádelas a cualquier oficio, junto
   a las de la biblioteca.
-- **Oraciones** — libro de oración estructurado en dieciocho categorías, de las
-  oraciones de la mañana a la preparación para la Comunión.
+- **Oraciones** — no se entra por un índice de títulos, sino por un **menú de
+  momentos**: al despertar, al salir de casa, antes y después de comer, al caer
+  en el pecado, en la angustia, al entrar en el templo, antes de comulgar…
+  Veinticuatro momentos en cuatro grupos —el día, el alma, los demás, ante
+  Dios—, y arriba, destacado, el que corresponde a la hora que es.
 - **Regla de oración** — además de los tres oficios, reglas propias para
   domingos, fiestas y periodos de ayuno.
 - **Oración de Jesús y komboskini** — contador con objetivos, temporizador,
@@ -403,7 +406,7 @@ ATHOS distingue tres estados en cada texto: **completo**, **parcial** y
 | --- | --- |
 | Biblia | Completa (RV1909). Los deuterocanónicos figuran con ficha; su texto es pendiente |
 | Salterio | Completo, 150 salmos. El Salmo 151 es pendiente |
-| Oraciones | 45 oraciones; 4 fichas pendientes (Gran Canon, canon de Comunión, Akáthistos) |
+| Oraciones | 79 oraciones en 24 momentos, ninguno vacío; 4 fichas pendientes (Gran Canon, canon de Comunión, Akáthistos, oración de Manasés) |
 | Santos | 162 conmemoraciones con su vida, en 147 días del año. El Menaion completo es pendiente |
 | Lecturas del día | **Completas**: los 365 días de 2024 a 2045, en calendario nuevo y juliano, del leccionario bizantino de tradición eslava |
 | Oficios | Estructura completa y partes cantadas; oraciones sacerdotales pendientes |
@@ -459,7 +462,7 @@ Verificado en Brave 151 (Chromium) sobre el servidor de `run.sh`:
 - Con la red del navegador **completamente cortada**: la aplicación recarga,
   pinta y permite navegar a rutas profundas como `/leer/salterio/50`, que
   muestra el salmo entero.
-- IndexedDB: 43 oraciones, 151 salmos, 162 santos y 31 084 versículos.
+- IndexedDB: 79 oraciones, 151 salmos, 162 santos y 31 084 versículos.
 - Manifest con **capturas reales** de la aplicación, tomadas con
   `scripts/screenshots.mjs` sobre un navegador sin ventana.
 

@@ -43,10 +43,21 @@ describe('secciones principales', () => {
     expect(screen.getAllByText(/Chotki/i).length).toBeGreaterThan(0);
   });
 
-  it('la biblioteca de oraciones lista las categorías', async () => {
+  it('las oraciones se abren por el menú de momentos', async () => {
     renderAt('/orar/oraciones');
-    await findHeading(/Oraciones de la mañana/i);
-    expect(screen.getAllByText(/Preparación para la comunión/i).length).toBeGreaterThan(0);
+    await findHeading(/El día/i);
+    // Los momentos se nombran por lo que le pasa a quien los busca.
+    expect(screen.getAllByText(/Al despertar/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Al caer en el pecado/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Antes de comer/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Después de comer/i).length).toBeGreaterThan(0);
+  });
+
+  it('un momento lleva a sus oraciones', async () => {
+    renderAt('/orar/oraciones/categoria/al-pecar');
+    await findHeading(/Al caer en el pecado/i);
+    // El título del momento es estático; la lista llega de IndexedDB.
+    await findHeading(/Troparios de compunción/i);
   });
 
   it('una oración concreta muestra su texto y su procedencia', async () => {

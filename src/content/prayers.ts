@@ -8,26 +8,40 @@
  * ATHOS nunca redacta un texto propio haciéndolo pasar por litúrgico.
  */
 import type { Prayer, PrayerCategory, PrayerCategoryId, SourceMeta, TextBlock } from '@/types';
+import { MORE_PRAYERS } from './prayers-more';
 
 export const PRAYER_CATEGORIES: PrayerCategory[] = [
-  { id: 'manana', name: 'Oraciones de la mañana', description: 'Al despertar, antes de comenzar el día.', order: 1 },
-  { id: 'noche', name: 'Oraciones de la noche', description: 'Antes del descanso, al cerrar la jornada.', order: 2 },
-  { id: 'antes-comer', name: 'Antes de comer', description: 'Bendición de la mesa.', order: 3 },
-  { id: 'despues-comer', name: 'Después de comer', description: 'Acción de gracias por el alimento.', order: 4 },
-  { id: 'antes-estudiar', name: 'Antes de estudiar', description: 'Para pedir luz al entendimiento.', order: 5 },
-  { id: 'antes-trabajar', name: 'Antes de trabajar', description: 'Para ofrecer el trabajo del día.', order: 6 },
-  { id: 'antes-viajar', name: 'Antes de viajar', description: 'Para el camino.', order: 7 },
-  { id: 'arrepentimiento', name: 'Arrepentimiento', description: 'Cuando el alma reconoce su pecado.', order: 8 },
-  { id: 'accion-de-gracias', name: 'Acción de gracias', description: 'Por los beneficios recibidos.', order: 9 },
-  { id: 'tentacion', name: 'Tentación', description: 'En la hora de la prueba.', order: 10 },
-  { id: 'enfermedad', name: 'Enfermedad', description: 'Por los enfermos y en la propia dolencia.', order: 11 },
-  { id: 'familia', name: 'Familia', description: 'Por los padres, el cónyuge y los hijos.', order: 12 },
-  { id: 'amigos', name: 'Amigos', description: 'Por quienes caminan a nuestro lado.', order: 13 },
-  { id: 'enemigos', name: 'Enemigos', description: 'Por quienes nos hacen daño.', order: 14 },
-  { id: 'difuntos', name: 'Difuntos', description: 'Por los que se han dormido en el Señor.', order: 15 },
-  { id: 'confesion', name: 'Preparación para la confesión', description: 'Antes del sacramento del arrepentimiento.', order: 16 },
-  { id: 'comunion', name: 'Preparación para la comunión', description: 'Antes y después de los Santos Misterios.', order: 17 },
-  { id: 'otras', name: 'Otras oraciones', description: 'Oraciones para diversas circunstancias.', order: 18 },
+  /* ---- El día ---- */
+  { id: 'manana', name: 'Al despertar', description: 'Lo primero, antes que el día empiece a tirar de ti.', order: 1 },
+  { id: 'salir-de-casa', name: 'Al salir de casa', description: 'En el umbral, antes de echarse a la calle.', order: 2 },
+  { id: 'antes-trabajar', name: 'Antes de trabajar', description: 'Para ofrecer la obra de las manos, y para darla por acabada.', order: 3 },
+  { id: 'antes-estudiar', name: 'Antes de estudiar', description: 'Para pedir luz al entendimiento.', order: 4 },
+  { id: 'antes-comer', name: 'Antes de comer', description: 'Bendición de la mesa.', order: 5 },
+  { id: 'despues-comer', name: 'Después de comer', description: 'Acción de gracias por el alimento.', order: 6 },
+  { id: 'antes-viajar', name: 'Antes de viajar', description: 'Antes de coger el coche, el tren o el avión.', order: 7 },
+  { id: 'noche', name: 'Al acostarse', description: 'Antes del descanso, al cerrar la jornada.', order: 8 },
+
+  /* ---- El alma ---- */
+  { id: 'al-pecar', name: 'Al caer en el pecado', description: 'En el momento mismo de la caída, sin dejarlo para luego.', order: 9 },
+  { id: 'arrepentimiento', name: 'Arrepentimiento', description: 'Cuando el alma reconoce su pecado y quiere volver.', order: 10 },
+  { id: 'tentacion', name: 'En la tentación', description: 'En la hora de la prueba.', order: 11 },
+  { id: 'angustia', name: 'En la angustia y la tristeza', description: 'Cuando aprieta la pena, el miedo o el desaliento.', order: 12 },
+  { id: 'accion-de-gracias', name: 'Al recibir un bien', description: 'Acción de gracias por los beneficios recibidos.', order: 13 },
+
+  /* ---- Los demás ---- */
+  { id: 'familia', name: 'Por la familia', description: 'Por los padres, el cónyuge y los hijos.', order: 14 },
+  { id: 'amigos', name: 'Por los amigos', description: 'Por quienes caminan a nuestro lado.', order: 15 },
+  { id: 'enemigos', name: 'Por los enemigos', description: 'Por quienes nos hacen daño.', order: 16 },
+  { id: 'enfermedad', name: 'En la enfermedad', description: 'Por los enfermos y en la propia dolencia.', order: 17 },
+  { id: 'padre-espiritual', name: 'Por el padre espiritual', description: 'Por quien te confiesa y te guía.', order: 18 },
+  { id: 'difuntos', name: 'Por los difuntos', description: 'Por los que se han dormido en el Señor.', order: 19 },
+
+  /* ---- Ante Dios ---- */
+  { id: 'templo', name: 'Al entrar en el templo', description: 'En la puerta de la iglesia y ante los iconos.', order: 20 },
+  { id: 'escritura', name: 'Antes de leer la Escritura', description: 'Para que la palabra no pase de largo.', order: 21 },
+  { id: 'confesion', name: 'Antes de confesar', description: 'Preparación para el sacramento del arrepentimiento.', order: 22 },
+  { id: 'comunion', name: 'Antes de comulgar', description: 'Antes y después de los Santos Misterios.', order: 23 },
+  { id: 'otras', name: 'Otras oraciones', description: 'Oraciones para diversas circunstancias.', order: 24 },
 ];
 
 const TRAD: SourceMeta = {
@@ -193,6 +207,9 @@ const seeds: Seed[] = [
     meta: meta({
       source: 'Guía de examen redactada para ATHOS conforme a la práctica ascética común',
       license: 'cc-by-sa-4.0',
+      copyright:
+        'Texto redactado para ATHOS. No es un texto litúrgico ni procede de un libro litúrgico. ' +
+        'Se publica bajo CC BY-SA 4.0.',
       notes: 'No es un texto litúrgico, sino una ayuda para el examen de conciencia.',
     }),
   },
@@ -266,7 +283,10 @@ const seeds: Seed[] = [
     meta: meta({
       source: 'Oración redactada para ATHOS a partir de fórmulas del Horologion',
       license: 'cc-by-sa-4.0',
-      notes: 'No procede de un libro litúrgico; se ofrece como ayuda y así se indica.',
+      copyright:
+        'Texto redactado para ATHOS. No es un texto litúrgico ni procede de un libro litúrgico. ' +
+        'Se publica bajo CC BY-SA 4.0.',
+      notes: 'No es un texto litúrgico: no procede de un libro litúrgico y se ofrece como ayuda.',
     }),
   },
   {
@@ -312,10 +332,11 @@ const seeds: Seed[] = [
     subtitle: 'Ten piedad de mí, oh Dios',
     category: 'arrepentimiento',
     blocks: [
-      rub('El salmo del arrepentimiento se lee íntegro desde el Salterio. En ATHOS: Leer → Salterio → Salmo 50.'),
+      t('Ten piedad de mí, oh Dios, conforme a tu misericordia; conforme a la multitud de tus piedades borra mis rebeliones. Lávame más y más de mi maldad, y límpiame de mi pecado.'),
+      rub('El salmo se lee íntegro desde el Salterio: Leer → Salterio → Salmo 50.'),
     ],
     meta: meta({
-      source: 'Salterio, salmo 50 según la numeración de los Setenta (51 hebreo)',
+      source: 'Salterio, salmo 50 según la numeración de los Setenta (51 hebreo). Reina-Valera 1909',
       license: 'public-domain',
     }),
   },
@@ -469,6 +490,12 @@ const seeds: Seed[] = [
     meta: meta({
       source: 'Guía redactada para ATHOS conforme a los manuales de confesión de uso común',
       license: 'cc-by-sa-4.0',
+      copyright:
+        'Texto redactado para ATHOS. No es un texto litúrgico ni procede de un libro litúrgico. ' +
+        'Se publica bajo CC BY-SA 4.0.',
+      notes:
+        'No es un texto litúrgico, sino una ayuda para el examen de conciencia. Lo que aquí falte o ' +
+        'sobre lo dirá el confesor, que conoce lo que esta lista no puede conocer.',
     }),
   },
   {
@@ -543,7 +570,14 @@ const seeds: Seed[] = [
     blocks: [
       t('Señor Jesucristo, que dijiste a tus apóstoles: «Mi paz os dejo, mi paz os doy»: no mires nuestros pecados, sino la fe de tu Iglesia, y concédele la paz. Aparta de nosotros la guerra, el odio y la división, y haz de nosotros instrumentos de tu misericordia. Amén.'),
     ],
-    meta: meta({ source: 'Basada en la oración de la Divina Liturgia y en Juan 14, 27' }),
+    meta: meta({
+      source: 'Oración redactada para ATHOS a partir de la Divina Liturgia y de Juan 14, 27',
+      license: 'cc-by-sa-4.0',
+      copyright:
+        'Texto redactado para ATHOS. No es un texto litúrgico ni procede de un libro litúrgico. ' +
+        'Se publica bajo CC BY-SA 4.0.',
+      notes: 'No es un texto litúrgico: recoge fórmulas de la Liturgia, pero la redacción es de ATHOS.',
+    }),
   },
   {
     id: 'oracion-de-la-hora',
@@ -574,7 +608,18 @@ const plain = (blocks: TextBlock[]) =>
     .join(' ')
     .toLowerCase();
 
-export const PRAYERS: Prayer[] = seeds.map((s, i) => ({
+/**
+ * Las oraciones de los momentos concretos viven en un archivo aparte y se
+ * ordenan aquí junto a las demás: dentro de cada momento se conserva el orden
+ * en que fueron escritas, y los momentos siguen el orden del día y de la vida.
+ */
+const CATEGORY_ORDER = new Map(PRAYER_CATEGORIES.map((c) => [c.id, c.order]));
+
+const allSeeds: Seed[] = [...seeds, ...MORE_PRAYERS].sort(
+  (a, b) => (CATEGORY_ORDER.get(a.category) ?? 99) - (CATEGORY_ORDER.get(b.category) ?? 99),
+);
+
+export const PRAYERS: Prayer[] = allSeeds.map((s, i) => ({
   id: s.id,
   title: s.title,
   subtitle: s.subtitle,

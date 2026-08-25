@@ -368,7 +368,17 @@ const es = {
     noLan:
       'No se ha podido averiguar la dirección de este ordenador en la red. Arranca ATHOS con ' +
       './run.sh --movil, que la muestra en el terminal junto a su código QR.',
+    loopbackTitle: 'ATHOS se está sirviendo sólo para este ordenador',
+    loopbackText:
+      'Por eso no hay código que escanear: la dirección de este ordenador en la red no respondería. ' +
+      'Detén ATHOS y vuelve a arrancarla con esta orden, que la abre a tu red local y muestra aquí ' +
+      'el código:',
+    blockedTitle: 'ATHOS escucha en la red, pero algo bloquea la conexión',
+    blockedText:
+      'Es casi siempre el cortafuegos. Permite el puerto y vuelve a cargar esta pantalla; hasta ' +
+      'entonces no se dibuja ningún código, porque llevaría a una dirección que rechaza la conexión.',
     copyLink: 'Copiar la dirección',
+    copyCommand: 'Copiar la orden',
     title: 'Instalar ATHOS',
     subtitle: 'ATHOS puede instalarse como una aplicación normal y funcionar sin conexión.',
     installed: 'ATHOS ya está instalada en este dispositivo.',

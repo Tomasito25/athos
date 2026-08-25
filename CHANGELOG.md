@@ -2,6 +2,24 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.6.1]
+
+### Corregido
+
+- **El código QR llevaba a una dirección que rechazaba la conexión.** El
+  servidor sabía la dirección de este ordenador en la red y la anunciaba, pero
+  escuchaba sólo en 127.0.0.1: el teléfono que escaneaba se encontraba con
+  ERR_CONNECTION_REFUSED. Saber una dirección no es lo mismo que responder en
+  ella. Ahora el servidor lo comprueba de verdad —mira a qué interfaz está
+  atado y abre una conexión contra sí mismo— y sólo entonces ofrece el código.
+- Cuando ATHOS se sirve sólo para este ordenador, que es lo normal, la pantalla
+  lo dice y muestra la orden que lo arregla (`./run.sh --movil`), con su botón
+  para copiarla. Si escucha en la red pero el cortafuegos la bloquea, también
+  se dice, con el puerto que hay que permitir.
+- Dos pruebas nuevas arrancan el servidor de las dos maneras y comprueban lo
+  que responde; la segunda además **pide ATHOS por la dirección que anuncia**,
+  que es exactamente lo que hace el teléfono.
+
 ## [1.6.0]
 
 ### Corregido

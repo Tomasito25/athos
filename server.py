@@ -41,7 +41,10 @@ IMMUTABLE_PREFIXES = ("/assets/", "/fonts/")
 HOST_ENDPOINT = "/__athos/host.json"
 
 
-def lan_url(port: int) -> str | None:
+LOOPBACK = ("127.", "::1", "localhost")
+
+
+def lan_ip() -> str | None:
     """
     La dirección de este ordenador en la red local.
 
@@ -60,7 +63,41 @@ def lan_url(port: int) -> str | None:
         return None
     if not ip or ip.startswith("127."):
         return None
-    return f"http://{ip}:{port}"
+    return ip
+
+
+def alcanzable(ip: str, port: int) -> bool:
+    """¿Hay alguien escuchando en esa dirección? Se comprueba conectando."""
+    import socket
+
+    try:
+        with socket.create_connection((ip, port), timeout=0.4):
+            return True
+    except OSError:
+        return False
+
+
+def estado_de_red(bind_host: str, port: int) -> dict:
+    """
+    Qué se le puede decir al teléfono.
+
+    No basta con saber la IP de este ordenador: si el servidor sólo escucha en
+    127.0.0.1 —que es lo normal—, esa IP no responde a nadie. Anunciar un
+    código QR hacia una dirección donde no hay nada escuchando es peor que no
+    ofrecer ninguno, así que se comprueba de verdad antes de decir que sí.
+    """
+    solo_local = bind_host.startswith(LOOPBACK)
+    ip = lan_ip()
+
+    if solo_local:
+        return {"lan": None, "reason": "loopback", "bound": bind_host, "command": "./run.sh --movil"}
+    if not ip:
+        return {"lan": None, "reason": "no-ip", "bound": bind_host}
+    if not alcanzable(ip, port):
+        # Escucha en todas las interfaces pero algo lo bloquea: casi siempre el
+        # cortafuegos. Se dice, en vez de dar un QR que no va a abrir nada.
+        return {"lan": None, "reason": "blocked", "bound": bind_host, "ip": ip, "port": port}
+    return {"lan": f"http://{ip}:{port}", "reason": "ok", "bound": bind_host}
 
 
 class AthosHandler(SimpleHTTPRequestHandler):
@@ -84,8 +121,8 @@ class AthosHandler(SimpleHTTPRequestHandler):
         if self.path.split("?")[0] == HOST_ENDPOINT:
             import json
 
-            url = lan_url(self.server.server_address[1])
-            cuerpo = json.dumps({"lan": url, "secure": False}).encode("utf-8")
+            host, port = self.server.server_address[0], self.server.server_address[1]
+            cuerpo = json.dumps(estado_de_red(str(host), int(port))).encode("utf-8")
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
             self.send_header("Content-Length", str(len(cuerpo)))

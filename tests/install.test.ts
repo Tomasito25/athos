@@ -5,7 +5,10 @@
  * convierte en píxeles y se pasa por un descodificador ajeno a la biblioteca
  * que lo generó. Si lo que se pinta no se lee, la prueba falla.
  */
-import { describe, expect, it } from 'vitest';
+import { afterAll, describe, expect, it } from 'vitest';
+import { spawn, type ChildProcess } from 'node:child_process';
+import { existsSync } from 'node:fs';
+import { get } from 'node:http';
 import QRCode from 'qrcode';
 import jsQR from 'jsqr';
 import { qrPath, type QrMatriz } from '@/lib/qr-path';
@@ -104,6 +107,34 @@ describe('qué dirección se le da al teléfono', () => {
     expect(r.installable).toBe(false);
   });
 
+  it('si el servidor sólo escucha para este ordenador, no se dibuja QR', async () => {
+    // El fallo que esto vigila: el QR anunciaba la IP de red aunque el
+    // servidor estuviera atado a 127.0.0.1, y el teléfono se encontraba con
+    // ERR_CONNECTION_REFUSED. Saber la IP no es lo mismo que responder en ella.
+    const fetcher = (async () =>
+      new Response(
+        JSON.stringify({ lan: null, reason: 'loopback', bound: '127.0.0.1', command: './run.sh --movil' }),
+        { status: 200 },
+      )) as unknown as typeof fetch;
+    const r = await resolvePhoneUrl({ href: 'http://127.0.0.1:8788/', hostname: '127.0.0.1' }, fetcher);
+    expect(r.url).toBeNull();
+    expect(r.reason).toBe('loopback');
+    // Y se dice qué hacer para que sí funcione.
+    expect(r.command).toBe('./run.sh --movil');
+  });
+
+  it('si el cortafuegos lo bloquea, tampoco', async () => {
+    const fetcher = (async () =>
+      new Response(
+        JSON.stringify({ lan: null, reason: 'blocked', bound: '0.0.0.0', ip: '192.168.1.42', port: 8788 }),
+        { status: 200 },
+      )) as unknown as typeof fetch;
+    const r = await resolvePhoneUrl({ href: 'http://127.0.0.1:8788/', hostname: '127.0.0.1' }, fetcher);
+    expect(r.url).toBeNull();
+    expect(r.reason).toBe('blocked');
+    expect(r.ip).toBe('192.168.1.42');
+  });
+
   it('si el servidor no sabe su dirección, no se inventa un QR', async () => {
     const fetcher = (async () =>
       new Response(JSON.stringify({ lan: null }), { status: 200 })) as unknown as typeof fetch;
@@ -119,4 +150,93 @@ describe('qué dirección se le da al teléfono', () => {
     const r = await resolvePhoneUrl({ href: 'http://localhost:8788/', hostname: 'localhost' }, fetcher);
     expect(r.url).toBeNull();
   });
+});
+
+
+/* ============================================================
+   El servidor local, de verdad
+   ------------------------------------------------------------
+   Saber la dirección de este ordenador en la red no es lo mismo
+   que responder en ella. El servidor anunciaba la IP aunque
+   estuviera atado a 127.0.0.1, y el teléfono que escaneaba el
+   código se encontraba con ERR_CONNECTION_REFUSED. Aquí se
+   arranca el servidor de las dos maneras y se comprueba.
+   ============================================================ */
+const hayDist = existsSync('dist/index.html');
+const procesos: ChildProcess[] = [];
+
+afterAll(() => {
+  for (const p of procesos) p.kill();
+});
+
+/**
+ * Una petición de verdad.
+ *
+ * `tests/setup.ts` sustituye el `fetch` global por un doble, que es lo que se
+ * quiere en casi todas las pruebas pero no aquí: esta habla con un servidor
+ * que está corriendo. Se usa `node:http`, que el doble no toca.
+ */
+function pedir(url: string): Promise<{ status: number; body: string }> {
+  return new Promise((resolve, reject) => {
+    const req = get(url, { timeout: 3000 }, (res) => {
+      let body = '';
+      res.setEncoding('utf-8');
+      res.on('data', (trozo) => {
+        body += trozo;
+      });
+      res.on('end', () => resolve({ status: res.statusCode ?? 0, body }));
+    });
+    req.on('timeout', () => req.destroy(new Error('tiempo agotado')));
+    req.on('error', reject);
+  });
+}
+
+async function servidor(host: string, port: number) {
+  const proceso = spawn('python3', ['server.py', '--host', host, '--port', String(port), '--dir', 'dist'], {
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  let ruido = '';
+  proceso.stdout?.on('data', (d) => {
+    ruido += d;
+  });
+  proceso.stderr?.on('data', (d) => {
+    ruido += d;
+  });
+  procesos.push(proceso);
+  // Se espera a que conteste, en vez de dormir una cantidad fija.
+  for (let intento = 0; intento < 40; intento += 1) {
+    try {
+      const r = await pedir(`http://127.0.0.1:${port}/__athos/host.json`);
+      if (r.status === 200) return JSON.parse(r.body) as Record<string, unknown>;
+    } catch {
+      /* todavía no escucha */
+    }
+    await new Promise((r) => setTimeout(r, 100));
+  }
+  throw new Error(`el servidor no arrancó en ${host}:${port}. ${ruido.slice(0, 400)}`);
+}
+
+describe.skipIf(!hayDist)('el servidor sólo anuncia lo que puede cumplir', () => {
+  it('atado a 127.0.0.1 no ofrece ninguna dirección para el teléfono', async () => {
+    const estado = await servidor('127.0.0.1', 8791);
+    expect(estado.lan).toBeNull();
+    expect(estado.reason).toBe('loopback');
+    expect(estado.command).toBe('./run.sh --movil');
+  }, 15_000);
+
+  it('abierto a la red, la dirección que anuncia sirve ATHOS', async () => {
+    const estado = await servidor('0.0.0.0', 8792);
+    if (estado.reason === 'no-ip' || estado.reason === 'blocked') {
+      // Sin red o con cortafuegos no hay nada que comprobar, y el servidor ya
+      // ha dicho que no ofrece dirección: que es justamente lo correcto.
+      expect(estado.lan).toBeNull();
+      return;
+    }
+    expect(estado.lan).toMatch(/^http:\/\/\d+\.\d+\.\d+\.\d+:8792$/);
+    expect(String(estado.lan)).not.toContain('127.0.0.1');
+    // La prueba de fuego: pedir la aplicación por esa misma dirección.
+    const pagina = await pedir(`${estado.lan}/`);
+    expect(pagina.status).toBe(200);
+    expect(pagina.body).toContain('ATHOS');
+  }, 15_000);
 });

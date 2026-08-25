@@ -1237,3 +1237,17 @@ input[type='range']:focus-visible::-webkit-slider-thumb {
   background: var(--surface-sunken);
   border-style: dashed;
 }
+
+/* Una orden para copiar y pegar en el terminal. */
+.command {
+  margin: var(--sp-3) 0;
+  padding: var(--sp-3);
+  background: var(--surface-sunken);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  font-family: ui-monospace, 'SFMono-Regular', 'Cascadia Mono', Menlo, Consolas, monospace;
+  font-size: var(--text-sm);
+  color: var(--ink);
+  overflow-x: auto;
+  white-space: pre;
+}

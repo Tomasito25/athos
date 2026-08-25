@@ -136,6 +136,48 @@ export function InstallPage() {
                 </>
               ) : null}
             </>
+          ) : phone?.reason === 'loopback' ? (
+            <div style={{ marginTop: 'var(--sp-3)' }}>
+              <p className="text-sm" style={{ fontWeight: 600 }}>
+                {es.install.loopbackTitle}
+              </p>
+              <p className="muted text-sm" style={{ marginTop: 'var(--sp-2)' }}>
+                {es.install.loopbackText}
+              </p>
+              <pre className="command">{phone.command ?? './run.sh --movil'}</pre>
+              <div className="btn-row">
+                <Button
+                  size="sm"
+                  onClick={async () => {
+                    const orden = phone.command ?? './run.sh --movil';
+                    try {
+                      await navigator.clipboard.writeText(orden);
+                      toast(es.install.copied);
+                    } catch {
+                      toast(orden);
+                    }
+                  }}
+                >
+                  {es.install.copyCommand}
+                </Button>
+              </div>
+            </div>
+          ) : phone?.reason === 'blocked' ? (
+            <div style={{ marginTop: 'var(--sp-3)' }}>
+              <p className="text-sm" style={{ fontWeight: 600 }}>
+                {es.install.blockedTitle}
+              </p>
+              <p className="muted text-sm" style={{ marginTop: 'var(--sp-2)' }}>
+                {es.install.blockedText}
+              </p>
+              {phone.ip ? (
+                <p className="muted text-sm" style={{ marginTop: 'var(--sp-2)' }}>
+                  <code>
+                    {phone.ip}:{phone.port}
+                  </code>
+                </p>
+              ) : null}
+            </div>
           ) : phone ? (
             <p className="muted text-sm" style={{ marginTop: 'var(--sp-3)' }}>
               {es.install.noLan}

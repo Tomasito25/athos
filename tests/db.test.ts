@@ -22,6 +22,7 @@ import {
   toggleRuleItem,
 } from '@/db/user';
 import { CONTENT_VERSION } from '@/content';
+import { SAINTS } from '@/content/saints';
 
 async function reset() {
   await db.delete();
@@ -136,6 +137,36 @@ describe('valores iniciales del usuario', () => {
     await deleteRule('oficio-manana');
     expect(await db.rule_items.where('ruleId').equals('oficio-manana').count()).toBe(0);
     expect(await db.rule_completions.where('ruleId').equals('oficio-manana').count()).toBe(0);
+  });
+});
+
+describe('santoral', () => {
+  it('ningún santo pisa a otro', async () => {
+    // Dos entradas con el mismo identificador no dan error: la segunda
+    // sobrescribe a la primera al sembrar, y el santo desaparece sin ruido.
+    const ids = SAINTS.map((s) => s.id);
+    const repetidos = [...new Set(ids.filter((x, i) => ids.indexOf(x) !== i))];
+    expect(repetidos).toEqual([]);
+    await seedContent();
+    expect(await db.saints.count()).toBe(SAINTS.length);
+  });
+
+  it('cada conmemoración tiene día válido y vida escrita', () => {
+    for (const santo of SAINTS) {
+      expect(santo.day, santo.id).toMatch(/^\d{2}-\d{2}$/);
+      const [mes, dia] = santo.day.split('-').map(Number);
+      expect(mes >= 1 && mes <= 12, `${santo.id}: mes ${mes}`).toBe(true);
+      expect(dia >= 1 && dia <= 31, `${santo.id}: día ${dia}`).toBe(true);
+      // La ficha sin vida no sirve de nada: es un nombre en un calendario.
+      expect(santo.biography.length, `${santo.id} sin vida escrita`).toBeGreaterThan(60);
+      expect(santo.name.length, santo.id).toBeGreaterThan(4);
+      expect(santo.category.length, `${santo.id} sin categoría`).toBeGreaterThan(0);
+    }
+  });
+
+  it('cubre buena parte del año', () => {
+    const dias = new Set(SAINTS.map((s) => s.day));
+    expect(dias.size).toBeGreaterThan(160);
   });
 });
 

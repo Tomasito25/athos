@@ -8,6 +8,7 @@
  */
 import type { Saint, SaintCategory, SourceMeta, TextBlock } from '@/types';
 import { MORE_SAINTS } from './saints-more';
+import { THIRD_SAINTS } from './saints-third';
 
 const bio: SourceMeta = {
   source: 'Reseña histórica redactada para ATHOS a partir de fuentes hagiográficas comunes',
@@ -129,7 +130,7 @@ const troparia: Record<string, TextBlock[]> = {
 };
 
 /** Primera tanda y ampliación, ordenadas por su día del calendario. */
-const allSeeds: SaintSeed[] = [...seeds, ...MORE_SAINTS].sort((a, b) =>
+const allSeeds: SaintSeed[] = [...seeds, ...MORE_SAINTS, ...THIRD_SAINTS].sort((a, b) =>
   a.day === b.day ? a.name.localeCompare(b.name, 'es') : a.day.localeCompare(b.day),
 );
 

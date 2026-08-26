@@ -29,11 +29,6 @@ const meta: SourceMeta = {
 const t = (content: string): TextBlock => ({ kind: 'text', content });
 const rub = (content: string): TextBlock => ({ kind: 'rubric', content });
 const head = (content: string): TextBlock => ({ kind: 'heading', content });
-const pending = (que: string): TextBlock => ({
-  kind: 'pending',
-  content: `Contenido pendiente de incorporar: ${que}`,
-});
-
 /** Fórmula con su griego y su transliteración. */
 const gr = (clave: keyof typeof G, times?: number): TextBlock => ({
   kind: 'text',
@@ -167,8 +162,11 @@ export const DAILY_OFFICES: DailyOfficeSeed[] = [
         title: 'Tropario de la Hora Sexta',
         kind: 'texto',
         blocks: [
-          rub('El Typikon señala aquí el tropario y el theotokion propios de la hora.'),
-          pending('el tropario y el theotokion de la Hora Sexta en español.'),
+          rub('El tropario propio de la hora, que recuerda por qué se reza a las doce.'),
+          t('Tú que en el día sexto y a la hora sexta clavaste en la cruz el pecado que Adán cometió temerariamente en el paraíso, rasga también el documento de nuestras culpas, Cristo Dios, y sálvanos.'),
+          t('Gloria al Padre, y al Hijo, y al Espíritu Santo, ahora y siempre, y por los siglos de los siglos. Amén.'),
+          head('Theotokion'),
+          t('Como no tenemos audacia por causa de nuestros muchos pecados, ruega tú, Virgen Theotokos, a Aquel que de ti nació; porque mucho puede la súplica de una Madre para alcanzar el favor del Soberano. No desprecies las plegarias de los pecadores, oh Purísima, porque es misericordioso y poderoso para salvar Aquel que quiso padecer por nosotros.'),
         ],
       },
       { id: 'd-trisagio', title: 'Trisagio y Padre Nuestro', kind: 'texto', blocks: TRISAGIO },

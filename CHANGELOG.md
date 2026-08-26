@@ -2,6 +2,32 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.8.0]
+
+### Añadido
+
+- **58 conmemoraciones nuevas**, hasta 220 en 169 días del año: los cuarenta
+  mártires de Sebaste, santa María Egipcíaca, san Panteleimón, santa María
+  Magdalena, san Demetrio, san Espiridón, y las grandes fiestas que faltaban
+  —Anunciación, Transfiguración, Dormición, Exaltación de la Cruz, Natividad—.
+  Sólo entran conmemoraciones cuya fecha en el calendario bizantino se conoce
+  con seguridad: poner a un santo en un día equivocado sería la misma falta que
+  inventarle un texto.
+- **El tropario propio de la Hora Sexta**, con su theotokion. Era el hueco que
+  el propio README señalaba con nombre y apellido. **Los tres oficios quedan
+  sin un solo «pendiente de incorporar»**, y una prueba lo exige.
+
+### Corregido
+
+- **La etiqueta de un interruptor y su explicación se pintaban pegadas**
+  —«Indexar automáticamenteATHOS descarga…»—. Eran dos `span` en línea, así que
+  el margen que debía separarlos no hacía nada.
+- Dos entradas del santoral con el mismo identificador no daban error: la
+  segunda sobrescribía a la primera al sembrar y el santo desaparecía sin
+  ruido. Tres pruebas nuevas comprueban que no haya repetidos, que cada
+  conmemoración tenga día válido y vida escrita, y que lo sembrado coincida con
+  el corpus.
+
 ## [1.7.2]
 
 ### Corregido

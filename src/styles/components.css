@@ -380,6 +380,7 @@
 }
 
 .list-item__title {
+  display: block;
   font-family: var(--font-serif);
   font-size: var(--text-md);
   line-height: 1.35;
@@ -562,7 +563,12 @@
   text-align: start;
 }
 
+/* Columna, no dos palabras seguidas: siendo `span` en línea, el título y su
+   explicación se pintaban pegados —«Indexar automáticamenteATHOS descarga…»—
+   y el margen superior de la explicación no hacía nada. */
 .switch__text {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   min-width: 0;
 }

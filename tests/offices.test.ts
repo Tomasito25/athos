@@ -183,3 +183,31 @@ describe('fórmulas en griego', () => {
     expect(repetidas.some((b) => b.times === 40)).toBe(true);
   });
 });
+
+
+describe('los tres oficios están completos', () => {
+  it('ningún paso remite a contenido pendiente', () => {
+    // El tropario propio de la Hora Sexta era el último hueco de los oficios.
+    for (const oficio of DAILY_OFFICES) {
+      for (const paso of oficio.steps) {
+        for (const bloque of paso.blocks ?? []) {
+          expect(bloque.kind, `${oficio.name} · ${paso.title}`).not.toBe('pending');
+          expect(bloque.content, `${oficio.name} · ${paso.title}`).not.toMatch(
+            /pendiente de incorporar/i,
+          );
+        }
+      }
+    }
+  });
+
+  it('la Hora Sexta dice por qué se reza a las doce', () => {
+    const sexta = OFFICE_BY_TIME.get('mediodia')!;
+    const tropario = sexta.steps.find((p) => p.id === 'd-tropario');
+    expect(tropario, 'falta el tropario propio de la hora').toBeDefined();
+    const texto = (tropario!.blocks ?? []).map((b) => b.content).join(' ');
+    expect(texto).toMatch(/hora sexta/i);
+    expect(texto).toMatch(/cruz/i);
+    // Y trae su theotokion, que el Typikon pone a continuación.
+    expect(texto).toMatch(/Theotokos/i);
+  });
+});

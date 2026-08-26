@@ -2,6 +2,34 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.7.2]
+
+### Corregido
+
+- **La cruz estaba al revés.** El travesaño inferior de la cruz ortodoxa sube
+  hacia la izquierda de quien mira —la mano derecha de Cristo, donde estaba el
+  ladrón que se arrepintió— y baja hacia la derecha. En ATHOS bajaba a la
+  izquierda y subía a la derecha, es decir, decía lo contrario. Estaba así en
+  las cuatro cruces del proyecto: el emblema de la aplicación, el icono del
+  momento «al caer en el pecado», el generador de iconos y, por él, el favicon
+  y los veinte PNG que produce. Corregidas todas y regenerados los iconos, las
+  pantallas de arranque, la imagen Open Graph y las capturas del manifest.
+  Cinco pruebas nuevas fijan la orientación y comprueban que los cuatro dibujos
+  coinciden entre sí.
+- **GitHub Pages devolvía 404 en los enlaces profundos.** La portada cargaba,
+  pero entrar directo en `/athos/leer/salterio/50` —o recargar estando ahí— no.
+  Al flujo de publicación le faltaba copiar `index.html` a `404.html`, que es
+  como GitHub Pages resuelve las rutas de una aplicación de una sola página.
+- **Dos pruebas se saltaban en silencio en GitHub.** Las que arrancan
+  `server.py` contra `dist/` se saltan si esa carpeta no existe, y los flujos
+  probaban antes de compilar: nunca llegaron a ejecutarse. Ahora se compila
+  primero.
+
+### Añadido
+
+- El flujo de publicación pasa lint, tipos y pruebas antes de subir nada, igual
+  que `deploy.sh`.
+
 ## [1.7.1]
 
 ### Corregido

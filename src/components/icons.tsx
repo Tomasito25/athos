@@ -29,13 +29,18 @@ function Svg({ size = 24, children, ...props }: IconProps) {
   );
 }
 
-/** Cruz ortodoxa de ocho puntas: el emblema de la aplicación. */
+/**
+ * Cruz ortodoxa de ocho puntas: el emblema de la aplicación.
+ *
+ * El supedáneo sube a la izquierda de quien mira —la mano derecha de Cristo,
+ * donde el ladrón arrepentido— y baja a la derecha.
+ */
 export const OrthodoxCross = (props: IconProps) => (
   <Svg {...props}>
     <path d="M12 2.5v19" />
     <path d="M9 6h6" />
     <path d="M6.5 10h11" />
-    <path d="M8 17.5l8-3.4" />
+    <path d="M8 14.1l8 3.4" />
   </Svg>
 );
 
@@ -351,13 +356,13 @@ export const IconChalice = (props: IconProps) => (
   </Svg>
 );
 
-/** La cruz ortodoxa de tres travesaños. */
+/** La cruz ortodoxa de tres travesaños; el inferior sube a la izquierda. */
 export const IconCross = (props: IconProps) => (
   <Svg {...props}>
     <path d="M12 3v18" />
     <path d="M8.5 6.5h7" />
     <path d="M6 10.5h12" />
-    <path d="M8 16.5l8-2.5" />
+    <path d="M8 14l8 2.5" />
   </Svg>
 );
 

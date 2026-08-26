@@ -17,7 +17,15 @@ const GOLD = '#C9A24A';
 const GOLD_DEEP = '#8C6A22';
 const PARCHMENT = '#F4EDE0';
 
-/** Cruz ortodoxa de ocho puntas dibujada sobre un lienzo de 512×512. */
+/**
+ * Cruz ortodoxa de ocho puntas dibujada sobre un lienzo de 512×512.
+ *
+ * El travesaño inferior —el supedáneo— sube hacia la IZQUIERDA de quien mira y
+ * baja hacia la derecha. No es un adorno: la izquierda del que mira es la mano
+ * derecha de Cristo, donde estaba el ladrón que se arrepintió y subió al
+ * paraíso; el otro extremo apunta abajo. Dibujarlo al revés invierte lo que la
+ * cruz dice.
+ */
 function cross({ stroke = GOLD, w = 26, scale = 1, cx = 256, cy = 256 } = {}) {
   const s = (n) => (n * scale).toFixed(2);
   const t = (x, y) => `${(cx + (x - 256) * scale).toFixed(2)} ${(cy + (y - 256) * scale).toFixed(2)}`;
@@ -26,7 +34,7 @@ function cross({ stroke = GOLD, w = 26, scale = 1, cx = 256, cy = 256 } = {}) {
       <path d="M ${t(256, 54)} L ${t(256, 458)}" />
       <path d="M ${t(186, 118)} L ${t(326, 118)}" />
       <path d="M ${t(128, 196)} L ${t(384, 196)}" />
-      <path d="M ${t(160, 366)} L ${t(352, 314)}" />
+      <path d="M ${t(160, 314)} L ${t(352, 366)}" />
     </g>`;
 }
 

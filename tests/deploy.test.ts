@@ -185,6 +185,40 @@ describe('el repositorio se puede clonar y compilar', () => {
     expect(lock.packages['']?.version).toBe(pkg.version);
   });
 
+  it('la publicación deja la reserva que GitHub Pages necesita', () => {
+    // Sin 404.html, entrar directo en /athos/leer/salterio/50 devuelve un 404
+    // la primera vez, antes de que el Service Worker esté instalado. Pasó de
+    // verdad: la portada cargaba y los enlaces profundos no.
+    const deploy = leer('.github/workflows/deploy.yml');
+    expect(deploy).toContain('cp dist/index.html dist/404.html');
+    // Y la reserva se hace antes de empaquetar lo que se sube.
+    expect(deploy.indexOf('404.html')).toBeLessThan(deploy.indexOf('upload-pages-artifact'));
+  });
+
+  it('la publicación comprueba antes de publicar', () => {
+    const deploy = leer('.github/workflows/deploy.yml');
+    for (const orden of ['npm run lint', 'npm run build', 'npm run test']) {
+      expect(deploy, orden).toContain(orden);
+    }
+    // Y todo eso ocurre antes de subir nada.
+    for (const orden of ['npm run lint', 'npm run test']) {
+      expect(deploy.indexOf(orden), orden).toBeLessThan(deploy.indexOf('upload-pages-artifact'));
+    }
+  });
+
+  it('se compila antes de probar, para que nada se salte en silencio', () => {
+    // Dos pruebas arrancan server.py contra dist/ y se saltan si no existe.
+    // Con el orden invertido no se ejecutaban nunca en GitHub.
+    for (const archivo of ['.github/workflows/ci.yml', '.github/workflows/deploy.yml']) {
+      const flujo = leer(archivo);
+      expect(flujo.indexOf('npm run build'), archivo).toBeLessThan(flujo.indexOf('npm run test'));
+    }
+  });
+
+  it('la publicación compila apuntando a la subcarpeta del repositorio', () => {
+    expect(leer('.github/workflows/deploy.yml')).toContain('ATHOS_BASE=/athos/');
+  });
+
   it('la integración continua comprueba lo mismo que se comprueba en local', () => {
     const ci = leer('.github/workflows/ci.yml');
     for (const orden of ['npm ci', 'npm run lint', 'npm run typecheck', 'npm run test', 'npm run build']) {

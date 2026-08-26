@@ -37,11 +37,13 @@ jobs:
       - name: Tipos
         run: npm run typecheck
 
-      - name: Pruebas
-        run: npm run test
-
+      # Se compila antes de probar a propósito: hay pruebas que arrancan
+      # server.py contra dist/ y, si no existe, se saltan en silencio.
       - name: Compilación
         run: npm run build
+
+      - name: Pruebas
+        run: npm run test
 
       # Que ATHOS siga funcionando colgada de una subcarpeta, que es como la
       # sirve GitHub Pages.

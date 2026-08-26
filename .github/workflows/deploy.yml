@@ -29,11 +29,35 @@ jobs:
           node-version: 20
           cache: npm
 
+      # Las pruebas del servidor local arrancan server.py de verdad.
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
       - name: Install dependencies
         run: npm ci
 
+      - name: Lint
+        run: npm run lint
+
+      # Se compila antes de probar a propósito: hay pruebas que necesitan la
+      # aplicación compilada —arrancan server.py contra dist/— y si no existe
+      # se saltan en silencio, que es la peor manera de no comprobar algo.
+      # `npm run build` incluye la comprobación de tipos.
       - name: Build
         run: ATHOS_BASE=/athos/ npm run build
+
+      # No se publica una versión rota en una dirección que la gente ya tiene
+      # guardada. Es lo mismo que hace deploy.sh antes de subir nada.
+      - name: Pruebas
+        run: npm run test
+
+      # GitHub Pages no sabe de aplicaciones de una sola página: sin este
+      # archivo, entrar directamente en /athos/leer/salterio/50 da un 404 la
+      # primera vez, antes de que el Service Worker esté instalado.
+      - name: Reserva para las rutas de la aplicación
+        run: cp dist/index.html dist/404.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

@@ -2,7 +2,18 @@
 import { useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { HYMNS_NOTE } from '@/content/hymns';
-import { Blocks, Empty, ListRow, Loading, PageHead, Section, SourceNote, StatusTag, Tag } from '@/components/ui';
+import {
+  Blocks,
+  Empty,
+  ListRow,
+  Loading,
+  PageHead,
+  Panel,
+  Section,
+  SourceNote,
+  StatusTag,
+  Tag,
+} from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { useVisitLog } from '@/hooks/useVisitLog';
 import type { Akathist, Canon, FavoriteKind } from '@/types';
@@ -90,6 +101,25 @@ export function HymnDetail({
           />
         </div>
       </header>
+
+      {/* Qué es y cómo está hecho. Cuando el texto está pendiente, esto es lo
+          único que hay: vale más que una ficha muda. */}
+      {item.about ? (
+        <Panel variant="quiet" style={{ marginBottom: 'var(--sp-5)' }}>
+          <p className="eyebrow">{es.library.whatItIs}</p>
+          <p style={{ marginTop: 'var(--sp-2)' }}>{item.about}</p>
+          {item.structure ? (
+            <>
+              <p className="eyebrow" style={{ marginTop: 'var(--sp-4)' }}>
+                {es.library.howItIsBuilt}
+              </p>
+              <p className="text-sm" style={{ marginTop: 'var(--sp-2)' }}>
+                {item.structure}
+              </p>
+            </>
+          ) : null}
+        </Panel>
+      ) : null}
 
       {sections.map((section) => (
         <Section key={section.id} title={section.title}>

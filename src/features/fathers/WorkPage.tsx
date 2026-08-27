@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
-import { Blocks, Empty, Loading, SourceNote } from '@/components/ui';
+import { Blocks, Empty, Loading, Panel, SourceNote } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { useVisitLog } from '@/hooks/useVisitLog';
 import es from '@/locales/es';
@@ -35,6 +35,20 @@ export function WorkPage() {
           note={{ targetKind: 'father-work', targetId: work.id, targetTitle: work.title, path }}
         />
       </header>
+
+      {/* De qué trata. Va antes del texto, y cuando el texto está pendiente es
+          lo único que hay: mejor eso que una ficha muda. */}
+      {work.summary ? (
+        <Panel variant="quiet" style={{ marginBottom: 'var(--sp-5)' }}>
+          <p className="eyebrow">{es.library.whatItSays}</p>
+          <p style={{ marginTop: 'var(--sp-2)' }}>{work.summary}</p>
+          {work.written ? (
+            <p className="muted text-sm" style={{ marginTop: 'var(--sp-3)' }}>
+              {work.written}
+            </p>
+          ) : null}
+        </Panel>
+      ) : null}
 
       <Blocks blocks={work.blocks} illuminated={work.status !== 'pending'} />
       <SourceNote meta={work.meta} status={work.status} />

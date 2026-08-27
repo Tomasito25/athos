@@ -7,6 +7,7 @@
  * verificarlo. El resto queda marcado como pendiente.
  */
 import type { Akathist, Canon, OfficeSection, SourceMeta, TextBlock } from '@/types';
+import { HYMN_ABOUT } from './hymns-about';
 
 const meta: SourceMeta = {
   source: 'Triodion, Menaion y colecciones de himnografía bizantina',
@@ -107,6 +108,7 @@ const akathistSeeds: AkathistSeed[] = [
 ];
 
 export const AKATHISTS: Akathist[] = akathistSeeds.map((a) => ({
+  ...HYMN_ABOUT[a.id],
   ...a,
   searchText: `${a.title} ${a.dedication} ${a.sections
     .flatMap((x) => x.blocks.filter((b) => b.kind !== 'pending').map((b) => b.content))
@@ -218,6 +220,7 @@ const canonSeeds: CanonSeed[] = [
 ];
 
 export const CANONS: Canon[] = canonSeeds.map((c) => ({
+  ...HYMN_ABOUT[c.id],
   ...c,
   searchText: `${c.title} ${c.dedication} ${c.odes
     .flatMap((x) => x.blocks.filter((b) => b.kind !== 'pending').map((b) => b.content))

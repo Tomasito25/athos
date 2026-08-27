@@ -348,6 +348,16 @@ export interface Office {
   kind: OfficeKind;
   order: number;
   sections: OfficeSection[];
+  /**
+   * Qué es y cómo está hecho, en prosa de ATHOS.
+   *
+   * No es texto litúrgico: acompaña al texto y, cuando éste está pendiente
+   * —porque no hay versión española con licencia comprobada—, es lo único que
+   * hay. Vale más eso que una ficha muda.
+   */
+  about?: string;
+  /** Cuándo se usa y cómo está construido por dentro. */
+  structure?: string;
   status: ContentStatus;
   meta: SourceMeta;
   searchText: string;
@@ -366,6 +376,16 @@ export interface Akathist {
   title: string;
   dedication: string;
   sections: OfficeSection[];
+  /**
+   * Qué es y cómo está hecho, en prosa de ATHOS.
+   *
+   * No es texto litúrgico: acompaña al texto y, cuando éste está pendiente
+   * —porque no hay versión española con licencia comprobada—, es lo único que
+   * hay. Vale más eso que una ficha muda.
+   */
+  about?: string;
+  /** Cuándo se usa y cómo está construido por dentro. */
+  structure?: string;
   status: ContentStatus;
   meta: SourceMeta;
   searchText: string;
@@ -377,6 +397,16 @@ export interface Canon {
   dedication: string;
   tone?: number;
   odes: OfficeSection[];
+  /**
+   * Qué es y cómo está hecho, en prosa de ATHOS.
+   *
+   * No es texto litúrgico: acompaña al texto y, cuando éste está pendiente
+   * —porque no hay versión española con licencia comprobada—, es lo único que
+   * hay. Vale más eso que una ficha muda.
+   */
+  about?: string;
+  /** Cuándo se usa y cómo está construido por dentro. */
+  structure?: string;
   status: ContentStatus;
   meta: SourceMeta;
   searchText: string;
@@ -388,7 +418,19 @@ export interface ChurchFather {
   fullName: string;
   century: string;
   feastDay?: string;
+  /** Su vida: de dónde salió y qué le pasó. */
   biography: string;
+  /**
+   * Qué enseñó: la aportación por la que la Iglesia lo lee todavía.
+   *
+   * Un párrafo por idea. Es lo que distingue una ficha de enciclopedia de algo
+   * que sirve para saber qué decía este hombre.
+   */
+  teaching: string[];
+  /** Por dónde empezar a leerlo, y qué esperar. */
+  reading?: string;
+  /** Lo que se le suele atribuir sin ser suyo, cuando conviene decirlo. */
+  caution?: string;
   works: FatherWork[];
   status: ContentStatus;
   meta: SourceMeta;
@@ -402,6 +444,16 @@ export interface FatherWork {
   blocks: TextBlock[];
   status: ContentStatus;
   meta: SourceMeta;
+  /**
+   * De qué trata la obra, en prosa de ATHOS.
+   *
+   * No sustituye al texto: lo acompaña. Y cuando el texto está pendiente
+   * —porque su traducción española no es de dominio público— al menos se sabe
+   * qué se está echando de menos, en vez de encontrar una ficha muda.
+   */
+  summary?: string;
+  /** Cuándo y en qué circunstancia se escribió. */
+  written?: string;
 }
 
 /* ============================================================

@@ -2,6 +2,39 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.11.0]
+
+### Añadido
+
+- **Los Padres de la Iglesia dicen ahora qué enseñaron.** Cada uno tiene, además
+  de su vida, entre tres y cinco párrafos sobre su aportación —por qué la
+  Iglesia lo sigue leyendo—, una guía de por dónde empezar a leerlo y qué
+  esperar, y en tres casos un aviso de lo que conviene saber antes: la opinión
+  discutida de san Isaac sobre el infierno, los escritos que se atribuyen a
+  san Máximo sin serlo, y las homilías de san Juan Crisóstomo contra los
+  judaizantes, que ni se excusan ni se esconden.
+
+- **Las 24 obras patrísticas dicen de qué tratan** y cuándo se escribieron.
+  Antes, una obra sin texto incorporado era una ficha muda: «Sobre el Espíritu
+  Santo — contenido pendiente de incorporar». Ahora se sabe qué sostiene ese
+  tratado, contra quién y de dónde sale el artículo del Credo.
+
+- **Los 10 akáthistos y cánones y los 10 oficios explican qué son**, cómo están
+  construidos por dentro y cuándo se cantan. El Gran Canon, las dos Divinas
+  Liturgias, los Presantificados, el Paráclisis: todo lo que todavía no se
+  puede dar entero, al menos se entiende.
+
+- **Las secciones de tropario y kontakion de los santos ya no están mudas.**
+  Eran 220 fichas con dos apartados que sólo decían «pendiente». Ahora explican
+  qué es un tropario, qué es un kontakion, y por qué ATHOS no incorpora el suyo:
+  hacerlo exige una versión española con licencia comprobable, y aquí no se
+  redacta un himno propio para llenar el hueco.
+
+Nada de esto es texto litúrgico ni patrístico: es prosa de ATHOS, y sus fichas
+lo declaran con su propia licencia. La regla del proyecto sigue intacta —no se
+inventa lo que no se puede verificar—, pero dejar de inventar no obliga a dejar
+de enseñar.
+
 ## [1.10.0]
 
 ### Añadido

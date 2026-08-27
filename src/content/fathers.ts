@@ -7,6 +7,7 @@
  * cuya versión española es de uso común y verificable. El resto queda pendiente.
  */
 import type { ChurchFather, FatherWork, SourceMeta, TextBlock } from '@/types';
+import { CAUTION, READING, TEACHING, WORK_SUMMARY } from './fathers-teaching';
 
 const bioMeta: SourceMeta = {
   source: 'Reseña redactada para ATHOS a partir de fuentes patrísticas comunes',
@@ -51,6 +52,9 @@ const work = (
   blocks: blocks ?? PENDING,
   status: blocks ? 'partial' : 'pending',
   meta: blocks ? quoteMeta(author, title) : pendingMeta(author, title),
+  // De qué trata la obra. Es lo que ATHOS puede dar mientras no pueda dar el
+  // texto: una ficha que al menos dice qué se está echando de menos.
+  ...WORK_SUMMARY[id],
 });
 
 interface FatherSeed {
@@ -253,11 +257,20 @@ export const CHURCH_FATHERS: ChurchFather[] = seeds.map((f) => ({
   century: f.century,
   feastDay: f.feastDay,
   biography: f.biography,
+  teaching: TEACHING[f.id] ?? [],
+  reading: READING[f.id],
+  caution: CAUTION[f.id],
   works: f.works,
   status: f.works.some((w) => w.status !== 'pending') ? 'partial' : 'pending',
   meta: bioMeta,
-  searchText: `${f.name} ${f.fullName} ${f.century} ${f.biography} ${f.works
-    .map((w) => `${w.title} ${w.blocks.filter((b) => b.kind !== 'pending').map((b) => b.content).join(' ')}`)
+  searchText: `${f.name} ${f.fullName} ${f.century} ${f.biography} ${(TEACHING[f.id] ?? []).join(' ')} ${f.works
+    .map(
+      (w) =>
+        `${w.title} ${WORK_SUMMARY[w.id]?.summary ?? ''} ${w.blocks
+          .filter((b) => b.kind !== 'pending')
+          .map((b) => b.content)
+          .join(' ')}`,
+    )
     .join(' ')}`.toLowerCase(),
 }));
 

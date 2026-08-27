@@ -2,11 +2,15 @@ import { useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
 import { SAINT_CATEGORY_LABELS } from '@/content/saints';
-import { Blocks, Empty, Loading, Section, SourceNote, Tag } from '@/components/ui';
+import { Blocks, Empty, Loading, Panel, Section, SourceNote, Tag } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { useVisitLog } from '@/hooks/useVisitLog';
 import { formatMonthDay } from '@/lib/format';
 import es from '@/locales/es';
+
+/** ¿Está el himno sin incorporar? */
+const esPendiente = (bloques?: { kind: string }[]) =>
+  !bloques?.length || bloques.every((b) => b.kind === 'pending');
 
 export function SaintPage() {
   const { saintId = '' } = useParams();
@@ -59,12 +63,29 @@ export function SaintPage() {
         </div>
       </Section>
 
+      {/* Cuando el himno no está incorporado, la sección explicaba nada: sólo
+          decía «pendiente». Al menos que se sepa qué es un tropario. */}
       <Section title={es.saints.troparion}>
-        <Blocks blocks={item.troparion ?? []} />
+        {esPendiente(item.troparion) ? (
+          <Panel variant="quiet">
+            <p className="text-sm">{es.saints.whatIsTroparion}</p>
+            <p className="muted text-sm" style={{ marginTop: 'var(--sp-3)' }}>
+              {es.saints.hymnPending}
+            </p>
+          </Panel>
+        ) : (
+          <Blocks blocks={item.troparion ?? []} />
+        )}
       </Section>
 
       <Section title={es.saints.kontakion}>
-        <Blocks blocks={item.kontakion ?? []} />
+        {esPendiente(item.kontakion) ? (
+          <Panel variant="quiet">
+            <p className="text-sm">{es.saints.whatIsKontakion}</p>
+          </Panel>
+        ) : (
+          <Blocks blocks={item.kontakion ?? []} />
+        )}
       </Section>
 
       <SourceNote meta={item.meta} status={item.status} />

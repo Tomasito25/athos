@@ -10,6 +10,7 @@
  * litúrgico del celebrante.
  */
 import type { Office, OfficeSection, SourceMeta, TextBlock } from '@/types';
+import { OFFICE_ABOUT } from './hymns-about';
 
 const meta: SourceMeta = {
   source: 'Ieratikón y Horologion bizantinos; textos de uso tradicional',
@@ -351,6 +352,7 @@ const plain = (sections: OfficeSection[]) =>
     .toLowerCase();
 
 export const OFFICES: Office[] = seeds.map((s, i) => ({
+  ...OFFICE_ABOUT[s.id],
   id: s.id,
   title: s.title,
   subtitle: s.subtitle,

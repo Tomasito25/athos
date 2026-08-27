@@ -1,7 +1,18 @@
 import { useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
-import { Empty, ListRow, Loading, PageHead, Section, SourceNote, StatusTag, Tag } from '@/components/ui';
+import {
+  Empty,
+  ListRow,
+  Loading,
+  Notice,
+  PageHead,
+  Panel,
+  Section,
+  SourceNote,
+  StatusTag,
+  Tag,
+} from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { useVisitLog } from '@/hooks/useVisitLog';
 import { formatMonthDay } from '@/lib/format';
@@ -40,6 +51,28 @@ export function FatherPage() {
         <p>{item.biography}</p>
       </div>
 
+      {/* Lo que enseñó: la razón por la que la Iglesia sigue leyéndolo. */}
+      {item.teaching.length > 0 ? (
+        <Section title={es.library.teaching}>
+          <div className="prose">
+            {item.teaching.map((parrafo) => (
+              <p key={parrafo.slice(0, 40)}>{parrafo}</p>
+            ))}
+          </div>
+        </Section>
+      ) : null}
+
+      {item.caution ? (
+        <div style={{ marginTop: 'var(--sp-5)' }}>
+          <Notice variant="warn">
+            <span>
+              <strong>{es.library.caution}. </strong>
+              {item.caution}
+            </span>
+          </Notice>
+        </div>
+      ) : null}
+
       <Section title={es.library.works}>
         <div className="list">
           {item.works.map((work) => (
@@ -47,12 +80,20 @@ export function FatherPage() {
               key={work.id}
               to={`/biblioteca/padres/${item.id}/${work.id}`}
               title={work.title}
-              meta={work.kind}
+              meta={work.summary ?? work.kind}
               trailing={<StatusTag status={work.status} />}
             />
           ))}
         </div>
       </Section>
+
+      {item.reading ? (
+        <Section title={es.library.whereToStart}>
+          <Panel variant="quiet">
+            <p className="text-sm">{item.reading}</p>
+          </Panel>
+        </Section>
+      ) : null}
 
       <SourceNote meta={item.meta} status={item.status} />
     </article>

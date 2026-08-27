@@ -249,6 +249,12 @@ const es = {
   },
 
   saints: {
+    whatIsTroparion:
+      'El tropario es la estrofa breve que resume por qué la Iglesia recuerda a este santo: qué hizo, qué enseñó o cómo murió. Se canta en su fiesta, en Vísperas y en Maitines, y es lo primero que se aprende de memoria de cualquier santo.',
+    whatIsKontakion:
+      'El kontakion es una segunda estrofa, algo más desarrollada, que se canta después de la sexta oda del canon. Suele detenerse en un episodio concreto de la vida del santo, donde el tropario da el conjunto.',
+    hymnPending:
+      'ATHOS no incorpora el suyo todavía: hacerlo exige una versión española cuya licencia se pueda comprobar, y aquí no se redacta un himno propio para llenar el hueco.',
     title: 'Santos',
     ofTheDay: 'Santo del día',
     search: 'Buscar un santo',
@@ -274,6 +280,12 @@ const es = {
   },
 
   library: {
+    teaching: 'Qué enseñó',
+    caution: 'Conviene saber',
+    whereToStart: 'Por dónde empezar',
+    whatItSays: 'De qué trata',
+    whatItIs: 'Qué es',
+    howItIsBuilt: 'Cómo está construido',
     title: 'Biblioteca',
     liturgy: 'Divina Liturgia',
     akathists: 'Akathistos',

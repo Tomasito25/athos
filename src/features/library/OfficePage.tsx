@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
-import { Blocks, Empty, Loading, SourceNote } from '@/components/ui';
+import { Blocks, Empty, Loading, Panel, SourceNote } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { useVisitLog } from '@/hooks/useVisitLog';
 import es from '@/locales/es';
@@ -52,6 +52,25 @@ export function OfficePage() {
           ))}
         </ol>
       </nav>
+
+      {/* Qué es y cómo está hecho. Cuando el texto está pendiente, esto es lo
+          único que hay: vale más que una ficha muda. */}
+      {item.about ? (
+        <Panel variant="quiet" style={{ marginBottom: 'var(--sp-5)' }}>
+          <p className="eyebrow">{es.library.whatItIs}</p>
+          <p style={{ marginTop: 'var(--sp-2)' }}>{item.about}</p>
+          {item.structure ? (
+            <>
+              <p className="eyebrow" style={{ marginTop: 'var(--sp-4)' }}>
+                {es.library.howItIsBuilt}
+              </p>
+              <p className="text-sm" style={{ marginTop: 'var(--sp-2)' }}>
+                {item.structure}
+              </p>
+            </>
+          ) : null}
+        </Panel>
+      ) : null}
 
       {item.sections.map((section) => (
         <section key={section.id} id={section.id} style={{ marginTop: 'var(--sp-6)' }}>

@@ -2,7 +2,8 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import { fileURLToPath, URL } from 'node:url';
-import { readFileSync } from 'node:fs';
+import { copyFileSync, existsSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf-8')) as {
   version: string;
@@ -24,6 +25,9 @@ const base = process.env.ATHOS_BASE || '/';
  * quedan como están, que es lo correcto mientras no se sepa el dominio.
  */
 const siteUrl = (process.env.ATHOS_URL || '').replace(/\/+$/, '');
+
+/** Carpeta donde se está compilando, para el alias del manifest. */
+let salidaDeLaCompilacion = 'dist';
 
 export default defineConfig({
   base,
@@ -56,6 +60,31 @@ export default defineConfig({
   },
   plugins: [
     react(),
+    {
+      /**
+       * Copia del manifest en `manifest.json`.
+       *
+       * El nombre estándar es `.webmanifest` y es el que enlaza el documento,
+       * pero muchos validadores, rastreadores y herramientas de PWA buscan
+       * `/manifest.json` por convención y, al no encontrarlo, dan por hecho que
+       * la aplicación no tiene manifest. Dejar las dos direcciones no cuesta
+       * nada y evita ese diagnóstico equivocado.
+       */
+      name: 'athos-manifest-json',
+      apply: 'build' as const,
+      // La carpeta de salida se toma de la configuración ya resuelta: con
+      // `--outDir` puede no ser `dist`, y escribir a ciegas dejaría el alias
+      // en un sitio y la compilación en otro.
+      configResolved(config: { build: { outDir: string } }) {
+        salidaDeLaCompilacion = config.build.outDir;
+      },
+      closeBundle() {
+        const origen = resolve(salidaDeLaCompilacion, 'manifest.webmanifest');
+        if (existsSync(origen)) {
+          copyFileSync(origen, resolve(salidaDeLaCompilacion, 'manifest.json'));
+        }
+      },
+    },
     {
       // Open Graph con direcciones absolutas, si se sabe cuál es el sitio.
       name: 'athos-og-absoluto',
@@ -91,6 +120,16 @@ export default defineConfig({
         theme_color: '#14100C',
         background_color: '#14100C',
         categories: ['books', 'lifestyle', 'education'],
+        // ATHOS no tiene aplicación nativa: que el navegador no busque una.
+        prefer_related_applications: false,
+        related_applications: [],
+        // Al abrirla de nuevo se reutiliza la ventana que ya está abierta, en
+        // vez de dejar una oración a medias en otra.
+        launch_handler: { client_mode: ['navigate-existing', 'auto'] },
+        // Instalada, abre sus propios enlaces en lugar de mandarlos al navegador.
+        handle_links: 'preferred',
+        // Edge puede tenerla abierta en su panel lateral mientras se lee otra cosa.
+        edge_side_panel: { preferred_width: 420 },
         icons: [
           { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
           { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },

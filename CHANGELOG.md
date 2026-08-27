@@ -2,6 +2,26 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.9.1]
+
+### Añadido
+
+- **El manifest se sirve también en `/manifest.json`.** El nombre estándar es
+  `.webmanifest` y es el que enlaza el documento, pero muchos validadores,
+  rastreadores y herramientas de PWA piden `/manifest.json` por convención y,
+  al no encontrarlo, concluyen que la aplicación no tiene manifest. Ahora las
+  dos direcciones sirven exactamente lo mismo, y una prueba lo exige.
+- **Cinco campos más en el manifest**, de 17 a 22:
+  `prefer_related_applications: false` y `related_applications: []` para que
+  ningún navegador busque una aplicación nativa que no existe;
+  `launch_handler` para que al abrirla de nuevo reutilice la ventana en vez de
+  dejar una oración a medias en otra; `handle_links: preferred` para que,
+  instalada, abra sus propios enlaces en lugar de mandarlos al navegador; y
+  `edge_side_panel`, que permite tenerla en el panel lateral de Edge.
+
+Comprobado con `Page.getAppManifest`: el navegador sigue interpretándolo sin un
+solo error.
+
 ## [1.9.0]
 
 ### Corregido

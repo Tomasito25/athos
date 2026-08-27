@@ -117,6 +117,38 @@ describe.skipIf(!built)('manifest', () => {
   });
 });
 
+describe.skipIf(!built)('reconocimiento por herramientas y navegadores', () => {
+  it('el manifest está también en /manifest.json', () => {
+    // El nombre estándar es .webmanifest y es el que enlaza el documento, pero
+    // muchos validadores y rastreadores piden /manifest.json por convención y,
+    // al no encontrarlo, concluyen que la aplicación no tiene manifest.
+    expect(existsSync(resolve(dist, 'manifest.json')), 'falta manifest.json').toBe(true);
+  });
+
+  it('las dos direcciones sirven exactamente lo mismo', () => {
+    // Dos manifests que difieran serían peor que uno solo.
+    expect(JSON.parse(read('manifest.json'))).toEqual(JSON.parse(read('manifest.webmanifest')));
+  });
+
+  it('el documento sigue enlazando el nombre estándar', () => {
+    expect(read('index.html')).toMatch(/rel="manifest"\s+href="manifest\.webmanifest"/);
+  });
+
+  it('declara que no hay aplicación nativa que preferir', () => {
+    const m = JSON.parse(read('manifest.json')) as Record<string, unknown>;
+    expect(m.prefer_related_applications).toBe(false);
+    expect(m.related_applications).toEqual([]);
+  });
+
+  it('instalada, se comporta como una aplicación', () => {
+    const m = JSON.parse(read('manifest.json')) as Record<string, unknown>;
+    // Reutiliza la ventana abierta en vez de dejar una oración a medias.
+    expect(m.launch_handler).toBeTruthy();
+    // Y abre sus propios enlaces en lugar de mandarlos al navegador.
+    expect(m.handle_links).toBe('preferred');
+  });
+});
+
 describe.skipIf(!built)('index.html', () => {
   const html = built ? read('index.html') : '';
 

@@ -219,6 +219,29 @@ describe('el repositorio se puede clonar y compilar', () => {
     expect(leer('.github/workflows/deploy.yml')).toContain('ATHOS_BASE=/athos/');
   });
 
+  it('los dos flujos usan la misma versión de Node', () => {
+    // El fallo que esto vigila: «Comprobar» con Node 24 pasaba y «Deploy» con
+    // Node 20 ni siquiera arrancaba vitest, así que la publicación quedaba
+    // bloqueada mientras la integración continua decía que todo iba bien.
+    const nvmrc = leer('.nvmrc').trim();
+    expect(nvmrc, '.nvmrc debe fijar una versión').toMatch(/^\d+/);
+    for (const archivo of ['.github/workflows/ci.yml', '.github/workflows/deploy.yml']) {
+      const flujo = leer(archivo);
+      expect(flujo, `${archivo} fija la versión a mano`).not.toMatch(/node-version:\s*'?\d/);
+      expect(flujo, `${archivo} no lee .nvmrc`).toContain("node-version-file: '.nvmrc'");
+    }
+  });
+
+  it('la versión de .nvmrc cumple lo que package.json exige', () => {
+    // En Node 20 las pruebas no arrancan: vitest necesita una API que esa
+    // versión no tiene. Declarar «>=20» era prometer algo que no se cumple.
+    const nvmrc = Number(leer('.nvmrc').trim().split('.')[0]);
+    const pkg = JSON.parse(leer('package.json')) as { engines: { node: string } };
+    const minimo = Number(pkg.engines.node.replace(/[^\d.]/g, '').split('.')[0]);
+    expect(minimo, 'engines debe pedir 22 o más').toBeGreaterThanOrEqual(22);
+    expect(nvmrc, `.nvmrc (${nvmrc}) por debajo de engines (${minimo})`).toBeGreaterThanOrEqual(minimo);
+  });
+
   it('la integración continua comprueba lo mismo que se comprueba en local', () => {
     const ci = leer('.github/workflows/ci.yml');
     for (const orden of ['npm ci', 'npm run lint', 'npm run typecheck', 'npm run test', 'npm run build']) {

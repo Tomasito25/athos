@@ -2,6 +2,23 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.8.2]
+
+### Corregido
+
+- **La publicación seguía bloqueada, y no era una prueba: era Node.** El flujo
+  de publicación usaba Node 20, donde vitest ni siquiera arranca
+  —`webidl.util.markAsUncloneable is not a function`, una API que esa versión
+  no tiene—. El flujo de comprobación usaba Node 24 y pasaba, así que la
+  integración continua daba luz verde mientras la publicación se caía en cada
+  intento. Reproducido instalando Node 20 y Node 22 en local: en 20 falla, en
+  22 pasan las 365 pruebas.
+- **Los dos flujos leen ahora la versión de un único sitio**, `.nvmrc`, para que
+  no puedan volver a divergir. Dos pruebas lo vigilan: que ninguno fije la
+  versión a mano y que la de `.nvmrc` cumpla lo que `package.json` exige.
+- `engines` pedía Node >=20, que era una promesa incumplible. Ahora pide >=22,
+  que es lo verificado.
+
 ## [1.8.1]
 
 ### Corregido

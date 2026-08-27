@@ -20,8 +20,15 @@ describe('rutas relativas a la base', () => {
     expect(absolutas).toEqual([]);
   });
 
-  it('el manifest se enlaza de forma relativa', () => {
-    expect(html).toMatch(/rel="manifest"\s+href="manifest\.webmanifest"/);
+  it('el documento fuente no enlaza el manifest a mano', () => {
+    // Lo inyecta vite-plugin-pwa con la base de compilación. Ponerlo también
+    // en el fuente dejaba DOS etiquetas `rel="manifest"` en la página
+    // publicada. Que el enlace acabe donde debe lo comprueba pwa.test.ts
+    // sobre el HTML compilado, que es el que lee el navegador.
+    // Se buscan etiquetas, no la cadena: el comentario que explica esto
+    // menciona `rel="manifest"` y haría fallar una comprobación de texto.
+    const enlaces = [...html.matchAll(/<link[^>]*rel="manifest"[^>]*>/g)];
+    expect(enlaces.length, 'el fuente enlaza el manifest a mano').toBe(0);
   });
 
   it('la configuración de Vite acepta una base distinta de la raíz', () => {

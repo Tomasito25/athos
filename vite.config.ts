@@ -153,14 +153,27 @@ export default defineConfig({
         ],
       },
       workbox: {
-        // Se precachea todo lo necesario para que ATHOS funcione sin conexión desde
-        // el primer momento: código, tipografía latina y el texto bíblico completo.
-        // Los subconjuntos griego y cirílico de las fuentes se cachean al usarse.
+        /**
+         * Qué se descarga antes de que el Service Worker se active.
+         *
+         * Todo lo que entra aquí retrasa la activación, y hasta que el Service
+         * Worker no se activa y toma el control, Android no termina de ofrecer
+         * la instalación. Así que entra sólo lo que hace falta para que ATHOS
+         * arranque y rece: código, tipografía latina, el leccionario y las
+         * miniaturas de los iconos.
+         *
+         * El texto bíblico NO entra, y no es un recorte de funcionalidad: la
+         * aplicación lo vuelca a IndexedDB por su cuenta nada más arrancar
+         * —`autoIndexBible`— y lo lee de ahí, no de la red. Precacherlo era
+         * descargar y guardar los mismos cinco megas dos veces, y costaba
+         * quince segundos de espera antes de poder instalar.
+         */
         globPatterns: [
           '**/*.{js,css,html,ico,svg,png}',
           'fonts/*-latin.woff2',
           'fonts/*-latin-ext.woff2',
-          'content/**/*.json',
+          'content/lectionary/lectionary.json',
+          'content/icons/origen.json',
           // De los iconos se precachea la miniatura; la imagen grande se
           // guarda al abrirla, para no cargar la instalación con 2 MB.
           'content/icons/*-mini.webp',

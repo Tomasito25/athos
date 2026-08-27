@@ -51,6 +51,13 @@ const man = await send('Page.getAppManifest');
 const errores = man.result?.errors ?? [];
 ok('el navegador lo encuentra y lo interpreta', Boolean(man.result?.url), JSON.stringify(man.result).slice(0,120));
 ok('sin errores de interpretación', errores.length===0, JSON.stringify(errores).slice(0,300));
+// Dos etiquetas `rel="manifest"` no rompen el navegador —usa la primera— pero
+// los validadores lo señalan y no hay motivo para tener dos.
+const enlaces = await ev(`[...document.querySelectorAll('link[rel="manifest"]')].map(l=>l.getAttribute('href'))`);
+ok('un único enlace al manifest', enlaces.length===1, `${enlaces.length}: ${JSON.stringify(enlaces)}`);
+// Muchos rastreadores piden /manifest.json por convención.
+const alterno = await ev(`(async()=>{try{const r=await fetch(new URL('manifest.json', location.href));return r.ok;}catch(e){return false;}})()`);
+ok('también responde /manifest.json, que es lo que piden los validadores', alterno===true, '404');
 const m = JSON.parse(man.result?.data || '{}');
 for (const [campo, cond, nota] of [
   ['name', !!m.name, m.name],
@@ -75,11 +82,20 @@ const rotos = await ev(`(async()=>{const srcs=${JSON.stringify(iconos.map(i=>i.s
 ok('todos los iconos se descargan', rotos.length===0, JSON.stringify(rotos));
 
 console.log('\n═══ 4. Service Worker ═══');
+// Sin esto Android no llega a ofrecer la instalación: se espera hasta que se
+// active y tome el control, en vez de mirar una sola vez y darlo por perdido.
+for (let i=0;i<20;i++) {
+  const listo = await ev(`(async()=>{const rs=await navigator.serviceWorker.getRegistrations();
+    return !!rs[0]?.active && !!navigator.serviceWorker.controller;})()`);
+  if (listo) break;
+  await new Promise(r=>setTimeout(r,1500));
+}
 const sw = await ev(`(async()=>{const rs=await navigator.serviceWorker.getRegistrations();
   return rs.map(r=>({ambito:r.scope, activo:!!r.active, estado:r.active?.state}));})()`);
 ok('registrado', sw.length>0, JSON.stringify(sw));
 ok('activo', sw[0]?.activo===true, JSON.stringify(sw));
 ok('el ámbito cubre la aplicación', sw[0]?.ambito?.endsWith(new URL(BASE+'/').pathname), sw[0]?.ambito);
+ok('controla la página (sin esto no se ofrece instalar)', await ev(`!!navigator.serviceWorker.controller`), 'no la controla');
 // Sin manejador de fetch, Chrome no considera la aplicación instalable.
 const precache = await ev(`(async()=>{const ks=await caches.keys(); let n=0;
   for(const k of ks){ n += (await (await caches.open(k)).keys()).length; }

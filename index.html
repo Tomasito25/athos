@@ -18,7 +18,12 @@
     <link rel="icon" href="favicon.ico" sizes="32x32" />
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
-    <link rel="manifest" href="manifest.webmanifest" />
+    <!--
+      El enlace al manifest lo inyecta vite-plugin-pwa con la base correcta.
+      Ponerlo también aquí dejaba DOS etiquetas `rel="manifest"` en la página
+      publicada: los navegadores usan la primera y descartan el resto, pero los
+      validadores lo señalan y no hay motivo para tener dos.
+    -->
 
     <!-- iOS: modo aplicación independiente -->
     <meta name="apple-mobile-web-app-capable" content="yes" />

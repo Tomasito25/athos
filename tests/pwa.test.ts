@@ -130,8 +130,17 @@ describe.skipIf(!built)('reconocimiento por herramientas y navegadores', () => {
     expect(JSON.parse(read('manifest.json'))).toEqual(JSON.parse(read('manifest.webmanifest')));
   });
 
-  it('el documento sigue enlazando el nombre estándar', () => {
-    expect(read('index.html')).toMatch(/rel="manifest"\s+href="manifest\.webmanifest"/);
+  it('el documento enlaza un único manifest, y es el estándar', () => {
+    // Había dos etiquetas: la del fuente y la que inyecta el plugin. Los
+    // navegadores usan la primera y descartan el resto, pero los validadores
+    // lo señalan y no hay ninguna razón para tener dos.
+    const html = read('index.html');
+    const enlaces = [...html.matchAll(/<link[^>]*rel="manifest"[^>]*>/g)];
+    expect(enlaces.length, `${enlaces.length} etiquetas rel="manifest"`).toBe(1);
+    const href = enlaces[0][0].match(/href="([^"]+)"/)?.[1] ?? '';
+    expect(href, 'el enlace debe apuntar al nombre estándar').toMatch(/manifest\.webmanifest$/);
+    // Y el archivo al que apunta tiene que existir de verdad.
+    expect(existsSync(resolve(dist, href.replace(/^\/[^/]*\//, '').replace(/^\//, '')))).toBe(true);
   });
 
   it('declara que no hay aplicación nativa que preferir', () => {
@@ -245,12 +254,35 @@ describe.skipIf(!built)('precaché', () => {
     expect(entries.some((url) => url.includes('inter') && url.includes('latin'))).toBe(true);
   });
 
-  it('incluye el texto bíblico completo', () => {
+  it('NO incluye el texto bíblico, y es a propósito', () => {
+    // Todo lo que entra en el precaché retrasa la activación del Service
+    // Worker, y hasta que no se activa y toma el control, Android no termina
+    // de ofrecer la instalación. La Escritura la vuelca ATHOS a IndexedDB
+    // nada más arrancar y la lee de ahí, no de la red: precachearla era
+    // descargar y guardar los mismos cinco megas dos veces.
+    //
+    // Que sin conexión se siga leyendo la Biblia lo comprueba el navegador,
+    // no esta prueba: `node scripts/pwa-audit.mjs`.
     const libros = entries.filter((url) => url.startsWith('content/bible/'));
-    // 66 libros más el índice.
-    expect(libros.length).toBeGreaterThanOrEqual(67);
-    expect(libros.some((url) => url.endsWith('PSA.json'))).toBe(true);
-    expect(libros.some((url) => url.endsWith('JHN.json'))).toBe(true);
+    expect(libros, 'la Escritura no debe ir en el precaché').toEqual([]);
+  });
+
+  it('se mantiene lo bastante ligero para instalarse deprisa', () => {
+    // Era de 8,9 MB y el Service Worker tardaba quince segundos en activarse.
+    const bytes = entries.reduce((total, url) => {
+      const archivo = resolve(dist, url);
+      return total + (existsSync(archivo) ? statSync(archivo).size : 0);
+    }, 0);
+    const megas = bytes / 1024 / 1024;
+    expect(megas, `el precaché pesa ${megas.toFixed(1)} MB`).toBeLessThan(5);
+  });
+
+  it('sí precachea lo que hace falta para rezar sin red desde el primer día', () => {
+    // El leccionario es lo único del corpus que no está en IndexedDB.
+    expect(entries.some((url) => url.includes('lectionary/lectionary.json'))).toBe(true);
+    expect(entries.some((url) => url.endsWith('.css'))).toBe(true);
+    expect(entries.some((url) => url.includes('-latin.woff2'))).toBe(true);
+    expect(entries.some((url) => url.endsWith('index.html'))).toBe(true);
   });
 
   it('cada entrada lleva revisión o huella en el nombre', () => {

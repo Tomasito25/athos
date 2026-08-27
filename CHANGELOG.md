@@ -22,6 +22,36 @@ Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 Comprobado con `Page.getAppManifest`: el navegador sigue interpretándolo sin un
 solo error.
 
+## [1.9.1]
+
+### Corregido
+
+- **El documento publicaba dos etiquetas `rel="manifest"`.** Una la ponía el
+  fuente a mano y otra la inyectaba el plugin con la base de compilación. Los
+  navegadores usan la primera y descartan el resto, pero los validadores lo
+  señalan y no hay motivo para tener dos. Ahora la pone sólo el plugin.
+- **El Service Worker no llegaba a activarse en diez segundos**, y hasta que no
+  se activa y toma el control, Android no termina de ofrecer la instalación.
+  La causa era el precaché: 7,9 MB antes de dar señales de vida.
+
+### Cambiado
+
+- **El texto bíblico sale del precaché.** No es un recorte: ATHOS lo vuelca a
+  IndexedDB nada más arrancar —`autoIndexBible`— y lo lee de ahí, no de la red;
+  precachearlo era descargar y guardar los mismos cinco megas dos veces.
+  **El precaché baja de 7,9 MB a 3,9 MB** y el Service Worker pasa a activarse
+  y tomar el control en seis segundos.
+
+  Comprobado que no se pierde nada: con la red cortada siguen abriéndose la
+  portada, las oraciones, el Salterio, **Juan 1 de la Biblia**, las lecturas del
+  día, el calendario y el santoral. La Escritura completa —31 084 versículos—
+  está en IndexedDB a los diez segundos de la primera visita.
+
+- `npm run pwa:audit` comprueba además que haya un único enlace al manifest, que
+  `/manifest.json` responda —es lo que piden muchos validadores— y que el
+  Service Worker llegue a controlar la página, esperando a que se active en vez
+  de mirar una sola vez.
+
 ## [1.9.0]
 
 ### Corregido

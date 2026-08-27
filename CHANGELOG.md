@@ -2,6 +2,32 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.10.0]
+
+### Añadido
+
+- **El ofrecimiento de instalación aparece solo al entrar**, y su botón abre
+  **el diálogo del navegador**, no una imitación. Antes existía, pero esperaba
+  doce segundos escondido en un aviso fino: era como no ofrecerlo nunca.
+  Ahora sale a los dos segundos, con la cruz, el título, qué se gana, «Instalar
+  ATHOS» y «Ahora no». Si se rechaza, no vuelve.
+
+  **El diálogo oficial no se puede abrir solo al cargar la página**: los
+  navegadores exigen un gesto del usuario y descartan la llamada si no lo hay.
+  Por eso hay un botón, y por eso está donde se ve. Un toque, y el que aparece
+  es el del navegador.
+
+### Corregido
+
+- El aviso «ATHOS ya funciona sin conexión» se pintaba **dentro** del
+  ofrecimiento: los dos viven pegados al borde inferior y coinciden justo en la
+  primera visita. Ahora la hoja mide su propio alto y los avisos se colocan
+  encima, sin números mágicos que se rompen al crecer el texto.
+- El ofrecimiento se quedaba asomando detrás del diálogo del navegador mientras
+  el usuario decidía. Ahora se retira antes de llamarlo.
+- `ResizeObserver` se usaba sin comprobar que existiera: donde no está, la
+  aplicación entera se caía a la pantalla de error. Lo cazó una prueba nueva.
+
 ## [1.9.1]
 
 ### Añadido

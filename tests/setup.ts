@@ -23,6 +23,15 @@ if (!window.matchMedia) {
   })) as typeof window.matchMedia;
 }
 
+// jsdom tampoco trae ResizeObserver, y varios componentes lo consultan.
+if (!('ResizeObserver' in globalThis)) {
+  (globalThis as { ResizeObserver?: unknown }).ResizeObserver = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  };
+}
+
 // jsdom define scrollTo, pero sólo para avisar de que no está implementado.
 Object.defineProperty(window, 'scrollTo', { value: vi.fn(), writable: true });
 Object.defineProperty(Element.prototype, 'scrollIntoView', { value: vi.fn(), writable: true });

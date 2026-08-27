@@ -382,6 +382,11 @@ const es = {
       'entonces no se dibuja ningún código, porque llevaría a una dirección que rechaza la conexión.',
     copyLink: 'Copiar la dirección',
     copyCommand: 'Copiar la orden',
+    sheetTitle: 'Instala ATHOS en este dispositivo',
+    sheetText:
+      'Se abre en su propia ventana, arranca al instante y funciona sin conexión. No pasa por ninguna tienda: es la misma web, guardada aquí.',
+    notNow: 'Ahora no',
+    otherWays: 'Otras formas de instalarla',
     title: 'Instalar ATHOS',
     subtitle: 'ATHOS puede instalarse como una aplicación normal y funcionar sin conexión.',
     installed: 'ATHOS ya está instalada en este dispositivo.',

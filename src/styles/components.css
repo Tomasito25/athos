@@ -833,6 +833,21 @@
   }
 }
 
+/* Los avisos suben por encima del ofrecimiento de instalación cuando los dos
+   coinciden, que es justo lo que pasa en la primera visita: sin esto, el aviso
+   «ATHOS ya funciona sin conexión» se pintaba dentro de la hoja. */
+body:has(.install-sheet) .toast-region {
+  bottom: calc(
+    var(--bottom-nav-h) + var(--safe-bottom) + var(--sp-3) + var(--install-sheet-h, 17rem)
+  );
+}
+
+@media (min-width: 62rem) {
+  body:has(.install-sheet) .toast-region {
+    bottom: calc(var(--sp-5) + var(--install-sheet-h, 17rem) + var(--sp-3));
+  }
+}
+
 .toast {
   pointer-events: auto;
   display: flex;
@@ -1256,4 +1271,107 @@ input[type='range']:focus-visible::-webkit-slider-thumb {
   color: var(--ink);
   overflow-x: auto;
   white-space: pre;
+}
+
+/* ============================================================
+   Ofrecimiento de instalación
+   ------------------------------------------------------------
+   Se apoya sobre la barra inferior, ocupa el ancho en el móvil
+   y se recoge en una tarjeta en escritorio. Su botón abre el
+   diálogo del navegador; esto sólo es lo que lo desencadena.
+   ============================================================ */
+.install-sheet {
+  position: fixed;
+  z-index: 60;
+  inset-inline: 0;
+  bottom: calc(var(--bottom-nav-h) + var(--safe-bottom));
+  margin-inline: auto;
+  width: min(100%, 26rem);
+  padding: var(--sp-5) var(--sp-4) var(--sp-4);
+  background: var(--surface-raised);
+  border: 1px solid var(--gold-soft);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  box-shadow: var(--shadow-lg);
+  animation: install-sheet-in var(--dur-slow) var(--ease);
+}
+
+@media (min-width: 48rem) {
+  .install-sheet {
+    inset-inline: auto var(--sp-5);
+    bottom: var(--sp-5);
+    border-radius: var(--radius-xl);
+  }
+}
+
+@keyframes install-sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .install-sheet {
+    animation: none;
+  }
+}
+
+/* Filo dorado, como el canto de un libro de horas. */
+.install-sheet::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 2px;
+  background: var(--gold-edge);
+}
+
+.install-sheet__close {
+  position: absolute;
+  inset-inline-end: var(--sp-2);
+  top: var(--sp-2);
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.install-sheet__body {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-4);
+  padding-inline-end: 2.5rem;
+}
+
+.install-sheet__mark {
+  flex: none;
+  line-height: 0;
+  color: var(--gold);
+}
+
+.install-sheet__title {
+  font-family: var(--font-serif);
+  font-size: var(--text-lg);
+  line-height: 1.2;
+  color: var(--ink-strong);
+  text-wrap: balance;
+}
+
+.install-sheet__text {
+  margin-top: var(--sp-2);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.install-sheet__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+}
+
+.install-sheet__more {
+  display: block;
+  margin-top: var(--sp-3);
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
 }

@@ -1,7 +1,7 @@
 {
   "name": "athos",
   "private": true,
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "ATHOS — Oración · Tradición · Vida. PWA ortodoxa offline-first.",
   "type": "module",
   "license": "AGPL-3.0-or-later",
@@ -21,7 +21,8 @@
     "build:bible": "node scripts/build-bible.mjs",
     "check": "npm run lint && npm run typecheck && npm run test && npm run build",
     "deploy": "./deploy.sh",
-    "screenshots": "node scripts/screenshots.mjs"
+    "screenshots": "node scripts/screenshots.mjs",
+    "pwa:audit": "node scripts/pwa-audit.mjs"
   },
   "dependencies": {
     "dexie": "^4.4.5",

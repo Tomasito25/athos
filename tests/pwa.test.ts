@@ -28,10 +28,35 @@ describe.skipIf(!built)('manifest', () => {
     expect(manifest.name).toContain('ATHOS');
     expect(manifest.short_name).toBe('ATHOS');
     expect(manifest.start_url).toBeTruthy();
-    expect(manifest.scope).toBe('/');
     expect(manifest.display).toBe('standalone');
     expect(manifest.lang).toBe('es');
     expect(manifest.description).toBeTruthy();
+  });
+
+  it('el ámbito encierra la aplicación, cuelgue de donde cuelgue', () => {
+    // Esta prueba exigía scope === '/' y por eso tumbaba la publicación:
+    // al servirse en usuario.github.io/athos/ el ámbito TIENE que ser
+    // '/athos/'. Lo que hay que comprobar no es el valor, sino la relación.
+    const scope = String(manifest.scope);
+    const start = String(manifest.start_url);
+    const id = String(manifest.id);
+
+    expect(scope.startsWith('/'), `ámbito relativo: ${scope}`).toBe(true);
+    expect(scope.endsWith('/'), `el ámbito debe acabar en barra: ${scope}`).toBe(true);
+    // Si start_url cae fuera del ámbito, el navegador no instala.
+    expect(start.startsWith(scope), `${start} está fuera de ${scope}`).toBe(true);
+    expect(id.startsWith(scope), `el identificador ${id} está fuera de ${scope}`).toBe(true);
+  });
+
+  it('todo lo que el manifest declara vive dentro del ámbito', () => {
+    const scope = String(manifest.scope);
+    const atajos = (manifest.shortcuts ?? []) as Array<{ url: string; name: string }>;
+    expect(atajos.length, 'sin accesos directos').toBeGreaterThan(0);
+    for (const atajo of atajos) {
+      expect(atajo.url.startsWith(scope), `el atajo «${atajo.name}» apunta fuera: ${atajo.url}`).toBe(
+        true,
+      );
+    }
   });
 
   it('lleva color de tema y de fondo', () => {

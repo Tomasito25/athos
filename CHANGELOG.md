@@ -2,6 +2,29 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.8.1]
+
+### Corregido
+
+- **La publicación llevaba dos días sin actualizarse porque las pruebas
+  fallaban en GitHub.** La prueba del manifest exigía `scope === '/'`, pero al
+  publicarse en `usuario.github.io/athos/` el ámbito **tiene que ser**
+  `/athos/`: la aplicación hacía lo correcto y la prueba la tumbaba. Ahora se
+  comprueba lo que de verdad importa —que el ámbito acabe en barra, y que
+  `start_url`, `id` y los accesos directos caigan dentro de él—, sea cual sea
+  la carpeta de la que cuelgue.
+- Por eso la cruz corregida seguía sin verse en el sitio publicado.
+
+### Añadido
+
+- **`npm run pwa:audit`**: auditoría de instalabilidad contra la aplicación
+  servida y el navegador de verdad. Comprueba los criterios que Chrome usa para
+  decidir si ofrece instalar —contexto seguro, manifest sin errores de
+  interpretación, iconos que se descargan, Service Worker activo con precaché,
+  navegación completa sin red, capturas y accesos directos—. Las pruebas miran
+  los archivos que deja la compilación; esto mira lo que el navegador hace con
+  ellos, que no es lo mismo.
+
 ## [1.8.0]
 
 ### Añadido

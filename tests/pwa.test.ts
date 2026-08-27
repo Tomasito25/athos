@@ -179,8 +179,12 @@ describe.skipIf(!built)('service worker', () => {
     expect(sw).toMatch(/SKIP_WAITING[\s\S]{0,60}skipWaiting\(\)/);
   });
 
-  it('no reclama los clientes ya abiertos sin avisar', () => {
-    expect(sw).not.toMatch(/clientsClaim\(\)/);
+  it('toma el control de la página en cuanto se activa', () => {
+    // Esta prueba exigía lo contrario. La decisión cambió por un motivo
+    // concreto: sin reclamar los clientes, el Service Worker no controlaba
+    // nada hasta la siguiente navegación, y Chrome, Brave y Edge no ofrecen
+    // instalar una aplicación cuyo Service Worker no controla la página.
+    expect(sw).toMatch(/clientsClaim\(\)/);
   });
 
   it('sirve la navegación desde index.html cuando no hay red', () => {
@@ -189,7 +193,7 @@ describe.skipIf(!built)('service worker', () => {
 
   it('declara cachés en tiempo de ejecución para las fuentes y el corpus', () => {
     expect(sw).toContain('athos-fonts-v1');
-    expect(sw).toContain('athos-content-v1');
+    expect(sw).toContain('athos-content-v2');
   });
 });
 
@@ -258,5 +262,60 @@ describe.skipIf(!built)('salida de la compilación', () => {
     const html = read('index.html');
     expect(html).not.toContain('/src/main.tsx');
     expect(html).not.toContain('@vite/client');
+  });
+});
+
+
+/* ============================================================
+   Que el navegador ofrezca instalar, y que ATHOS se entere
+   ============================================================ */
+describe('instalación', () => {
+  const raiz = (f: string) => readFileSync(resolve(process.cwd(), f), 'utf-8');
+
+  it('el Service Worker toma el control de la página al activarse', () => {
+    // Sin `clientsClaim`, el Service Worker no controlaba nada hasta la
+    // siguiente navegación, y Chrome no ofrece instalar una aplicación cuyo
+    // Service Worker no controla la página.
+    const config = raiz('vite.config.ts');
+    expect(config).toMatch(/clientsClaim:\s*true/);
+  });
+
+  it('pero la versión nueva sigue esperando a que el usuario la acepte', () => {
+    // La comprobación sobre el Service Worker generado la hace «no se activa
+    // por su cuenta»; aquí se fija la configuración que la produce.
+    // Reclamar clientes y saltarse la espera son cosas distintas: lo primero
+    // hace instalable la aplicación, lo segundo la cambiaría bajo los pies de
+    // quien está rezando. Sólo se quiere lo primero.
+    const config = raiz('vite.config.ts');
+    expect(config).toMatch(/skipWaiting:\s*false/);
+    expect(config).toMatch(/registerType:\s*'prompt'/);
+  });
+
+  it('el evento de instalación se recoge antes de que arranque la aplicación', () => {
+    // `beforeinstallprompt` se dispara una sola vez y muy pronto: antes de que
+    // React esté montado. Si no hay nadie escuchando, se pierde y ATHOS cree
+    // que el navegador no ofrece instalarla.
+    const html = raiz('index.html');
+    expect(html).toContain("addEventListener('beforeinstallprompt'");
+    expect(html).toContain('__athosInstall');
+    // Y tiene que estar en el documento, no en el paquete que se carga después.
+    const posEscuchador = html.indexOf("addEventListener('beforeinstallprompt'");
+    const posModulo = html.indexOf('<script type="module"');
+    expect(posEscuchador, 'el escuchador va después del módulo').toBeLessThan(
+      posModulo === -1 ? Number.MAX_SAFE_INTEGER : posModulo,
+    );
+  });
+
+  it('la aplicación mira primero lo que recogió el escuchador temprano', () => {
+    const pwa = raiz('src/lib/pwa.ts');
+    expect(pwa).toContain('__athosInstall');
+    expect(pwa).toContain("'athos:installable'");
+  });
+
+  it('las capturas no lastran la primera visita', () => {
+    // Sólo las lee el navegador para la ficha de instalación; la aplicación no
+    // las usa nunca, y eran casi un mega antes de poder empezar a rezar.
+    const config = raiz('vite.config.ts');
+    expect(config).toMatch(/globIgnores:[\s\S]*?screenshot/);
   });
 });

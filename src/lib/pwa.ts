@@ -47,20 +47,46 @@ export function supportsInstallPrompt(): boolean {
 }
 
 /** Escucha el evento de instalación de los navegadores basados en Chromium. */
+/**
+ * Avisa cuando el navegador ofrece instalar ATHOS.
+ *
+ * El evento nativo se dispara una sola vez, y lo hace antes de que la
+ * aplicación esté montada: lo recoge el script que hay en `index.html` y lo
+ * deja en `window.__athosInstall`. Aquí se mira primero si ya está ahí —el
+ * caso normal— y sólo después se escucha por si llegara más tarde.
+ *
+ * Sin esto, quien entraba por primera vez veía «tu navegador no ofrece el
+ * botón de instalación automática» aunque el navegador sí lo ofrecía.
+ */
 export function listenForInstallPrompt(
   onEvent: (event: BeforeInstallPromptEvent | null) => void,
 ): () => void {
+  const guardado = (window as { __athosInstall?: BeforeInstallPromptEvent | null })
+    .__athosInstall;
+  if (guardado) onEvent(guardado);
+
+  const recoger = () => {
+    const actual = (window as { __athosInstall?: BeforeInstallPromptEvent | null })
+      .__athosInstall;
+    if (actual) onEvent(actual);
+  };
   const handler = (event: Event) => {
     event.preventDefault();
     onEvent(event as BeforeInstallPromptEvent);
   };
   const installed = () => onEvent(null);
 
+  // El nativo, por si el script de index.html no llegó a instalarse; y el
+  // propio, que es el que avisa en la práctica.
   window.addEventListener('beforeinstallprompt', handler);
+  window.addEventListener('athos:installable', recoger);
   window.addEventListener('appinstalled', installed);
+  window.addEventListener('athos:installed', installed);
   return () => {
     window.removeEventListener('beforeinstallprompt', handler);
+    window.removeEventListener('athos:installable', recoger);
     window.removeEventListener('appinstalled', installed);
+    window.removeEventListener('athos:installed', installed);
   };
 }
 

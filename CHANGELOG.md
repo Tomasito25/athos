@@ -2,6 +2,39 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.9.0]
+
+### Corregido
+
+- **No se podía instalar, y eran dos fallos distintos.**
+
+  El primero, en el Service Worker: con `clientsClaim: false` no tomaba el
+  control de la página hasta la siguiente navegación, y Chrome, Brave y Edge no
+  ofrecen instalar una aplicación cuyo Service Worker no controla la página.
+  Medido antes y después: antes seguía sin controlar a los 61 segundos; ahora
+  controla a los 6. La garantía de que una versión nueva no se aplica sola
+  sigue intacta —de eso se encarga `skipWaiting: false`, que es otra cosa—.
+
+  El segundo, peor: **ATHOS no se enteraba de que el navegador sí ofrecía
+  instalarla.** `beforeinstallprompt` se dispara una sola vez y a los tres
+  segundos, pero el escuchador vivía dentro de React, que no se monta hasta que
+  termina de sembrarse la base de datos. El evento se perdía, y la pantalla de
+  instalación decía «tu navegador no ofrece el botón de instalación
+  automática» mientras el navegador lo estaba ofreciendo. Ahora se recoge en el
+  propio `index.html`, antes de que arranque nada.
+
+- **Firefox de escritorio no instala PWA**, y no es un fallo de ATHOS: el
+  navegador retiró esa capacidad. En Android sí, con «Añadir a la pantalla de
+  inicio».
+
+### Cambiado
+
+- Las capturas de la ficha de instalación y la imagen de vista previa salen del
+  precaché: casi un mega que sólo lee el navegador y que retrasaba la primera
+  visita. De 8,9 a 7,9 MB.
+- El corpus pasa a servirse con `CacheFirst`: lleva huella de versión y no
+  cambia, así que no hay por qué revalidarlo contra la red cada vez.
+
 ## [1.8.2]
 
 ### Corregido

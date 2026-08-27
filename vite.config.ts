@@ -131,6 +131,11 @@ export default defineConfig({
         globIgnores: [
           // El leccionario juliano sólo se descarga si se elige ese calendario.
           'content/lectionary/lectionary-juliano.json',
+          // Las capturas las lee el navegador de la ficha de instalación; la
+          // aplicación no las usa nunca. Casi un mega que no hace falta tener
+          // descargado antes de poder empezar a rezar.
+          'icons/screenshot-*.png',
+          'icons/og-image.png',
           'icons/icon-192.png',
           'icons/icon-512.png',
           'icons/maskable-192.png',
@@ -141,7 +146,20 @@ export default defineConfig({
         navigateFallback: `${base}index.html`,
         navigateFallbackDenylist: [/^\/api\//],
         cleanupOutdatedCaches: true,
-        clientsClaim: false,
+        /**
+         * El Service Worker toma el control de la página en cuanto se activa.
+         *
+         * Con `clientsClaim: false` no controlaba nada hasta la siguiente
+         * navegación, y Chrome, Brave y Edge no ofrecen instalar una
+         * aplicación cuyo Service Worker no controla la página: quien entraba
+         * por primera vez no veía el botón de instalar por ningún lado.
+         *
+         * No compromete la promesa de que las actualizaciones no se aplican
+         * solas: de eso se encarga `skipWaiting: false`, que deja la versión
+         * nueva esperando hasta que el usuario la acepta. Reclamar clientes y
+         * saltarse la espera son cosas distintas.
+         */
+        clientsClaim: true,
         skipWaiting: false,
         runtimeCaching: [
           {
@@ -154,11 +172,14 @@ export default defineConfig({
             },
           },
           {
+            // El corpus lleva huella de versión y no cambia: una vez guardado,
+            // se sirve de la caché sin volver a pedirlo por la red.
             urlPattern: ({ url }) => url.pathname.startsWith(`${base}content/`),
-            handler: 'StaleWhileRevalidate',
+            handler: 'CacheFirst',
             options: {
-              cacheName: 'athos-content-v1',
-              expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 365 },
+              cacheName: 'athos-content-v2',
+              expiration: { maxEntries: 300, maxAgeSeconds: 60 * 60 * 24 * 365 },
+              cacheableResponse: { statuses: [0, 200] },
             },
           },
         ],

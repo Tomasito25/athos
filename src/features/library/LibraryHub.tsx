@@ -12,6 +12,12 @@ const SECTIONS = [
   { to: '/biblioteca/athos', title: es.library.athos, text: ATHOS_INTRO, Icon: IconMonastery },
   { to: '/biblioteca/iconos', title: es.library.icons, text: 'Los iconos que la Iglesia venera y lo que significan.', Icon: IconCandle },
   {
+    to: '/biblioteca/historia',
+    title: es.history.title,
+    text: 'De Pentecostés a hoy, en ocho épocas: los siete Concilios con su ficha, las rupturas, las misiones y los conflictos que siguen abiertos.',
+    Icon: IconScroll,
+  },
+  {
     to: '/biblioteca/catecismo',
     title: es.catechism.title,
     text: 'Qué cree la Iglesia ortodoxa y por qué, en preguntas con respuesta. Filtrable según se llegue de fuera, se sea catecúmeno o se lleve años dentro.',

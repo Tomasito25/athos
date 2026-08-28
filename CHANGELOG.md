@@ -2,6 +2,36 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.14.0]
+
+### Añadido
+
+- **Historia de la Iglesia ortodoxa**, de Pentecostés a hoy: ocho épocas, **70
+  hechos fechados** y **13 concilios con ficha completa** —quién los convocó,
+  cuántos asistieron, contra qué se reunieron, qué quedó definido y qué
+  conviene no dar por sabido—.
+
+  Están los siete Ecuménicos, de Nicea 325 a Nicea II 787, y también los
+  locales que la Iglesia tiene por vinculantes: el Quinisexto, los tres
+  concilios palamitas, Florencia, Jerusalén 1672 y Creta 2016.
+
+  **Construida en dos capas a propósito.** Donde hay prosa, se escribe; donde
+  no la hay todavía, el hecho conserva su año y su lugar en la cronología y lo
+  dice: «sin reseña escrita todavía». Un hueco fechado enseña más que una
+  ausencia, porque se ve. La portada indica cuántos hechos están escritos de
+  cuántos hay.
+
+  Los conflictos vivos se cuentan como conflictos, con las dos posiciones: la
+  ruptura por Ucrania, las cuatro Iglesias que no acudieron a Creta, la reforma
+  del calendario, la autocefalía americana, la anomalía de la diáspora frente a
+  la condena del filetismo de 1872. Y las rupturas antiguas no se cuentan como
+  victorias: Calcedonia dice quiénes se separaron y por qué; 1054, que las
+  excomuniones se levantaron en 1965.
+
+  Dieciséis pruebas vigilan que el esqueleto esté entero: que no falte ningún
+  Ecuménico, que las fechas vayan hacia delante, que cada concilio diga quién
+  lo convocó y contra qué, y que lo discutido se marque como discutido.
+
 ## [1.13.0]
 
 ### Añadido

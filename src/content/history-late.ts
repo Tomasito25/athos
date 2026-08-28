@@ -1,0 +1,179 @@
+/**
+ * De la separación con Roma hasta hoy.
+ *
+ * Los conflictos vivos —Ucrania, los calendarios, la relación con Roma— se
+ * exponen como conflictos, con las dos posiciones. Un relato en el que los
+ * nuestros siempre tienen razón no es historia.
+ */
+import type { HistoryPeriod } from './history';
+
+export const LATE_PERIODS: HistoryPeriod[] = [
+  /* ═════════════════ 4. Los eslavos y la separación ═════════════════ */
+  {
+    id: 'separacion',
+    title: 'Los eslavos y la separación',
+    range: '843 – 1204',
+    summary: [
+      'Mientras Oriente y Occidente se distancian, la Iglesia bizantina hace su misión más fecunda: la evangelización de los eslavos. Cirilo y Metodio crean un alfabeto para una lengua que no lo tenía y traducen a ella la Escritura y la Liturgia, contra quienes sostenían que sólo podía orarse en hebreo, griego y latín. De ahí salen el cirílico y la cultura escrita de media Europa.',
+      'La separación con Roma no ocurre un día. Se prepara durante siglos: dos lenguas que dejan de entenderse, dos imperios rivales, la añadidura del Filioque al Credo, y sobre todo dos maneras distintas de entender qué es el primado del obispo de Roma. El año 1054 es una fecha simbólica, no la causa.',
+      'Lo que la vuelve irreversible es lo que viene después. En 1204 los cruzados, en vez de ir a Jerusalén, saquean Constantinopla durante tres días, profanan Santa Sofía y establecen un imperio latino. A partir de ahí la ruptura deja de ser cosa de teólogos y se convierte en memoria popular.',
+    ],
+    events: [
+      { id: 'cirilo-metodio', year: '863', sort: 863, title: 'Cirilo y Metodio, misión entre los eslavos', kind: 'mision',
+        detail: 'Dos hermanos de Tesalónica traducen la Liturgia y la Escritura a la lengua de los moravos, para lo cual tienen que inventarle un alfabeto. Es la decisión que hará que la ortodoxia se rece en las lenguas de los pueblos y no en una sola sagrada.',
+        seeAlso: [{ label: 'Santos Cirilo y Metodio', path: '/calendario/santos/cirilo-metodio' }] },
+      { id: 'focio', year: '863-867', sort: 864, title: 'El cisma de Focio', kind: 'cisma',
+        detail: 'Primer choque abierto entre Constantinopla y Roma, por la jurisdicción sobre Bulgaria y por el Filioque, que Focio denuncia como añadidura ilegítima. Se resuelve en 879 con un concilio que restablece la comunión, pero deja planteados todos los términos del conflicto posterior.' },
+      { id: 'bautismo-bulgaria', year: '864', sort: 866, title: 'Bautismo de Bulgaria', kind: 'mision' },
+      { id: 'bautismo-rus', year: '988', sort: 988, title: 'Bautismo de la Rus de Kiev', kind: 'mision',
+        detail: 'El príncipe Vladímir hace bautizar a su pueblo tras haber enviado emisarios a examinar las religiones. La crónica cuenta que en Santa Sofía no supieron «si estaban en el cielo o en la tierra». De aquí arrancan las Iglesias rusa, ucraniana y bielorrusa.' },
+      { id: 'cisma-1054', year: '1054', sort: 1054, title: 'La excomunión mutua', kind: 'cisma',
+        detail: 'El cardenal Humberto deposita una bula de excomunión sobre el altar de Santa Sofía; el patriarca Miguel Cerulario responde con otra. Ninguna de las dos afectaba a la Iglesia entera —el papa que envió la delegación ya había muerto— y la comunión no se rompió del todo ese día.',
+        disputed: 'Es la fecha convencional del cisma, pero los historiadores coinciden en que fue un episodio más de un distanciamiento largo, y que la ruptura real se consuma en 1204. Las excomuniones de 1054 fueron levantadas en 1965 por Pablo VI y Atenágoras.' },
+      { id: 'saqueo-1204', year: '1204', sort: 1204, title: 'Los cruzados saquean Constantinopla', kind: 'cisma',
+        detail: 'La Cuarta Cruzada, desviada de su destino, toma la ciudad cristiana más rica del mundo y la saquea durante tres días. Se profana Santa Sofía, se destruyen reliquias y bibliotecas, y se instala un patriarca latino. Bizancio no se recuperará nunca del todo.',
+        disputed: 'Juan Pablo II pidió perdón por este hecho en 2001, y Bartolomé I aceptó la petición. Sigue siendo, para muchos ortodoxos, la herida decisiva.' },
+    ],
+  },
+
+  /* ═════════════════ 5. El ocaso y el yugo ═════════════════ */
+  {
+    id: 'ocaso',
+    title: 'El ocaso y el yugo',
+    range: '1204 – 1700',
+    summary: [
+      'Cinco siglos difíciles. Bizancio sobrevive dos siglos más como una sombra de sí mismo, y en 1453 Constantinopla cae ante los otomanos. Los cuatro patriarcados antiguos quedan bajo dominio musulmán durante cuatrocientos años: la Iglesia sobrevive, pero sin escuelas, sin imprenta y pagando por existir.',
+      'En medio de ese declive ocurre lo más hondo del pensamiento bizantino: la controversia hesicasta. San Gregorio Palamás defiende que la luz que los apóstoles vieron en el Tabor era Dios mismo y no un fenómeno creado, y distingue en Dios la esencia inaccesible de las energías por las que se comunica. Tres concilios le dan la razón.',
+      'Rusia toma el relevo. Con Constantinopla caída, Moscú se proclama heredera —«la tercera Roma»— y obtiene su propio patriarcado en 1589. Pero el precio se paga en el siglo siguiente: las reformas litúrgicas de Nikon provocan el cisma de los viejos creyentes, que aún dura.',
+    ],
+    events: [
+      { id: 'palamas-controversia', year: '1338-1341', sort: 1338, title: 'La controversia hesicasta', kind: 'obra',
+        detail: 'Barlaam de Calabria se burla de la manera corporal de rezar de los monjes del Athos y niega que se pueda ver la luz increada. Palamas responde con las Tríadas.',
+        seeAlso: [{ label: 'San Gregorio Palamás', path: '/biblioteca/padres/gregorio-palamas' }] },
+      { id: 'concilios-palamitas', year: '1341, 1347, 1351', sort: 1341, title: 'Los concilios palamitas de Constantinopla', kind: 'concilio',
+        council: { place: 'Constantinopla', year: '1341, 1347 y 1351', convokedBy: 'Los emperadores Andrónico III y Juan VI Cantacuceno',
+          against: 'Barlaam de Calabria y después Acindino y Gregoras, que sostenían que todo lo que llega del Dios inaccesible es criatura.',
+          defined: ['En Dios se distinguen la esencia, inaccesible para siempre, y las energías increadas por las que se comunica.',
+            'La luz del Tabor es increada: los apóstoles vieron la divinidad misma.',
+            'La distinción no divide a Dios ni introduce composición en Él.'],
+          note: 'No son concilios ecuménicos, pero la Iglesia ortodoxa los tiene por vinculantes y su doctrina es hoy una de las diferencias teológicas de fondo con Occidente. El segundo domingo de Gran Cuaresma se conmemora a Palamás.' } },
+      { id: 'florencia', year: '1438-1439', sort: 1438, title: 'Concilio de Florencia', kind: 'concilio',
+        council: { place: 'Ferrara y Florencia', year: '1438-1439', convokedBy: 'El papa Eugenio IV y el emperador Juan VIII Paleólogo',
+          against: 'No una herejía: se buscaba la unión de las Iglesias a cambio de ayuda militar contra los turcos.',
+          defined: ['Se firmó un decreto de unión que aceptaba el Filioque, el purgatorio y el primado papal.'],
+          note: 'La delegación oriental firmó bajo enorme presión política. San Marcos de Éfeso fue el único obispo que se negó, y por eso la Iglesia ortodoxa lo venera. Al volver a Constantinopla el pueblo rechazó la unión, y ninguna Iglesia ortodoxa la considera válida. La ayuda militar nunca llegó.' },
+        disputed: 'La Iglesia católica lo cuenta entre sus concilios ecuménicos; la ortodoxa lo considera un concilio fallido y rechazado por la recepción de la Iglesia, que es su criterio.' },
+      { id: 'caida-constantinopla', year: '1453', sort: 1453, title: 'Caída de Constantinopla', kind: 'politico',
+        detail: 'El 29 de mayo los otomanos toman la ciudad. Santa Sofía se convierte en mezquita. El último emperador muere combatiendo. Empiezan cuatro siglos de dominio turco para los cristianos de Oriente, en los que el patriarca pasa a ser también responsable civil de su comunidad ante el sultán.' },
+      { id: 'tercera-roma', year: '1510', sort: 1510, title: 'Moscú, «la tercera Roma»', kind: 'politico',
+        detail: 'El monje Filoteo escribe al zar que dos Romas han caído, que Moscú es la tercera y que no habrá una cuarta. La idea tendrá una larga vida política, no siempre para bien de la Iglesia.' },
+      { id: 'patriarcado-moscu', year: '1589', sort: 1589, title: 'Se crea el Patriarcado de Moscú', kind: 'politico' },
+      { id: 'viejos-creyentes', year: '1653-1666', sort: 1653, title: 'El cisma de los viejos creyentes', kind: 'cisma',
+        detail: 'El patriarca Nikon reforma los libros y los ritos rusos para ajustarlos al uso griego: entre otras cosas, la señal de la cruz pasa de dos dedos a tres. Una parte considerable del pueblo se niega. La represión es durísima y miles se dejan morir antes que ceder.',
+        disputed: 'La Iglesia rusa levantó los anatemas contra los viejos ritos en 1971, reconociendo que eran igualmente ortodoxos. La división, sin embargo, no se ha cerrado.' },
+      { id: 'jerusalen-1672', year: '1672', sort: 1672, title: 'Concilio de Jerusalén', kind: 'concilio',
+        council: { place: 'Jerusalén', year: '1672', convokedBy: 'El patriarca Dositeo de Jerusalén',
+          against: 'La Confesión calvinista atribuida al patriarca Cirilo Lucaris, que había introducido tesis protestantes.',
+          defined: ['Rechazo de la predestinación calvinista y de la sola fide.',
+            'Afirmación de la presencia real en la Eucaristía y del valor de los siete Misterios.'],
+          note: 'Es la respuesta ortodoxa a la Reforma. Su lenguaje está muy marcado por las categorías escolásticas occidentales que se usaban para discutir con protestantes y católicos, y hoy se lee con esa cautela.' } },
+    ],
+  },
+
+  /* ═════════════════ 6. La era moderna ═════════════════ */
+  {
+    id: 'moderna',
+    title: 'La era moderna',
+    range: '1700 – 1917',
+    summary: [
+      'Pedro el Grande suprime el patriarcado de Moscú en 1721 y lo sustituye por un Sínodo controlado por el Estado. Durante casi doscientos años la Iglesia rusa vive bajo tutela política, con un funcionario laico —el ober-procurador— vigilando sus decisiones.',
+      'Y sin embargo es un periodo de renacimiento espiritual. En 1782 se publica en Venecia la Filocalia, una antología de los Padres sobre la oración del corazón que Paisi Velichkovski traduce al eslavo y Teófano el Recluso al ruso. De ella nace el movimiento de los stárets —Óptina, Sarov— y buena parte de lo que hoy se entiende por espiritualidad rusa.',
+      'Es también el siglo de las misiones: Alaska, Japón, China. Y el de las independencias nacionales en los Balcanes, que traen consigo Iglesias autocéfalas nuevas y, con ellas, un problema que aún colea: la tentación de confundir la Iglesia con la nación, condenada como herejía —el filetismo— en 1872.',
+    ],
+    events: [
+      { id: 'sinodo-pedro', year: '1721', sort: 1721, title: 'Pedro I suprime el patriarcado de Moscú', kind: 'politico',
+        detail: 'Lo sustituye por un Santísimo Sínodo gobernado de hecho por un funcionario del zar. La Iglesia rusa queda convertida en un departamento del Estado hasta 1917.' },
+      { id: 'filocalia', year: '1782', sort: 1782, title: 'Se publica la Filocalia', kind: 'obra',
+        detail: 'Nicodemo el Hagiorita y Macario de Corinto reúnen en Venecia textos de los Padres sobre la oración del corazón, desde el siglo IV al XV. Paisi Velichkovski la traduce al eslavo casi enseguida, y su difusión cambia la vida espiritual de Rusia entera.' },
+      { id: 'mision-alaska', year: '1794', sort: 1794, title: 'Misión ortodoxa en Alaska', kind: 'mision',
+        detail: 'Monjes de Valaam llegan a América. San Germán de Alaska defenderá a los nativos frente a los comerciantes rusos. De aquí arranca la ortodoxia en América del Norte.' },
+      { id: 'serafin-sarov', year: '1759-1833', sort: 1800, title: 'San Serafín de Sarov', kind: 'figura',
+        seeAlso: [{ label: 'San Serafín de Sarov', path: '/biblioteca/padres/serafin-sarov' }] },
+      { id: 'independencia-griega', year: '1821-1832', sort: 1821, title: 'Independencia de Grecia', kind: 'politico',
+        detail: 'El patriarca Gregorio V es ahorcado en la puerta del Patriarcado en represalia por la sublevación. Con la independencia nace la Iglesia de Grecia, autocéfala desde 1850.' },
+      { id: 'optina', year: 'siglo XIX', sort: 1830, title: 'Los ancianos de Óptina', kind: 'figura',
+        detail: 'El monasterio de Óptina se convierte en el destino de peregrinos, campesinos y también de Gógol, Dostoyevski y Tolstói. De allí sale la oración matutina que se reza todavía.',
+        seeAlso: [{ label: 'Oración de los ancianos de Óptina', path: '/orar/oraciones/optina' }] },
+      { id: 'mision-japon', year: '1861', sort: 1861, title: 'San Nicolás del Japón', kind: 'mision',
+        detail: 'Llega como capellán del consulado ruso y funda una Iglesia japonesa con clero japonés y liturgia en japonés. Cuando estalló la guerra ruso-japonesa pidió a sus fieles que rezaran por Japón, su patria.' },
+      { id: 'filetismo', year: '1872', sort: 1872, title: 'Condena del filetismo', kind: 'concilio',
+        council: { place: 'Constantinopla', year: '1872', convokedBy: 'El patriarca Antimo VI',
+          against: 'El filetismo: organizar la Iglesia por criterios de nación o etnia en vez de por territorio.',
+          defined: ['Es herejía subordinar la Iglesia a la nación y crear jurisdicciones paralelas por origen étnico en un mismo lugar.'],
+          note: 'La condena sigue siendo formalmente vigente y sigue siendo formalmente incumplida: en la diáspora conviven obispos griegos, rusos, serbios y rumanos sobre el mismo territorio. Es una de las contradicciones internas que la ortodoxia reconoce y no ha resuelto.' },
+        disputed: 'Todas las Iglesias reconocen la condena en teoría; la situación de la diáspora la contradice en la práctica, y así lo admiten los propios documentos panortodoxos.' },
+    ],
+  },
+
+  /* ═════════════════ 7. El siglo de los mártires ═════════════════ */
+  {
+    id: 'martires',
+    title: 'El siglo de los mártires',
+    range: '1917 – 1991',
+    summary: [
+      'La Iglesia ortodoxa sufre en el siglo XX la mayor persecución de toda la historia cristiana, en número de víctimas y en duración. En Rusia, tras la revolución de 1917, se ejecuta a decenas de miles de obispos, sacerdotes, monjes y laicos; se cierran o destruyen la inmensa mayoría de las iglesias y casi todos los monasterios.',
+      'El patriarcado, restaurado en 1917 después de dos siglos, queda casi inmediatamente descabezado. Durante décadas la jerarquía superviviente se mueve entre la colaboración forzada y la clandestinidad, y esa herida —quién cedió, quién no y hasta dónde— sigue sin cerrarse del todo.',
+      'Al mismo tiempo, la emigración lleva la ortodoxia a Occidente. París, Nueva York y Londres se convierten en centros de una teología que redescubre a los Padres y dialoga con el pensamiento moderno: Florovski, Lossky, Schmemann, Meyendorff. Paradójicamente, la catástrofe hace universal a una Iglesia que era regional.',
+    ],
+    events: [
+      { id: 'concilio-moscu', year: '1917-1918', sort: 1917, title: 'Concilio de Moscú y restauración del patriarcado', kind: 'concilio',
+        detail: 'Se reúne el concilio más importante de la Iglesia rusa en siglos, con participación de laicos, y restaura el patriarcado suprimido por Pedro I. San Tijón es elegido patriarca. Sus reformas apenas llegan a aplicarse: la revolución las alcanza.' },
+      { id: 'persecucion-sovietica', year: '1918-1938', sort: 1918, title: 'La persecución soviética', kind: 'persecucion',
+        detail: 'Fusilamientos, campos y clausura sistemática. Sólo en 1937 y 1938 se ejecuta a decenas de miles de personas por motivos religiosos. De las más de cincuenta mil iglesias abiertas en 1917 quedan unos cientos en funcionamiento al empezar la guerra.' },
+      { id: 'nuevos-martires', year: '2000', sort: 1920, title: 'Los nuevos mártires y confesores de Rusia', kind: 'figura',
+        detail: 'La Iglesia rusa canonizó en 2000 a más de mil de ellos, y el número reconocido ha seguido creciendo. Su conmemoración común se celebra a finales de enero.' },
+      { id: 'calendario-revisado', year: '1923-1924', sort: 1923, title: 'La reforma del calendario', kind: 'liturgia',
+        detail: 'Varias Iglesias adoptan el calendario juliano revisado para las fiestas fijas. Otras —Rusia, Serbia, Jerusalén, el Athos— mantienen el juliano.',
+        disputed: 'La reforma provocó cismas de viejos calendaristas que persisten. Todas las Iglesias, sin embargo, siguen calculando la Pascua por el cómputo juliano.' },
+      { id: 'san-sergio-paris', year: '1925', sort: 1925, title: 'El Instituto San Sergio de París', kind: 'obra',
+        detail: 'Fundado por emigrados rusos, se convierte en el foco de la llamada renovación patrística: volver a los Padres en vez de a los manuales escolásticos. De ahí salen Florovski, Lossky y una generación que reintroduce la teología ortodoxa en el debate occidental.' },
+      { id: 'levantamiento-1965', year: '1965', sort: 1965, title: 'Se levantan las excomuniones de 1054', kind: 'liturgia',
+        detail: 'Pablo VI y el patriarca Atenágoras retiran simultáneamente las excomuniones mutuas. Es un gesto: no restablece la comunión, pero cambia el tono de la relación.' },
+      { id: 'ocan-1970', year: '1970', sort: 1970, title: 'Autocefalía de la Iglesia Ortodoxa en América', kind: 'politico',
+        disputed: 'Moscú concedió la autocefalía a la OCA; Constantinopla no la reconoce, porque sostiene que sólo a él corresponde otorgarla. El desacuerdo sigue abierto.' },
+      { id: 'milenio-rus', year: '1988', sort: 1988, title: 'Milenio del bautismo de la Rus', kind: 'liturgia',
+        detail: 'La celebración, tolerada por el poder soviético, marca el principio del fin de la persecución. En los años siguientes se devuelven miles de iglesias.' },
+    ],
+  },
+
+  /* ═════════════════ 8. Hoy ═════════════════ */
+  {
+    id: 'hoy',
+    title: 'Hoy',
+    range: '1991 – ',
+    summary: [
+      'Tras la caída de la Unión Soviética, la Iglesia rusa pasa de unos pocos cientos de parroquias a decenas de miles en veinte años. Es la mayor reconstrucción institucional de la historia reciente del cristianismo, con sus luces y con la sombra de una relación demasiado estrecha con el poder político.',
+      'La ortodoxia mundial —unos doscientos millones de fieles— sigue organizada en Iglesias autocéfalas que comparten fe y sacramentos. Su gran asunto pendiente sigue siendo el mismo: cómo actuar conjuntamente sin una autoridad última. El Concilio de Creta de 2016 lo intentó y cuatro Iglesias no acudieron.',
+      'Y hay una ruptura abierta. Desde 2018 el Patriarcado de Moscú ha roto la comunión con Constantinopla por la concesión de autocefalía a la Iglesia ortodoxa de Ucrania. Es la división más grave dentro de la ortodoxia desde hace siglos, y ATHOS no puede resolverla ni tomar partido: la expone.',
+    ],
+    events: [
+      { id: 'reconstruccion', year: '1991-2010', sort: 1991, title: 'Reconstrucción tras el comunismo', kind: 'politico',
+        detail: 'Se reabren monasterios, se restauran catedrales y se recuperan reliquias. También reaparecen las tensiones sobre el papel de la Iglesia en la vida pública y su relación con el Estado.' },
+      { id: 'creta-2016', year: '2016', sort: 2016, title: 'Concilio de Creta', kind: 'concilio',
+        council: { place: 'Kolymbari, Creta', year: '2016', convokedBy: 'El patriarca Bartolomé I, con acuerdo previo de todas las Iglesias',
+          attendees: 'Diez de las catorce Iglesias autocéfalas',
+          against: 'No una herejía: se buscaba una respuesta común a asuntos pendientes desde hacía décadas.',
+          defined: ['Documentos sobre la misión, la diáspora, la autonomía, el matrimonio, el ayuno y la relación con el resto del mundo cristiano.'],
+          note: 'Antioquía, Rusia, Bulgaria y Georgia no acudieron, por motivos distintos. Su estatuto sigue discutido: quienes participaron lo consideran vinculante; los ausentes, no. Fue el primer intento de concilio panortodoxo en más de mil años y mostró a la vez la voluntad de reunirse y la dificultad de hacerlo.' },
+        disputed: 'Las cuatro Iglesias ausentes no reconocen sus documentos como vinculantes. No hay acuerdo sobre qué autoridad tiene.' },
+      { id: 'ucrania-2018', year: '2018-2019', sort: 2018, title: 'La ruptura por Ucrania', kind: 'cisma',
+        detail: 'Constantinopla concede la autocefalía a una nueva Iglesia ortodoxa de Ucrania, reuniendo a comunidades que estaban fuera de la comunión. Moscú rompe la comunión con Constantinopla, y después con las Iglesias que reconocen la nueva autocefalía.',
+        disputed: 'Constantinopla sostiene que le corresponde otorgar la autocefalía y que Ucrania estuvo bajo su jurisdicción hasta 1686. Moscú sostiene que Ucrania es territorio canónico suyo desde entonces y que la concesión fue una intromisión. La guerra iniciada en 2022 ha agravado la fractura, con parroquias y monasterios divididos sobre el terreno. Es una división real y abierta entre Iglesias ortodoxas, no un asunto zanjado.' },
+      { id: 'santa-sofia-2020', year: '2020', sort: 2020, title: 'Santa Sofía vuelve a ser mezquita', kind: 'politico',
+        detail: 'Museo desde 1934, Turquía revierte su estatuto. Todas las Iglesias ortodoxas protestaron.' },
+      { id: 'diaspora', year: 'hoy', sort: 2026, title: 'La ortodoxia fuera de sus tierras', kind: 'mision',
+        detail: 'Hay parroquias ortodoxas en casi todos los países. En España las hay en la mayoría de capitales, dependientes sobre todo de los patriarcados de Constantinopla, Rumanía, Rusia y Serbia, y con una proporción creciente de conversos y de liturgia en castellano.',
+        disputed: 'La coexistencia de varios obispos de distintas jurisdicciones sobre un mismo territorio contradice la organización canónica y la condena del filetismo de 1872. Todas las Iglesias lo reconocen como anomalía; ninguna ha renunciado a su jurisdicción.' },
+    ],
+  },
+];

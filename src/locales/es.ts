@@ -292,6 +292,26 @@ const es = {
     progress: '{{done}} de {{total}} lecciones',
   },
 
+  history: {
+    title: 'Historia de la Iglesia',
+    subtitle: 'De Pentecostés a hoy: {{events}} hechos fechados y {{councils}} concilios.',
+    periods: 'Épocas',
+    councils: 'Los siete Concilios Ecuménicos',
+    councilsIntro:
+      'Las junturas sobre las que se articula todo lo demás. Cada uno dice quién lo convocó, contra qué y qué quedó definido.',
+    localCouncil: 'Concilio local o particular',
+    place: 'Dónde',
+    convoked: 'Convocado por',
+    attendees: 'Asistentes',
+    against: 'Contra qué',
+    defined: 'Qué quedó definido',
+    disputed: 'Aquí no todos coinciden',
+    noDetail: 'Sin reseña escrita todavía. El hecho conserva su fecha y su lugar en la cronología.',
+    skeleton:
+      'Están escritos {{written}} de los {{total}} hechos. Los que no lo están conservan su fecha y su sitio: así se ve lo que falta, en vez de no estar.',
+    disputedNote:
+      'Las diferencias doctrinales con otras confesiones se explican aparte, en el',
+  },
   catechism: {
     title: 'Catecismo',
     subtitle: 'Aprender la fe ortodoxa: {{count}} preguntas con su respuesta.',

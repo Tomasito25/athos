@@ -1480,3 +1480,81 @@ input[type='range']:focus-visible::-webkit-slider-thumb {
   color: var(--ink-strong);
   text-wrap: balance;
 }
+
+/* ---------------- Cronología ---------------- */
+.timeline {
+  list-style: none;
+  margin-top: var(--sp-6);
+  padding-left: 0;
+}
+
+.timeline__item {
+  position: relative;
+  padding-left: var(--sp-5);
+  padding-bottom: var(--sp-6);
+  border-left: 1px solid var(--line);
+}
+
+.timeline__item:last-child {
+  border-left-color: transparent;
+}
+
+/* El punto sobre la línea. */
+.timeline__item::before {
+  content: '';
+  position: absolute;
+  left: -4.5px;
+  top: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+.timeline__year {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-wide);
+  color: var(--gold);
+}
+
+.timeline__title {
+  font-family: var(--font-serif);
+  font-size: var(--text-lg);
+  line-height: 1.25;
+  margin-top: var(--sp-1);
+  color: var(--ink-strong);
+  text-wrap: balance;
+}
+
+.council {
+  margin-top: var(--sp-3);
+  font-size: var(--text-sm);
+}
+
+.council > div + div {
+  margin-top: var(--sp-2);
+}
+
+.council dt {
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.council dd {
+  margin-top: 2px;
+  color: var(--ink);
+}
+
+.council__list {
+  margin: var(--sp-2) 0 0 var(--sp-4);
+  font-size: var(--text-sm);
+}
+
+.council__list li + li {
+  margin-top: var(--sp-2);
+}

@@ -19,6 +19,15 @@
   padding-bottom: calc(var(--sp-7) + var(--safe-bottom));
 }
 
+/* En pantallas muy estrechas el margen se estrecha también: con 32 píxeles de
+   aire a los lados, las siete celdas del calendario no llegaban al mínimo
+   táctil. El texto se lee igual y lo que hay que tocar se puede tocar. */
+@media (max-width: 22.5rem) {
+  .app-main {
+    padding-inline: max(var(--sp-3), var(--safe-left)) max(var(--sp-3), var(--safe-right));
+  }
+}
+
 .app-main > .page {
   animation: page-in var(--dur) var(--ease);
 }

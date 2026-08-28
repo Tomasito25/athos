@@ -91,6 +91,37 @@ describe('interfaz apta para el dedo', () => {
     expect(consultas.length).toBeGreaterThanOrEqual(3);
   });
 
+  it('un enlace suelto que hay que tocar tiene área para el dedo', () => {
+    // Los nombres de santo del calendario eran enlaces de bloque sin relleno:
+    // medían lo que una línea de texto, la mitad del mínimo táctil.
+    const css = leer('src/styles/components.css');
+    const bloque = css.slice(css.indexOf('.tap-row {'));
+    expect(bloque).toMatch(/min-height:\s*2\.75rem/);
+  });
+
+  it('el número de versículo no baja de lo legible', () => {
+    // 0.62em del cuerpo daba nueve píxeles en una pantalla estrecha.
+    const css = leer('src/styles/typography.css');
+    const bloque = css.slice(css.indexOf('.verse-num {'));
+    expect(bloque).toMatch(/font-size:\s*max\(/);
+  });
+
+  it('en pantallas muy estrechas el margen cede para que quepa lo táctil', () => {
+    // Con 32px de aire a los lados, las siete celdas del calendario no
+    // llegaban al mínimo de 40px.
+    const css = leer('src/styles/shell.css');
+    expect(css).toMatch(/@media \(max-width: 22\.5rem\)[\s\S]{0,200}padding-inline/);
+  });
+
+  it('la navegación del oficio queda donde alcanza el pulgar', () => {
+    const css = leer('src/styles/components.css');
+    const bloque = css.slice(css.indexOf('.office-nav {'));
+    expect(bloque).toMatch(/position:\s*sticky/);
+    expect(bloque).toMatch(/bottom:/);
+    // Y sus botones cumplen el mínimo táctil.
+    expect(css.slice(css.indexOf('.office-nav .btn {'))).toMatch(/min-height:\s*2\.75rem/);
+  });
+
   it('la casilla de la regla tiene un área táctil mayor que su marca', () => {
     expect(css).toMatch(/\.check-btn\s*\{[^}]*width: 2\.75rem/);
     expect(css).toMatch(/\.check-btn\s*\{[^}]*height: 2\.75rem/);

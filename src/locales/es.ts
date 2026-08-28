@@ -6,6 +6,8 @@
  */
 const es = {
   app: {
+    previous: 'Anterior',
+    next: 'Siguiente',
     name: 'ATHOS',
     tagline: 'Oración · Tradición · Vida',
     loading: 'Un momento…',
@@ -126,6 +128,14 @@ const es = {
   },
 
   office: {
+    howToPray: 'Cómo rezarlo',
+    restore: 'Restaurar el oficio',
+    restoreConfirm:
+      '¿Devolver este oficio a su forma original? Se recuperarán los pasos que ATHOS haya añadido desde que lo instalaste, y se perderá lo que hayas cambiado en ÉL. Los otros dos oficios no se tocan.',
+    restored: 'Oficio restaurado',
+    stepByStep: 'Paso a paso',
+    continuous: 'Seguido',
+    stepNav: 'Moverse por los pasos del oficio',
     title: 'Oficio del día',
     morning: 'Oficio de la mañana',
     midday: 'Oficio del mediodía',

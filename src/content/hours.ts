@@ -138,6 +138,9 @@ export const DAILY_OFFICES: DailyOfficeSeed[] = [
         ],
       },
       { id: 'm-entrega', title: 'Entrega del día', kind: 'prayer', prayerId: 'entrega-del-dia' },
+      // El libro de oraciones cierra la mañana haciendo sitio a los demás:
+      // los nombres, uno a uno, antes de la despedida.
+      { id: 'm-vivos', title: 'Por los vivos', kind: 'prayer', prayerId: 'por-los-vivos', note: 'Donde va N. se dice el nombre, sin prisa.' },
       { id: 'm-despedida', title: 'Despedida', kind: 'texto', blocks: DESPEDIDA },
     ],
   },
@@ -182,6 +185,7 @@ export const DAILY_OFFICES: DailyOfficeSeed[] = [
       },
       { id: 'd-jesus', title: 'Oración de Jesús', kind: 'jesus-prayer', target: 12 },
       { id: 'd-trabajo', title: 'Por el trabajo del día', kind: 'prayer', prayerId: 'antes-de-trabajar' },
+      { id: 'd-bienhechores', title: 'Por los que nos hacen bien', kind: 'prayer', prayerId: 'por-los-bienhechores' },
       { id: 'd-despedida', title: 'Despedida', kind: 'texto', blocks: DESPEDIDA },
     ],
   },
@@ -209,6 +213,7 @@ export const DAILY_OFFICES: DailyOfficeSeed[] = [
       { id: 'n-theotokos', title: 'A la Santísima Theotokos', kind: 'texto', blocks: [gr('theotokeParthene')] },
       { id: 'n-simeon', title: 'Cántico de san Simeón', kind: 'prayer', prayerId: 'simeon-noche' },
       { id: 'n-jesus', title: 'Oración de Jesús', kind: 'jesus-prayer', target: 12 },
+      { id: 'n-difuntos', title: 'Por los difuntos', kind: 'prayer', prayerId: 'por-los-padres-difuntos', note: 'La noche es la hora en que la Iglesia recuerda a los que se han dormido.' },
       { id: 'n-acostarse', title: 'Al acostarse', kind: 'prayer', prayerId: 'oracion-final-noche' },
       { id: 'n-despedida', title: 'Despedida', kind: 'texto', blocks: DESPEDIDA },
     ],

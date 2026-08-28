@@ -60,7 +60,9 @@
 
 .verse-num {
   font-family: var(--font-ui);
-  font-size: 0.62em;
+  /* 0.62em del cuerpo bajaba a nueve píxeles en una pantalla estrecha: el
+     número quedaba ahí como un adorno ilegible. El suelo lo pone `max`. */
+  font-size: max(0.72rem, 0.62em);
   font-weight: 600;
   color: var(--gold);
   vertical-align: 0.35em;

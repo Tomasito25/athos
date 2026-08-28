@@ -22,7 +22,7 @@ import {
   SAINTS,
 } from '@/content';
 import { DAILY_OFFICES } from '@/content/hours';
-import type { PrayerRule, RuleItem } from '@/types';
+import type { PrayerRule, RuleItem, RuleTime } from '@/types';
 import { db, getSetting, setSetting } from './db';
 
 const CONTENT_VERSION_KEY = 'content.version';
@@ -146,6 +146,39 @@ export async function seedUserDefaults(): Promise<boolean> {
     await db.rule_items.bulkPut(items);
   });
   await setSetting(DEFAULTS_KEY, true);
+  return true;
+}
+
+/**
+ * Devuelve un oficio a su forma de fábrica.
+ *
+ * Los oficios se siembran una sola vez, y con razón: si se resembraran en cada
+ * arranque, cualquiera que hubiese ordenado el suyo a su gusto lo perdería. El
+ * precio es que las mejoras posteriores no llegan a quien ya tenía ATHOS
+ * instalada. Esto lo arregla, pero sólo cuando el usuario lo pide, y sólo para
+ * el oficio que pida: lo que haya hecho en los otros dos no se toca.
+ *
+ * Lo que sí se pierde es lo que el usuario hubiera cambiado en ESE oficio.
+ * Por eso quien lo llama tiene que avisar antes.
+ */
+export async function restoreOffice(time: RuleTime): Promise<boolean> {
+  const office = DAILY_OFFICES.find((o) => o.time === time);
+  if (!office) return false;
+
+  const { rules, items } = defaultOffices();
+  const ruleId = `oficio-${time}`;
+  const regla = rules.find((r) => r.id === ruleId);
+  const pasos = items.filter((i) => i.ruleId === ruleId);
+  if (!regla || !pasos.length) return false;
+
+  await db.transaction('rw', [db.daily_rules, db.rule_items], async () => {
+    // Fuera los pasos actuales de este oficio, y sólo los de éste.
+    const viejos = await db.rule_items.where('ruleId').equals(ruleId).toArray();
+    await db.rule_items.bulkDelete(viejos.map((v) => v.id));
+    const existente = await db.daily_rules.get(ruleId);
+    await db.daily_rules.put({ ...regla, createdAt: existente?.createdAt ?? regla.createdAt });
+    await db.rule_items.bulkPut(pasos);
+  });
   return true;
 }
 

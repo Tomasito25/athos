@@ -24,6 +24,8 @@ export interface SettingsState {
   serifUi: boolean;
   highContrast: boolean;
   greekMode: GreekMode;
+  /** Cómo se reza un oficio: de corrido o un paso cada vez. */
+  officeFlow: 'seguido' | 'paso';
 
   calendarStyle: CalendarStyle;
   language: string;
@@ -54,6 +56,8 @@ export const DEFAULT_SETTINGS = {
   serifUi: false,
   highContrast: false,
   greekMode: 'ambos' as GreekMode,
+  // Un paso cada vez: es como se reza un oficio con el teléfono en la mano.
+  officeFlow: 'paso' as 'seguido' | 'paso',
   calendarStyle: 'nuevo' as CalendarStyle,
   language: 'es',
   officeHours: { manana: 5, mediodia: 12, noche: 19 },

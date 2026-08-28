@@ -2,6 +2,41 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.12.0]
+
+### Añadido
+
+- **Los oficios se rezan paso a paso.** Un solo paso en pantalla, con la
+  navegación pegada al borde inferior, donde llega el pulgar, y el número de
+  paso siempre a la vista. Marcar un paso avanza al siguiente; desmarcarlo no,
+  que sería quitarle a alguien lo que acaba de corregir. Rezar los trece pasos
+  de la mañana desplazándose por un rollo era perder el sitio a cada rato.
+  «Seguido» sigue estando a un toque, para quien lo prefiera o lea en pantalla
+  grande.
+
+- **Las conmemoraciones que faltaban en los tres oficios.** La mañana cierra
+  haciendo sitio a los demás —los nombres, uno a uno— antes de la despedida,
+  como hace el libro de oraciones. La noche recuerda a los difuntos, que es su
+  hora. Y el mediodía, a los que nos hacen bien.
+
+- **Restaurar un oficio.** Los oficios se siembran una sola vez, y con razón:
+  resembrarlos borraría lo que cada uno haya ordenado a su gusto. El precio era
+  que las mejoras posteriores no llegaban a quien ya tenía ATHOS instalada.
+  Ahora se pueden pedir, oficio por oficio, avisando de lo que se pierde. Los
+  otros dos no se tocan, y hay una prueba que lo exige.
+
+### Corregido
+
+- **Los números de versículo bajaban a nueve píxeles** en una pantalla
+  estrecha: quedaban como un adorno ilegible. Ahora tienen suelo.
+- **Las celdas del calendario no llegaban al mínimo táctil a 320 px.** En
+  pantallas muy estrechas el margen de la página cede para que quepan.
+- **Los nombres de santo del calendario** eran enlaces de bloque sin relleno:
+  medían lo que una línea de texto, la mitad de lo que hay que poder tocar.
+
+Barridas las 23 pantallas a 320, 360 y 412 píxeles: sin desbordes, sin texto
+por debajo de lo legible y sin controles por debajo del mínimo táctil.
+
 ## [1.11.0]
 
 ### Añadido

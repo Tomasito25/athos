@@ -1375,3 +1375,72 @@ input[type='range']:focus-visible::-webkit-slider-thumb {
   font-size: var(--text-sm);
   color: var(--ink-muted);
 }
+
+/* ============================================================
+   Navegación del oficio, paso a paso
+   ------------------------------------------------------------
+   Se queda pegada al borde inferior, encima de la barra de la
+   aplicación: rezando con el teléfono en la mano, lo que hay
+   que tocar tiene que estar donde llega el pulgar, no arriba.
+   ============================================================ */
+.office-nav {
+  position: sticky;
+  bottom: calc(var(--safe-bottom) + var(--sp-3));
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-top: var(--sp-6);
+  padding: var(--sp-3);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow);
+}
+
+.office-nav .btn {
+  min-height: 2.75rem;
+  border-radius: var(--radius-pill);
+}
+
+.office-nav .btn:disabled {
+  opacity: 0.35;
+}
+
+.office-nav__count {
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-wide);
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+/* En pantallas estrechas sobran las palabras: bastan las flechas. */
+@media (max-width: 26rem) {
+  .office-nav__word {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .office-nav .btn {
+    min-width: 3.25rem;
+    justify-content: center;
+  }
+}
+
+
+/* Un enlace suelto que hay que poder tocar con el dedo. Como bloque a secas
+   medía lo que una línea de texto, muy por debajo del mínimo táctil. */
+.tap-row {
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding-block: var(--sp-1);
+}

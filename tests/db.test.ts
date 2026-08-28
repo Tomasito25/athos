@@ -4,7 +4,7 @@
  */
 import { beforeEach, describe, expect, it } from 'vitest';
 import { AthosDatabase, db, getSetting, setSetting } from '@/db/db';
-import { seedContent, seedUserDefaults } from '@/db/seed';
+import { restoreOffice, seedContent, seedUserDefaults } from '@/db/seed';
 import {
   completionsOn,
   deleteRule,
@@ -272,5 +272,39 @@ describe('ajustes', () => {
     await setSetting('prueba', { a: 1 });
     expect(await getSetting('prueba', null)).toEqual({ a: 1 });
     expect(await getSetting('inexistente', 'defecto')).toBe('defecto');
+  });
+});
+
+describe('restaurar un oficio', () => {
+  it('recupera los pasos de fábrica sin tocar los otros oficios', async () => {
+    // Los oficios se siembran una sola vez, así que las mejoras posteriores no
+    // llegan solas: esto es lo que permite recibirlas, y sólo cuando se pide.
+    await seedUserDefaults();
+
+    // El usuario destroza el de la mañana y personaliza el de la noche.
+    const pasosManana = await ruleItems('oficio-manana');
+    await db.rule_items.bulkDelete(pasosManana.slice(2).map((p) => p.id));
+    const pasosNoche = await ruleItems('oficio-noche');
+    await db.rule_items.update(pasosNoche[0].id, { title: 'Mi paso de siempre' });
+
+    expect((await ruleItems('oficio-manana')).length).toBe(2);
+
+    const hecho = await restoreOffice('manana');
+    expect(hecho).toBe(true);
+
+    // La mañana vuelve entera, con la conmemoración de los vivos incluida.
+    const restaurada = await ruleItems('oficio-manana');
+    expect(restaurada.length).toBeGreaterThan(10);
+    expect(restaurada.some((p) => p.id.endsWith('m-vivos'))).toBe(true);
+
+    // Y la noche conserva lo que el usuario había cambiado.
+    const noche = await ruleItems('oficio-noche');
+    expect(noche[0].title).toBe('Mi paso de siempre');
+  });
+
+  it('no inventa un oficio que no existe', async () => {
+    expect(await restoreOffice('manana')).toBe(true);
+    // @ts-expect-error a propósito: un momento que no es de los tres.
+    expect(await restoreOffice('tarde')).toBe(false);
   });
 });

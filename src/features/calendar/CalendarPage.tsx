@@ -200,7 +200,7 @@ export function CalendarPage() {
               <div style={{ marginTop: 'var(--sp-3)' }}>
                 <p className="eyebrow">{es.calendar.saints}</p>
                 {selectedDay.saints.map((saint) => (
-                  <Link key={saint.id} to={`/calendario/santos/${saint.id}`} style={{ display: 'block' }}>
+                  <Link key={saint.id} to={`/calendario/santos/${saint.id}`} className="tap-row">
                     {saint.name}
                   </Link>
                 ))}

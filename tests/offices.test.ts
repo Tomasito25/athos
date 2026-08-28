@@ -211,3 +211,34 @@ describe('los tres oficios están completos', () => {
     expect(texto).toMatch(/Theotokos/i);
   });
 });
+
+
+describe('las conmemoraciones que faltaban', () => {
+  it('la mañana hace sitio a los demás antes de la despedida', () => {
+    // El libro de oraciones cierra la mañana con los nombres, uno a uno.
+    const manana = OFFICE_BY_TIME.get('manana')!;
+    const ids = manana.steps.map((p) => p.id);
+    expect(ids).toContain('m-vivos');
+    // Y va antes de la despedida, no después.
+    expect(ids.indexOf('m-vivos')).toBeLessThan(ids.indexOf('m-despedida'));
+  });
+
+  it('la noche recuerda a los difuntos', () => {
+    const noche = OFFICE_BY_TIME.get('noche')!;
+    const ids = noche.steps.map((p) => p.id);
+    expect(ids).toContain('n-difuntos');
+    expect(ids.indexOf('n-difuntos')).toBeLessThan(ids.indexOf('n-despedida'));
+  });
+
+  it('el mediodía, a los que nos hacen bien', () => {
+    const ids = OFFICE_BY_TIME.get('mediodia')!.steps.map((p) => p.id);
+    expect(ids).toContain('d-bienhechores');
+  });
+
+  it('las oraciones que enlazan siguen existiendo', () => {
+    const ids = new Set(PRAYERS.map((p) => p.id));
+    for (const nueva of ['por-los-vivos', 'por-los-padres-difuntos', 'por-los-bienhechores']) {
+      expect(ids.has(nueva), `falta ${nueva}`).toBe(true);
+    }
+  });
+});

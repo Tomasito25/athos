@@ -1,11 +1,17 @@
 /**
- * Un oficio del día, rezado de corrido.
+ * Un oficio del día.
  *
- * No es una lista de tareas: es un libro que se lee de arriba abajo. Las
- * marcas de cada paso están para saber por dónde se iba si hay que
- * interrumpirse, no para puntuar a nadie.
+ * No es una lista de tareas: las marcas de cada paso están para saber por
+ * dónde se iba si hay que interrumpirse, no para puntuar a nadie.
+ *
+ * Se puede rezar de dos maneras. **Paso a paso** es la de por defecto y la
+ * pensada para el teléfono: un solo paso en pantalla, con la navegación al
+ * alcance del pulgar, porque rezar un oficio desplazándose por un rollo de
+ * trece pasos es perder el sitio a cada rato. **Seguido** deja el oficio
+ * entero de arriba abajo, como un libro, para quien lo prefiera o lo lea en
+ * una pantalla grande.
  */
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { useOfficeSteps, type ResolvedStep } from './useOfficeSteps';
@@ -14,19 +20,24 @@ import { completionsOn, ruleForTime, toggleRuleItem } from '@/db/user';
 import { useToday } from '@/hooks/useLiturgicalDay';
 import {
   Blocks,
+  Button,
   ButtonLink,
   CheckCircle,
   Empty,
   Loading,
   Panel,
   ProgressBlocks,
+  Segmented,
   Rule,
   SourceNote,
   Tag,
 } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { InlineCounter } from './InlineCounter';
-import { IconEdit } from '@/components/icons';
+import { IconChevronLeft, IconChevronRight, IconEdit } from '@/components/icons';
+import { useSettings } from '@/stores/settings';
+import { useUi } from '@/stores/ui';
+import { restoreOffice } from '@/db/seed';
 import type { RuleTime } from '@/types';
 import es from '@/locales/es';
 
@@ -43,6 +54,16 @@ export function OfficePage() {
     () => new Set((hechos.data ?? []).map((c) => c.itemId)),
     [hechos.data],
   );
+
+  const toast = useUi((s) => s.toast);
+  const modo = useSettings((s) => s.officeFlow);
+  const ponerModo = useSettings((s) => s.set);
+
+  // El paso en curso lleva dentro de qué oficio es. Así, al cambiar de oficio
+  // se empieza por el principio sin necesidad de un efecto que lo reinicie.
+  const [posicion, setPosicion] = useState({ time, indice: 0 });
+  const actual = posicion.time === time ? posicion.indice : 0;
+  const setActual = (indice: number) => setPosicion({ time, indice });
 
   if (regla.loading) return <Loading />;
 
@@ -78,6 +99,19 @@ export function OfficePage() {
           <ProgressBlocks value={lista.length ? hechosCuenta / lista.length : 0} />
         </div>
 
+        <Segmented
+          value={modo}
+          onChange={(v) => {
+            ponerModo('officeFlow', v);
+            setActual(0);
+          }}
+          options={[
+            { value: 'paso' as const, label: es.office.stepByStep },
+            { value: 'seguido' as const, label: es.office.continuous },
+          ]}
+          label={es.office.howToPray}
+        />
+
         <div className="row row--wrap">
           <ReaderToolbar
             favorite={{
@@ -104,18 +138,33 @@ export function OfficePage() {
 
       {pasos.loading ? <Loading /> : null}
 
-      {lista.map((paso, indice) => (
-        <Step
-          key={paso.item.id}
-          paso={paso}
-          numero={indice + 1}
-          hecho={completados.has(paso.item.id)}
-          onToggle={async () => {
+      {modo === 'seguido'
+        ? lista.map((paso, indice) => (
+            <Step
+              key={paso.item.id}
+              paso={paso}
+              numero={indice + 1}
+              hecho={completados.has(paso.item.id)}
+              onToggle={async () => {
+                await toggleRuleItem(today, regla.data!.id, paso.item.id, paso.item.target);
+                hechos.reload();
+              }}
+            />
+          ))
+        : null}
+
+      {modo === 'paso' && lista.length > 0 ? (
+        <PasoAPaso
+          lista={lista}
+          actual={Math.min(actual, lista.length - 1)}
+          completados={completados}
+          irA={setActual}
+          onToggle={async (paso) => {
             await toggleRuleItem(today, regla.data!.id, paso.item.id, paso.item.target);
             hechos.reload();
           }}
         />
-      ))}
+      ) : null}
 
       <Rule />
 
@@ -125,11 +174,92 @@ export function OfficePage() {
 
       <div className="btn-row" style={{ marginTop: 'var(--sp-5)' }}>
         <ButtonLink to={`/orar/regla/editar/${regla.data.id}`}>{es.office.edit}</ButtonLink>
+        <Button
+          variant="ghost"
+          onClick={async () => {
+            // Se avisa antes: esto borra lo que el usuario haya cambiado en
+            // ESTE oficio, aunque no toca los otros dos.
+            if (!window.confirm(es.office.restoreConfirm)) return;
+            await restoreOffice(time as RuleTime);
+            pasos.reload();
+            hechos.reload();
+            toast(es.office.restored);
+          }}
+        >
+          {es.office.restore}
+        </Button>
         <ButtonLink to="/orar" variant="ghost">
           {es.app.back}
         </ButtonLink>
       </div>
     </article>
+  );
+}
+
+/**
+ * Un paso cada vez, con la navegación abajo.
+ *
+ * Al marcar un paso se avanza solo al siguiente: es lo que uno haría de todos
+ * modos, y ahorra un toque en mitad de la oración.
+ */
+function PasoAPaso({
+  lista,
+  actual,
+  completados,
+  irA,
+  onToggle,
+}: {
+  lista: ResolvedStep[];
+  actual: number;
+  completados: Set<string>;
+  irA: (n: number) => void;
+  onToggle: (paso: ResolvedStep) => Promise<void>;
+}) {
+  const paso = lista[actual];
+  const primero = actual === 0;
+  const ultimo = actual === lista.length - 1;
+
+  return (
+    <>
+      <Step
+        paso={paso}
+        numero={actual + 1}
+        hecho={completados.has(paso.item.id)}
+        onToggle={async () => {
+          const estaba = completados.has(paso.item.id);
+          await onToggle(paso);
+          // Marcar avanza; desmarcar no, que sería quitarle a alguien el paso
+          // que acaba de corregir.
+          if (!estaba && !ultimo) irA(actual + 1);
+        }}
+      />
+
+      <nav className="office-nav" aria-label={es.office.stepNav}>
+        <button
+          type="button"
+          className="btn btn--ghost"
+          onClick={() => irA(actual - 1)}
+          disabled={primero}
+        >
+          <IconChevronLeft size={18} />
+          <span className="office-nav__word">{es.app.previous}</span>
+        </button>
+
+        <span className="office-nav__count">
+          {actual + 1} / {lista.length}
+        </span>
+
+        <button
+          type="button"
+          className="btn btn--primary"
+          onClick={() => irA(actual + 1)}
+          disabled={ultimo}
+        >
+          <span className="office-nav__word">{es.app.next}</span>
+          <IconChevronRight size={18} />
+        </button>
+      </nav>
+    </>
   );
 }
 

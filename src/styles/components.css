@@ -1444,3 +1444,39 @@ input[type='range']:focus-visible::-webkit-slider-thumb {
   min-height: 2.75rem;
   padding-block: var(--sp-1);
 }
+
+/* El cierre del oficio: lo único que se marca, y al final, que es cuando de
+   verdad está rezado. */
+.office-close {
+  margin-top: var(--sp-7);
+  padding-top: var(--sp-5);
+  border-top: 1px solid var(--line-soft);
+  text-align: center;
+}
+
+.office-close__done {
+  font-family: var(--font-serif);
+  font-size: var(--text-lg);
+  color: var(--gold);
+  margin-bottom: var(--sp-3);
+}
+
+/* ---------------- Catecismo ---------------- */
+.catechism-entry {
+  margin-top: var(--sp-7);
+  padding-top: var(--sp-5);
+  border-top: 1px solid var(--line-soft);
+}
+
+.catechism-entry:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.catechism-entry__q {
+  font-family: var(--font-serif);
+  font-size: var(--text-xl);
+  line-height: 1.25;
+  color: var(--ink-strong);
+  text-wrap: balance;
+}

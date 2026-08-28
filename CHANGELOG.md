@@ -2,6 +2,33 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.13.0]
+
+### Añadido
+
+- **Catecismo**: 39 preguntas con su respuesta, en diez partes —Dios, el
+  hombre, Cristo, la Iglesia, los Misterios, la vida cristiana, las últimas
+  cosas, el fondo y las preguntas difíciles—. Cada una dice a quién sirve, y se
+  puede filtrar: quien llega de fuera, quien se prepara para el bautismo y
+  quien lleva años dentro no necesitan lo mismo.
+
+  Dos reglas lo gobiernan, y hay pruebas que las exigen. **Lo que se discute
+  entre confesiones se marca como discutido** —el Filioque, el primado del
+  papa, el purgatorio, el pecado original, la satisfacción— explicando la
+  postura ajena sin caricaturizarla; una prueba comprueba que cada aviso nombre
+  a quien discrepa. Y **lo que la Iglesia no ha definido se declara no
+  definido**: el estado intermedio, la salvación fuera de sus límites visibles,
+  la relación entre gracia y libertad, el mal.
+
+### Cambiado
+
+- **Los oficios ya no se marcan oración por oración.** Trece casillas que
+  puntuar mientras se reza convertían el oficio en una lista de tareas. Ahora
+  se da por rezado al llegar al final, que es cuando de verdad lo está: en el
+  último paso, «Siguiente» deja sitio a «Terminar». Por dentro se siguen
+  guardando las marcas de cada paso, así que el progreso y las estadísticas
+  funcionan igual que antes.
+
 ## [1.12.0]
 
 ### Añadido

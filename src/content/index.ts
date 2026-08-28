@@ -16,6 +16,8 @@ export * from './psalter';
 export * from './saints';
 export * from './athos';
 export * from './study';
+export * from './catechism';
+export * from './catechism-parts';
 export * from './greek';
 export * from './hours';
 export * from './moments';
@@ -24,4 +26,4 @@ export * from './moments';
  * Versión del corpus. Al incrementarla, ATHOS vuelve a sembrar las tablas de
  * contenido en la próxima apertura, sin tocar los datos del usuario.
  */
-export const CONTENT_VERSION = 8;
+export const CONTENT_VERSION = 9;

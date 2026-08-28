@@ -129,6 +129,9 @@ const es = {
 
   office: {
     howToPray: 'Cómo rezarlo',
+    finish: 'Terminar el oficio',
+    prayedToday: 'Rezado hoy',
+    prayedUndo: 'Marcar como no rezado',
     restore: 'Restaurar el oficio',
     restoreConfirm:
       '¿Devolver este oficio a su forma original? Se recuperarán los pasos que ATHOS haya añadido desde que lo instalaste, y se perderá lo que hayas cambiado en ÉL. Los otros dos oficios no se tocan.',
@@ -289,6 +292,25 @@ const es = {
     progress: '{{done}} de {{total}} lecciones',
   },
 
+  catechism: {
+    title: 'Catecismo',
+    subtitle: 'Aprender la fe ortodoxa: {{count}} preguntas con su respuesta.',
+    forWhom: 'Para quién',
+    all: 'Todo',
+    newcomer: 'Llego de fuera',
+    catechumen: 'Catecúmeno',
+    initiated: 'Ya en la fe',
+    parts: 'Partes',
+    inScripture: 'En la Escritura',
+    disputed: 'Aquí no todos coinciden',
+    notDefined: 'La Iglesia no lo ha definido',
+    seeAlso: 'Sigue por',
+    allParts: 'Todas las partes',
+    warning:
+      'Esto explica; no sustituye. Es una redacción de ATHOS a partir del Símbolo de la Fe, los Concilios y la enseñanza patrística común, no un texto oficial de ninguna Iglesia.',
+    askPriest: 'Lo que de verdad importe, pregúntaselo a un sacerdote.',
+    howToAsk: 'Cómo se pide la bendición',
+  },
   library: {
     teaching: 'Qué enseñó',
     caution: 'Conviene saber',

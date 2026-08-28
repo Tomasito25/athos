@@ -16,13 +16,12 @@ import { Link, useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { useOfficeSteps, type ResolvedStep } from './useOfficeSteps';
 import { OFFICE_BY_TIME, OFFICES_STRUCTURE_NOTE } from '@/content/hours';
-import { completionsOn, ruleForTime, toggleRuleItem } from '@/db/user';
+import { completeRule, completionsOn, ruleForTime, uncompleteRule } from '@/db/user';
 import { useToday } from '@/hooks/useLiturgicalDay';
 import {
   Blocks,
   Button,
   ButtonLink,
-  CheckCircle,
   Empty,
   Loading,
   Panel,
@@ -80,7 +79,16 @@ export function OfficePage() {
   }
 
   const lista = pasos.data ?? [];
-  const hechosCuenta = lista.filter((p) => completados.has(p.item.id)).length;
+  // El oficio se da por rezado entero, no oración a oración. Basta con mirar
+  // si el último paso está marcado.
+  const rezado = lista.length > 0 && completados.has(lista[lista.length - 1].item.id);
+
+  const darPorRezado = async () => {
+    if (!regla.data) return;
+    if (rezado) await uncompleteRule(today, regla.data.id);
+    else await completeRule(today, regla.data.id);
+    hechos.reload();
+  };
 
   return (
     <article className="page page--reading">
@@ -96,7 +104,7 @@ export function OfficePage() {
         {definicion ? <p className="muted">{definicion.subtitle}</p> : null}
 
         <div style={{ margin: 'var(--sp-4) 0' }}>
-          <ProgressBlocks value={lista.length ? hechosCuenta / lista.length : 0} />
+          <ProgressBlocks value={rezado ? 1 : 0} />
         </div>
 
         <Segmented
@@ -138,31 +146,22 @@ export function OfficePage() {
 
       {pasos.loading ? <Loading /> : null}
 
-      {modo === 'seguido'
-        ? lista.map((paso, indice) => (
-            <Step
-              key={paso.item.id}
-              paso={paso}
-              numero={indice + 1}
-              hecho={completados.has(paso.item.id)}
-              onToggle={async () => {
-                await toggleRuleItem(today, regla.data!.id, paso.item.id, paso.item.target);
-                hechos.reload();
-              }}
-            />
-          ))
-        : null}
+      {modo === 'seguido' ? (
+        <>
+          {lista.map((paso, indice) => (
+            <Step key={paso.item.id} paso={paso} numero={indice + 1} />
+          ))}
+          <Cierre rezado={rezado} onCerrar={darPorRezado} />
+        </>
+      ) : null}
 
       {modo === 'paso' && lista.length > 0 ? (
         <PasoAPaso
           lista={lista}
           actual={Math.min(actual, lista.length - 1)}
-          completados={completados}
+          rezado={rezado}
           irA={setActual}
-          onToggle={async (paso) => {
-            await toggleRuleItem(today, regla.data!.id, paso.item.id, paso.item.target);
-            hechos.reload();
-          }}
+          onCerrar={darPorRezado}
         />
       ) : null}
 
@@ -199,21 +198,21 @@ export function OfficePage() {
 /**
  * Un paso cada vez, con la navegación abajo.
  *
- * Al marcar un paso se avanza solo al siguiente: es lo que uno haría de todos
- * modos, y ahorra un toque en mitad de la oración.
+ * En el último paso, «Siguiente» deja sitio a «Terminar»: es ahí donde el
+ * oficio se da por rezado, no oración a oración.
  */
 function PasoAPaso({
   lista,
   actual,
-  completados,
+  rezado,
   irA,
-  onToggle,
+  onCerrar,
 }: {
   lista: ResolvedStep[];
   actual: number;
-  completados: Set<string>;
+  rezado: boolean;
   irA: (n: number) => void;
-  onToggle: (paso: ResolvedStep) => Promise<void>;
+  onCerrar: () => Promise<void>;
 }) {
   const paso = lista[actual];
   const primero = actual === 0;
@@ -221,18 +220,7 @@ function PasoAPaso({
 
   return (
     <>
-      <Step
-        paso={paso}
-        numero={actual + 1}
-        hecho={completados.has(paso.item.id)}
-        onToggle={async () => {
-          const estaba = completados.has(paso.item.id);
-          await onToggle(paso);
-          // Marcar avanza; desmarcar no, que sería quitarle a alguien el paso
-          // que acaba de corregir.
-          if (!estaba && !ultimo) irA(actual + 1);
-        }}
-      />
+      <Step paso={paso} numero={actual + 1} />
 
       <nav className="office-nav" aria-label={es.office.stepNav}>
         <button
@@ -249,49 +237,51 @@ function PasoAPaso({
           {actual + 1} / {lista.length}
         </span>
 
-        <button
-          type="button"
-          className="btn btn--primary"
-          onClick={() => irA(actual + 1)}
-          disabled={ultimo}
-        >
-          <span className="office-nav__word">{es.app.next}</span>
-          <IconChevronRight size={18} />
-        </button>
+        {ultimo ? (
+          <button
+            type="button"
+            className={rezado ? 'btn btn--ghost' : 'btn btn--primary'}
+            onClick={onCerrar}
+          >
+            {rezado ? es.office.prayedUndo : es.office.finish}
+          </button>
+        ) : (
+          <button type="button" className="btn btn--primary" onClick={() => irA(actual + 1)}>
+            <span className="office-nav__word">{es.app.next}</span>
+            <IconChevronRight size={18} />
+          </button>
+        )}
       </nav>
     </>
   );
 }
 
-function Step({
-  paso,
-  numero,
-  hecho,
-  onToggle,
-}: {
-  paso: ResolvedStep;
-  numero: number;
-  hecho: boolean;
-  onToggle: () => void;
-}) {
+/** El cierre del oficio en el modo seguido, al pie de todo. */
+function Cierre({ rezado, onCerrar }: { rezado: boolean; onCerrar: () => Promise<void> }) {
+  return (
+    <div className="office-close">
+      {rezado ? (
+        <>
+          <p className="office-close__done">{es.office.prayedToday}</p>
+          <Button variant="ghost" size="sm" onClick={onCerrar}>
+            {es.office.prayedUndo}
+          </Button>
+        </>
+      ) : (
+        <Button variant="primary" block onClick={onCerrar}>
+          {es.office.finish}
+        </Button>
+      )}
+    </div>
+  );
+}
+
+function Step({ paso, numero }: { paso: ResolvedStep; numero: number }) {
   const { item } = paso;
 
   return (
-    <section
-      id={item.id}
-      style={{ marginTop: 'var(--sp-6)', opacity: hecho ? 0.62 : 1, transition: 'opacity var(--dur) var(--ease)' }}
-    >
-      <div className="row" style={{ alignItems: 'flex-start', gap: 'var(--sp-2)' }}>
-        <button
-          type="button"
-          className="check-btn"
-          aria-pressed={hecho}
-          aria-label={`${hecho ? 'Desmarcar' : 'Marcar'} ${item.title}`}
-          onClick={onToggle}
-        >
-          <CheckCircle done={hecho} />
-        </button>
-
+    <section id={item.id} style={{ marginTop: 'var(--sp-6)' }}>
+      <div className="row" style={{ alignItems: 'flex-start', gap: 'var(--sp-3)' }}>
         <div style={{ flex: 1, minWidth: 0 }}>
           <p className="eyebrow">
             {numero}. {item.title}
@@ -314,11 +304,7 @@ function Step({
 
       <div style={{ marginTop: 'var(--sp-3)' }}>
         {paso.counter ? (
-          <InlineCounter
-            mode={paso.counter}
-            target={item.target ?? 33}
-            onComplete={hecho ? undefined : onToggle}
-          />
+          <InlineCounter mode={paso.counter} target={item.target ?? 33} />
         ) : (
           <Blocks blocks={paso.blocks} />
         )}

@@ -184,6 +184,36 @@ export async function reorderRuleItems(items: RuleItem[]): Promise<void> {
 
 const completionId = (date: string, itemId: string) => `${date}|${itemId}`;
 
+/**
+ * Da un oficio por rezado, o lo deshace.
+ *
+ * Antes había que ir marcando oración por oración, lo que convertía el oficio
+ * en una lista de tareas: trece casillas que puntuar mientras se reza. Ahora
+ * se marca entero al llegar al final, que es cuando de verdad está rezado.
+ *
+ * Por dentro se siguen guardando las marcas de cada paso: así el progreso, las
+ * estadísticas y todo lo que ya leía esos datos siguen funcionando igual.
+ */
+export async function completeRule(date: string, ruleId: string): Promise<void> {
+  const items = await ruleItems(ruleId);
+  const stamp = now();
+  const registros: RuleCompletion[] = items.map((item) => ({
+    id: completionId(date, item.id),
+    date,
+    ruleId,
+    itemId: item.id,
+    completedAt: stamp,
+    count: item.target,
+  }));
+  await db.rule_completions.bulkPut(registros);
+}
+
+/** Deshace lo anterior: el oficio vuelve a estar sin rezar. */
+export async function uncompleteRule(date: string, ruleId: string): Promise<void> {
+  const done = await db.rule_completions.where('[date+ruleId]').equals([date, ruleId]).toArray();
+  await db.rule_completions.bulkDelete(done.map((d) => d.id));
+}
+
 export async function toggleRuleItem(
   date: string,
   ruleId: string,

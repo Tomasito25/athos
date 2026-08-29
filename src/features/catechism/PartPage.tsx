@@ -6,8 +6,8 @@
  * conviene confundir con doctrina cerrada: lo discutido entre confesiones y lo
  * que la Iglesia no ha definido.
  */
-import { useMemo } from 'react';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { useEffect, useMemo } from 'react';
+import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom';
 import { CATECHISM_LEVELS, CATECHISM_META, type CatechismLevel } from '@/content/catechism';
 import { CATECHISM_PARTS } from '@/content/catechism-parts';
 import { ButtonLink, Empty, Notice, PageHead, SourceNote, Tag } from '@/components/ui';
@@ -17,6 +17,7 @@ import es from '@/locales/es';
 export function CatechismPartPage() {
   const { partId = '' } = useParams();
   const [params] = useSearchParams();
+  const { hash } = useLocation();
   const nivel = params.get('nivel') as CatechismLevel | null;
 
   const parte = CATECHISM_PARTS.find((p) => p.id === partId);
@@ -26,6 +27,30 @@ export function CatechismPartPage() {
   );
 
   useVisitLog(parte ? { path: `/biblioteca/catecismo/${partId}`, title: parte.title, kind: es.catechism.title } : null);
+
+  /*
+   * El buscador de la portada enlaza a una pregunta concreta, no a la parte
+   * entera. Si no se baja hasta ella, el resultado deja al lector arriba del
+   * todo y con diez preguntas por delante, que es justo lo que quería evitar.
+   *
+   * No se usa `scrollIntoView` porque la barra superior es fija y dejaría la
+   * pregunta debajo de ella; hay que descontar su alto. Y no se usa
+   * `requestAnimationFrame` para esperar al montaje porque no se dispara en
+   * una pestaña que no está pintando —comprobado— y entonces el salto no
+   * ocurriría nunca. Un `setTimeout` de cero sí se dispara siempre.
+   */
+  useEffect(() => {
+    if (!hash) return;
+    const id = hash.slice(1);
+    const espera = window.setTimeout(() => {
+      const destino = document.getElementById(id);
+      if (!destino) return;
+      const barra = 72; // alto de la barra superior fija
+      const top = destino.getBoundingClientRect().top + window.scrollY - barra;
+      window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
+    }, 0);
+    return () => window.clearTimeout(espera);
+  }, [hash, partId, nivel]);
 
   if (!parte) {
     return (

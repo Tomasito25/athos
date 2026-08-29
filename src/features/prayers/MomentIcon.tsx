@@ -12,11 +12,16 @@ import {
   IconCandle,
   IconChalice,
   IconChurch,
+  IconCradle,
   IconCross,
+  IconCrowns,
   IconDeep,
   IconDoor,
+  IconDove,
   IconFamily,
   IconHealing,
+  IconHome,
+  IconLamp,
   IconMoon,
   IconPath,
   IconPeople,
@@ -54,6 +59,11 @@ const ICONOS = {
   church: IconChurch,
   scroll: IconScroll,
   pray: IconPray,
+  crowns: IconCrowns,
+  cradle: IconCradle,
+  dove: IconDove,
+  lamp: IconLamp,
+  home: IconHome,
 } as const;
 
 export function MomentIcon({ id, size = 22 }: { id: PrayerCategoryId; size?: number }) {

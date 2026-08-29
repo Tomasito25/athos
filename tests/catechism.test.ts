@@ -8,7 +8,7 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { CATECHISM_LEVELS, CATECHISM_META } from '@/content/catechism';
-import { CATECHISM_PARTS } from '@/content/catechism-parts';
+import { CATECHISM_INDEX, CATECHISM_PARTS } from '@/content/catechism-parts';
 
 const todas = CATECHISM_PARTS.flatMap((p) => p.entries);
 
@@ -85,14 +85,73 @@ describe('honradez', () => {
   });
 
   it('el aviso de lo discutido explica la postura ajena, no la caricaturiza', () => {
+    // Hay dos clases de desacuerdo y las dos usan este campo: el que separa a
+    // la ortodoxia de otra confesión, y el que existe dentro de la propia
+    // ortodoxia entre Iglesias locales. En los dos casos la exigencia es la
+    // misma: nombrar a quien discrepa, en vez de hablar de «los otros».
+    const fuera = /católic|Roma|protestante|occidental|Occidente|latina|Florencia|Anselmo/i;
+    const dentro = /Iglesia[s]? local|sinodal|teólog|jerarquí|Grecia|Alejandría|Athos|Creta|patriarcad/i;
     for (const e of todas.filter((x) => x.disputed)) {
       expect(e.disputed!.length, `${e.id}: aviso demasiado escueto`).toBeGreaterThan(80);
-      // Nombra a quien discrepa en vez de hablar de «los otros».
       expect(
-        /católic|Roma|protestante|occidental|Occidente|latina|Florencia|Anselmo/i.test(e.disputed!),
+        fuera.test(e.disputed!) || dentro.test(e.disputed!),
         `${e.id}: no dice con quién se discrepa`,
       ).toBe(true);
+      // Y no se despacha con un «hay quien opina» sin sujeto.
+      expect(
+        /^(hay quien|algunos|otros)\b/i.test(e.disputed!.trim()),
+        `${e.id}: el desacuerdo no tiene sujeto`,
+      ).toBe(false);
     }
+  });
+
+
+  it('responde a lo que la gente pregunta de verdad', () => {
+    // Un catecismo que resuelve la Trinidad y esquiva el dinero, el sexo y el
+    // suicidio no está enseñando: está eligiendo lo cómodo.
+    for (const id of [
+      'dinero',
+      'sexualidad',
+      'homosexualidad',
+      'aborto',
+      'suicidio',
+      'no-cristianos',
+      'politica',
+      'mujeres-sacerdocio',
+    ]) {
+      const e = todas.find((x) => x.id === id);
+      expect(e, `falta la pregunta ${id}`).toBeTruthy();
+      expect(e!.answer.length, `${id}: respuesta de una línea`).toBeGreaterThanOrEqual(3);
+    }
+  });
+
+  it('donde no hay unanimidad ortodoxa, no se finge', () => {
+    for (const id of ['anticoncepcion', 'cremacion', 'mujeres-sacerdocio']) {
+      const e = todas.find((x) => x.id === id);
+      expect(
+        (e?.disputed ?? '') + (e?.undefined_ ?? ''),
+        `${id}: se presenta como zanjado`,
+      ).not.toBe('');
+    }
+  });
+
+  it('la pregunta del suicidio no deja a nadie sin a dónde llamar', () => {
+    const e = todas.find((x) => x.id === 'suicidio');
+    expect(e?.answer.join(' '), 'sin teléfono de ayuda').toMatch(/024/);
+  });
+
+  it('cada parte tiene identificador único y preguntas dentro', () => {
+    const ids = CATECHISM_PARTS.map((p) => p.id);
+    expect(new Set(ids).size, 'partes repetidas').toBe(ids.length);
+    for (const parte of CATECHISM_PARTS) {
+      expect(parte.entries.length, `${parte.title}: parte vacía`).toBeGreaterThan(2);
+    }
+  });
+
+  it('el índice suelto contiene todas las preguntas una sola vez', () => {
+    expect(CATECHISM_INDEX.length).toBe(todas.length);
+    const ids = CATECHISM_INDEX.map((x) => x.entry.id);
+    expect(new Set(ids).size).toBe(ids.length);
   });
 
   it('las citas bíblicas tienen forma de cita', () => {

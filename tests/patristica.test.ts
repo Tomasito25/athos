@@ -7,7 +7,7 @@
  * es eso que falta, cómo está hecho y qué dice.
  */
 import { describe, expect, it } from 'vitest';
-import { CHURCH_FATHERS } from '@/content/fathers';
+import { CHURCH_FATHERS, FATHERS_BY_ERA, FATHER_ERAS } from '@/content/fathers';
 import { AKATHISTS, CANONS } from '@/content/hymns';
 import { OFFICES } from '@/content/offices';
 
@@ -55,6 +55,29 @@ describe('los Padres dicen qué enseñaron', () => {
     expect(pendientes.length, 'no hay obras pendientes que comprobar').toBeGreaterThan(5);
     for (const obra of pendientes) {
       expect((obra.summary ?? '').length, `${obra.title}`).toBeGreaterThan(150);
+    }
+  });
+
+
+  it('abarcan veinte siglos, no sólo el siglo IV', () => {
+    // La patrística no es un bloque antiguo. Si todos los Padres cayeran en
+    // dos o tres siglos, la sección estaría enseñando algo falso.
+    const conGente = FATHERS_BY_ERA.filter((e) => e.fathers.length > 0);
+    expect(conGente.length, 'faltan épocas enteras').toBe(FATHER_ERAS.length);
+    for (const era of conGente) {
+      expect(era.fathers.length, `${era.title}: una sola voz`).toBeGreaterThanOrEqual(2);
+      expect(era.note.length, `${era.title}: sin explicar`).toBeGreaterThan(80);
+    }
+  });
+
+  it('advierten de lo que hay que advertir', () => {
+    // Donde un Padre sostuvo algo que la Iglesia no enseña, o hizo algo que no
+    // se defiende, la ficha lo dice. Callarlo sería hagiografía, no historia.
+    for (const id of ['gregorio-nisa', 'cirilo-alejandria', 'isaac-sirio', 'juan-crisostomo']) {
+      const padre = CHURCH_FATHERS.find((p) => p.id === id);
+      expect(padre, id).toBeTruthy();
+      expect(padre?.caution, `${id}: sin advertencia`).toBeTruthy();
+      expect((padre?.caution ?? '').length).toBeGreaterThan(150);
     }
   });
 

@@ -9,6 +9,7 @@
  */
 import type { Prayer, PrayerCategory, PrayerCategoryId, SourceMeta, TextBlock } from '@/types';
 import { MORE_PRAYERS } from './prayers-more';
+import { THIRD_PRAYERS } from './prayers-third';
 
 export const PRAYER_CATEGORIES: PrayerCategory[] = [
   /* ---- El día ---- */
@@ -35,13 +36,22 @@ export const PRAYER_CATEGORIES: PrayerCategory[] = [
   { id: 'enfermedad', name: 'En la enfermedad', description: 'Por los enfermos y en la propia dolencia.', order: 17 },
   { id: 'padre-espiritual', name: 'Por el padre espiritual', description: 'Por quien te confiesa y te guía.', order: 18 },
   { id: 'difuntos', name: 'Por los difuntos', description: 'Por los que se han dormido en el Señor.', order: 19 },
+  { id: 'agonia', name: 'Junto a un moribundo', description: 'Las horas últimas, y qué se hace en ellas.', order: 20 },
+  { id: 'duelo', name: 'En el duelo', description: 'Cuando el muerto es tuyo y el que queda eres tú.', order: 21 },
+
+  /* ---- La casa ---- */
+  { id: 'matrimonio', name: 'Por el matrimonio', description: 'Antes de casarse y en los años que vienen después.', order: 22 },
+  { id: 'embarazo', name: 'En la espera de un hijo', description: 'Por la mujer encinta, por el parto y por lo que no llega.', order: 23 },
+  { id: 'casa', name: 'Por la casa', description: 'El hogar, la mesa y quien entra por la puerta.', order: 24 },
 
   /* ---- Ante Dios ---- */
-  { id: 'templo', name: 'Al entrar en el templo', description: 'En la puerta de la iglesia y ante los iconos.', order: 20 },
-  { id: 'escritura', name: 'Antes de leer la Escritura', description: 'Para que la palabra no pase de largo.', order: 21 },
-  { id: 'confesion', name: 'Antes de confesar', description: 'Preparación para el sacramento del arrepentimiento.', order: 22 },
-  { id: 'comunion', name: 'Antes de comulgar', description: 'Antes y después de los Santos Misterios.', order: 23 },
-  { id: 'otras', name: 'Otras oraciones', description: 'Oraciones para diversas circunstancias.', order: 24 },
+  { id: 'templo', name: 'Al entrar en el templo', description: 'En la puerta de la iglesia y ante los iconos.', order: 25 },
+  { id: 'escritura', name: 'Antes de leer la Escritura', description: 'Para que la palabra no pase de largo.', order: 26 },
+  { id: 'confesion', name: 'Antes de confesar', description: 'Preparación para el sacramento del arrepentimiento.', order: 27 },
+  { id: 'comunion', name: 'Antes de comulgar', description: 'Antes y después de los Santos Misterios.', order: 28 },
+  { id: 'dudas', name: 'Cuando falla la fe', description: 'Cuando no sale, no se siente nada o se ha dejado de creer.', order: 29 },
+  { id: 'paz', name: 'En tiempo de guerra', description: 'Por la paz, por las víctimas y por los que combaten.', order: 30 },
+  { id: 'otras', name: 'Otras oraciones', description: 'Oraciones para diversas circunstancias.', order: 31 },
 ];
 
 const TRAD: SourceMeta = {
@@ -615,7 +625,7 @@ const plain = (blocks: TextBlock[]) =>
  */
 const CATEGORY_ORDER = new Map(PRAYER_CATEGORIES.map((c) => [c.id, c.order]));
 
-const allSeeds: Seed[] = [...seeds, ...MORE_PRAYERS].sort(
+const allSeeds: Seed[] = [...seeds, ...MORE_PRAYERS, ...THIRD_PRAYERS].sort(
   (a, b) => (CATEGORY_ORDER.get(a.category) ?? 99) - (CATEGORY_ORDER.get(b.category) ?? 99),
 );
 

@@ -73,6 +73,14 @@ export function FatherPage() {
         </div>
       ) : null}
 
+      {item.reading ? (
+        <Section title={es.library.whereToStart}>
+          <Panel variant="quiet">
+            <p className="text-sm">{item.reading}</p>
+          </Panel>
+        </Section>
+      ) : null}
+
       <Section title={es.library.works}>
         <div className="list">
           {item.works.map((work) => (
@@ -86,14 +94,6 @@ export function FatherPage() {
           ))}
         </div>
       </Section>
-
-      {item.reading ? (
-        <Section title={es.library.whereToStart}>
-          <Panel variant="quiet">
-            <p className="text-sm">{item.reading}</p>
-          </Panel>
-        </Section>
-      ) : null}
 
       <SourceNote meta={item.meta} status={item.status} />
     </article>

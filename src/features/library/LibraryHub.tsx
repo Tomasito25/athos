@@ -1,46 +1,64 @@
+/**
+ * Portada de la biblioteca.
+ *
+ * Antes eran nueve tarjetas iguales, y ninguna decía si detrás había tres
+ * páginas o cuatrocientas. Ahora van en tres bloques —para entender la fe, lo
+ * que se reza, quiénes lo dijeron— y cada una lleva su cuenta, sacada del
+ * contenido y no escrita a mano.
+ */
 import { Link } from 'react-router-dom';
 import { PageHead, Section } from '@/components/ui';
-import { IconBook, IconCandle, IconMonastery, IconScroll, OrthodoxCross } from '@/components/icons';
-import { ATHOS_INTRO } from '@/content/athos';
+import {
+  IconBook,
+  IconCandle,
+  IconChalice,
+  IconMonastery,
+  IconScroll,
+  OrthodoxCross,
+} from '@/components/icons';
+import { LIBRARY_GROUPS, type LibrarySection } from '@/content/library';
 import es from '@/locales/es';
 
-const SECTIONS = [
-  { to: '/biblioteca/liturgia', title: es.library.liturgy, text: 'Divina Liturgia, Vísperas, Maitines, Completas y demás oficios.', Icon: OrthodoxCross },
-  { to: '/biblioteca/akathistos', title: es.library.akathists, text: 'Himnos que se cantan de pie, empezando por el Akáthistos a la Theotokos.', Icon: IconScroll },
-  { to: '/biblioteca/canones', title: es.library.canons, text: 'Cánones de arrepentimiento, de preparación para la Comunión y a los santos.', Icon: IconScroll },
-  { to: '/biblioteca/padres', title: es.library.fathers, text: 'Crisóstomo, Basilio, Isaac el Sirio, Máximo, Palamás, Silvano.', Icon: IconBook },
-  { to: '/biblioteca/athos', title: es.library.athos, text: ATHOS_INTRO, Icon: IconMonastery },
-  { to: '/biblioteca/iconos', title: es.library.icons, text: 'Los iconos que la Iglesia venera y lo que significan.', Icon: IconCandle },
-  {
-    to: '/biblioteca/historia',
-    title: es.history.title,
-    text: 'De Pentecostés a hoy, en ocho épocas: los siete Concilios con su ficha, las rupturas, las misiones y los conflictos que siguen abiertos.',
-    Icon: IconScroll,
-  },
-  {
-    to: '/biblioteca/catecismo',
-    title: es.catechism.title,
-    text: 'Qué cree la Iglesia ortodoxa y por qué, en preguntas con respuesta. Filtrable según se llegue de fuera, se sea catecúmeno o se lleve años dentro.',
-    Icon: IconScroll,
-  },
-  { to: '/biblioteca/estudio', title: es.library.study, text: 'Itinerarios para estudiar despacio y el catálogo de las obras que forman la tradición.', Icon: IconBook },
-];
+const ICONOS = {
+  cross: OrthodoxCross,
+  scroll: IconScroll,
+  book: IconBook,
+  monastery: IconMonastery,
+  candle: IconCandle,
+  chalice: IconChalice,
+} as const;
+
+function Tarjeta({ section }: { section: LibrarySection }) {
+  const Icono = ICONOS[section.icon];
+  return (
+    <Link className="card" to={section.to}>
+      <Icono size={22} style={{ color: 'var(--gold)' }} />
+      <span className="card__title">{section.title}</span>
+      <span className="card__text">{section.text}</span>
+      <span className="card__count">
+        <b>{section.count}</b> {section.unit}
+      </span>
+    </Link>
+  );
+}
 
 export function LibraryHub() {
   return (
     <div className="page">
-      <PageHead title={es.library.title} subtitle="Los libros de la Iglesia." />
-      <Section>
-        <div className="grid grid--wide">
-          {SECTIONS.map(({ to, title, text, Icon }) => (
-            <Link key={to} className="card" to={to}>
-              <Icon size={22} style={{ color: 'var(--gold)' }} />
-              <span className="card__title">{title}</span>
-              <span className="card__text">{text}</span>
-            </Link>
-          ))}
-        </div>
-      </Section>
+      <PageHead title={es.library.title} subtitle={es.library.subtitle} />
+
+      {LIBRARY_GROUPS.map((grupo) => (
+        <Section key={grupo.id} title={grupo.title}>
+          <p className="muted text-sm" style={{ marginBottom: 'var(--sp-3)' }}>
+            {grupo.note}
+          </p>
+          <div className="grid grid--wide">
+            {grupo.sections.map((section) => (
+              <Tarjeta key={section.id} section={section} />
+            ))}
+          </div>
+        </Section>
+      ))}
     </div>
   );
 }

@@ -42,13 +42,30 @@ export const MOMENT_GROUPS: MomentGroup[] = [
     id: 'los-demas',
     name: 'Los demás',
     description: 'La parte de la oración que no es para uno mismo.',
-    moments: ['familia', 'amigos', 'enemigos', 'enfermedad', 'padre-espiritual', 'difuntos'],
+    // La agonía, los difuntos y el duelo van seguidos y en ese orden: son tres
+    // momentos de lo mismo, y quien busca uno suele necesitar el siguiente.
+    moments: [
+      'familia',
+      'amigos',
+      'enemigos',
+      'enfermedad',
+      'padre-espiritual',
+      'agonia',
+      'difuntos',
+      'duelo',
+    ],
+  },
+  {
+    id: 'la-casa',
+    name: 'La casa',
+    description: 'Lo que empieza dentro de una familia: casarse, esperar un hijo, estrenar casa.',
+    moments: ['matrimonio', 'embarazo', 'casa'],
   },
   {
     id: 'ante-dios',
     name: 'Ante Dios',
     description: 'El templo, la Escritura y los sacramentos.',
-    moments: ['templo', 'escritura', 'confesion', 'comunion', 'otras'],
+    moments: ['templo', 'escritura', 'confesion', 'comunion', 'dudas', 'paz', 'otras'],
   },
 ];
 
@@ -81,6 +98,13 @@ export const MOMENT_ICONS: Record<PrayerCategoryId, string> = {
   enfermedad: 'healing',
   'padre-espiritual': 'blessing',
   difuntos: 'tomb',
+  agonia: 'candle',
+  duelo: 'deep',
+  matrimonio: 'crowns',
+  embarazo: 'cradle',
+  casa: 'home',
+  paz: 'dove',
+  dudas: 'lamp',
   templo: 'church',
   escritura: 'scroll',
   confesion: 'cross',

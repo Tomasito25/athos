@@ -51,7 +51,7 @@ describe('el menú de momentos', () => {
 });
 
 describe('el signo de cada momento', () => {
-  it('los veinticuatro tienen icono', () => {
+  it('todos los momentos tienen icono, y no sobra ninguno', () => {
     for (const id of MOMENTS_IN_ORDER) {
       expect(MOMENT_ICONS[id], id).toBeTruthy();
     }
@@ -210,6 +210,23 @@ describe('procedencia: lo que ATHOS escribe no se disfraza de texto litúrgico',
       const tieneTexto = prayer.blocks.some((b) => b.kind === 'text' || b.kind === 'verse');
       expect(tieneTexto, `${prayer.id} no tiene ni una línea que rezar`).toBe(true);
     }
+  });
+
+
+  it('los momentos difíciles no se quedan vacíos', () => {
+    // Se añadieron precisamente porque nadie los servía. Si alguno se queda sin
+    // nada dentro, el menú promete algo que no da.
+    for (const id of ['agonia', 'duelo', 'matrimonio', 'embarazo', 'casa', 'dudas', 'paz'] as const) {
+      const dentro = PRAYERS.filter((p) => p.category === id);
+      expect(dentro.length, `${id}: momento vacío`).toBeGreaterThan(1);
+    }
+  });
+
+  it('donde la Iglesia no habla con una sola voz, se dice', () => {
+    const guerra = PRAYERS.find((p) => p.id === 'la-iglesia-y-la-guerra');
+    const texto = (guerra?.blocks ?? []).map((b) => b.content).join(' ');
+    expect(texto, 'la guerra sin sus desacuerdos').toMatch(/posiciones opuestas|enfrentado/i);
+    expect(texto, 'sin la parte difícil del Evangelio').toMatch(/enemigos/i);
   });
 
   it('el texto de búsqueda se calcula sin las etiquetas ni los huecos', () => {

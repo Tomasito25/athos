@@ -2,6 +2,45 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.15.0]
+
+### Añadido
+
+- **Un santo cada día del año.** Se han escrito **197 conmemoraciones nuevas**
+  para los días que estaban en blanco: ya no queda ninguno, incluido el 29 de
+  febrero —san Juan Casiano, cuya fiesta sólo cae en años bisiestos—. El
+  santoral pasa de 220 a **389 fichas** con vida escrita, en fechas del
+  calendario eclesiástico.
+- **Doce Padres de la Iglesia más**, de san Ignacio de Antioquía a san Sofronio
+  de Essex, con lo que enseñó cada uno, la ficha de cada obra, por dónde empezar
+  a leerlo y —donde hace falta— qué conviene saber antes. La lista se recorre
+  ahora **por épocas**, de los que oyeron a los apóstoles hasta el siglo XX.
+- **Siete momentos nuevos de oración**: junto a un moribundo, en el duelo, por
+  el matrimonio, en la espera de un hijo, por la casa, cuando falla la fe y en
+  tiempo de guerra. Con lo que hay que hacer cuando alguien se está muriendo y
+  qué significan los días tercero, noveno y cuadragésimo.
+- **Veintinueve preguntas más en el catecismo**, con tres partes nuevas: la
+  Escritura, dentro del templo y la vida de todos los días. Entran el dinero, el
+  trabajo, la sexualidad, el aborto, el suicidio, la cremación, la salvación de
+  los no cristianos y el diaconado femenino. Y **buscador**, que lleva a la
+  pregunta y no sólo a la parte que la contiene.
+- **Seis artículos nuevos del Monte Athos**: el ávaton con sus objeciones, el
+  gobierno de la Sagrada Comunidad, los sketes y las ermitas, los iconos, el
+  canto bizantino y cómo se llega. Cada monasterio dice ahora **qué es hoy** y
+  **quién vivió en él**.
+- **Portada de la biblioteca con cuentas reales**, calculadas del contenido:
+  ningún número escrito a mano que pueda quedarse viejo.
+
+### Corregido
+
+- **Veintiocho conmemoraciones duplicadas.** San Demetrio de Tesalónica estaba
+  tres veces el 26 de octubre y la Natividad de Cristo dos veces el 25 de
+  diciembre, con fichas distintas, porque las tandas del santoral se habían
+  escrito por separado. Una prueba nueva impide que vuelva a pasar.
+- **Veinte fichas de santos que se quedaban en una línea**, entre ellas las de
+  las mayores fiestas del año: la Anunciación, la Exaltación de la Cruz, la
+  Degollación del Bautista, san Marcos, san Demetrio y san Esteban Protomártir.
+
 ## [1.14.0]
 
 ### Añadido

@@ -81,6 +81,13 @@ export type PrayerCategoryId =
   | 'enemigos'
   | 'difuntos'
   | 'padre-espiritual'
+  | 'duelo'
+  | 'agonia'
+  | 'matrimonio'
+  | 'embarazo'
+  | 'casa'
+  | 'paz'
+  | 'dudas'
   | 'templo'
   | 'escritura'
   | 'confesion'
@@ -477,6 +484,15 @@ export interface Monastery {
   location: { side: 'este' | 'oeste' | 'sur'; along: number };
   monks?: string;
   treasures?: string[];
+  /**
+   * Un segundo párrafo: qué es hoy ese monasterio, no sólo cuándo se fundó.
+   * Una lista de veinte fechas de fundación no dice nada de la Montaña.
+   */
+  today?: string;
+  /** Quién vivió allí. Es lo que hace que un monasterio no sea un edificio. */
+  saints?: string[];
+  /** Sketes y dependencias que le pertenecen. */
+  dependencies?: string[];
   status: ContentStatus;
   meta: SourceMeta;
   searchText: string;
@@ -485,7 +501,19 @@ export interface Monastery {
 export interface AthosArticle {
   id: string;
   title: string;
-  topic: 'historia' | 'geografia' | 'hesicasmo' | 'monacato' | 'ancianos' | 'arquitectura';
+  topic:
+    | 'historia'
+    | 'geografia'
+    | 'hesicasmo'
+    | 'monacato'
+    | 'ancianos'
+    | 'arquitectura'
+    | 'avaton'
+    | 'gobierno'
+    | 'sketes'
+    | 'iconos'
+    | 'canto'
+    | 'visita';
   blocks: TextBlock[];
   status: ContentStatus;
   meta: SourceMeta;

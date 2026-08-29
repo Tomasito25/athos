@@ -8,6 +8,22 @@
  */
 import type { ChurchFather, FatherWork, SourceMeta, TextBlock } from '@/types';
 import { CAUTION, READING, TEACHING, WORK_SUMMARY } from './fathers-teaching';
+import { MORE_FATHERS } from './fathers-more';
+import {
+  CAUTION_MORE,
+  READING_MORE,
+  TEACHING_MORE,
+  WORK_SUMMARY_MORE,
+} from './fathers-teaching-more';
+
+/** Las dos tandas, consultadas como una sola. */
+const teaching: Record<string, string[]> = { ...TEACHING, ...TEACHING_MORE };
+const reading: Record<string, string> = { ...READING, ...READING_MORE };
+const caution: Record<string, string> = { ...CAUTION, ...CAUTION_MORE };
+const summaries: Record<string, { summary: string; written?: string }> = {
+  ...WORK_SUMMARY,
+  ...WORK_SUMMARY_MORE,
+};
 
 const bioMeta: SourceMeta = {
   source: 'Reseña redactada para ATHOS a partir de fuentes patrísticas comunes',
@@ -54,7 +70,7 @@ const work = (
   meta: blocks ? quoteMeta(author, title) : pendingMeta(author, title),
   // De qué trata la obra. Es lo que ATHOS puede dar mientras no pueda dar el
   // texto: una ficha que al menos dice qué se está echando de menos.
-  ...WORK_SUMMARY[id],
+  ...summaries[id],
 });
 
 interface FatherSeed {
@@ -250,28 +266,119 @@ const seeds: FatherSeed[] = [
   },
 ];
 
-export const CHURCH_FATHERS: ChurchFather[] = seeds.map((f) => ({
+/**
+ * La segunda tanda entra por aquí. Ninguno de estos autores tiene todavía
+ * pasajes incorporados —las traducciones españolas disponibles no son de
+ * licencia compatible—, así que sus obras quedan en ficha: qué son, de qué
+ * tratan y cuándo se escribieron. Eso ATHOS sí puede darlo.
+ */
+const moreSeeds: FatherSeed[] = MORE_FATHERS.map((f) => ({
   id: f.id,
   name: f.name,
   fullName: f.fullName,
   century: f.century,
   feastDay: f.feastDay,
   biography: f.biography,
-  teaching: TEACHING[f.id] ?? [],
-  reading: READING[f.id],
-  caution: CAUTION[f.id],
+  works: f.works.map(([id, title, kind]) => work(id, title, kind, f.name)),
+}));
+
+const allFathers: FatherSeed[] = [...seeds, ...moreSeeds];
+
+export const CHURCH_FATHERS: ChurchFather[] = allFathers.map((f) => ({
+  id: f.id,
+  name: f.name,
+  fullName: f.fullName,
+  century: f.century,
+  feastDay: f.feastDay,
+  biography: f.biography,
+  teaching: teaching[f.id] ?? [],
+  reading: reading[f.id],
+  caution: caution[f.id],
   works: f.works,
   status: f.works.some((w) => w.status !== 'pending') ? 'partial' : 'pending',
   meta: bioMeta,
-  searchText: `${f.name} ${f.fullName} ${f.century} ${f.biography} ${(TEACHING[f.id] ?? []).join(' ')} ${f.works
+  searchText: `${f.name} ${f.fullName} ${f.century} ${f.biography} ${(teaching[f.id] ?? []).join(' ')} ${f.works
     .map(
       (w) =>
-        `${w.title} ${WORK_SUMMARY[w.id]?.summary ?? ''} ${w.blocks
+        `${w.title} ${summaries[w.id]?.summary ?? ''} ${w.blocks
           .filter((b) => b.kind !== 'pending')
           .map((b) => b.content)
           .join(' ')}`,
     )
     .join(' ')}`.toLowerCase(),
+}));
+
+
+/* ---------------- Las épocas ----------------
+   Veinticuatro nombres seguidos en una lista no dicen nada. Puestos en su
+   siglo sí: se ve de un vistazo que la patrística no es un bloque antiguo,
+   sino veinte siglos con etapas distintas, y que sigue habiendo Padres. */
+
+const ROMANOS: Record<string, number> = {
+  I: 1, II: 2, III: 3, IV: 4, V: 5, VI: 6, VII: 7, VIII: 8, IX: 9, X: 10,
+  XI: 11, XII: 12, XIII: 13, XIV: 14, XV: 15, XVI: 16, XVII: 17, XVIII: 18,
+  XIX: 19, XX: 20,
+};
+
+/** Primer siglo que se menciona en la ficha; sirve para ordenar. */
+function primerSiglo(century: string): number {
+  const romano = century.match(/\b([IVX]+)\b/);
+  return romano ? (ROMANOS[romano[1]] ?? 99) : 99;
+}
+
+export interface FatherEra {
+  id: string;
+  title: string;
+  /** Hasta qué siglo llega, ambos incluidos. */
+  hasta: number;
+  note: string;
+}
+
+export const FATHER_ERAS: FatherEra[] = [
+  {
+    id: 'apostolicos',
+    title: 'Los que oyeron a los apóstoles',
+    hasta: 3,
+    note: 'La primera generación que escribe. No hay todavía concilios ni vocabulario técnico: hay cartas y refutaciones.',
+  },
+  {
+    id: 'concilios',
+    title: 'El siglo de los concilios',
+    hasta: 5,
+    note: 'Nicea, Constantinopla, Éfeso. Se fija el lenguaje de la Trinidad y de Cristo, y se paga caro por él.',
+  },
+  {
+    id: 'bizancio',
+    title: 'Bizancio y los iconos',
+    hasta: 9,
+    note: 'El monacato ya está formado y la disputa se traslada a la imagen: si Cristo se puede pintar o no.',
+  },
+  {
+    id: 'hesicasmo',
+    title: 'La oración del corazón',
+    hasta: 15,
+    note: 'De Simeón a Palamás: si el hombre puede conocer a Dios de verdad, y en qué sentido.',
+  },
+  {
+    id: 'modernos',
+    title: 'Los Padres de ayer',
+    hasta: 99,
+    note: 'La patrística no se acabó en Bizancio. Estos escribieron con imprenta, bajo el zar o bajo el comunismo, y algunos fueron canonizados hace pocos años.',
+  },
+];
+
+/** A qué época pertenece cada Padre. */
+export function eraOf(century: string): string {
+  const siglo = primerSiglo(century);
+  return (FATHER_ERAS.find((e) => siglo <= e.hasta) ?? FATHER_ERAS[FATHER_ERAS.length - 1]).id;
+}
+
+/** Los Padres agrupados por época y ordenados por siglo dentro de cada una. */
+export const FATHERS_BY_ERA = FATHER_ERAS.map((era) => ({
+  ...era,
+  fathers: CHURCH_FATHERS.filter((f) => eraOf(f.century) === era.id).sort(
+    (a, b) => primerSiglo(a.century) - primerSiglo(b.century),
+  ),
 }));
 
 export const FATHERS_NOTE =

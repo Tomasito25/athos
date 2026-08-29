@@ -46,7 +46,23 @@ export function MonasteryPage() {
 
       <div className="prose book-surface" style={{ marginTop: 'var(--sp-5)' }}>
         <p>{item.description}</p>
+        {/* Qué es hoy. Sin esto, la ficha se queda en la fecha de fundación y
+            todos los monasterios se parecen. */}
+        {item.today ? <p>{item.today}</p> : null}
       </div>
+
+      {item.saints?.length ? (
+        <Section title="Quién vivió aquí">
+          <ul className="stack stack--tight">
+            {item.saints.map((santo) => (
+              <li key={santo} className="row">
+                <span style={{ color: 'var(--gold)' }}>✤</span>
+                <span>{santo}</span>
+              </li>
+            ))}
+          </ul>
+        </Section>
+      ) : null}
 
       {item.treasures?.length ? (
         <Section title="Lo que custodia">
@@ -58,6 +74,20 @@ export function MonasteryPage() {
               </li>
             ))}
           </ul>
+        </Section>
+      ) : null}
+
+      {item.dependencies?.length ? (
+        <Section title="De él dependen">
+          <div className="tag-row">
+            {item.dependencies.map((dep) => (
+              <Tag key={dep}>{dep}</Tag>
+            ))}
+          </div>
+          <p className="muted text-sm" style={{ marginTop: 'var(--sp-2)' }}>
+            Sketes, celdas y ermitas. Todo lo que hay en la Montaña pertenece a alguno de los veinte
+            monasterios: no existe tierra sin dueño.
+          </p>
         </Section>
       ) : null}
 

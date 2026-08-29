@@ -38,10 +38,10 @@ porque no hay servidor.
 
 ## Qué trae
 
-- **Oraciones por el momento, no por el título.** Veinticuatro momentos —al
+- **Oraciones por el momento, no por el título.** Treinta y un momentos —al
   despertar, al salir de casa, antes y después de comer, al caer en el pecado,
-  en la angustia, al entrar en el templo, antes de comulgar—, con el que
-  corresponde a la hora destacado al abrir.
+  en la angustia, junto a un moribundo, en el duelo, en la espera de un hijo,
+  cuando falla la fe—, con el que corresponde a la hora destacado al abrir.
 - **Tres oficios diarios** con la estructura del Horologion: mañana, Hora Sexta
   y Pequeñas Completas, con sus salmos y las fórmulas en griego.
 - **La Biblia completa** en Reina-Valera 1909, con búsqueda sin conexión.
@@ -51,9 +51,19 @@ porque no hay servidor.
   versículo exacto: no el capítulo entero, sino la perícopa que se lee.
 - **Calendario litúrgico** con la Pascua ortodoxa calculada de verdad, el tono
   del Octoecos, las fiestas y el ayuno de cada día.
-- **Santoral** con la vida de cada conmemoración.
-- **Biblioteca**: Divina Liturgia, Padres de la Iglesia, Monte Athos,
-  iconografía y cinco itinerarios de estudio.
+- **Santoral completo**: no queda ningún día del año sin conmemoración, con la
+  vida escrita de cada una.
+- **Catecismo** en preguntas y respuestas, filtrable según se llegue de fuera,
+  se sea catecúmeno o se lleven años dentro, y con buscador. Dice también lo que
+  la Iglesia no ha definido y dónde no hay unanimidad.
+- **Historia de la Iglesia** de Pentecostés a hoy, en ocho épocas, con la ficha
+  de cada Concilio y los conflictos abiertos contados como conflictos.
+- **Padres de la Iglesia** por épocas, de san Ignacio de Antioquía a san
+  Sofronio de Essex: qué enseñó cada uno, de qué trata cada obra suya, por dónde
+  empezar a leerlo y qué conviene saber antes.
+- **Monte Athos**: los veinte monasterios con lo que son hoy y quién vivió en
+  ellos, y artículos sobre el gobierno, el ávaton, los sketes, el canto y cómo
+  se llega.
 - **Oración de Jesús y komboskini**, con contador, temporizador e historial.
 
 ---

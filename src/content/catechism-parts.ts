@@ -6,8 +6,9 @@
  * preguntas que la gente hace de verdad y los catecismos suelen esquivar.
  */
 import type { CatechismPart } from './catechism';
+import { EXTRA_ENTRIES, EXTRA_PARTS } from './catechism-more';
 
-export const CATECHISM_PARTS: CatechismPart[] = [
+const BASE_PARTS: CatechismPart[] = [
   /* ═══════════════════ 1. Antes de empezar ═══════════════════ */
   {
     id: 'empezar',
@@ -547,3 +548,45 @@ export const CATECHISM_PARTS: CatechismPart[] = [
     ],
   },
 ];
+
+/**
+ * Las dos tandas, montadas en un solo catecismo.
+ *
+ * Las partes nuevas se intercalan donde les toca —la Escritura después de la
+ * Iglesia, el templo después de los Misterios— y no al final, porque un
+ * catecismo con un apéndice es un catecismo que no se lee entero. Las
+ * preguntas añadidas a una parte que ya existía van detrás de las suyas.
+ */
+const DONDE_VA: Record<string, string> = {
+  // parte nueva -> detrás de qué parte existente
+  escritura: 'iglesia',
+  'en-la-iglesia': 'misterios',
+  'vida-diaria': 'vida',
+};
+
+function montar(): CatechismPart[] {
+  const conExtras = BASE_PARTS.map((parte) => {
+    const mas = EXTRA_ENTRIES[parte.id];
+    return mas ? { ...parte, entries: [...parte.entries, ...mas] } : parte;
+  });
+
+  const salida: CatechismPart[] = [];
+  for (const parte of conExtras) {
+    salida.push(parte);
+    for (const nueva of EXTRA_PARTS) {
+      if (DONDE_VA[nueva.id] === parte.id) salida.push(nueva);
+    }
+  }
+  // Si alguna parte nueva apunta a una que no existe, no se pierde: va al final.
+  for (const nueva of EXTRA_PARTS) {
+    if (!salida.some((p) => p.id === nueva.id)) salida.push(nueva);
+  }
+  return salida;
+}
+
+export const CATECHISM_PARTS: CatechismPart[] = montar();
+
+/** Todas las preguntas, sueltas, con la parte a la que pertenecen. */
+export const CATECHISM_INDEX = CATECHISM_PARTS.flatMap((parte) =>
+  parte.entries.map((entry) => ({ entry, partId: parte.id, partTitle: parte.title })),
+);

@@ -262,6 +262,8 @@ const es = {
   },
 
   saints: {
+    byMonth: 'Ver por meses',
+    wholeYear: 'Todo el año',
     whatIsTroparion:
       'El tropario es la estrofa breve que resume por qué la Iglesia recuerda a este santo: qué hizo, qué enseñó o cómo murió. Se canta en su fiesta, en Vísperas y en Maitines, y es lo primero que se aprende de memoria de cualquier santo.',
     whatIsKontakion:
@@ -321,6 +323,8 @@ const es = {
     catechumen: 'Catecúmeno',
     initiated: 'Ya en la fe',
     parts: 'Partes',
+    search: 'Buscar una pregunta…',
+    noResults: 'Ninguna pregunta dice eso todavía. Prueba con otra palabra.',
     inScripture: 'En la Escritura',
     disputed: 'Aquí no todos coinciden',
     notDefined: 'La Iglesia no lo ha definido',
@@ -332,6 +336,7 @@ const es = {
     howToAsk: 'Cómo se pide la bendición',
   },
   library: {
+    subtitle: 'Los libros de la Iglesia, y lo que hace falta para leerlos.',
     teaching: 'Qué enseñó',
     caution: 'Conviene saber',
     whereToStart: 'Por dónde empezar',
@@ -360,6 +365,11 @@ const es = {
     empty: 'Todavía no has guardado nada',
     bookmarks: 'Marcadores',
     notes: 'Notas',
+  },
+
+  fathers: {
+    search: 'Buscar un Padre o una obra…',
+    noneFound: 'Ningún Padre coincide con esa búsqueda.',
   },
 
   search: {

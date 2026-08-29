@@ -9,6 +9,8 @@
 import type { Saint, SaintCategory, SourceMeta, TextBlock } from '@/types';
 import { MORE_SAINTS } from './saints-more';
 import { THIRD_SAINTS } from './saints-third';
+import { YEAR_SAINTS_1 } from './saints-year-1';
+import { YEAR_SAINTS_2 } from './saints-year-2';
 
 const bio: SourceMeta = {
   source: 'Reseña histórica redactada para ATHOS a partir de fuentes hagiográficas comunes',
@@ -53,62 +55,46 @@ const seeds: SaintSeed[] = [
   { id: 'cirilo-metodio-c', name: 'San Cirilo, iguales a los Apóstoles', day: '02-14', category: ['obispo'], century: 'IX', place: 'Tesalónica', biography: 'Con su hermano Metodio creó el alfabeto glagolítico y tradujo la Escritura y los oficios al eslavo, dando origen a la cristiandad eslava.' },
 
   /* ---------------- Marzo ---------------- */
-  { id: 'cuarenta-martires', name: 'Los Cuarenta Mártires de Sebaste', day: '03-09', category: ['martir'], century: 'IV', place: 'Sebaste, Armenia', biography: 'Cuarenta soldados cristianos condenados a morir de frío sobre un lago helado el año 320. Uno flaqueó; un guardia ocupó su lugar al ver las coronas descender sobre ellos.' },
   { id: 'gregorio-palamas', name: 'San Gregorio Palamás', day: '03-14', category: ['obispo', 'padre'], century: 'XIV', place: 'Monte Athos y Tesalónica', biography: 'Monje athonita y arzobispo de Tesalónica († 1359). Defendió a los hesicastas explicando la distinción entre la esencia de Dios, inaccesible, y sus energías increadas, en las que el hombre participa realmente.' },
-  { id: 'anunciacion-s', name: 'Anunciación de la Theotokos', day: '03-25', category: ['theotokos'], biography: 'El arcángel Gabriel anuncia a la Virgen la encarnación del Verbo. La fiesta se celebra siempre, incluso el Viernes Santo.' },
+  { id: 'anunciacion-s', name: 'Anunciación de la Theotokos', day: '03-25', category: ['theotokos'], biography: 'El arcángel Gabriel anuncia a la Virgen la encarnación del Verbo y ella responde: «Hágase en mí según tu palabra». La Iglesia entiende esa respuesta como el consentimiento de la humanidad entera, y por eso la fiesta va exactamente nueve meses antes de la Navidad. Es la única que no se aplaza nunca: se celebra aunque caiga en Viernes Santo, y entonces se cantan a la vez el anuncio y el sepulcro.' },
 
   /* ---------------- Abril ---------------- */
-  { id: 'maria-egipciaca', name: 'Santa María Egipcíaca', day: '04-01', category: ['justo'], century: 'V–VI', place: 'Desierto de Jordania', biography: 'Vivió en Alejandría entregada al desenfreno hasta que una fuerza invisible le impidió entrar en la iglesia del Santo Sepulcro. Tras arrepentirse pasó cuarenta y siete años sola en el desierto. Su vida se lee íntegra durante la Gran Cuaresma.' },
-  { id: 'juan-escala', name: 'San Juan Clímaco', day: '03-30', category: ['monje'], century: 'VI–VII', place: 'Monte Sinaí', biography: 'Abad del Sinaí († c. 649). Su Escala Santa describe treinta peldaños de ascenso espiritual y es lectura obligada de los monasterios durante la Cuaresma.' },
   { id: 'jorge-trofeoforo', name: 'San Jorge el Trofeóforo', day: '04-23', category: ['granmartir'], century: 'IV', place: 'Capadocia y Lida', biography: 'Oficial del ejército de Diocleciano que confesó públicamente su fe y fue martirizado el año 303. Patrón de numerosos pueblos cristianos.' },
-  { id: 'marcos-evangelista', name: 'San Marcos Evangelista', day: '04-25', category: ['apostol'], century: 'I', place: 'Alejandría', biography: 'Discípulo de San Pedro y autor del segundo Evangelio. Fundó la Iglesia de Alejandría, donde sufrió el martirio.' },
+  { id: 'marcos-evangelista', name: 'San Marcos Evangelista', day: '04-25', category: ['apostol'], century: 'I', place: 'Alejandría', biography: 'Discípulo de san Pedro, que lo llama «mi hijo», y autor del segundo Evangelio, el más breve y el más antiguo de los cuatro según casi todos los estudiosos. Escribe deprisa, con el adverbio «enseguida» en cada página, y no oculta las torpezas de los apóstoles. Fundó la Iglesia de Alejandría, la segunda del mundo antiguo, y allí lo arrastraron por las calles hasta matarlo. Sus reliquias, robadas por unos mercaderes venecianos en el siglo IX, están en San Marcos de Venecia; en 1968 Roma devolvió una parte a Alejandría.' },
 
   /* ---------------- Mayo ---------------- */
   { id: 'juan-teologo-mayo', name: 'San Juan el Teólogo', day: '05-08', category: ['apostol', 'padre'], century: 'I', place: 'Éfeso y Patmos', biography: 'El discípulo amado, junto a la Cruz y ante el sepulcro vacío. Autor del cuarto Evangelio, de tres cartas y del Apocalipsis, escrito en Patmos.' },
-  { id: 'constantino-elena-s', name: 'Santos Constantino y Elena', day: '05-21', category: ['justo'], century: 'IV', place: 'Constantinopla y Jerusalén', biography: 'El emperador que dio la paz a la Iglesia con el Edicto de Milán y convocó el Concilio de Nicea, y su madre, que halló en Jerusalén la Preciosa Cruz.' },
 
   /* ---------------- Junio ---------------- */
   { id: 'justino-filosofo', name: 'San Justino Filósofo', day: '06-01', category: ['martir', 'padre'], century: 'II', place: 'Roma', biography: 'Filósofo convertido y primer gran apologista († c. 165). Su Primera Apología contiene la descripción más antigua de la celebración eucarística dominical.' },
-  { id: 'juan-bautista-natividad', name: 'Natividad de San Juan Bautista', day: '06-24', category: ['profeta'], century: 'I', biography: 'Nacimiento del Precursor, anunciado a Zacarías en el Templo. Se celebra seis meses antes de la Natividad de Cristo, como indica el Evangelio de Lucas.' },
-  { id: 'pedro-pablo-s', name: 'Santos Apóstoles Pedro y Pablo', day: '06-29', category: ['apostol'], century: 'I', place: 'Roma', biography: 'Los coribeos de los Apóstoles, martirizados en Roma bajo Nerón: Pedro crucificado cabeza abajo, Pablo decapitado por ser ciudadano romano.' },
 
   /* ---------------- Julio ---------------- */
-  { id: 'cosme-damian', name: 'Santos Cosme y Damián', day: '07-01', category: ['justo'], century: 'III', biography: 'Médicos anargiros: curaban sin cobrar, «gratis lo recibisteis, dadlo gratis». Muy invocados en la enfermedad.' },
-  { id: 'atanasio-athonita', name: 'San Atanasio el Athonita', day: '07-05', category: ['monje'], century: 'X', place: 'Monte Athos', biography: 'Fundador de la Gran Laura el año 963, primer monasterio cenobítico del Monte Athos y cabeza de los veinte que hoy lo forman.' },
+  { id: 'cosme-damian', name: 'Santos Cosme y Damián', day: '07-01', category: ['justo'], century: 'III', biography: 'Hermanos médicos que atendían sin cobrar nada, de donde les viene el nombre de anárgiros, los sin plata: tomaron al pie de la letra el «gratis lo recibisteis, dadlo gratis» del Evangelio. Hay tres parejas distintas de Cosme y Damián en el santoral bizantino, conmemoradas en tres días del año, y la tradición no las ha llegado a distinguir del todo. Se les invoca en la enfermedad, y el aceite de sus santuarios se sigue repartiendo en Grecia.' },
+  { id: 'atanasio-athonita', name: 'San Atanasio el Athonita', day: '07-05', category: ['monje'], century: 'X', place: 'Monte Athos', biography: 'Fundador de la Gran Laura en 963, con el apoyo de su amigo el emperador Nicéforo Focas († c. 1000). Antes de él, el Athos era una montaña de ermitaños dispersos; él la organizó en comunidad, con regla, refectorio y oficio en común, y los eremitas de la Montaña se lo tomaron tan mal que estuvieron a punto de expulsarlo. Murió al desplomarse la cúpula que estaba construyendo, con cinco monjes más. La Gran Laura sigue siendo el primero de los veinte monasterios.' },
   { id: 'elias-profeta', name: 'Santo Profeta Elías', day: '07-20', category: ['profeta'], century: 'IX a. C.', place: 'Israel', biography: 'Profeta del fuego y del silencio: desafió a los profetas de Baal en el Carmelo y encontró a Dios en la brisa suave del Horeb. Fue arrebatado en un carro de fuego y apareció con Moisés en la Transfiguración.' },
-  { id: 'panteleimon', name: 'San Panteleimón', day: '07-27', category: ['granmartir'], century: 'III–IV', place: 'Nicomedia', biography: 'Médico de Nicomedia martirizado el año 305. Anargiro y sanador; el monasterio ruso del Monte Athos lleva su nombre.' },
+  { id: 'panteleimon', name: 'San Panteleimón', day: '07-27', category: ['granmartir'], century: 'III–IV', place: 'Nicomedia', biography: 'Médico de Nicomedia martirizado en 305, hijo de padre pagano y madre cristiana. Atendía gratis y su clientela arruinó a los demás médicos de la ciudad, que lo denunciaron. Su nombre de bautismo era Pantoleón; la Iglesia lo cambió a Panteleimón, «el que todo lo compadece». Es, con san Cosme y san Damián, el más invocado en la enfermedad, y el monasterio ruso del Monte Athos lleva su nombre.' },
 
   /* ---------------- Agosto ---------------- */
-  { id: 'transfiguracion-s', name: 'Transfiguración del Señor', day: '08-06', category: ['senor'], biography: 'En el Tabor, Cristo muestra a Pedro, Santiago y Juan la luz increada de su divinidad. Fundamento escriturístico de la teología hesicasta.' },
-  { id: 'dormicion-s', name: 'Dormición de la Theotokos', day: '08-15', category: ['theotokos'], biography: 'La Madre de Dios entrega su alma en manos de su Hijo, rodeada de los Apóstoles reunidos milagrosamente. Culmina el ayuno de catorce días.' },
-  { id: 'degollacion-s', name: 'Degollación de San Juan Bautista', day: '08-29', category: ['profeta', 'martir'], century: 'I', biography: 'Herodes hizo decapitar al Precursor por reprender su adulterio. Día de ayuno estricto en toda la Iglesia.' },
+  { id: 'degollacion-s', name: 'Degollación de San Juan Bautista', day: '08-29', category: ['profeta', 'martir'], century: 'I', biography: 'Herodes Antipas mandó decapitar a Juan por haberle reprochado que viviera con la mujer de su hermano, y lo hizo a regañadientes, atrapado por un juramento hecho en un banquete. La Iglesia guarda ese día ayuno estricto aunque caiga en domingo, y en muchos sitios se evita cortar nada redondo ni comer en plato hondo: una costumbre popular que no obliga a nadie, pero que ha conservado la memoria del modo en que murió.' },
   { id: 'cosme-etolia', name: 'San Cosme de Etolia', day: '08-24', category: ['martir', 'monje'], century: 'XVIII', place: 'Monte Athos y Epiro', biography: 'Monje de Filoteu que recorrió Grecia y Albania predicando y fundando escuelas († 1779). Fue ahorcado por orden turca. Sus profecías siguen siendo muy leídas.' },
 
   /* ---------------- Septiembre ---------------- */
   { id: 'simeon-estilita', name: 'San Simeón el Estilita', day: '09-01', category: ['monje'], century: 'V', place: 'Siria', biography: 'Vivió treinta y siete años sobre una columna cerca de Alepo († 459), predicando y arbitrando pleitos desde lo alto. Inauguró una forma de ascesis propia del Oriente cristiano.' },
-  { id: 'natividad-theotokos-s', name: 'Natividad de la Theotokos', day: '09-08', category: ['theotokos'], biography: 'Nacimiento de la Virgen María, hija de Joaquín y Ana, ancianos y sin hijos. Primera de las grandes fiestas del año eclesiástico, que comienza el 1 de septiembre.' },
-  { id: 'exaltacion-s', name: 'Exaltación de la Cruz', day: '09-14', category: ['senor'], biography: 'Conmemora el hallazgo de la Cruz por Santa Elena y su elevación ante el pueblo por el patriarca Macario. Día de ayuno.' },
+  { id: 'exaltacion-s', name: 'Exaltación de la Cruz', day: '09-14', category: ['senor'], biography: 'Conmemora dos cosas: el hallazgo de la Cruz por santa Elena hacia el año 326 y su recuperación en 630, cuando Heraclio la trajo de vuelta de Persia. El nombre viene del gesto: el patriarca la levantaba en alto hacia los cuatro puntos cardinales mientras el pueblo cantaba «Señor, ten piedad» cien veces seguidas, y ese rito se sigue haciendo. Es una de las doce grandes fiestas, y la única que se celebra ayunando.' },
   { id: 'juan-teologo-dormicion', name: 'Dormición de San Juan el Teólogo', day: '09-26', category: ['apostol'], century: 'I', place: 'Éfeso', biography: 'Tránsito del discípulo amado en Éfeso, ya centenario. La tradición recuerda que repetía a sus discípulos: «Hijitos, amaos los unos a los otros».' },
   { id: 'silvano-athonita', name: 'San Silvano del Monte Athos', day: '09-24', category: ['monje'], century: 'XIX–XX', place: 'Monasterio de San Panteleimón, Athos', biography: 'Monje ruso del Athos († 1938). Recibió la palabra «Ten tu mente en el infierno y no desesperes». Sus escritos, publicados por su discípulo el archimandrita Sofronio, son un clásico de la espiritualidad contemporánea.' },
 
   /* ---------------- Octubre ---------------- */
-  { id: 'proteccion-s', name: 'Protección de la Theotokos', day: '10-01', category: ['theotokos'], century: 'X', place: 'Constantinopla', biography: 'San Andrés el Loco por Cristo vio en las Blaquernas a la Madre de Dios extendiendo su velo sobre los fieles. La fiesta es especialmente querida en las Iglesias eslavas.' },
-  { id: 'dionisio-areopagita', name: 'San Dionisio Areopagita', day: '10-03', category: ['obispo', 'martir'], century: 'I', place: 'Atenas', biography: 'Miembro del Areópago convertido por la predicación de San Pablo (Hch 17). Primer obispo de Atenas.' },
-  { id: 'lucas-evangelista', name: 'San Lucas Evangelista', day: '10-18', category: ['apostol'], century: 'I', biography: 'Médico y compañero de San Pablo, autor del tercer Evangelio y de los Hechos. La tradición le atribuye los primeros iconos de la Theotokos.' },
-  { id: 'demetrio-s', name: 'San Demetrio de Tesalónica', day: '10-26', category: ['granmartir'], century: 'IV', place: 'Tesalónica', biography: 'Mirobléta, «el que mana mirra». Oficial romano martirizado bajo Galerio; patrón de Tesalónica y de los Balcanes.' },
+  { id: 'dionisio-areopagita', name: 'San Dionisio Areopagita', day: '10-03', category: ['obispo', 'martir'], century: 'I', place: 'Atenas', biography: 'Miembro del consejo del Areópago convertido por el discurso de san Pablo ante el altar al dios desconocido, según los Hechos, y primer obispo de Atenas. Bajo su nombre circulan desde el siglo VI cuatro tratados de enorme influencia —sobre los nombres de Dios, la jerarquía celeste, la eclesiástica y la teología mística—, que la crítica atribuye hoy a un autor sirio muy posterior. La Iglesia los sigue leyendo y los llama areopagíticos, sin sostener ya que los escribiera él.' },
+  { id: 'demetrio-s', name: 'San Demetrio de Tesalónica', day: '10-26', category: ['granmartir'], century: 'IV', place: 'Tesalónica', biography: 'Oficial romano martirizado en Tesalónica hacia 306, atravesado con lanzas en el subterráneo donde lo tenían preso. Le llaman Mirobleta, el que mana mirra, por el aceite perfumado que según la tradición brota de su sepulcro. Es el patrono de Tesalónica y uno de los santos militares más venerados de los Balcanes, junto con san Jorge; su basílica, del siglo V, sigue en pie sobre el lugar de su muerte.' },
 
   /* ---------------- Noviembre ---------------- */
-  { id: 'miguel-arcangel', name: 'Arcángel Miguel', fullName: 'Sinaxis del Arcángel Miguel y todas las Potestades incorpóreas', day: '11-08', category: ['justo'], biography: 'Jefe de las milicias celestiales, cuyo nombre significa «¿Quién como Dios?». La fiesta reúne a los nueve coros angélicos.' },
-  { id: 'juan-crisostomo', name: 'San Juan Crisóstomo', day: '11-13', category: ['obispo', 'padre'], century: 'IV–V', place: 'Antioquía y Constantinopla', biography: 'Arzobispo de Constantinopla († 407), llamado «Boca de oro» por su predicación. Desterrado dos veces por denunciar los abusos de la corte, murió camino del exilio diciendo «Gloria a Dios por todas las cosas». Su Divina Liturgia es la que se celebra habitualmente.' },
-  { id: 'gregorio-palamas-nov', name: 'San Gregorio Palamás (traslación)', day: '11-14', category: ['obispo', 'padre'], century: 'XIV', biography: 'Segunda conmemoración del defensor del hesicasmo, junto al apóstol Felipe. La principal se celebra el segundo domingo de Cuaresma.' },
-  { id: 'entrada-theotokos-s', name: 'Entrada de la Theotokos en el Templo', day: '11-21', category: ['theotokos'], biography: 'La Virgen niña es presentada en el Templo por sus padres. En esta fiesta comienzan a cantarse los irmos de Navidad.' },
-  { id: 'andres-primerllamado', name: 'San Andrés el Primer Llamado', day: '11-30', category: ['apostol'], century: 'I', place: 'Patras', biography: 'Primero en seguir a Cristo y en llevar a su hermano Pedro. Predicó en Escitia y Bizancio; fue crucificado en Patras sobre una cruz en aspa. Patrón del Patriarcado Ecuménico.' },
+  { id: 'miguel-arcangel', name: 'Arcángel Miguel', fullName: 'Sinaxis del Arcángel Miguel y todas las Potestades incorpóreas', day: '11-08', category: ['justo'], biography: 'Sinaxis de todas las potestades incorpóreas. El nombre de Miguel es una pregunta —«¿Quién como Dios?»— y la tradición la pone en su boca frente a la caída de Lucifer. La fiesta reúne a los nueve coros que enumera el Areopagita: serafines, querubines y tronos; dominaciones, virtudes y potestades; principados, arcángeles y ángeles. Se celebra el día octavo del noveno mes por esos nueve coros y por el octavo día, que en la tradición patrística es el de la eternidad.' },
+  { id: 'gregorio-palamas-nov', name: 'San Gregorio Palamás (traslación)', day: '11-14', category: ['obispo', 'padre'], century: 'XIV', biography: 'Segunda conmemoración del defensor del hesicasmo, el día de su muerte en 1359, junto al apóstol Felipe. La principal es móvil: el segundo domingo de Cuaresma, puesto ahí en 1368 para presentarlo como una prolongación del Triunfo de la Ortodoxia del domingo anterior. Que un teólogo del siglo XIV tenga un domingo cuaresmal es señal de hasta qué punto la Iglesia consideró decisivo lo que estaba en juego.' },
+  { id: 'entrada-theotokos-s', name: 'Entrada de la Theotokos en el Templo', day: '11-21', category: ['theotokos'], biography: 'Joaquín y Ana llevan al Templo a la Virgen de tres años, cumpliendo la promesa que habían hecho antes de tenerla. El relato no está en el Evangelio sino en el Protoevangelio de Santiago, un escrito del siglo II que la Iglesia no cuenta entre los libros inspirados pero cuya memoria conservó en la liturgia. Desde este día empiezan a cantarse los irmos de Navidad: es el primer aviso de que la fiesta se acerca.' },
 
   /* ---------------- Diciembre ---------------- */
-  { id: 'nicolas-s', name: 'San Nicolás de Mira', day: '12-06', category: ['obispo'], century: 'IV', place: 'Mira de Licia', biography: 'Obispo de Mira († c. 343), célebre por su misericordia silenciosa con los pobres y por su firmeza en Nicea. Es, después de la Theotokos, el santo con más iglesias dedicadas en Oriente.' },
-  { id: 'espiridon', name: 'San Espiridón de Trimitonte', day: '12-12', category: ['obispo'], century: 'IV', place: 'Chipre y Corfú', biography: 'Pastor de ovejas hecho obispo, participó en el Concilio de Nicea, donde explicó la Trinidad con un ladrillo. Sus reliquias incorruptas se veneran en Corfú.' },
-  { id: 'natividad-s', name: 'Natividad de Cristo', day: '12-25', category: ['senor'], biography: 'El Verbo se hace carne en Belén. La fiesta va precedida de cuarenta días de ayuno y seguida de doce días sin ayuno hasta la Teofanía.' },
-  { id: 'esteban-protomartir', name: 'San Esteban Protomártir', day: '12-27', category: ['martir'], century: 'I', place: 'Jerusalén', biography: 'Primero de los siete diáconos y primer mártir. Apedreado ante Saulo de Tarso, murió orando por sus verdugos.' },
+  { id: 'esteban-protomartir', name: 'San Esteban Protomártir', day: '12-27', category: ['martir'], century: 'I', place: 'Jerusalén', biography: 'El primero de los siete diáconos y el primer mártir de la Iglesia, apedreado en Jerusalén hacia el año 34. Su discurso ante el sanedrín es el más largo de los Hechos y consiste casi entero en repasar la historia de Israel. Murió pidiendo perdón para quienes lo mataban, y entre los que aprobaban su muerte estaba Saulo de Tarso, guardando la ropa de los ejecutores. La Iglesia lo conmemora dos días después de la Navidad.' },
 
   /* ---------------- Padres y ancianos athonitas ---------------- */
   { id: 'isaac-sirio', name: 'San Isaac el Sirio', day: '01-28', category: ['obispo', 'monje', 'padre'], century: 'VII', place: 'Nínive', biography: 'Obispo de Nínive que renunció a la sede a los cinco meses para volver a la soledad. Sus Discursos ascéticos, sobre la misericordia y el corazón compasivo, se leen en todos los monasterios ortodoxos.' },
@@ -118,7 +104,6 @@ const seeds: SaintSeed[] = [
   { id: 'teofano-recluso', name: 'San Teófano el Recluso', day: '01-10', category: ['obispo'], century: 'XIX', place: 'Vysha, Rusia', biography: 'Obispo que se retiró a la reclusión veintiocho años († 1894). Tradujo la Filocalia al ruso y respondió por carta a miles de personas sobre la vida de oración.' },
   { id: 'paisios-athonita', name: 'San Paisios del Monte Athos', day: '07-12', category: ['monje'], century: 'XX', place: 'Monte Athos', biography: 'Monje de Kutlumusiu y de la celda de Panagouda († 1994), canonizado en 2015. Recibía cada día a centenares de peregrinos; sus consejos, recogidos por sus discípulos, circulan en varios volúmenes.' },
   { id: 'porfirio-kavsokalivita', name: 'San Porfirio Kavsokalivita', day: '12-02', category: ['monje'], century: 'XX', place: 'Athos y Atenas', biography: 'Entró en el Athos a los doce años († 1991). Capellán durante décadas de una policlínica de Atenas, unía un raro don de discernimiento a una insistencia constante en el amor y no en el miedo.' },
-  { id: 'nectario-egina', name: 'San Nectario de Egina', day: '11-09', category: ['obispo'], century: 'XIX–XX', place: 'Egina, Grecia', biography: 'Metropolita de Pentápolis († 1920), calumniado y apartado, aceptó la humillación en silencio y fundó el monasterio de Egina. Canonizado en 1961; uno de los santos más venerados de Grecia.' },
   { id: 'sergio-radonezh', name: 'San Sergio de Rádonezh', day: '09-25', category: ['monje'], century: 'XIV', place: 'Rusia', biography: 'Fundador de la Laura de la Trinidad († 1392) y renovador del monacato ruso. Bendijo a Dimitri Donskói antes de Kulikovo y rehusó siempre cargos y honores.' },
   { id: 'ambrosio-optina', name: 'San Ambrosio de Óptina', day: '10-10', category: ['monje'], century: 'XIX', place: 'Óptina, Rusia', biography: 'El más conocido de los stárets de Óptina († 1891). Enfermo casi toda su vida, recibía a diario a campesinos y escritores; Dostoyevski lo visitó y se inspiró en él para el stárets Zósima.' },
 ];
@@ -130,7 +115,13 @@ const troparia: Record<string, TextBlock[]> = {
 };
 
 /** Primera tanda y ampliación, ordenadas por su día del calendario. */
-const allSeeds: SaintSeed[] = [...seeds, ...MORE_SAINTS, ...THIRD_SAINTS].sort((a, b) =>
+const allSeeds: SaintSeed[] = [
+  ...seeds,
+  ...MORE_SAINTS,
+  ...THIRD_SAINTS,
+  ...YEAR_SAINTS_1,
+  ...YEAR_SAINTS_2,
+].sort((a, b) =>
   a.day === b.day ? a.name.localeCompare(b.name, 'es') : a.day.localeCompare(b.day),
 );
 
@@ -179,8 +170,14 @@ export function saintsOnDay(monthDay: string): Saint[] {
 }
 
 export const SAINTS_COVERAGE_NOTE =
-  `El santoral de ATHOS reúne ${SAINTS.length} conmemoraciones con su vida escrita. El Menaion ` +
-  'completo tiene varias por día y puede añadirse importando datos desde Configuración → Datos.';
+  `El santoral de ATHOS reúne ${SAINTS.length} conmemoraciones con su vida escrita, y no queda ` +
+  'ningún día del año sin al menos una. Aun así, esto no es el Menaion: el libro completo trae ' +
+  'varios santos cada día, y aquí hay una selección. Las vidas son reseñas históricas redactadas ' +
+  'para ATHOS; los troparios, que son texto litúrgico, sólo se incluyen cuando existe una versión ' +
+  'española verificable, y por eso la mayoría siguen pendientes.';
+
+/** Cuántos días del año tienen conmemoración. Los 366 desde agosto de 2026. */
+export const SAINT_DAYS_COVERED = new Set(SAINTS.map((s) => s.day)).size;
 
 /** Días del año que ya tienen alguna conmemoración incorporada. */
 export const SAINT_DAYS = new Set(SAINTS.map((s) => s.day));

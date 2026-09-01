@@ -2,6 +2,49 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.18.0]
+
+### Añadido
+
+- **Ningún santo se queda sin tropario.** El propio de cada uno sigue sin
+  incorporarse —son cientos y ATHOS no escribe himnos—, pero ya no hay ficha
+  muda: se muestra el **tropario general de su rango**, que es exactamente lo
+  que la Iglesia canta cuando no dispone del propio y lo que figura como tal en
+  el Horologion. Hay uno para los mártires, otro para los jerarcas, otro para
+  los monjes, los apóstoles, los profetas, los confesores y los justos.
+- **Doce grandes fiestas con su tropario propio**: Natividad, Teofanía,
+  Encuentro, Anunciación, Transfiguración, Dormición, Natividad y Entrada de la
+  Theotokos, la Cruz, la Protección y las Potestades incorpóreas. Las tres
+  fiestas de la Cruz comparten el suyo, y una clausura repite el de su fiesta,
+  como manda el libro.
+- **Oración de Manasés**, que estaba pendiente desde el principio. Es un texto
+  de la Septuaginta y la Reina-Valera 1909 sigue el canon corto, así que se ha
+  traducido del griego.
+- **Los cuatro oficios pendientes, armados**: las Horas con sus salmos y el
+  tropario propio de cada una, el Oficio de Medianoche, el Moleben y la
+  Paráclesis. Pasan de «pendiente» a utilizable.
+- **La pantalla de Fuentes dice qué falta y por qué.** Antes ponía «17
+  pendientes» y ahí se acababa. Ahora cada hueco dice de qué clase es —falta la
+  licencia, son cientos de propios, o es una traducción larga por hacer— y qué
+  haría falta para cerrarlo.
+
+### Corregido
+
+- **Lo que ATHOS quitaba de su contenido se quedaba para siempre en las
+  aplicaciones ya instaladas.** La siembra usaba `bulkPut`, que añade y
+  actualiza pero no borra: por eso el código decía 389 santos y la pantalla de
+  Fuentes seguía enseñando 417, con san Demetrio tres veces el 26 de octubre.
+  Ahora las tablas de contenido se vacían antes de sembrar. Las del usuario no
+  se tocan, y hay una prueba para cada mitad de esa frase.
+
+### Sobre lo que no se ha hecho
+
+Ningún texto litúrgico se ha inventado. Lo que se ha incorporado es de una de
+estas dos clases: lo que la Iglesia prescribe para el caso —los troparios
+generales—, o traducciones del original griego, que es de dominio público,
+diciendo en la ficha que la versión española es de ATHOS y no de un libro
+publicado.
+
 ## [1.17.0]
 
 ### Añadido

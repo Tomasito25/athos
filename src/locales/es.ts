@@ -292,6 +292,10 @@ const es = {
   },
 
   saints: {
+    generalIntro:
+      'Su tropario propio no está incorporado todavía. Éste es el tropario general de su rango: el que la Iglesia canta cuando no dispone del propio, y que figura como tal en el Horologion. Donde dice el nombre entre paréntesis se dice el suyo.',
+    feastTroparion:
+      'Éste es el tropario propio de la fiesta, el que se canta en ella. La versión española es una traducción hecha para ATHOS a partir del original griego, que es de dominio público.',
     alsoFather: 'Es también Padre de la Iglesia:',
     seeTeaching: 'ver qué enseñó y sus obras',
     alsoSaint: 'Su fiesta y su vida, en el santoral:',

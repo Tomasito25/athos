@@ -308,3 +308,51 @@ describe('restaurar un oficio', () => {
     expect(await restoreOffice('tarde')).toBe(false);
   });
 });
+
+describe('sembrar contenido no arrastra lo que se quitó', () => {
+  it('borra de la base lo que ya no está en el contenido', async () => {
+    // El fallo que esto vigila: `bulkPut` añade y actualiza pero no borra, así
+    // que veintiocho santos duplicados que se eliminaron del código seguían
+    // apareciendo en las aplicaciones ya instaladas. La cuenta decía 417 y el
+    // código decía 389.
+    await seedContent(true);
+    const antes = await db.saints.count();
+
+    await db.saints.put({
+      id: 'santo-que-ya-no-existe',
+      name: 'San Fantasma',
+      day: '01-01',
+      category: ['justo'],
+      biography: 'Una ficha que se quedó de una versión anterior del contenido.',
+      status: 'partial',
+      meta: { source: 'x', language: 'es', license: 'cc-by-sa-4.0', dateAdded: '2026-01-01' },
+      searchText: 'san fantasma',
+    } as never);
+    expect(await db.saints.get('santo-que-ya-no-existe')).toBeTruthy();
+
+    await seedContent(true);
+    expect(await db.saints.get('santo-que-ya-no-existe')).toBeUndefined();
+    expect(await db.saints.count()).toBe(antes);
+  });
+
+  it('no toca nada de lo que ha escrito el usuario', async () => {
+    // La otra mitad de la regla: vaciar las tablas de contenido no puede
+    // llevarse por delante una nota o una regla de oración.
+    await db.notes.put({
+      id: 'nota-de-prueba',
+      targetKind: 'prayer',
+      targetId: 'x',
+      targetTitle: 'x',
+      path: '/orar',
+      body: 'Una nota escrita por quien usa la aplicación.',
+      createdAt: '2026-01-01T00:00:00.000Z',
+      updatedAt: '2026-01-01T00:00:00.000Z',
+    } as never);
+
+    await seedContent(true);
+
+    const nota = await db.notes.get('nota-de-prueba');
+    expect(nota, 'sembrar contenido ha borrado una nota del usuario').toBeTruthy();
+    await db.notes.delete('nota-de-prueba');
+  });
+});

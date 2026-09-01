@@ -1,7 +1,7 @@
 {
   "name": "athos",
   "private": true,
-  "version": "1.17.0",
+  "version": "1.18.0",
   "description": "ATHOS — Oración · Tradición · Vida. PWA ortodoxa offline-first.",
   "type": "module",
   "license": "AGPL-3.0-or-later",

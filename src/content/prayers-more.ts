@@ -263,19 +263,27 @@ export const MORE_PRAYERS: MorePrayerSeed[] = [
     title: 'Oración de Manasés',
     subtitle: 'Se lee en las Grandes Completas',
     category: 'al-pecar',
-    blocks: [{ kind: 'pending', content: 'Contenido pendiente de incorporar.' }],
-    status: 'pending',
+    blocks: [
+      rub('El rey Manasés de Judá, que había llenado Jerusalén de ídolos, la reza desde el cautiverio de Babilonia. La Iglesia la lee cada noche de Gran Cuaresma, en las Grandes Completas.'),
+      t('Señor todopoderoso, Dios de nuestros padres, de Abrahán, de Isaac y de Jacob, y de su descendencia justa; Tú que hiciste el cielo y la tierra con todo su ornato, que ataste el mar con la palabra de tu mandato, que cerraste el abismo y lo sellaste con tu nombre temible y glorioso.'),
+      t('Ante Ti todo se estremece y tiembla delante de tu poder, porque nadie puede resistir la magnificencia de tu gloria, y es insoportable la ira de tu amenaza contra los pecadores. Pero es inmensa e inescrutable la misericordia de tu promesa, porque Tú eres el Señor altísimo, compasivo, paciente y de mucha misericordia, y te arrepientes de los males de los hombres.'),
+      t('Tú, Señor, según la muchedumbre de tu bondad, prometiste el arrepentimiento y el perdón a los que han pecado contra Ti, y en tu gran compasión determinaste el arrepentimiento para la salvación de los pecadores.'),
+      t('Tú, pues, Señor, Dios de los justos, no pusiste el arrepentimiento para los justos —para Abrahán, Isaac y Jacob, que no pecaron contra Ti—, sino que pusiste el arrepentimiento para mí, que soy pecador; porque son más mis pecados que las arenas del mar.'),
+      t('Se han multiplicado mis iniquidades, Señor, se han multiplicado, y no soy digno de mirar ni de ver la altura del cielo por la muchedumbre de mis maldades. Estoy encorvado bajo el peso de muchas cadenas de hierro, hasta no poder levantar la cabeza, y no tengo respiro, porque provoqué tu ira e hice el mal delante de Ti: no cumplí tu voluntad ni guardé tus mandamientos, sino que puse abominaciones y multipliqué los ídolos.'),
+      t('Y ahora doblo las rodillas de mi corazón, suplicando tu bondad. He pecado, Señor, he pecado, y reconozco mis iniquidades. Te pido y te ruego: perdóname, Señor, perdóname; no me pierdas con mis iniquidades ni me guardes rencor para siempre, ni me condenes a lo más hondo de la tierra; porque Tú eres, oh Dios, el Dios de los que se arrepienten.'),
+      t('Muestra en mí tu bondad, salvando por tu gran misericordia a este indigno; y te alabaré todos los días de mi vida. Porque a Ti te canta todo el ejército de los cielos, y tuya es la gloria por los siglos de los siglos. Amén.'),
+    ],
+    status: 'complete',
     meta: meta({
-      source: 'Septuaginta, Odas 12; se lee en las Grandes Completas de la Gran Cuaresma',
-      license: 'pending',
+      source:
+        'Oración de Manasés (Septuaginta, Odas 12). Traducción al español hecha para ATHOS a partir del original griego, que es de dominio público',
+      license: 'cc-by-sa-4.0',
+      copyright:
+        'Texto bíblico del canon largo; el original griego es de dominio público. Esta versión española es una traducción hecha para ATHOS y se publica bajo CC BY-SA 4.0.',
       notes:
-        'Texto veterotestamentario del canon largo. ATHOS todavía no incorpora los libros ' +
-        'deuterocanónicos, porque la Reina-Valera 1909 —la traducción de dominio público que usa la ' +
-        'aplicación— no los contiene. No se transcribe de memoria.',
+        'No es un texto litúrgico redactado por ATHOS, sino una traducción de un texto que existe: la oración figura en la Septuaginta y se lee en las Grandes Completas de la Gran Cuaresma. La Reina-Valera 1909, que es la Biblia de dominio público que usa la aplicación, sigue el canon corto y no la trae; por eso hacía falta traducirla.',
     }),
   },
-
-  /* ═════════════════════ EN LA TENTACIÓN ═════════════════════ */
   {
     id: 'deus-in-adiutorium',
     title: 'Dios, ven en mi auxilio',

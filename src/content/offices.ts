@@ -295,11 +295,34 @@ const seeds: OfficeSeed[] = [
     title: 'Oficio de Medianoche',
     subtitle: 'Mesonyktikón',
     kind: 'medianoche',
-    status: 'pending',
+    status: 'partial',
     sections: [
-      section('ficha', 'Oficio de Medianoche', [
-        rub('Se reza al levantarse de noche, en espera del Esposo que llega a medianoche. Incluye el salmo 118 los días de diario y el canon a la Trinidad los domingos.'),
-        pending('el texto del oficio.'),
+      section('sentido', 'Por qué a medianoche', [
+        rub('Se reza al levantarse de noche, esperando al Esposo que llega a medianoche. En los monasterios abre el ciclo diario: es el primer oficio del día, antes de Maitines.'),
+      ]),
+      section('comienzo', 'Comienzo habitual', [
+        rub('Se empieza como toda regla: Trisagio, Padre Nuestro y las oraciones iniciales.'),
+        rub('El texto completo está en Orar → Oraciones → Comienzo habitual.'),
+      ]),
+      section('salmo-50', 'Salmo 50', [
+        rub('El salmo del arrepentimiento, que abre casi todos los oficios.'),
+        rub('Se lee entero. Está en Leer → Salterio → Salmo 50.'),
+      ]),
+      section('kathisma-17', 'Salmo 118', [
+        rub('El salmo más largo del Salterio, la kathisma decimoséptima, dividida en tres estasis. Es el corazón del oficio los días de diario.'),
+        rub('Está en Leer → Salterio → Kathisma 17.'),
+        rub('Los domingos se sustituye por el canon a la Santísima Trinidad, del Octoecos, cuyo texto no está incorporado todavía.'),
+      ]),
+      section('simbolo', 'Símbolo de la Fe', [
+        rub('Se recita entero. Está en Orar → Oraciones → Símbolo de la Fe.'),
+      ]),
+      section('propios', 'Troparios y oraciones del oficio', [
+        pending('los troparios de compunción y la oración de san Marcos el Monje.'),
+      ]),
+      section('difuntos', 'Conmemoración de los difuntos', [
+        rub('El oficio de Medianoche termina cada día con una conmemoración de los difuntos: en la tradición monástica es el momento fijo en que se reza por ellos.'),
+        t('Acuérdate, Señor, de los que se han dormido en la esperanza de la resurrección y de la vida eterna, y da descanso a sus almas donde brilla la luz de tu rostro.'),
+        rub('Traducción para ATHOS a partir del uso corriente del oficio; no procede de un libro litúrgico español publicado.'),
       ]),
     ],
   },
@@ -308,11 +331,37 @@ const seeds: OfficeSeed[] = [
     title: 'Las Horas',
     subtitle: 'Primera, Tercera, Sexta y Novena',
     kind: 'horas',
-    status: 'pending',
+    status: 'partial',
     sections: [
-      section('ficha', 'Las Horas', [
-        rub('Prima al amanecer, Tercia a media mañana (el descenso del Espíritu Santo), Sexta al mediodía (la Crucifixión) y Nona a media tarde (la muerte del Señor). Cada hora consta de tres salmos, un tropario y una oración.'),
-        pending('el texto de las cuatro Horas.'),
+      section('sentido', 'Las cuatro horas del día', [
+        rub('Cada hora recuerda un momento de la Pasión y de Pentecostés, y las cuatro tienen la misma forma: tres salmos, un tropario propio de la hora, el Trisagio, un kontakion y una oración final.'),
+      ]),
+      section('prima', 'Primera Hora · al amanecer', [
+        rub('Salmos 5, 89 y 100. Están en Leer → Salterio.'),
+        rub('Tropario de la hora:'),
+        t('Por la mañana escucha mi voz, Rey mío y Dios mío.'),
+        rub('Y al final, la oración que cierra la hora:'),
+        t('Cristo, luz verdadera, que iluminas y santificas a todo hombre que viene al mundo: imprime en nosotros la luz de tu rostro, para que en ella veamos la luz inaccesible. Endereza nuestros pasos al cumplimiento de tus mandamientos, por las súplicas de tu purísima Madre y de todos tus santos.'),
+      ]),
+      section('tercia', 'Tercera Hora · media mañana', [
+        rub('La hora en que el Espíritu Santo descendió sobre los apóstoles. Salmos 16, 24 y 50.'),
+        rub('Tropario de la hora:'),
+        t('Señor, que a la hora tercia enviaste tu Santísimo Espíritu sobre tus apóstoles: no nos lo quites, oh Bueno, sino renuévalo en nosotros, que te suplicamos.'),
+        t('Crea en mí, oh Dios, un corazón limpio, y renueva un espíritu recto dentro de mí.'),
+        t('No me eches de tu presencia, y no quites de mí tu santo Espíritu.'),
+      ]),
+      section('sexta', 'Sexta Hora · mediodía', [
+        rub('La hora de la Crucifixión. Salmos 53, 54 y 90.'),
+        rub('Tropario de la hora:'),
+        t('Tú, que a la hora sexta clavaste en la cruz el pecado que Adán se atrevió a cometer en el paraíso: rasga también el escrito de nuestras culpas, oh Cristo Dios, y sálvanos.'),
+      ]),
+      section('nona', 'Novena Hora · media tarde', [
+        rub('La hora en que el Señor entregó el espíritu. Salmos 83, 84 y 85.'),
+        rub('Tropario de la hora:'),
+        t('Tú, que a la hora novena gustaste la muerte en la carne por nosotros: mortifica la soberbia de nuestra carne, oh Cristo Dios, y sálvanos.'),
+      ]),
+      section('propios', 'Lo que cambia cada día', [
+        pending('los troparios y kontakia propios del día y del tiempo litúrgico, que se toman del Menaion y del Triodion.'),
       ]),
     ],
   },
@@ -321,11 +370,27 @@ const seeds: OfficeSeed[] = [
     title: 'Moleben',
     subtitle: 'Oficio de súplica',
     kind: 'moleben',
-    status: 'pending',
+    status: 'partial',
     sections: [
-      section('ficha', 'Moleben', [
-        rub('Oficio breve de intercesión que puede celebrarse por una necesidad concreta: por los enfermos, por los que viajan, en acción de gracias, al comenzar el curso o una obra.'),
-        pending('el texto del oficio.'),
+      section('sentido', 'Cuándo se pide', [
+        rub('Oficio breve de intercesión que se celebra por una necesidad concreta: por un enfermo, por los que viajan, al empezar el curso o una obra, o en acción de gracias. Se pide al sacerdote y dura entre veinte minutos y media hora.'),
+      ]),
+      section('orden', 'Cómo va', [
+        rub('1. Bendición inicial y la gran letanía de la paz.'),
+        rub('2. «Dios es el Señor» con el tropario del santo o de la necesidad por la que se pide.'),
+        rub('3. Salmo 50 (Leer → Salterio → Salmo 50).'),
+        rub('4. El canon del santo o de la ocasión, con sus odas.'),
+        rub('5. Evangelio.'),
+        rub('6. Letanía intensa, con los nombres de aquellos por quienes se pide.'),
+        rub('7. Oración de súplica del sacerdote y despedida.'),
+      ]),
+      section('letania', 'La letanía intensa', [
+        rub('Es el momento en que se leen los nombres. El coro responde a cada petición:'),
+        ref('Señor, ten piedad. <em>(tres veces)</em>'),
+        rub('Los nombres se entregan por escrito antes de empezar, de bautismo y sin apellidos.'),
+      ]),
+      section('propios', 'Lo que cambia según la ocasión', [
+        pending('los cánones y las oraciones propias de cada moleben: por los enfermos, por los viajeros, de acción de gracias.'),
       ]),
     ],
   },
@@ -334,11 +399,25 @@ const seeds: OfficeSeed[] = [
     title: 'Paráclesis a la Theotokos',
     subtitle: 'Canon de súplica',
     kind: 'paraclesis',
-    status: 'pending',
+    status: 'partial',
     sections: [
-      section('ficha', 'Paráclesis', [
-        rub('Canon de súplica a la Madre de Dios. La Pequeña Paráclesis se canta durante las dos primeras semanas de agosto, en el ayuno de la Dormición, alternando con la Grande.'),
-        pending('el texto del canon.'),
+      section('sentido', 'Qué es', [
+        rub('Canon de súplica a la Madre de Dios en la aflicción. Hay dos: la Pequeña Paráclesis, que se canta durante las dos primeras semanas de agosto en el ayuno de la Dormición, y la Grande, que se alterna con ella. La Pequeña puede rezarla un laico en casa, y es de los oficios que más se rezan fuera del templo.'),
+      ]),
+      section('orden', 'Cómo va', [
+        rub('1. Comienzo habitual y salmo 142 (Leer → Salterio → Salmo 142).'),
+        rub('2. «Dios es el Señor» y los troparios a la Theotokos.'),
+        rub('3. Salmo 50.'),
+        rub('4. El canon, en ocho odas, con su estribillo repetido en cada tropario.'),
+        rub('5. Evangelio y la letanía con los nombres de los vivos.'),
+        rub('6. Despedida.'),
+      ]),
+      section('estribillo', 'El estribillo del canon', [
+        rub('Se repite antes de cada tropario del canon, y es lo que da nombre al oficio:'),
+        ref('Santísima Theotokos, sálvanos.'),
+      ]),
+      section('propios', 'El texto del canon', [
+        pending('los troparios de las ocho odas del canon, obra de Teosteriktos el Monje en el siglo IX.'),
       ]),
     ],
   },

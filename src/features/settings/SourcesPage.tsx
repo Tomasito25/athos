@@ -14,6 +14,7 @@ import { ICONS_NOTE } from '@/content/icons';
 import { HYMNS_NOTE } from '@/content/hymns';
 import { LECTIONARY_COVERAGE_NOTE } from '@/content/lectionary';
 import { SAINTS_COVERAGE_NOTE } from '@/content/saints';
+import { GAPS, GAP_KINDS, PENDING_NOTE } from '@/content/pending';
 import { PSALTER_META } from '@/content/psalter';
 import { Loading, PageHead, Panel, Section, SourceNote, Tag } from '@/components/ui';
 import es from '@/locales/es';
@@ -89,6 +90,31 @@ export function SourcesPage() {
             ))}
           </div>
         )}
+      </Section>
+
+      {/*
+        Un marcador no sirve de nada: «17 pendientes» no dice si falta mucho o
+        poco, ni si es un descuido o un impedimento. Esto lo desglosa y dice
+        qué haría falta para cerrar cada hueco.
+      */}
+      <Section title="Qué falta, y por qué">
+        <div className="stack stack--tight">
+          {GAPS.filter((g) => g.count > 0).map((gap) => (
+            <Panel key={gap.label} variant="quiet">
+              <div className="row row--between">
+                <p className="panel__title">{gap.label}</p>
+                <Tag tone={gap.kind === 'propio' ? 'gold' : undefined}>{gap.count}</Tag>
+              </div>
+              <p className="text-sm" style={{ marginTop: 'var(--sp-2)' }}>
+                {gap.what}
+              </p>
+              <p className="muted text-sm" style={{ marginTop: 'var(--sp-2)' }}>
+                <strong>{GAP_KINDS[gap.kind].name}.</strong> {GAP_KINDS[gap.kind].note}
+              </p>
+            </Panel>
+          ))}
+        </div>
+        <p className="source-note">{PENDING_NOTE}</p>
       </Section>
 
       <Section title="Traducción bíblica">

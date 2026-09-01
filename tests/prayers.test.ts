@@ -136,6 +136,24 @@ describe('la biblioteca de oraciones', () => {
 describe('procedencia: lo que ATHOS escribe no se disfraza de texto litúrgico', () => {
   const esDeAthos = (texto: string) => /para ATHOS|redactad|compuesto para|resumido por ATHOS/i.test(texto);
 
+  /*
+   * Hay tres clases de texto y no dos, que es lo que se aprendió al incorporar
+   * la Oración de Manasés:
+   *
+   * 1. **Tradicional.** Existe y circula en español; ATHOS lo recoge.
+   * 2. **Propio.** Lo ha escrito ATHOS porque no hay texto para ese momento.
+   * 3. **Traducido.** El texto existe y es antiquísimo, pero en griego; lo que
+   *    no existe con licencia compatible es una versión española, así que
+   *    ATHOS la hace.
+   *
+   * Los tres llevan licencia distinta y dicen cosas distintas. Lo que no puede
+   * pasar es que uno se presente como otro: que lo propio parezca litúrgico,
+   * que lo litúrgico parezca de ATHOS, o que una traducción propia se anuncie
+   * como la versión que se reza en las parroquias.
+   */
+  const esTraduccion = (prayer: (typeof PRAYERS)[number]) =>
+    /traducción al español hecha para ATHOS/i.test(prayer.meta.source);
+
   it('lo redactado para ATHOS nunca se declara tradicional', () => {
     for (const prayer of PRAYERS) {
       if (esDeAthos(prayer.meta.source)) {
@@ -147,6 +165,15 @@ describe('procedencia: lo que ATHOS escribe no se disfraza de texto litúrgico',
   it('lo redactado para ATHOS lo dice con todas las letras', () => {
     for (const prayer of PRAYERS) {
       if (prayer.meta.license !== 'cc-by-sa-4.0') continue;
+      // Una traducción sí es un texto litúrgico: lo que es de ATHOS es la
+      // versión española, y eso lo declara su propia nota.
+      if (esTraduccion(prayer)) {
+        expect(
+          /traducción de un texto que existe|es una traducción/i.test(prayer.meta.notes ?? ''),
+          `${prayer.id}: no aclara que lo propio es la traducción`,
+        ).toBe(true);
+        continue;
+      }
       expect(
         /no es un texto litúrgico/i.test(prayer.meta.notes ?? ''),
         `${prayer.id}: la ficha no advierte de que no es texto litúrgico`,
@@ -161,11 +188,33 @@ describe('procedencia: lo que ATHOS escribe no se disfraza de texto litúrgico',
       if (prayer.meta.license !== 'cc-by-sa-4.0') continue;
       const derechos = prayer.meta.copyright ?? '';
       expect(derechos.length, `${prayer.id} sin aviso de derechos`).toBeGreaterThan(20);
+      if (esTraduccion(prayer)) {
+        // Una traducción sí puede decir «dominio público»: es lo que es el
+        // original. Lo que tiene que decir además es de quién es la versión.
+        expect(
+          /traducción hecha para ATHOS/i.test(derechos),
+          `${prayer.id}: no dice de quién es la versión española`,
+        ).toBe(true);
+        continue;
+      }
       expect(
         /texto litúrgico tradicional|dominio público/i.test(derechos),
         `${prayer.id} se atribuye derechos de texto tradicional`,
       ).toBe(false);
       expect(/redactado para ATHOS/i.test(derechos), `${prayer.id}`).toBe(true);
+    }
+  });
+
+  it('una traducción propia no se anuncia como la que se reza en las parroquias', () => {
+    // Es la mentira fácil: presentar la versión de ATHOS como «de uso
+    // corriente». El texto es auténtico; la versión, no está en ningún libro.
+    for (const prayer of PRAYERS) {
+      if (!esTraduccion(prayer)) continue;
+      expect(
+        /uso corriente en las parroquias/i.test(prayer.meta.notes ?? ''),
+        `${prayer.id}: se atribuye un uso que no tiene`,
+      ).toBe(false);
+      expect(prayer.meta.license, prayer.id).toBe('cc-by-sa-4.0');
     }
   });
 

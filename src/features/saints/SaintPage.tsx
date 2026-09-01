@@ -6,6 +6,10 @@ import { Blocks, Empty, Loading, Panel, Section, SourceNote, Tag } from '@/compo
 import { ReaderToolbar } from '@/components/Reader';
 import { RichText } from '@/components/RichText';
 import { otraFicha } from '@/content/links';
+import {
+  GENERAL_TROPARION_META,
+  generalTroparionFor,
+} from '@/content/troparia-general';
 import { useVisitLog } from '@/hooks/useVisitLog';
 import { formatMonthDay } from '@/lib/format';
 import es from '@/locales/es';
@@ -34,6 +38,7 @@ export function SaintPage() {
   // Muchos santos son además Padres de la Iglesia, y esa otra ficha es la que
   // trae lo que enseñaron. Sin este enlace hay que salir a buscarla.
   const comoPadre = otraFicha(item.name, 'santo');
+  const general = generalTroparionFor(item.category, item.id);
 
   return (
     <article className="page page--reading">
@@ -81,14 +86,35 @@ export function SaintPage() {
 
       {/* Cuando el himno no está incorporado, la sección explicaba nada: sólo
           decía «pendiente». Al menos que se sepa qué es un tropario. */}
+      {/*
+        Sin tropario propio no se deja el hueco: se canta el general del rango,
+        que es lo que la Iglesia hace cuando no tiene el propio a mano. La
+        ficha dice cuál es y por qué, para que nadie lo tome por el suyo.
+      */}
       <Section title={es.saints.troparion}>
         {esPendiente(item.troparion) ? (
-          <Panel variant="quiet">
-            <p className="text-sm">{es.saints.whatIsTroparion}</p>
-            <p className="muted text-sm" style={{ marginTop: 'var(--sp-3)' }}>
-              {es.saints.hymnPending}
-            </p>
-          </Panel>
+          general ? (
+            <>
+              <Panel variant="quiet">
+                <p className="text-sm">
+                  {general.own ? es.saints.feastTroparion : es.saints.generalIntro}
+                </p>
+              </Panel>
+              <div className="tag-row" style={{ margin: 'var(--sp-3) 0' }}>
+                <Tag tone="gold">{general.name}</Tag>
+                <Tag>{general.tone}</Tag>
+              </div>
+              <Blocks blocks={general.blocks} />
+              <SourceNote meta={GENERAL_TROPARION_META} />
+            </>
+          ) : (
+            <Panel variant="quiet">
+              <p className="text-sm">{es.saints.whatIsTroparion}</p>
+              <p className="muted text-sm" style={{ marginTop: 'var(--sp-3)' }}>
+                {es.saints.hymnPending}
+              </p>
+            </Panel>
+          )
         ) : (
           <Blocks blocks={item.troparion ?? []} />
         )}

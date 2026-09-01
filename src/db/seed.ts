@@ -51,6 +51,36 @@ export async function seedContent(force = false): Promise<boolean> {
       db.settings,
     ],
     async () => {
+      /*
+       * Primero se vacían las tablas de contenido, y sólo ésas.
+       *
+       * `bulkPut` añade y actualiza, pero no borra: lo que ATHOS quitaba de su
+       * contenido se quedaba para siempre en la base de datos de quien ya lo
+       * tenía instalado. Se vio al eliminar veintiocho conmemoraciones
+       * duplicadas del santoral: el código decía 389 santos y la aplicación
+       * instalada seguía enseñando 417, con san Demetrio tres veces el 26 de
+       * octubre.
+       *
+       * Las tablas de usuario —reglas, notas, favoritos, diario, avance de
+       * lectura— no aparecen en esta lista y no se tocan. Sembrar contenido
+       * nunca puede borrar lo que ha escrito una persona.
+       */
+      await Promise.all([
+        db.prayers.clear(),
+        db.bible_books.clear(),
+        db.bible_translations.clear(),
+        db.saints.clear(),
+        db.feasts.clear(),
+        db.liturgical_readings.clear(),
+        db.liturgies.clear(),
+        db.akathists.clear(),
+        db.canons.clear(),
+        db.church_fathers.clear(),
+        db.monasteries.clear(),
+        db.athos_articles.clear(),
+        db.icons.clear(),
+      ]);
+
       await db.prayers.bulkPut(PRAYERS);
       await db.bible_books.bulkPut(BIBLE_BOOKS);
       await db.bible_translations.bulkPut([RV1909]);

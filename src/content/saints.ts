@@ -173,8 +173,11 @@ export const SAINTS_COVERAGE_NOTE =
   `El santoral de ATHOS reúne ${SAINTS.length} conmemoraciones con su vida escrita, y no queda ` +
   'ningún día del año sin al menos una. Aun así, esto no es el Menaion: el libro completo trae ' +
   'varios santos cada día, y aquí hay una selección. Las vidas son reseñas históricas redactadas ' +
-  'para ATHOS; los troparios, que son texto litúrgico, sólo se incluyen cuando existe una versión ' +
-  'española verificable, y por eso la mayoría siguen pendientes.';
+  'para ATHOS. En cuanto a los troparios: el propio de cada santo sigue sin incorporarse —son ' +
+  'cientos y ATHOS no los escribe—, pero ninguna ficha se queda muda, porque se muestra el ' +
+  'tropario general de su rango, que es justo lo que la Iglesia canta cuando no dispone del ' +
+  'propio. Las grandes fiestas llevan el suyo. Ambos van traducidos del griego para ATHOS y su ' +
+  'ficha lo dice.';
 
 /** Cuántos días del año tienen conmemoración. Los 366 desde agosto de 2026. */
 export const SAINT_DAYS_COVERED = new Set(SAINTS.map((s) => s.day)).size;

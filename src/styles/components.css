@@ -517,6 +517,25 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* Un nombre enlazado dentro de un párrafo.
+   Se marca con un subrayado tenue y no con color: si cada santo nombrado se
+   pusiera en dorado, la prosa se leería como un índice. El subrayado se
+   afianza al pasar por encima, que es cuando hace falta que se note. */
+.in-text {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--gold-soft);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  transition: text-decoration-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+
+.in-text:hover,
+.in-text:focus-visible {
+  color: var(--gold);
+  text-decoration-color: var(--gold);
+}
+
 /* ---------------- Barra de progreso ---------------- */
 .progress {
   display: flex;

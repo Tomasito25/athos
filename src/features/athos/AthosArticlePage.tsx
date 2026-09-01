@@ -35,7 +35,7 @@ export function AthosArticlePage() {
         }}
       />
       <div style={{ marginTop: 'var(--sp-5)' }}>
-        <Blocks blocks={article.data.blocks} />
+        <Blocks blocks={article.data.blocks} linked />
       </div>
       <SourceNote meta={article.data.meta} status={article.data.status} />
     </article>

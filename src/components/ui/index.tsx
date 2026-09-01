@@ -10,6 +10,7 @@ import {
 } from 'react';
 import { Link } from 'react-router-dom';
 import { IconCheck, IconChevronRight, IconClose, IconStar, IconStarFilled } from '@/components/icons';
+import { RichText } from '@/components/RichText';
 import type { ContentStatus, LicenseId, SourceMeta, TextBlock } from '@/types';
 import { useSettings } from '@/stores/settings';
 import es from '@/locales/es';
@@ -500,12 +501,22 @@ function GreekLines({ block }: { block: TextBlock }) {
  * Presenta un texto litúrgico respetando la distinción entre rúbricas
  * (indicaciones, en rojo) y texto orante.
  */
+/**
+ * `linked` enlaza los nombres que tienen ficha dentro de ATHOS.
+ *
+ * Sólo se activa en la prosa que ha escrito ATHOS —los artículos del Athos,
+ * por ejemplo—. Nunca en una oración, un tropario o un canon: el texto
+ * litúrgico se muestra tal como es, sin adornos añadidos por la aplicación.
+ * Por eso el valor por defecto es `false` y hay que pedirlo expresamente.
+ */
 export function Blocks({
   blocks,
   illuminated = false,
+  linked = false,
 }: {
   blocks: TextBlock[];
   illuminated?: boolean;
+  linked?: boolean;
 }) {
   return (
     <div className={`prose book-surface${illuminated ? ' prose--illuminated' : ''}`}>
@@ -521,7 +532,7 @@ export function Blocks({
           case 'rubric':
             return (
               <p key={key} className="rubric" style={{ marginTop: '1em' }}>
-                {block.content}
+                {linked ? <RichText max={2}>{block.content}</RichText> : block.content}
               </p>
             );
           case 'refrain':
@@ -546,6 +557,17 @@ export function Blocks({
               </p>
             );
           default:
+            // Con `linked` no se usa `dangerouslySetInnerHTML`: la prosa de
+            // ATHOS no lleva etiquetas, y así el enlazado no puede romper
+            // marcado ajeno.
+            if (linked) {
+              return (
+                <p key={key}>
+                  <RichText>{block.content}</RichText>
+                  <GreekLines block={block} />
+                </p>
+              );
+            }
             return (
               <p key={key}>
                 <span dangerouslySetInnerHTML={{ __html: block.content }} />

@@ -55,10 +55,16 @@ export function HistoryPage() {
       </Section>
 
       <Panel variant="quiet" style={{ marginTop: 'var(--sp-5)' }}>
+        {/* Cuando no falta ninguna reseña, decirlo; y si mañana se añade un
+            hecho sin párrafo, la cuenta vuelve sola a la otra frase. */}
         <p className="text-sm">
-          {es.history.skeleton
-            .replace('{{written}}', String(conProsa))
-            .replace('{{total}}', String(HISTORY_TIMELINE.length))}
+          {conProsa === HISTORY_TIMELINE.length
+            ? es.history.skeletonDone
+                .replace('{{total}}', String(HISTORY_TIMELINE.length))
+                .replace('{{councils}}', String(COUNCILS.length))
+            : es.history.skeleton
+                .replace('{{written}}', String(conProsa))
+                .replace('{{total}}', String(HISTORY_TIMELINE.length))}
         </p>
         <p className="muted text-sm" style={{ marginTop: 'var(--sp-3)' }}>
           {es.history.disputedNote}{' '}

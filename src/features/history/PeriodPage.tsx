@@ -9,6 +9,8 @@ import { Link } from 'react-router-dom';
 import { EVENT_KINDS, HISTORY_META } from '@/content/history';
 import { HISTORY_PERIODS } from '@/content/history-all';
 import { ButtonLink, Empty, Notice, PageHead, Panel, SourceNote, Tag } from '@/components/ui';
+import { RichText } from '@/components/RichText';
+import { useHashScroll } from '@/hooks/useHashScroll';
 import { useVisitLog } from '@/hooks/useVisitLog';
 import es from '@/locales/es';
 
@@ -20,6 +22,8 @@ export function HistoryPeriodPage() {
   const siguiente = indice >= 0 && indice < HISTORY_PERIODS.length - 1 ? HISTORY_PERIODS[indice + 1] : null;
 
   useVisitLog(periodo ? { path: `/biblioteca/historia/${periodId}`, title: periodo.title, kind: es.history.title } : null);
+  // La portada enlaza a un concilio concreto, no a la época entera.
+  useHashScroll([periodId]);
 
   if (!periodo) {
     return (
@@ -38,7 +42,9 @@ export function HistoryPeriodPage() {
 
       <div className="prose book-surface">
         {periodo.summary.map((parrafo) => (
-          <p key={parrafo.slice(0, 40)}>{parrafo}</p>
+          <p key={parrafo.slice(0, 40)}>
+            <RichText>{parrafo}</RichText>
+          </p>
         ))}
       </div>
 
@@ -47,7 +53,12 @@ export function HistoryPeriodPage() {
           <li key={hecho.id} id={hecho.id} className="timeline__item">
             <div className="timeline__year">{hecho.year}</div>
             <div className="timeline__body">
-              <h2 className="timeline__title">{hecho.title}</h2>
+              {/* También el título: media cronología nombra a alguien que
+                  tiene ficha —«San Antonio se retira al desierto»— y era el
+                  sitio más obvio para pinchar. */}
+              <h2 className="timeline__title">
+                <RichText max={1}>{hecho.title}</RichText>
+              </h2>
               <div className="tag-row" style={{ marginTop: 'var(--sp-2)' }}>
                 <Tag tone={hecho.kind === 'concilio' ? 'gold' : hecho.kind === 'cisma' ? 'red' : undefined}>
                   {EVENT_KINDS[hecho.kind]}
@@ -55,7 +66,9 @@ export function HistoryPeriodPage() {
               </div>
 
               {hecho.detail ? (
-                <p style={{ marginTop: 'var(--sp-3)' }}>{hecho.detail}</p>
+                <p style={{ marginTop: 'var(--sp-3)' }}>
+                  <RichText>{hecho.detail}</RichText>
+                </p>
               ) : (
                 // Sin párrafo, el hecho conserva su fecha y su sitio. El hueco
                 // se ve, que es la idea: una ausencia no se ve.
@@ -90,7 +103,9 @@ export function HistoryPeriodPage() {
                     ) : null}
                     <div>
                       <dt>{es.history.against}</dt>
-                      <dd>{hecho.council.against}</dd>
+                      <dd>
+                        <RichText max={2}>{hecho.council.against}</RichText>
+                      </dd>
                     </div>
                   </dl>
 
@@ -99,13 +114,15 @@ export function HistoryPeriodPage() {
                   </p>
                   <ul className="council__list">
                     {hecho.council.defined.map((linea) => (
-                      <li key={linea.slice(0, 30)}>{linea}</li>
+                      <li key={linea.slice(0, 30)}>
+                        <RichText max={2}>{linea}</RichText>
+                      </li>
                     ))}
                   </ul>
 
                   {hecho.council.note ? (
                     <p className="muted text-sm" style={{ marginTop: 'var(--sp-3)' }}>
-                      {hecho.council.note}
+                      <RichText max={3}>{hecho.council.note}</RichText>
                     </p>
                   ) : null}
                 </Panel>
@@ -116,7 +133,7 @@ export function HistoryPeriodPage() {
                   <Notice variant="warn">
                     <span>
                       <strong>{es.history.disputed}. </strong>
-                      {hecho.disputed}
+                      <RichText max={3}>{hecho.disputed}</RichText>
                     </span>
                   </Notice>
                 </div>

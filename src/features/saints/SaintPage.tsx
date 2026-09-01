@@ -1,9 +1,11 @@
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
 import { SAINT_CATEGORY_LABELS } from '@/content/saints';
 import { Blocks, Empty, Loading, Panel, Section, SourceNote, Tag } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
+import { RichText } from '@/components/RichText';
+import { otraFicha } from '@/content/links';
 import { useVisitLog } from '@/hooks/useVisitLog';
 import { formatMonthDay } from '@/lib/format';
 import es from '@/locales/es';
@@ -29,6 +31,9 @@ export function SaintPage() {
   }
 
   const item = saint.data;
+  // Muchos santos son además Padres de la Iglesia, y esa otra ficha es la que
+  // trae lo que enseñaron. Sin este enlace hay que salir a buscarla.
+  const comoPadre = otraFicha(item.name, 'santo');
 
   return (
     <article className="page page--reading">
@@ -57,9 +62,20 @@ export function SaintPage() {
         />
       </header>
 
+      {comoPadre ? (
+        <Panel variant="quiet" style={{ marginBottom: 'var(--sp-4)' }}>
+          <p className="text-sm">
+            {es.saints.alsoFather}{' '}
+            <Link to={comoPadre.path}>{es.saints.seeTeaching}</Link>
+          </p>
+        </Panel>
+      ) : null}
+
       <Section title={es.saints.biography}>
         <div className="prose book-surface">
-          <p>{item.biography}</p>
+          <p>
+            <RichText>{item.biography}</RichText>
+          </p>
         </div>
       </Section>
 

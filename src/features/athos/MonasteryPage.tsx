@@ -4,6 +4,7 @@ import { db } from '@/db/db';
 import { AthosMap } from './AthosMap';
 import { Empty, Loading, PageHead, Panel, Section, SourceNote, Tag } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
+import { RichText } from '@/components/RichText';
 import { useVisitLog } from '@/hooks/useVisitLog';
 import es from '@/locales/es';
 
@@ -45,10 +46,16 @@ export function MonasteryPage() {
       </Panel>
 
       <div className="prose book-surface" style={{ marginTop: 'var(--sp-5)' }}>
-        <p>{item.description}</p>
+        <p>
+          <RichText>{item.description}</RichText>
+        </p>
         {/* Qué es hoy. Sin esto, la ficha se queda en la fecha de fundación y
             todos los monasterios se parecen. */}
-        {item.today ? <p>{item.today}</p> : null}
+        {item.today ? (
+          <p>
+            <RichText>{item.today}</RichText>
+          </p>
+        ) : null}
       </div>
 
       {item.saints?.length ? (
@@ -57,7 +64,9 @@ export function MonasteryPage() {
             {item.saints.map((santo) => (
               <li key={santo} className="row">
                 <span style={{ color: 'var(--gold)' }}>✤</span>
-                <span>{santo}</span>
+                <span>
+                  <RichText max={1}>{santo}</RichText>
+                </span>
               </li>
             ))}
           </ul>

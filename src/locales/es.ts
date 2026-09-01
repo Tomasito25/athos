@@ -262,6 +262,9 @@ const es = {
   },
 
   saints: {
+    alsoFather: 'Es también Padre de la Iglesia:',
+    seeTeaching: 'ver qué enseñó y sus obras',
+    alsoSaint: 'Su fiesta y su vida, en el santoral:',
     byMonth: 'Ver por meses',
     wholeYear: 'Todo el año',
     whatIsTroparion:
@@ -311,6 +314,8 @@ const es = {
     noDetail: 'Sin reseña escrita todavía. El hecho conserva su fecha y su lugar en la cronología.',
     skeleton:
       'Están escritos {{written}} de los {{total}} hechos. Los que no lo están conservan su fecha y su sitio: así se ve lo que falta, en vez de no estar.',
+    skeletonDone:
+      'Los {{total}} hechos tienen su reseña escrita, y los {{councils}} concilios, su ficha. Cuando se añada un hecho nuevo aparecerá con su fecha aunque todavía no tenga párrafo: el hueco se ve antes de taparlo.',
     disputedNote:
       'Las diferencias doctrinales con otras confesiones se explican aparte, en el',
   },

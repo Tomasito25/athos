@@ -2,6 +2,41 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.16.0]
+
+### Añadido
+
+- **La historia, terminada.** Los **70 hechos** de la cronología tienen ya su
+  reseña escrita: no queda ninguno reducido a una fecha. Entre los 21 que
+  faltaban están cinco Concilios Ecuménicos —Éfeso, Calcedonia, Constantinopla
+  II y III, Nicea II—, el Quinisexto, los concilios palamitas, Florencia, la
+  condena del filetismo de 1872 y el Concilio de Creta de 2016.
+- **Los nombres llevan a su página.** Cuando un texto nombra a un santo, a un
+  Padre, a una obra suya, a un monasterio del Athos o a un icono, ese nombre es
+  ahora un enlace a su ficha. Funciona en la historia, el catecismo, las vidas
+  de los santos, los Padres y los artículos del Monte Athos.
+- **Las dos fichas de la misma persona, enlazadas.** San Gregorio Palamás tiene
+  página como santo —su vida y el día de su fiesta— y como Padre —lo que enseñó
+  y sus obras—. Cada una lleva ahora a la otra.
+- **Ir a un concilio concreto** desde la portada de la historia baja hasta él,
+  igual que hacía ya el buscador del catecismo con sus preguntas.
+
+### Corregido
+
+- El salto a un elemento concreto dentro de una página larga no funcionaba en
+  la historia: el enlace dejaba al lector arriba del todo. Ahora es un solo
+  gancho compartido por la historia y el catecismo.
+
+### Detalles del enlazado
+
+- Sólo se enlazan nombres inequívocos: «San Juan Damasceno» sí, «Juan» no. Los
+  apodos que pueden ir sueltos —«Crisóstomo», «Palamás»— están escritos y
+  revisados uno por uno.
+- Un mismo destino se enlaza **una sola vez por texto**, con un tope de cuatro
+  enlaces por párrafo: un párrafo lleno de enlaces no se lee, se escanea.
+- **Nunca sobre texto litúrgico.** Una oración, un tropario o un canon se
+  muestran tal como son. La regla es la misma que impide inventarlos.
+
 ## [1.15.0]
 
 ### Añadido

@@ -56,8 +56,12 @@ porque no hay servidor.
 - **Catecismo** en preguntas y respuestas, filtrable según se llegue de fuera,
   se sea catecúmeno o se lleven años dentro, y con buscador. Dice también lo que
   la Iglesia no ha definido y dónde no hay unanimidad.
-- **Historia de la Iglesia** de Pentecostés a hoy, en ocho épocas, con la ficha
-  de cada Concilio y los conflictos abiertos contados como conflictos.
+- **Historia de la Iglesia** de Pentecostés a hoy, en ocho épocas: setenta
+  hechos, todos con su reseña escrita, la ficha de cada Concilio y los
+  conflictos abiertos contados como conflictos.
+- **Los nombres se pinchan.** Un santo, un Padre, una obra suya o un monasterio
+  nombrados en cualquier texto llevan a su ficha. En el texto litúrgico, nunca:
+  una oración se muestra tal como es.
 - **Padres de la Iglesia** por épocas, de san Ignacio de Antioquía a san
   Sofronio de Essex: qué enseñó cada uno, de qué trata cada obra suya, por dónde
   empezar a leerlo y qué conviene saber antes.

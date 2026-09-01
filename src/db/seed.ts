@@ -26,11 +26,38 @@ import type { PrayerRule, RuleItem, RuleTime } from '@/types';
 import { db, getSetting, setSetting } from './db';
 
 const CONTENT_VERSION_KEY = 'content.version';
+const APP_VERSION_KEY = 'content.appVersion';
 const DEFAULTS_KEY = 'user.defaultsCreated';
 
+/**
+ * La versión de la aplicación, cuando la hay.
+ *
+ * En la compilación es una constante que inyecta Vite; en las pruebas, que
+ * corren sobre el código fuente, no existe. De ahí el rodeo en vez de leerla
+ * directamente.
+ */
+function appVersion(): string {
+  return typeof __APP_VERSION__ === 'string' ? __APP_VERSION__ : 'dev';
+}
+
+/**
+ * Vuelve a sembrar cuando cambia el contenido **o** cuando cambia la versión
+ * de la aplicación.
+ *
+ * Lo segundo se añadió después de tropezar dos veces con lo mismo: se edita un
+ * texto, se olvida subir `CONTENT_VERSION`, y la aplicación instalada sigue
+ * enseñando lo viejo sin que nada avise. El número a mano es fácil de olvidar;
+ * la versión del paquete sube en cada publicación por fuerza.
+ *
+ * Sembrar es barato —vaciar catorce tablas y volver a escribirlas— y no toca
+ * nada del usuario, así que hacerlo de más no cuesta nada y hacerlo de menos
+ * cuesta que alguien lea durante meses un texto que ya se corrigió.
+ */
 export async function seedContent(force = false): Promise<boolean> {
   const current = await getSetting<number>(CONTENT_VERSION_KEY, 0);
-  if (!force && current === CONTENT_VERSION) return false;
+  const currentApp = await getSetting<string>(APP_VERSION_KEY, '');
+  const alDia = current === CONTENT_VERSION && currentApp === appVersion();
+  if (!force && alDia) return false;
 
   await db.transaction(
     'rw',
@@ -94,11 +121,9 @@ export async function seedContent(force = false): Promise<boolean> {
       await db.monasteries.bulkPut(MONASTERIES);
       await db.athos_articles.bulkPut(ATHOS_ARTICLES);
       await db.icons.bulkPut(ICONS);
-      await db.settings.put({
-        key: CONTENT_VERSION_KEY,
-        value: CONTENT_VERSION,
-        updatedAt: new Date().toISOString(),
-      });
+      const ahora = new Date().toISOString();
+      await db.settings.put({ key: CONTENT_VERSION_KEY, value: CONTENT_VERSION, updatedAt: ahora });
+      await db.settings.put({ key: APP_VERSION_KEY, value: appVersion(), updatedAt: ahora });
     },
   );
 

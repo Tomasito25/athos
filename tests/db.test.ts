@@ -335,6 +335,19 @@ describe('sembrar contenido no arrastra lo que se quitó', () => {
     expect(await db.saints.count()).toBe(antes);
   });
 
+
+  it('vuelve a sembrar cuando cambia la versión de la aplicación', async () => {
+    // El número de contenido se sube a mano y es fácil de olvidar; la versión
+    // del paquete sube en cada publicación por fuerza. Con las dos, un texto
+    // corregido no se queda meses sin llegar a quien ya tiene la aplicación.
+    await seedContent(true);
+    expect(await seedContent(), 'ha vuelto a sembrar sin motivo').toBe(false);
+
+    await setSetting('content.appVersion', 'una-version-vieja');
+    expect(await seedContent(), 'no ha sembrado al cambiar la versión').toBe(true);
+    expect(await seedContent(), 'sigue sembrando después de ponerse al día').toBe(false);
+  });
+
   it('no toca nada de lo que ha escrito el usuario', async () => {
     // La otra mitad de la regla: vaciar las tablas de contenido no puede
     // llevarse por delante una nota o una regla de oración.

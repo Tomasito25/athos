@@ -28,4 +28,4 @@ export * from './moments';
  * Versión del corpus. Al incrementarla, ATHOS vuelve a sembrar las tablas de
  * contenido en la próxima apertura, sin tocar los datos del usuario.
  */
-export const CONTENT_VERSION = 12;
+export const CONTENT_VERSION = 13;

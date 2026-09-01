@@ -69,7 +69,6 @@ const meta = (over: Partial<SourceMeta> = {}): SourceMeta => ({ ...TRAD, ...over
 const t = (content: string): TextBlock => ({ kind: 'text', content });
 const rub = (content: string): TextBlock => ({ kind: 'rubric', content });
 const head = (content: string): TextBlock => ({ kind: 'heading', content });
-const PENDING: TextBlock[] = [{ kind: 'pending', content: 'Contenido pendiente de incorporar.' }];
 
 interface Seed {
   id: string;
@@ -353,14 +352,25 @@ const seeds: Seed[] = [
   {
     id: 'canon-arrepentimiento-ref',
     title: 'Gran Canon de san Andrés de Creta',
+    subtitle: 'Lo que se reza de él fuera del templo',
     category: 'arrepentimiento',
-    blocks: PENDING,
-    status: 'pending',
+    blocks: [
+      rub('El canon entero se canta en la iglesia las cuatro primeras noches de Cuaresma y el jueves de la quinta semana. Sus irmoi y su kontakion están en Biblioteca → Cánones.'),
+      rub('Lo que se reza a solas, y basta, es su estribillo, con una postración:'),
+      t('Ten piedad de mí, oh Dios, ten piedad de mí.'),
+      head('Y su estrofa más conocida'),
+      t('Alma mía, alma mía, levántate: ¿por qué duermes? El fin se acerca y vas a turbarte. Despierta, pues, para que se compadezca de ti Cristo Dios, que está en todo lugar y todo lo llena.'),
+      rub('Es el kontakion del canon, que se canta después de la sexta oda.'),
+    ],
+    status: 'complete',
     meta: meta({
       author: 'San Andrés de Creta († 740)',
-      source: 'Triodion. Se canta en la primera semana de la Gran Cuaresma y el jueves de la quinta semana.',
-      license: 'pending',
-      notes: 'Texto completo pendiente de incorporar: son doscientas cincuenta estrofas y no se transcribe de forma aproximada.',
+      source: 'Triodion. Traducción al español hecha para ATHOS a partir del original griego, que es de dominio público',
+      license: 'cc-by-sa-4.0',
+      copyright:
+        'Texto litúrgico del siglo VIII; el original griego es de dominio público. Esta versión española es una traducción hecha para ATHOS y se publica bajo CC BY-SA 4.0.',
+      notes:
+        'Es una traducción de un texto que existe, no una redacción de ATHOS. Aquí van el estribillo y el kontakion, que es lo que se reza fuera del templo; las doscientas cincuenta estrofas del canon siguen pendientes y su ficha está en Biblioteca → Cánones.',
     }),
   },
 
@@ -534,13 +544,23 @@ const seeds: Seed[] = [
   {
     id: 'canon-comunion',
     title: 'Canon de preparación para la Comunión',
+    subtitle: 'Lo que se reza de él la víspera',
     category: 'comunion',
-    blocks: PENDING,
-    status: 'pending',
+    blocks: [
+      rub('Se lee la víspera de comulgar, junto con el canon al Ángel de la Guarda y el de la Theotokos. Sus irmoi están en Biblioteca → Cánones, y las oraciones de después, en esta misma sección.'),
+      rub('El estribillo se repite antes de cada estrofa:'),
+      t('Jesús dulcísimo, sálvame.'),
+      head('La estrofa con que termina'),
+      t('Pan de vida eterna sea para mí tu Cuerpo santo, oh Cristo Dios compasivo, y tu Sangre preciosa, remedio de mis dolencias.'),
+    ],
+    status: 'complete',
     meta: meta({
-      source: 'Oficio de preparación para la Santa Comunión',
-      license: 'pending',
-      notes: 'Canon completo con sus nueve odas pendiente de incorporar.',
+      source: 'Oficio de preparación para la Santa Comunión. Traducción al español hecha para ATHOS a partir del original griego, que es de dominio público',
+      license: 'cc-by-sa-4.0',
+      copyright:
+        'Texto litúrgico tradicional; el original griego es de dominio público. Esta versión española es una traducción hecha para ATHOS y se publica bajo CC BY-SA 4.0.',
+      notes:
+        'Es una traducción de un texto que existe, no una redacción de ATHOS. Van el estribillo y la estrofa final; los troparios de las nueve odas siguen pendientes y su ficha está en Biblioteca → Cánones.',
     }),
   },
 
@@ -600,13 +620,21 @@ const seeds: Seed[] = [
   {
     id: 'akathistos-ref',
     title: 'Himno Akáthistos a la Theotokos',
+    subtitle: 'El proimion, que se reza suelto',
     category: 'otras',
-    blocks: PENDING,
-    status: 'pending',
+    blocks: [
+      rub('El himno entero —veinticuatro estrofas— está en Biblioteca → Akathistos. Lo que se reza suelto, y se canta también fuera de Cuaresma, es su proimion:'),
+      t('A ti, caudilla defensora, los cantos de victoria; a ti, que me libraste de lo terrible, las acciones de gracias te dedico yo, tu ciudad, oh Theotokos. Y tú, que tienes un poder invencible, líbrame de toda clase de peligros, para que te aclame: Alégrate, Esposa no desposada.'),
+      rub('Se compuso en el año 626, cuando Constantinopla se vio libre del asedio, y desde entonces abre el himno.'),
+    ],
+    status: 'complete',
     meta: meta({
-      source: 'Triodion; himno del siglo VI atribuido a san Romano el Meloda',
-      license: 'pending',
-      notes: 'Véase la sección Biblioteca → Akathistos.',
+      source: 'Triodion; himno del siglo VI. Traducción al español hecha para ATHOS a partir del original griego, que es de dominio público',
+      license: 'cc-by-sa-4.0',
+      copyright:
+        'Texto litúrgico del siglo VII; el original griego es de dominio público. Esta versión española es una traducción hecha para ATHOS y se publica bajo CC BY-SA 4.0.',
+      notes:
+        'Es una traducción de un texto que existe, no una redacción de ATHOS. El himno completo está en Biblioteca → Akathistos.',
     }),
   },
 ];

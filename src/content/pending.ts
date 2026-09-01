@@ -58,21 +58,21 @@ export const GAPS: Gap[] = [
   },
   {
     label: 'Obras de los Padres',
-    count: CHURCH_FATHERS.flatMap((f) => f.works).filter((w) => w.status === 'pending').length,
-    kind: 'licencia',
-    what: 'El texto íntegro de cada obra. Los originales son de dominio público; las traducciones españolas modernas, no. Cada obra dice mientras tanto de qué trata y cuándo se escribió.',
+    count: CHURCH_FATHERS.flatMap((f) => f.works).filter((w) => w.status !== 'complete').length,
+    kind: 'extension',
+    what: 'Cada obra tiene ya el pasaje por el que se la conoce, traducido del original. Lo que falta es el texto íntegro, que son libros enteros: Contra las herejías tiene cinco tomos y la Escala, treinta escalones. De las obras del siglo XX, con derechos vigentes, sólo cabe la cita.',
   },
   {
     label: 'Akathistos',
     count: sinTexto(AKATHISTS),
     kind: 'extension',
-    what: 'Los veinticuatro tramos de cada himno. Cada ficha explica qué es ese akathistos y cómo está construido.',
+    what: 'El Akáthistos a la Theotokos está entero: las veinticuatro estrofas con sus ciento cuarenta y cuatro saludos, traducidas del griego. De los otros cuatro están el proimion, los estribillos y la forma, que es con lo que se sigue el himno cuando lo canta otro; sus estrofas siguen pendientes.',
   },
   {
     label: 'Cánones',
     count: sinTexto(CANONS),
     kind: 'extension',
-    what: 'Los troparios de las odas. El Gran Canon de san Andrés tiene doscientos cincuenta.',
+    what: 'El Canon Pascual está entero. De los otros cuatro están los irmoi de las nueve odas, los kontakia y los estribillos, que es la parte fija y con la que se canta. Los troparios que van entre irmos e irmos siguen pendientes: el Gran Canon tiene doscientos cincuenta.',
   },
   {
     label: 'Propios de los oficios',
@@ -99,4 +99,6 @@ export const PENDING_NOTE =
   'hacerlo de una de estas tres maneras: recogiendo una versión española de uso corriente, ' +
   'traduciendo el original griego —que es de dominio público— y diciendo que la traducción es ' +
   'suya, o dejando la ficha con la explicación de qué falta. Lo que no hace, y no va a hacer, es ' +
-  'escribir un himno y presentarlo como de la Iglesia.';
+  'escribir un himno y presentarlo como de la Iglesia. ' +
+  'Por eso ninguna de estas cuentas llegará nunca a cero de golpe: bajan cuando alguien traduce, ' +
+  'y traducir doscientas cincuenta estrofas lleva lo que lleva.';

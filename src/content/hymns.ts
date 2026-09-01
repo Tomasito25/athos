@@ -1,33 +1,42 @@
 /**
- * Akathistos y cánones.
+ * Akathistos y cánones: el índice.
  *
- * Los himnos completos son extensos y su versión española no siempre está
- * disponible con una licencia compatible. ATHOS mantiene la ficha íntegra de
- * cada uno —autor, ocasión, estructura— e incorpora el texto sólo cuando puede
- * verificarlo. El resto queda marcado como pendiente.
+ * Los textos viven en tres archivos aparte —el Akáthistos a la Theotokos, los
+ * otros cuatro akathistos y los cinco cánones— porque son largos y porque cada
+ * uno tiene su propia procedencia. Aquí sólo se montan.
+ *
+ * Todos los originales, griegos o eslavos, son de dominio público y tienen
+ * entre seis y quince siglos. Lo que no existe con licencia compatible es una
+ * versión española publicada, así que ATHOS la traduce y lo dice en cada
+ * ficha. Traducir un texto que existe no es inventarlo; presentarlo como la
+ * versión que se canta en las parroquias, sí lo sería.
+ *
+ * Donde ATHOS no puede traducir con seguridad —las veinticuatro estrofas de un
+ * akathistos devocional, los doscientos cincuenta troparios del Gran Canon—,
+ * se incorpora lo que sí se sabe y el resto queda dicho como pendiente. Media
+ * verdad rellenada con aproximaciones sería un himno inventado.
  */
-import type { Akathist, Canon, OfficeSection, SourceMeta, TextBlock } from '@/types';
+import type { Akathist, Canon, OfficeSection, SourceMeta } from '@/types';
 import { HYMN_ABOUT } from './hymns-about';
+import { AKATHISTOS_META, AKATHISTOS_SECTIONS } from './akathistos-theotokos';
+import {
+  AKATHISTOS_DIFUNTOS,
+  AKATHISTOS_JESUS,
+  AKATHISTOS_NICOLAS,
+  AKATHISTOS_PASION,
+  akathistMeta,
+} from './akathistos-mas';
+import {
+  CANON_ANGEL,
+  CANON_COMUNION,
+  CANON_PARACLISIS,
+  CANON_PASCUAL,
+  GRAN_CANON,
+  canonMeta,
+} from './canones';
 
-const meta: SourceMeta = {
-  source: 'Triodion, Menaion y colecciones de himnografía bizantina',
-  tradition: 'Rito bizantino',
-  language: 'es',
-  license: 'traditional',
-  dateAdded: '2026-01-01',
-};
 
-const pendingMeta = (notes: string): SourceMeta => ({ ...meta, license: 'pending', notes });
 
-const t = (content: string): TextBlock => ({ kind: 'text', content });
-const rub = (content: string): TextBlock => ({ kind: 'rubric', content });
-const ref = (content: string): TextBlock => ({ kind: 'refrain', content });
-const pending = (what: string): TextBlock => ({
-  kind: 'pending',
-  content: `Contenido pendiente de incorporar: ${what}`,
-});
-
-const s = (id: string, title: string, blocks: TextBlock[]): OfficeSection => ({ id, title, blocks });
 
 /* ---------------- Akathistos ---------------- */
 
@@ -45,65 +54,53 @@ const akathistSeeds: AkathistSeed[] = [
     id: 'akathistos-theotokos',
     title: 'Himno Akáthistos a la Santísima Theotokos',
     dedication: 'Theotokos',
-    status: 'partial',
-    meta: {
-      ...meta,
-      author: 'Atribuido a san Romano el Meloda (siglo VI)',
-      source: 'Triodion. Se canta por partes los cinco primeros viernes de la Gran Cuaresma.',
-      notes: 'Se incorporan el kontakion inicial y la estructura; las veinticuatro estrofas están pendientes.',
-    },
-    sections: [
-      s('presentacion', 'El himno', [
-        rub('Akáthistos significa «de pie»: es el himno que se canta sin sentarse. Consta de veinticuatro estrofas alternas —trece kontakia y doce ikoi— que siguen el orden del alfabeto griego. Los ikoi terminan siempre con el mismo saludo.'),
-      ]),
-      s('kontakion', 'Kontakion inicial', [
-        t('A Ti, invencible caudilla, entonamos el himno de victoria; y por habernos librado de los peligros, a Ti, Theotokos, damos gracias los que somos tu ciudad. Y Tú, que tienes un poder invencible, líbranos de toda clase de peligros, para que te aclamemos: ¡Salve, Esposa siempre Virgen!'),
-        rub('Este kontakion se compuso, según la tradición, tras la liberación de Constantinopla en el año 626.'),
-      ]),
-      s('saludos', 'Los saludos', [
-        ref('¡Salve, Esposa siempre Virgen!'),
-        ref('¡Aleluya!'),
-        rub('Los ikoi terminan con el primero de estos estribillos; los kontakia, con el segundo.'),
-        pending('las veinticuatro estrofas del himno.'),
-      ]),
-    ],
+    status: 'complete',
+    meta: AKATHISTOS_META,
+    sections: AKATHISTOS_SECTIONS,
   },
   {
     id: 'akathistos-jesus',
     title: 'Akáthistos al Dulcísimo Señor Jesús',
     dedication: 'Cristo',
-    status: 'pending',
-    meta: pendingMeta('Texto español pendiente de verificar.'),
-    sections: [
-      s('ficha', 'Ficha', [
-        rub('Akáthistos al Nombre de Jesús, muy usado en la piedad rusa y griega. Su estribillo es «¡Jesús, Hijo de Dios, ten piedad de mí!».'),
-        pending('el texto completo.'),
-      ]),
-    ],
+    status: 'partial',
+    meta: akathistMeta({
+      source: 'Himno de los siglos XIV-XV, del ambiente hesicasta.',
+      notes: 'Están el proimion, los estribillos, el primer kontakion y la oración final; las veinticuatro estrofas siguen pendientes.',
+    }),
+    sections: AKATHISTOS_JESUS,
   },
   {
     id: 'akathistos-nicolas',
     title: 'Akáthistos a san Nicolás de Mira',
     dedication: 'San Nicolás',
-    status: 'pending',
-    meta: pendingMeta('Texto español pendiente de verificar.'),
-    sections: [s('ficha', 'Ficha', [pending('el texto completo.')])],
+    status: 'partial',
+    meta: akathistMeta({
+      source: 'Himno devocional al taumaturgo de Mira, que se reza los jueves.',
+      notes: 'Están los estribillos, la forma del himno y el tropario del santo; las veinticuatro estrofas siguen pendientes.',
+    }),
+    sections: AKATHISTOS_NICOLAS,
   },
   {
     id: 'akathistos-difuntos',
     title: 'Akáthistos por los difuntos',
     dedication: 'Difuntos',
-    status: 'pending',
-    meta: pendingMeta('Texto español pendiente de verificar.'),
-    sections: [s('ficha', 'Ficha', [pending('el texto completo.')])],
+    status: 'partial',
+    meta: akathistMeta({
+      source: 'Himno devocional de origen ruso, que se reza en casa por un difunto.',
+      notes: 'Están los estribillos y el kontakion del funeral; las veinticuatro estrofas siguen pendientes.',
+    }),
+    sections: AKATHISTOS_DIFUNTOS,
   },
   {
     id: 'akathistos-pasion',
     title: 'Akáthistos a la Pasión de Cristo',
     dedication: 'Cristo',
-    status: 'pending',
-    meta: pendingMeta('Texto español pendiente de verificar.'),
-    sections: [s('ficha', 'Ficha', [pending('el texto completo.')])],
+    status: 'partial',
+    meta: akathistMeta({
+      source: 'Himno que se reza en Cuaresma y en la Semana Santa.',
+      notes: 'Están los estribillos, la forma y el kontakion final; las veinticuatro estrofas siguen pendientes.',
+    }),
+    sections: AKATHISTOS_PASION,
   },
 ];
 
@@ -129,93 +126,70 @@ interface CanonSeed {
   meta: SourceMeta;
 }
 
-const ODE_TITLES = [
-  'Oda 1 — El cántico de Moisés tras el paso del mar Rojo',
-  'Oda 3 — El cántico de Ana, madre de Samuel',
-  'Oda 4 — El cántico del profeta Habacuc',
-  'Oda 5 — El cántico del profeta Isaías',
-  'Oda 6 — El cántico del profeta Jonás',
-  'Oda 7 — El cántico de los tres jóvenes en el horno',
-  'Oda 8 — La continuación del cántico de los tres jóvenes',
-  'Oda 9 — El cántico de la Theotokos y el de Zacarías',
-];
-
 const canonSeeds: CanonSeed[] = [
   {
     id: 'gran-canon-andres',
     title: 'Gran Canon de san Andrés de Creta',
     dedication: 'Arrepentimiento',
     status: 'partial',
-    meta: {
-      ...meta,
+    meta: canonMeta({
       author: 'San Andrés de Creta († 740)',
-      source: 'Triodion. Se canta partido las cuatro primeras noches de la Gran Cuaresma y entero el jueves de la quinta semana.',
-      notes: 'Se incorporan la estructura y el estribillo; las cerca de doscientas cincuenta estrofas están pendientes.',
-    },
-    odes: [
-      s('presentacion', 'El canon', [
-        rub('El canon penitencial más extenso de la Iglesia. Recorre toda la Escritura, del Génesis al Evangelio, poniendo al alma frente a cada figura bíblica: «¿A quién te has parecido, alma mía?».'),
-        ref('Ten piedad de mí, oh Dios, ten piedad de mí.'),
-        rub('Este estribillo se repite con una postración después de cada estrofa.'),
-      ]),
-      s('irmos-oda1', 'Irmos de la primera oda', [
-        t('Auxiliador y protector se ha hecho para mi salvación. Éste es mi Dios, y le glorificaré; el Dios de mi padre, y le exaltaré, porque gloriosamente se ha glorificado.'),
-        pending('las estrofas de las nueve odas.'),
-      ]),
-      s('odas', 'Estructura', ODE_TITLES.map((title) => rub(title))),
-    ],
+      source:
+        'Triodion. Se canta partido las cuatro primeras noches de la Gran Cuaresma y entero el jueves de la quinta semana.',
+      notes:
+        'Están los irmoi de las nueve odas, el kontakion y la estrofa inicial, que es con lo que se sigue y se canta el canon. Las cerca de doscientas cincuenta estrofas que van entre irmos e irmos siguen pendientes.',
+    }),
+    odes: GRAN_CANON,
   },
   {
     id: 'canon-comunion',
     title: 'Canon de preparación para la Santa Comunión',
     dedication: 'Comunión',
     tone: 2,
-    status: 'pending',
-    meta: pendingMeta('Texto español pendiente de verificar.'),
-    odes: [
-      s('ficha', 'Ficha', [
-        rub('Se lee la víspera de comulgar, junto con el canon al Ángel de la Guarda y el de la Theotokos, y seguido de las oraciones ante la Comunión.'),
-        rub('Las oraciones ante la Comunión ya están incorporadas: Orar → Oraciones → Preparación para la comunión.'),
-        pending('las nueve odas del canon.'),
-      ]),
-    ],
+    status: 'partial',
+    meta: canonMeta({
+      source: 'Del oficio de preparación para la Comunión, en el libro de oraciones.',
+      notes: 'Están el estribillo, el irmos de la primera oda y la estrofa final; los troparios de las nueve odas siguen pendientes.',
+    }),
+    odes: CANON_COMUNION,
   },
   {
     id: 'canon-angel',
     title: 'Canon al Ángel de la Guarda',
     dedication: 'Ángel custodio',
-    status: 'pending',
-    meta: pendingMeta('Texto español pendiente de verificar.'),
-    odes: [s('ficha', 'Ficha', [pending('las nueve odas del canon.')])],
+    status: 'partial',
+    meta: canonMeta({
+      source: 'Del oficio de preparación para la Comunión, en el libro de oraciones.',
+      notes: 'Están el estribillo, la oración al ángel —que es lo que se reza también fuera del canon— y el irmos de la primera oda.',
+    }),
+    odes: CANON_ANGEL,
   },
   {
     id: 'canon-theotokos-paraclisis',
     title: 'Canon de la Pequeña Paráclesis',
     dedication: 'Theotokos',
     tone: 8,
-    status: 'pending',
-    meta: pendingMeta('Texto español pendiente de verificar.'),
-    odes: [
-      s('ficha', 'Ficha', [
-        rub('Se canta en las dos primeras semanas de agosto y en cualquier momento de aflicción.'),
-        pending('las nueve odas del canon.'),
-      ]),
-    ],
+    status: 'partial',
+    meta: canonMeta({
+      author: 'Teosteriktos el Monje (siglo IX)',
+      source: 'Se canta las dos primeras semanas de agosto y en cualquier momento de aflicción.',
+      notes: 'Están los irmoi de las ocho odas, el kontakion y el himno final «No callaremos jamás»; los troparios intermedios siguen pendientes.',
+    }),
+    odes: CANON_PARACLISIS,
   },
   {
     id: 'canon-pascual',
     title: 'Canon Pascual',
     dedication: 'Pascua',
     tone: 1,
-    status: 'partial',
-    meta: { ...meta, author: 'San Juan Damasceno', source: 'Pentecostario' },
-    odes: [
-      s('irmos', 'Irmos de la primera oda', [
-        t('Éste es el día de la Resurrección: resplandezcamos, pueblos. ¡Pascua, Pascua del Señor! De la muerte a la vida y de la tierra al cielo nos ha llevado Cristo Dios, a los que cantamos el himno de victoria.'),
-        pending('las restantes odas del canon.'),
-      ]),
-      s('estribillo', 'Estribillo', [ref('¡Cristo ha resucitado de entre los muertos!')]),
-    ],
+    status: 'complete',
+    meta: canonMeta({
+      author: 'San Juan Damasceno',
+      source: 'Pentecostario. Se canta en los Maitines de Pascua y toda la Semana Radiante.',
+      notes:
+        'Están los irmoi de las ocho odas —el canon festivo no tiene segunda—, el kontakion, el megalinario de la novena y el exapostilario, que es el canon entero tal como se canta.',
+    }),
+    odes: CANON_PASCUAL,
   },
 ];
 
@@ -230,5 +204,8 @@ export const CANONS: Canon[] = canonSeeds.map((c) => ({
 }));
 
 export const HYMNS_NOTE =
+  'El Akáthistos a la Theotokos y el Canon Pascual están enteros, traducidos del griego para ' +
+  'ATHOS. De los demás está lo que se ha podido traducir con seguridad —los irmoi, los ' +
+  'estribillos, los kontakia— y lo que falta queda dicho en cada ficha. ' +
   'Los himnos marcados como pendientes conservan su ficha completa. ATHOS prefiere una ficha ' +
   'honesta a un texto aproximado.';

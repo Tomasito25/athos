@@ -9,6 +9,7 @@
 import type { ChurchFather, FatherWork, SourceMeta, TextBlock } from '@/types';
 import { CAUTION, READING, TEACHING, WORK_SUMMARY } from './fathers-teaching';
 import { MORE_FATHERS } from './fathers-more';
+import { WORK_EXCERPT } from './patristica-pasajes';
 import {
   CAUTION_MORE,
   READING_MORE,
@@ -55,23 +56,40 @@ const t = (content: string): TextBlock => ({ kind: 'text', content });
 const rub = (content: string): TextBlock => ({ kind: 'rubric', content });
 const PENDING: TextBlock[] = [{ kind: 'pending', content: 'Contenido pendiente de incorporar.' }];
 
+/**
+ * Una obra, con su texto si lo tiene.
+ *
+ * Hay tres casos y se distinguen por lo que llega aquí:
+ *
+ * · `blocks` explícitos — el pasaje ya estaba incorporado y verificado.
+ * · Un pasaje en `WORK_EXCERPT` — traducido para ATHOS, o citado brevemente
+ *   cuando la obra tiene derechos vigentes. Es la vía por la que las cuarenta
+ *   y siete obras que no tenían ni una línea pasaron a tener la suya.
+ * · Ninguno de los dos — la ficha queda pendiente, con su resumen.
+ *
+ * En los tres casos el estado es `partial` como mucho: un pasaje no es una
+ * obra, y decir «completo» de un libro del que hay dos párrafos sería falso.
+ */
 const work = (
   id: string,
   title: string,
   kind: FatherWork['kind'],
   author: string,
   blocks?: TextBlock[],
-): FatherWork => ({
-  id,
-  title,
-  kind,
-  blocks: blocks ?? PENDING,
-  status: blocks ? 'partial' : 'pending',
-  meta: blocks ? quoteMeta(author, title) : pendingMeta(author, title),
-  // De qué trata la obra. Es lo que ATHOS puede dar mientras no pueda dar el
-  // texto: una ficha que al menos dice qué se está echando de menos.
-  ...summaries[id],
-});
+): FatherWork => {
+  const pasaje = WORK_EXCERPT[id];
+  const cuerpo = blocks ?? pasaje?.blocks;
+  return {
+    id,
+    title,
+    kind,
+    blocks: cuerpo ?? PENDING,
+    status: cuerpo ? 'partial' : 'pending',
+    meta: blocks ? quoteMeta(author, title) : (pasaje?.meta ?? pendingMeta(author, title)),
+    // De qué trata la obra. Acompaña al pasaje: dice dónde encaja lo que se lee.
+    ...summaries[id],
+  };
+};
 
 interface FatherSeed {
   id: string;
@@ -382,6 +400,8 @@ export const FATHERS_BY_ERA = FATHER_ERAS.map((era) => ({
 }));
 
 export const FATHERS_NOTE =
-  'Las obras de los Padres son de dominio público en su lengua original. Muchas traducciones ' +
-  'españolas modernas no lo son: por eso ATHOS incorpora sólo pasajes breves de uso común y ' +
-  'mantiene la ficha del resto hasta poder añadir una traducción con licencia compatible.';
+  'Las cincuenta y cuatro obras tienen ya su pasaje: el que da nombre a cada una y por el que se ' +
+  'la recuerda. Los originales griegos y siríacos son de dominio público y esas páginas están ' +
+  'traducidas para ATHOS; de las obras del siglo XX, que conservan sus derechos, va sólo una frase ' +
+  'citada con su atribución. Lo que sigue pendiente es el texto íntegro, que son libros enteros: ' +
+  'un pasaje no es una obra, y por eso ninguna figura como completa.';

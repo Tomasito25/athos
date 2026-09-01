@@ -49,11 +49,14 @@ describe('los Padres dicen qué enseñaron', () => {
     }
   });
 
-  it('las obras pendientes son precisamente las que más lo necesitan', () => {
-    // Si una obra no tiene texto, su resumen es lo único que el lector recibe.
-    const pendientes = CHURCH_FATHERS.flatMap((p) => p.works).filter((w) => w.status === 'pending');
-    expect(pendientes.length, 'no hay obras pendientes que comprobar').toBeGreaterThan(5);
-    for (const obra of pendientes) {
+  it('el resumen acompaña al pasaje, no lo sustituye', () => {
+    // Antes esto vigilaba las obras sin texto, que eran cuarenta y siete y ya
+    // no queda ninguna: todas tienen su pasaje. El resumen sigue haciendo
+    // falta por otro motivo —dice dónde encaja lo que se acaba de leer dentro
+    // del libro entero—, así que ahora se exige a todas.
+    const obras = CHURCH_FATHERS.flatMap((p) => p.works);
+    expect(obras.filter((w) => w.status === 'pending').length, 'obras sin texto').toBe(0);
+    for (const obra of obras) {
       expect((obra.summary ?? '').length, `${obra.title}`).toBeGreaterThan(150);
     }
   });
@@ -94,6 +97,10 @@ describe('los Padres dicen qué enseñaron', () => {
 describe('los himnos dicen qué son', () => {
   const todos = [...AKATHISTS, ...CANONS];
 
+/** Un akathistos guarda sus partes en `sections`; un canon, en `odes`. */
+const partesDe = (himno: (typeof todos)[number]) =>
+  'sections' in himno ? himno.sections : himno.odes;
+
   it('todos explican qué son y cómo están construidos', () => {
     for (const himno of todos) {
       expect(himno.about, `${himno.title}: sin explicación`).toBeTruthy();
@@ -102,11 +109,35 @@ describe('los himnos dicen qué son', () => {
     }
   });
 
-  it('los pendientes también, que son los que dependen de esto', () => {
-    const pendientes = todos.filter((h) => h.status === 'pending');
-    expect(pendientes.length).toBeGreaterThan(2);
-    for (const himno of pendientes) {
+  it('los que aún no tienen el texto entero, también', () => {
+    // Antes esto miraba el estado «pendiente». Ya no queda ninguno: todos los
+    // himnos tienen texto, unos entero y otros con las estrofas por traducir.
+    // Lo que sigue importando es que el que tenga huecos los explique, así que
+    // la prueba mira los huecos y no la etiqueta.
+    const conHuecos = todos.filter((h) =>
+      partesDe(h).some((s) => s.blocks.some((b) => b.kind === 'pending')),
+    );
+    expect(conHuecos.length, 'ningún himno declara huecos: ¿se han tapado?').toBeGreaterThan(2);
+    for (const himno of conHuecos) {
       expect((himno.about ?? '').length, himno.title).toBeGreaterThan(200);
+      // Y que diga qué falta, no sólo que falta.
+      const huecos = partesDe(himno)
+        .flatMap((s) => s.blocks)
+        .filter((b) => b.kind === 'pending');
+      for (const hueco of huecos) {
+        expect(hueco.content.length, `${himno.title}: hueco sin explicar`).toBeGreaterThan(40);
+      }
+    }
+  });
+
+  it('los dos que están enteros no declaran ningún hueco', () => {
+    for (const id of ['akathistos-theotokos', 'canon-pascual']) {
+      const himno = todos.find((h) => h.id === id);
+      expect(himno?.status, id).toBe('complete');
+      expect(
+        partesDe(himno!).some((s) => s.blocks.some((b) => b.kind === 'pending')),
+        `${id} se declara completo con huecos`,
+      ).toBe(false);
     }
   });
 

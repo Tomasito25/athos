@@ -2,6 +2,43 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.19.0]
+
+### Añadido
+
+- **El Himno Akáthistos a la Theotokos, entero.** Las veinticuatro estrofas con
+  sus ciento cuarenta y cuatro saludos, el proimion y el acróstico completo de
+  la alfa a la omega, traducidos del griego. Es el himno mariano más antiguo
+  que se canta sin interrupción y el modelo de todos los demás akathistos.
+- **El Canon Pascual, entero**: los ocho irmoi, el kontakion, el megalinario de
+  la novena oda y el exapostilario.
+- **Los otros cuatro akathistos y los otros cuatro cánones**, con lo que se
+  puede traducir con seguridad: proimion, estribillos, irmoi de las nueve odas,
+  kontakia y las oraciones que se rezan sueltas. Pasan de pendientes a
+  utilizables: con eso se sigue y se responde un himno cuando lo canta otro.
+- **Las cincuenta y cuatro obras patrísticas tienen ya su pasaje**, el que da
+  nombre a cada una: el altar del pobre de Crisóstomo, la gloria de Dios que es
+  el hombre viviente de Ireneo, el anzuelo de la divinidad de Gregorio de Nisa,
+  el trigo de Dios de Ignacio. Cuarenta y siete no tenían ni una línea.
+- **Tres oraciones más completas**: el Gran Canon, el Akáthistos y el canon de
+  la Comunión ya no remiten a un hueco, sino que traen lo que de ellos se reza
+  fuera del templo.
+
+### Corregido
+
+- **Un texto corregido podía tardar meses en llegar a quien ya tenía la
+  aplicación.** La siembra sólo se rehacía al subir a mano `CONTENT_VERSION`, y
+  ese número es fácil de olvidar. Ahora también se rehace cuando cambia la
+  versión del paquete, que sube en cada publicación por fuerza.
+
+### Lo que sigue faltando, y por qué
+
+Los troparios propios de cada santo, las estrofas de los cuatro akathistos
+devocionales, los doscientos cincuenta troparios del Gran Canon y el texto
+íntegro de las obras. Nada de eso se ha rellenado con aproximaciones: un himno
+inventado sería peor que un hueco declarado. De las obras del siglo XX, con
+derechos vigentes, va una frase citada y no una traducción.
+
 ## [1.18.0]
 
 ### Añadido

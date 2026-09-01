@@ -41,7 +41,14 @@
   letter-spacing: 0.01em;
 }
 
-/* La primera letra de una oración, a la manera de los manuscritos. */
+/* ---------------- Capitular iluminada ----------------
+   En el manuscrito la primera letra no es sólo más grande: va en tinta roja
+   dentro de un recuadro, y el texto se acomoda a su alrededor. Aquí se
+   reconstruye con `float` y `::first-letter`, que es lo más cerca que llega
+   el navegador sin partir el texto en dos elementos.
+
+   Se puede apagar: hay quien lee mejor sin ella, y en pantallas muy
+   estrechas una capitular de tres líneas se come el ancho. */
 .prose--illuminated > p:first-of-type::first-letter {
   float: left;
   font-family: var(--font-serif);
@@ -49,6 +56,50 @@
   line-height: 0.82;
   padding: 0.06em 0.1em 0 0;
   color: var(--red);
+}
+
+:root[data-dropcaps='si'] .prose--illuminated > p:first-of-type::first-letter {
+  margin-inline-end: 0.12em;
+  padding: 0.1em 0.14em 0.04em 0.1em;
+  border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent);
+  border-radius: var(--radius-sm);
+  background: var(--gold-wash);
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--red) 12%, transparent);
+}
+
+/* Por debajo de 24rem la capitular deja el párrafo en una columna de dos
+   palabras. Se queda grande, pero sin caja ni flotado. */
+@media (max-width: 24rem) {
+  :root[data-dropcaps='si'] .prose--illuminated > p:first-of-type::first-letter {
+    border: none;
+    background: none;
+    box-shadow: none;
+    padding: 0.06em 0.1em 0 0;
+  }
+}
+
+/* ---------------- Ornamentos ---------------- */
+.ornament {
+  display: block;
+  margin-inline: auto;
+  color: var(--gold);
+  opacity: 0.8;
+  max-width: 100%;
+  height: auto;
+}
+
+.ornament--headpiece {
+  margin-bottom: var(--sp-3);
+}
+
+.ornament--tailpiece {
+  margin-block: var(--sp-5);
+  opacity: 0.65;
+}
+
+.ornament--band {
+  margin-block: var(--sp-4);
+  opacity: 0.6;
 }
 
 /* Nombres divinos y exclamaciones en versalitas */

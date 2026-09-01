@@ -11,25 +11,37 @@ import {
 import { Link } from 'react-router-dom';
 import { IconCheck, IconChevronRight, IconClose, IconStar, IconStarFilled } from '@/components/icons';
 import { RichText } from '@/components/RichText';
+import { Headpiece } from '@/components/Ornament';
 import type { ContentStatus, LicenseId, SourceMeta, TextBlock } from '@/types';
 import { useSettings } from '@/stores/settings';
 import es from '@/locales/es';
 
 /* ---------------- Encabezado de página ---------------- */
 
+/**
+ * `ornate` abre la página como un manuscrito: con la puerta de entrelazo
+ * encima del título y el título centrado debajo.
+ *
+ * Se reserva para las páginas que son un texto —una oración, un salmo, un
+ * capítulo, un oficio—, no para las que son un menú. En una lista de ajustes
+ * el ornamento sobra; en la portada del Evangelio de san Juan, no.
+ */
 export function PageHead({
   title,
   subtitle,
   eyebrow,
   actions,
+  ornate = false,
 }: {
   title: string;
   subtitle?: string;
   eyebrow?: string;
   actions?: ReactNode;
+  ornate?: boolean;
 }) {
   return (
-    <header className="page-head">
+    <header className={ornate ? 'page-head page-head--ornate' : 'page-head'}>
+      {ornate ? <Headpiece /> : null}
       {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
       <div className="page-head__row">
         <h1 className="page-head__title display">{title}</h1>

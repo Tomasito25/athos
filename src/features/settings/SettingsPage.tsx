@@ -21,7 +21,13 @@ import {
   IconSun,
 } from '@/components/icons';
 import type { CalendarStyle } from '@/types';
-import type { GreekMode, MeasureChoice, ThemeChoice } from '@/stores/settings';
+import type {
+  DensityChoice,
+  GreekMode,
+  MeasureChoice,
+  StartChoice,
+  ThemeChoice,
+} from '@/stores/settings';
 import { GREEK_NOTE } from '@/content/greek';
 import es from '@/locales/es';
 
@@ -99,6 +105,35 @@ export function SettingsPage() {
           </div>
 
           <div style={{ marginTop: 'var(--sp-4)' }}>
+            <Field label={es.settings.density}>
+              {() => (
+                <Segmented
+                  value={settings.density}
+                  label={es.settings.density}
+                  options={[
+                    { value: 'comoda' as DensityChoice, label: es.settings.densityRoomy },
+                    { value: 'normal' as DensityChoice, label: es.settings.densityNormal },
+                    { value: 'compacta' as DensityChoice, label: es.settings.densityTight },
+                  ]}
+                  onChange={(value) => settings.set('density', value)}
+                />
+              )}
+            </Field>
+          </div>
+
+          <div style={{ marginTop: 'var(--sp-4)' }}>
+            <Switch
+              checked={settings.ornaments}
+              onChange={(value) => settings.set('ornaments', value)}
+              title={es.settings.ornaments}
+              description={es.settings.ornamentsNote}
+            />
+            <Switch
+              checked={settings.dropCaps}
+              onChange={(value) => settings.set('dropCaps', value)}
+              title={es.settings.dropCaps}
+              description={es.settings.dropCapsNote}
+            />
             <Switch
               checked={settings.paperMode}
               onChange={(value) => settings.set('paperMode', value)}
@@ -137,6 +172,26 @@ export function SettingsPage() {
           </div>
 
           <p className="source-note">{es.settings.reducedMotion}</p>
+        </Panel>
+      </Section>
+
+      <Section title={es.settings.start}>
+        <Panel>
+          <Field label={es.settings.startAt} hint={es.settings.startAtNote}>
+            {() => (
+              <Segmented
+                value={settings.startAt}
+                label={es.settings.startAt}
+                options={[
+                  { value: 'inicio' as StartChoice, label: es.nav.home },
+                  { value: 'orar' as StartChoice, label: es.nav.pray },
+                  { value: 'leer' as StartChoice, label: es.nav.read },
+                  { value: 'calendario' as StartChoice, label: es.nav.calendar },
+                ]}
+                onChange={(value) => settings.set('startAt', value)}
+              />
+            )}
+          </Field>
         </Panel>
       </Section>
 

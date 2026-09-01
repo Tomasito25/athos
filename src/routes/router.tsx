@@ -6,7 +6,7 @@
  */
 import { createBrowserRouter, type RouteObject } from 'react-router-dom';
 import { AppShell } from '@/components/layout/AppShell';
-import { HomePage } from '@/features/home/HomePage';
+import { StartRedirect } from '@/features/home/StartRedirect';
 import { ErrorPage } from '@/features/error/ErrorPage';
 
 const page = (loader: () => Promise<Record<string, unknown>>, name: string) => async () => {
@@ -21,7 +21,7 @@ export const routes: RouteObject[] = [
     element: <AppShell />,
     errorElement: <ErrorPage />,
     children: [
-      { index: true, element: <HomePage /> },
+      { index: true, element: <StartRedirect /> },
 
       /* ---------------- Orar ---------------- */
       { path: 'orar', lazy: page(() => import('@/features/pray/PrayHub'), 'PrayHub') },
@@ -46,6 +46,8 @@ export const routes: RouteObject[] = [
       { path: 'leer/salterio/kathisma/:number', lazy: page(() => import('@/features/psalter/KathismaPage'), 'KathismaPage') },
       { path: 'leer/salterio/:number', lazy: page(() => import('@/features/psalter/PsalmPage'), 'PsalmPage') },
       { path: 'leer/lecturas', lazy: page(() => import('@/features/readings/ReadingsPage'), 'ReadingsPage') },
+      { path: 'leer/planes', lazy: page(() => import('@/features/read/PlansPage'), 'PlansPage') },
+      { path: 'leer/planes/:planId', lazy: page(() => import('@/features/read/PlanPage'), 'PlanPage') },
 
       /* ---------------- Calendario ---------------- */
       { path: 'calendario', lazy: page(() => import('@/features/calendar/CalendarPage'), 'CalendarPage') },

@@ -3,6 +3,7 @@ import { useAsync } from '@/hooks/useAsync';
 import { getPsalm } from '@/db/psalter';
 import { kathismaOf, PSALM_NOTES } from '@/content/psalter';
 import { Blocks, Empty, Loading, SourceNote, Tag } from '@/components/ui';
+import { Headpiece, Tailpiece } from '@/components/Ornament';
 import { ReaderToolbar } from '@/components/Reader';
 import { IconChevronLeft, IconChevronRight } from '@/components/icons';
 import { useVisitLog } from '@/hooks/useVisitLog';
@@ -30,7 +31,11 @@ export function PsalmPage() {
 
   return (
     <article className="page page--reading">
-      <header style={{ paddingTop: 'var(--sp-5)', marginBottom: 'var(--sp-4)' }}>
+      <header
+        className="page-head--ornate"
+        style={{ paddingTop: 'var(--sp-5)', marginBottom: 'var(--sp-4)' }}
+      >
+        <Headpiece />
         {kathisma ? (
           <Link className="eyebrow" to={`/leer/salterio/kathisma/${kathisma.number}`} style={{ textDecoration: 'none' }}>
             {es.psalter.kathisma.replace('{{n}}', String(kathisma.number))}
@@ -68,7 +73,9 @@ export function PsalmPage() {
         </div>
       </header>
 
-      <Blocks blocks={item.blocks} />
+      <Blocks blocks={item.blocks} illuminated />
+
+      <Tailpiece />
 
       <nav className="row row--between" style={{ marginTop: 'var(--sp-6)' }} aria-label="Navegación entre salmos">
         {lxx > 1 ? (

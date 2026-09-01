@@ -63,6 +63,22 @@
 }
 
 /* ---------------- Separador ornamental ---------------- */
+.page-head--ornate {
+  text-align: center;
+}
+
+.page-head--ornate .page-head__row {
+  justify-content: center;
+}
+
+.page-head--ornate .page-head__title {
+  letter-spacing: var(--tracking-wide);
+}
+
+.page-head--ornate .page-head__sub {
+  margin-inline: auto;
+}
+
 .rule {
   display: flex;
   align-items: center;
@@ -494,6 +510,36 @@
 .card__text {
   font-size: var(--text-sm);
   color: var(--ink-muted);
+}
+
+/* ---------------- El arca del icono ----------------
+   Una tabla de icono no es plana: se rebaja el centro y queda un reborde
+   alrededor, el kovcheg. Es lo que hace que la imagen esté «dentro» de la
+   madera y no encima. Aquí se imita con un doble filete interior, que además
+   da a la tarjeta el aire de tabla que un rectángulo liso no tiene.
+
+   Va bajo el interruptor de ornamentos: quien lo apaga vuelve al rectángulo. */
+:root[data-ornaments='si'] .card {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--gold) 16%, transparent),
+    inset 0 0 0 5px var(--surface-2);
+}
+
+:root[data-ornaments='si'] .card:hover {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--gold) 34%, transparent),
+    inset 0 0 0 5px var(--surface-2),
+    var(--shadow);
+}
+
+/* El separador, cuando hay ornamentos, deja de ser una línea con una cruz y
+   pasa a ser una cinta de entrelazo con la cruz en medio. */
+:root[data-ornaments='si'] .rule::before,
+:root[data-ornaments='si'] .rule::after {
+  height: 3px;
+  background:
+    linear-gradient(to right, transparent, color-mix(in srgb, var(--gold) 30%, transparent), transparent);
+  mask-image: repeating-linear-gradient(to right, #000 0 6px, transparent 6px 12px);
 }
 
 /* La cuenta de una tarjeta: cuántas piezas hay detrás.

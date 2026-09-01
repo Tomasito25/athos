@@ -2,6 +2,38 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.17.0]
+
+### Añadido
+
+- **Planes de lectura.** Cuatro: los cuatro Evangelios en 89 días, el Nuevo
+  Testamento en 260, el Salterio por kathismata en 20 y la Biblia entera en un
+  año. Los días no están escritos a mano: se reparten los capítulos entre los
+  días del plan, parejo y sin partir ninguno, de modo que un plan son cuatro
+  líneas de definición. Se marca lo leído, se puede saltar un día y volver a
+  él, y el avance se guarda en el dispositivo.
+- **Leer se abre por lo de hoy.** La epístola y el evangelio del día van
+  delante con su cita a la vista, después el plan que se lleve empezado y sólo
+  entonces los libros.
+- **Ir a un pasaje desde la Biblia.** Escribir «Juan 3, 16» —o «Mt 5», o
+  «1 Co 13»— ofrece abrir ese capítulo directamente. Usa el mismo análisis de
+  citas que el leccionario, así que entiende abreviaturas y las dos notaciones.
+- **Ornamentos bizantinos.** Cabecera de entrelazo sobre el título de cada
+  texto, remate al pie, capitular iluminada en tinta roja dentro de su recuadro
+  y filete de tabla de icono en las tarjetas. Todo dibujado con trazo, no con
+  imágenes: unos cientos de bytes, escala sin perder filo y sigue al tema.
+- **Cuatro ajustes nuevos**: ornamentos, capitular, **densidad** —el aire entre
+  las cosas, aparte del tamaño de la letra— y **por dónde se abre la
+  aplicación**, para quien entra siempre a lo mismo.
+
+### Detalles
+
+- La capitular pierde su recuadro por debajo de 24 rem: a esa anchura una
+  letra de tres líneas deja el párrafo en una columna de dos palabras.
+- Los planes dicen en su ficha que no son la lectura de la Iglesia. El
+  leccionario está en Leer → Lecturas del día y sigue el año litúrgico; un plan
+  es para leer seguido por tu cuenta, que es otra cosa.
+
 ## [1.16.0]
 
 ### Añadido

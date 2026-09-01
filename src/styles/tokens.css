@@ -29,15 +29,21 @@
   --tracking-wider: 0.16em;
   --tracking-widest: 0.28em;
 
-  /* ---- Espaciado ------------------------------------------ */
-  --sp-1: 0.25rem;
-  --sp-2: 0.5rem;
-  --sp-3: 0.75rem;
-  --sp-4: 1rem;
-  --sp-5: 1.5rem;
-  --sp-6: 2rem;
-  --sp-7: 3rem;
-  --sp-8: 4rem;
+  /* ---- Espaciado ------------------------------------------
+     Todo el espaciado pasa por un mismo multiplicador para que la densidad
+     sea un solo ajuste y no treinta. El tamaño de la letra va aparte: son
+     dos preferencias distintas y mezclarlas obliga a elegir entre ver más
+     texto y verlo más grande. */
+  --user-space-scale: 1;
+
+  --sp-1: calc(0.25rem * var(--user-space-scale));
+  --sp-2: calc(0.5rem * var(--user-space-scale));
+  --sp-3: calc(0.75rem * var(--user-space-scale));
+  --sp-4: calc(1rem * var(--user-space-scale));
+  --sp-5: calc(1.5rem * var(--user-space-scale));
+  --sp-6: calc(2rem * var(--user-space-scale));
+  --sp-7: calc(3rem * var(--user-space-scale));
+  --sp-8: calc(4rem * var(--user-space-scale));
 
   /* Los radios son algo mayores que antes: dan un aire actual sin restar
      sobriedad, siempre que la tipografía siga siendo la de un libro. */

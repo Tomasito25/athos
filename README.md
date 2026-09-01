@@ -44,7 +44,10 @@ porque no hay servidor.
   cuando falla la fe—, con el que corresponde a la hora destacado al abrir.
 - **Tres oficios diarios** con la estructura del Horologion: mañana, Hora Sexta
   y Pequeñas Completas, con sus salmos y las fórmulas en griego.
-- **La Biblia completa** en Reina-Valera 1909, con búsqueda sin conexión.
+- **La Biblia completa** en Reina-Valera 1909, con búsqueda sin conexión y
+  salto directo a una cita: se escribe «Juan 3, 16» y se abre el capítulo.
+- **Planes de lectura**: los Evangelios, el Nuevo Testamento, el Salterio o la
+  Biblia entera, repartidos por días, con lo leído marcado.
 - **El Salterio** en la numeración de los Setenta, repartido en los veinte
   kathismata.
 - **Las lecturas de cada día** del leccionario bizantino, recortadas al
@@ -69,6 +72,8 @@ porque no hay servidor.
   ellos, y artículos sobre el gobierno, el ávaton, los sketes, el canto y cómo
   se llega.
 - **Oración de Jesús y komboskini**, con contador, temporizador e historial.
+- **Ornamentos bizantinos** dibujados con trazo —cabeceras de entrelazo,
+  capitulares iluminadas, filete de tabla de icono—, que se pueden apagar.
 
 ---
 ## Contribuir

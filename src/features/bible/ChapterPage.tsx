@@ -9,6 +9,7 @@ import { BOOKS_BY_ID, RV1909 } from '@/content/bible';
 import { saveBookmark } from '@/db/user';
 import { Button, Empty, Loading, Notice, SourceNote } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
+import { Headpiece } from '@/components/Ornament';
 import { IconBookmark, IconChevronLeft, IconChevronRight } from '@/components/icons';
 import { useVisitLog } from '@/hooks/useVisitLog';
 import { useUi } from '@/stores/ui';
@@ -43,7 +44,11 @@ export function ChapterPage() {
 
   return (
     <article className="page page--reading">
-      <header style={{ paddingTop: 'var(--sp-5)', marginBottom: 'var(--sp-4)' }}>
+      <header
+        className="page-head--ornate"
+        style={{ paddingTop: 'var(--sp-5)', marginBottom: 'var(--sp-4)' }}
+      >
+        <Headpiece />
         <Link to={`/leer/biblia/${book.id}`} className="eyebrow" style={{ textDecoration: 'none' }}>
           {book.name}
         </Link>

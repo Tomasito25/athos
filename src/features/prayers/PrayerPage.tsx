@@ -3,6 +3,7 @@ import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
 import { Blocks, Empty, Loading, SourceNote, Tag } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
+import { Headpiece, Tailpiece } from '@/components/Ornament';
 import { useVisitLog } from '@/hooks/useVisitLog';
 import { PRAYER_CATEGORIES } from '@/content/prayers';
 import es from '@/locales/es';
@@ -32,7 +33,12 @@ export function PrayerPage() {
 
   return (
     <article className="page page--reading">
-      <header style={{ paddingTop: 'var(--sp-5)', marginBottom: 'var(--sp-5)' }}>
+      {/* La oración se abre como un texto del libro, con su puerta encima. */}
+      <header
+        className="page-head--ornate"
+        style={{ paddingTop: 'var(--sp-5)', marginBottom: 'var(--sp-5)' }}
+      >
+        <Headpiece />
         <p className="eyebrow">{category?.name}</p>
         <h1 className="display" style={{ fontSize: 'var(--text-2xl)', margin: 'var(--sp-2) 0' }}>
           {item.title}
@@ -65,6 +71,8 @@ export function PrayerPage() {
           <Tag>{item.status === 'pending' ? es.sources.statusPending : es.sources.statusPartial}</Tag>
         </div>
       ) : null}
+
+      <Tailpiece />
 
       <SourceNote meta={item.meta} status={item.status} />
     </article>

@@ -205,6 +205,9 @@ const es = {
     verse: 'Versículo',
     translation: 'Traducción',
     search: 'Buscar en la Biblia',
+    searchOrGo: 'Un libro, o una cita: «Juan 3, 16»',
+    goTo: 'Ir al pasaje',
+    goToNote: 'Abrir este capítulo',
     previousChapter: 'Capítulo anterior',
     nextChapter: 'Capítulo siguiente',
     copyVerse: 'Copiar versículo',
@@ -213,6 +216,33 @@ const es = {
     indexing: 'Indexando… {{done}} de {{total}}',
     indexed: 'Biblia indexada por completo',
     deuterocanon: 'Deuterocanónicos',
+  },
+
+  read: {
+    subtitle: 'La Escritura, el Salterio y lo que la Iglesia lee hoy.',
+    books: 'Los libros',
+  },
+
+  plans: {
+    title: 'Planes de lectura',
+    subtitle: 'Leer la Escritura seguida, un tramo cada día.',
+    started: 'Lo que llevas empezado',
+    others: 'Otros planes',
+    choose: 'Elige un plan',
+    today: 'Hoy toca',
+    day: 'Día',
+    read: 'Leer',
+    markDone: 'Marcar como leído',
+    unmark: 'Quitar la marca',
+    continue: 'Seguir por aquí',
+    allDays: 'Todos los días',
+    more: 'Ver {{count}} días más',
+    finished: 'Plan terminado',
+    finishedNote:
+      'Lo has leído entero. En la tradición monástica el Salterio se termina y se vuelve a empezar el mismo día; con la Escritura pasa igual, porque no se lee para haberla leído.',
+    restart: 'Empezar de nuevo',
+    resetConfirm: '¿Borrar el avance de este plan y empezar de cero?',
+    reset: 'Plan reiniciado',
   },
 
   psalter: {
@@ -394,6 +424,18 @@ const es = {
   },
 
   settings: {
+    density: 'Densidad',
+    densityRoomy: 'Cómoda',
+    densityNormal: 'Normal',
+    densityTight: 'Compacta',
+    ornaments: 'Ornamentos bizantinos',
+    ornamentsNote:
+      'Cabeceras de entrelazo, remates y el filete de tabla de icono en las tarjetas, como en un manuscrito.',
+    dropCaps: 'Capitular iluminada',
+    dropCapsNote: 'La primera letra de una oración o de un salmo, grande y en tinta roja.',
+    start: 'Al abrir',
+    startAt: 'Empezar en',
+    startAtNote: 'La pantalla que se abre al entrar. Los enlaces directos no se tocan.',
     title: 'Configuración',
     appearance: 'Aspecto',
     theme: 'Tema',

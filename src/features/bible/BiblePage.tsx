@@ -4,6 +4,7 @@ import { useAsync } from '@/hooks/useAsync';
 import { bibleIndexStatus, indexWholeBible } from '@/db/bible';
 import { AT_ORDER, BIBLE_BOOKS, DEUTEROCANON_NOTE, NT_ORDER, RV1909, SECTION_LABELS, TESTAMENT_LABELS } from '@/content/bible';
 import { Button, ListRow, Notice, PageHead, Progress, Section, StatusTag, Tag } from '@/components/ui';
+import { parsePassage } from '@/lib/pericope';
 import { normalize } from '@/lib/text';
 import { useUi } from '@/stores/ui';
 import type { BibleSection, Testament } from '@/types';
@@ -22,6 +23,27 @@ export function BiblePage() {
     return BIBLE_BOOKS.filter((book) =>
       normalize(`${book.name} ${book.abbr} ${(book.alternateNames ?? []).join(' ')}`).includes(needle),
     );
+  }, [query]);
+
+  /*
+   * Si lo escrito es una cita —«Juan 3, 16», «Mt 5», «1 Co 13»—, se ofrece ir
+   * derecho al capítulo. Quien busca en una Biblia casi nunca busca el nombre
+   * de un libro: busca un pasaje, y hasta ahora había que dar tres toques
+   * para llegar. El análisis es el mismo que usa el leccionario, así que
+   * entiende las abreviaturas y las dos notaciones.
+   */
+  const cita = useMemo(() => {
+    if (query.trim().length < 3) return null;
+    const partes = parsePassage(query);
+    const primera = partes?.[0];
+    const capitulo = primera?.ranges[0]?.chapter;
+    if (!primera || !capitulo) return null;
+    const libro = BIBLE_BOOKS.find((b) => b.id === primera.bookId);
+    if (!libro || capitulo > libro.chapters) return null;
+    return {
+      label: `${libro.name} ${capitulo}`,
+      path: `/leer/biblia/${libro.id}/${capitulo}`,
+    };
   }, [query]);
 
   const runIndex = async () => {
@@ -44,10 +66,10 @@ export function BiblePage() {
       <input
         type="search"
         className="input"
-        placeholder="Buscar un libro…"
+        placeholder={es.bible.searchOrGo}
         value={query}
         onChange={(event) => setQuery(event.target.value)}
-        aria-label="Buscar un libro"
+        aria-label={es.bible.searchOrGo}
       />
 
       {status.data && status.data.done < status.data.total ? (
@@ -69,7 +91,17 @@ export function BiblePage() {
         </div>
       ) : null}
 
-      {filtered ? (
+      {cita ? (
+        <Section title={es.bible.goTo}>
+          <div className="list">
+            <ListRow to={cita.path} title={cita.label} meta={es.bible.goToNote} />
+          </div>
+        </Section>
+      ) : null}
+
+      {/* Con una cita reconocida y ningún libro que se llame así, la lista
+          vacía sólo dice «0 libros» debajo de la respuesta buena. */}
+      {filtered && (filtered.length > 0 || !cita) ? (
         <Section title={`${filtered.length} libros`}>
           <div className="list">
             {filtered.map((book) => (

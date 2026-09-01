@@ -56,9 +56,11 @@ porque no hay servidor.
   del Octoecos, las fiestas y el ayuno de cada día.
 - **Santoral completo**: no queda ningún día del año sin conmemoración, con la
   vida escrita de cada una.
-- **Catecismo** en preguntas y respuestas, filtrable según se llegue de fuera,
-  se sea catecúmeno o se lleven años dentro, y con buscador. Dice también lo que
-  la Iglesia no ha definido y dónde no hay unanimidad.
+- **Catecismo** de 108 preguntas con las tres partes clásicas —la fe sobre el
+  Símbolo artículo por artículo, la esperanza sobre el Padre Nuestro y las
+  Bienaventuranzas, el amor sobre el Decálogo—, filtrable según se llegue de
+  fuera, se sea catecúmeno o se lleven años dentro, y con buscador. Dice también
+  lo que la Iglesia no ha definido y dónde no hay unanimidad.
 - **Historia de la Iglesia** de Pentecostés a hoy, en ocho épocas: setenta
   hechos, todos con su reseña escrita, la ficha de cada Concilio y los
   conflictos abiertos contados como conflictos.

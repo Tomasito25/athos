@@ -189,3 +189,71 @@ describe('los enlaces internos llevan a algún sitio', () => {
     }
   });
 });
+
+describe('las tres partes clásicas', () => {
+  it('están las tres, y en su orden: fe, esperanza, amor', () => {
+    // Es el armazón que tiene un catecismo ortodoxo desde san Pablo. Sin él,
+    // las preguntas sueltas no forman un catecismo: forman un montón.
+    const ids = CATECHISM_PARTS.map((p) => p.id);
+    for (const parte of ['simbolo', 'esperanza', 'amor']) {
+      expect(ids, `falta la parte ${parte}`).toContain(parte);
+    }
+    expect(ids.indexOf('simbolo')).toBeLessThan(ids.indexOf('esperanza'));
+    expect(ids.indexOf('esperanza')).toBeLessThan(ids.indexOf('amor'));
+  });
+
+  it('el Símbolo se explica artículo por artículo, los doce', () => {
+    const simbolo = CATECHISM_PARTS.find((p) => p.id === 'simbolo')!;
+    for (let n = 1; n <= 12; n += 1) {
+      expect(
+        simbolo.entries.some((e) => e.id === `articulo-${n}`),
+        `falta el artículo ${n}`,
+      ).toBe(true);
+    }
+  });
+
+  it('el Padre Nuestro se explica petición por petición, las siete', () => {
+    const esperanza = CATECHISM_PARTS.find((p) => p.id === 'esperanza')!;
+    for (let n = 1; n <= 7; n += 1) {
+      expect(
+        esperanza.entries.some((e) => e.id === `peticion-${n}`),
+        `falta la petición ${n}`,
+      ).toBe(true);
+    }
+    expect(esperanza.entries.some((e) => e.id === 'padrenuestro-invocacion')).toBe(true);
+    expect(esperanza.entries.some((e) => e.id === 'doxologia')).toBe(true);
+  });
+
+  it('están las nueve bienaventuranzas, repartidas en tres', () => {
+    const esperanza = CATECHISM_PARTS.find((p) => p.id === 'esperanza')!;
+    const grupos = esperanza.entries.filter((e) => e.id.startsWith('bienaventuranzas-'));
+    expect(grupos.length).toBe(3);
+  });
+
+  it('están los diez mandamientos', () => {
+    const amor = CATECHISM_PARTS.find((p) => p.id === 'amor')!;
+    for (let n = 1; n <= 10; n += 1) {
+      expect(
+        amor.entries.some((e) => e.id === `mandamiento-${n}`),
+        `falta el mandamiento ${n}`,
+      ).toBe(true);
+    }
+  });
+
+  it('avisa de que la numeración del Decálogo no es la misma en todas partes', () => {
+    // Discutir por un número sin saber que hay dos maneras de contar es la
+    // discusión más inútil que existe sobre los mandamientos.
+    const amor = CATECHISM_PARTS.find((p) => p.id === 'amor')!;
+    const texto = amor.entries.flatMap((e) => e.answer).join(' ');
+    expect(texto).toMatch(/numeración/i);
+    expect(texto).toMatch(/católica romana|luterana/i);
+  });
+
+  it('el Símbolo no transcribe el Credo: remite a donde está', () => {
+    // El texto litúrgico vive en Orar → Oraciones. Aquí va la explicación,
+    // que es prosa de ATHOS y no un documento conciliar.
+    const simbolo = CATECHISM_PARTS.find((p) => p.id === 'simbolo')!;
+    const primera = simbolo.entries.find((e) => e.id === 'que-es-el-simbolo');
+    expect(primera?.seeAlso?.some((x) => x.path.includes('simbolo-de-la-fe'))).toBe(true);
+  });
+});

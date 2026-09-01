@@ -559,6 +559,13 @@ const BASE_PARTS: CatechismPart[] = [
  */
 const DONDE_VA: Record<string, string> = {
   // parte nueva -> detrás de qué parte existente
+  //
+  // Las tres clásicas van seguidas y en su orden —fe, esperanza, amor—, justo
+  // después de las preguntas sobre Dios: son el armazón, y lo demás son las
+  // preguntas que la gente hace además de eso.
+  simbolo: 'dios',
+  esperanza: 'simbolo',
+  amor: 'esperanza',
   escritura: 'iglesia',
   'en-la-iglesia': 'misterios',
   'vida-diaria': 'vida',
@@ -571,12 +578,16 @@ function montar(): CatechismPart[] {
   });
 
   const salida: CatechismPart[] = [];
-  for (const parte of conExtras) {
+  const encolar = (parte: CatechismPart) => {
     salida.push(parte);
+    // Una parte nueva puede colgar de otra parte nueva —la esperanza va detrás
+    // del Símbolo, y el amor detrás de la esperanza—, así que hay que seguir
+    // la cadena en vez de mirar sólo las partes de la primera tanda.
     for (const nueva of EXTRA_PARTS) {
-      if (DONDE_VA[nueva.id] === parte.id) salida.push(nueva);
+      if (DONDE_VA[nueva.id] === parte.id) encolar(nueva);
     }
-  }
+  };
+  for (const parte of conExtras) encolar(parte);
   // Si alguna parte nueva apunta a una que no existe, no se pierde: va al final.
   for (const nueva of EXTRA_PARTS) {
     if (!salida.some((p) => p.id === nueva.id)) salida.push(nueva);

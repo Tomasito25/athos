@@ -129,6 +129,10 @@
   --gold-fill: linear-gradient(150deg, #a9832a 0%, #8a6817 100%);
   --shadow-gold: 0 6px 20px rgba(154, 118, 31, 0.18);
   --ring: 0 0 0 3px var(--gold-wash);
+
+  /* La orla: mosaico de entrelazo con rombos en las esquinas, servido como
+     `border-image`. El color va dentro del SVG, así que hay una por tema. */
+  --orla: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' fill='none' stroke='%239a761f' stroke-width='1.4' stroke-linecap='round'%3E%3Cpath d='M8 3 L13 8 L8 13 L3 8 Z'/%3E%3Cpath d='M40 3 L45 8 L40 13 L35 8 Z'/%3E%3Cpath d='M8 35 L13 40 L8 45 L3 40 Z'/%3E%3Cpath d='M40 35 L45 40 L40 45 L35 40 Z'/%3E%3Cpath d='M16 8 C 20 8, 20 3, 24 3 S 28 8, 32 8'/%3E%3Cpath d='M16 8 C 20 8, 20 13, 24 13 S 28 8, 32 8'/%3E%3Cpath d='M16 40 C 20 40, 20 35, 24 35 S 28 40, 32 40'/%3E%3Cpath d='M16 40 C 20 40, 20 45, 24 45 S 28 40, 32 40'/%3E%3Cpath d='M8 16 C 8 20, 3 20, 3 24 S 8 28, 8 32'/%3E%3Cpath d='M8 16 C 8 20, 13 20, 13 24 S 8 28, 8 32'/%3E%3Cpath d='M40 16 C 40 20, 35 20, 35 24 S 40 28, 40 32'/%3E%3Cpath d='M40 16 C 40 20, 45 20, 45 24 S 40 28, 40 32'/%3E%3C/svg%3E");
 }
 
 /* ------------------------------------------------------------
@@ -174,6 +178,8 @@
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
   --shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
   --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.7);
+
+  --orla: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' fill='none' stroke='%23c9a24a' stroke-width='1.4' stroke-linecap='round'%3E%3Cpath d='M8 3 L13 8 L8 13 L3 8 Z'/%3E%3Cpath d='M40 3 L45 8 L40 13 L35 8 Z'/%3E%3Cpath d='M8 35 L13 40 L8 45 L3 40 Z'/%3E%3Cpath d='M40 35 L45 40 L40 45 L35 40 Z'/%3E%3Cpath d='M16 8 C 20 8, 20 3, 24 3 S 28 8, 32 8'/%3E%3Cpath d='M16 8 C 20 8, 20 13, 24 13 S 28 8, 32 8'/%3E%3Cpath d='M16 40 C 20 40, 20 35, 24 35 S 28 40, 32 40'/%3E%3Cpath d='M16 40 C 20 40, 20 45, 24 45 S 28 40, 32 40'/%3E%3Cpath d='M8 16 C 8 20, 3 20, 3 24 S 8 28, 8 32'/%3E%3Cpath d='M8 16 C 8 20, 13 20, 13 24 S 8 28, 8 32'/%3E%3Cpath d='M40 16 C 40 20, 35 20, 35 24 S 40 28, 40 32'/%3E%3Cpath d='M40 16 C 40 20, 45 20, 45 24 S 40 28, 40 32'/%3E%3C/svg%3E");
 
   --paper: #171208;
   --paper-ink: #e3d6bd;

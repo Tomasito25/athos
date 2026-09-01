@@ -2,6 +2,42 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.20.0]
+
+### Añadido
+
+- **El catecismo, con su armazón clásico.** Pasa de 68 preguntas a **108**, y
+  sobre todo gana lo que le faltaba: la estructura de tres partes con que un
+  catecismo ortodoxo se ha enseñado siempre, tomada de san Pablo —«ahora
+  permanecen la fe, la esperanza y el amor»—.
+  - **La fe**: los **doce artículos del Símbolo**, uno por uno, con lo que dice
+    cada uno, contra qué se escribió y qué se juega en él. El Filioque, la
+    cláusula contra Marcelo, el «consustancial» que costó cinco destierros.
+  - **La esperanza**: qué es la oración, la **invocación, las siete peticiones
+    y la doxología** del Padre Nuestro, y las **nueve bienaventuranzas**.
+  - **El amor**: los dos mandamientos en que Cristo resumió la Ley y el
+    **Decálogo entero**, en la numeración ortodoxa, avisando de que la católica
+    y la luterana cuentan distinto.
+- **El catecismo, decorado por todos lados.** Cada pregunta va dentro de una
+  orla de entrelazo con rombos en las esquinas, la pregunta en su cartela
+  dorada, la respuesta con capitular en tinta roja dentro de su recuadro y una
+  cinta doble en el margen. Entre pregunta y pregunta, una banda de trenza; la
+  parte se abre con la puerta y se cierra con el remate.
+
+### Detalles
+
+- La orla es un `border-image` sobre un SVG en línea: enmarca los cuatro lados
+  con un solo mosaico, no pesa nada y no hay ninguna imagen que descargar.
+  Adelgaza sola por debajo de 30 rem, donde un marco de dieciséis píxeles se
+  comería el ancho de lectura, y ahí la capitular pierde su caja.
+- Todo cuelga del interruptor de ornamentos: quien prefiera la página desnuda
+  la tiene en Configuración.
+- Los artículos del Símbolo, las peticiones y los mandamientos están
+  formulados como preguntas y no como títulos, para que el buscador del
+  catecismo los encuentre por lo que la gente escribe.
+- El Credo no se transcribe en el catecismo: el texto litúrgico vive en Orar →
+  Oraciones, y aquí va la explicación, que es prosa de ATHOS.
+
 ## [1.19.0]
 
 ### Añadido

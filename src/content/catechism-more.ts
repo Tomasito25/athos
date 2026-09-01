@@ -16,10 +16,44 @@
  * 4. Ninguna respuesta se escribe contra nadie.
  */
 import type { CatechismEntry, CatechismPart } from './catechism';
+import { LOVE_ENTRIES } from './catechism-amor';
+import { HOPE_ENTRIES } from './catechism-esperanza';
+import { SYMBOL_ENTRIES } from './catechism-simbolo';
 
 /* ═══════════════ Partes nuevas ═══════════════ */
 
 export const EXTRA_PARTS: CatechismPart[] = [
+  /*
+   * Las tres partes clásicas.
+   *
+   * Un catecismo ortodoxo se ha organizado siempre desde san Pablo —«ahora
+   * permanecen la fe, la esperanza y el amor»—: la fe sobre el Símbolo, la
+   * esperanza sobre el Padre Nuestro y las Bienaventuranzas, el amor sobre los
+   * mandamientos. ATHOS tenía las preguntas sueltas y le faltaba justamente
+   * eso: el esqueleto que las sostiene y el texto explicado línea por línea.
+   */
+  {
+    id: 'simbolo',
+    title: 'La fe · el Símbolo, artículo por artículo',
+    summary:
+      'Los doce artículos del Credo, uno a uno: qué dice cada uno, contra qué se escribió y qué se juega en él.',
+    entries: SYMBOL_ENTRIES,
+  },
+  {
+    id: 'esperanza',
+    title: 'La esperanza · el Padre Nuestro y las Bienaventuranzas',
+    summary:
+      'Qué es la oración, la invocación, las siete peticiones, la doxología y las nueve bienaventuranzas.',
+    entries: HOPE_ENTRIES,
+  },
+  {
+    id: 'amor',
+    title: 'El amor · los mandamientos',
+    summary:
+      'Los dos mandamientos en que Cristo resumió la Ley, y el Decálogo uno por uno en la numeración ortodoxa.',
+    entries: LOVE_ENTRIES,
+  },
+
   {
     id: 'escritura',
     title: 'La Escritura',

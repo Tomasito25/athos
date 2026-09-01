@@ -1616,6 +1616,90 @@ input[type='range']:focus-visible::-webkit-slider-thumb {
   text-wrap: balance;
 }
 
+/* ═══════════ El catecismo, ornado ═══════════
+   Con los ornamentos puestos, una parte del catecismo se lee como una página
+   de manuscrito: cada pregunta dentro de su orla de entrelazo, la inicial en
+   tinta roja dentro de su recuadro y una cinta en el margen.
+
+   Todo cuelga de `[data-ornaments='si']`, así que quien prefiera la página
+   desnuda la tiene con un interruptor. Y todo es CSS sobre un SVG en línea:
+   ni una imagen que descargar. */
+
+:root[data-ornaments='si'] .catechism-entry {
+  position: relative;
+  margin-top: var(--sp-6);
+  padding: var(--sp-5) var(--sp-5) var(--sp-4);
+  border: 16px solid transparent;
+  border-image: var(--orla) 16 round;
+}
+
+:root[data-ornaments='si'] .catechism-entry:first-of-type {
+  padding-top: var(--sp-5);
+}
+
+/* La pregunta, en su cartela: fondo dorado tenue y un filete arriba y abajo,
+   como el encabezamiento de un capítulo en un evangeliario. */
+:root[data-ornaments='si'] .catechism-entry__q {
+  margin: calc(-1 * var(--sp-2)) 0 var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--gold-wash);
+  border-block: 1px solid color-mix(in srgb, var(--gold) 38%, transparent);
+}
+
+/* La primera letra de la respuesta, agrandada y en rojo dentro de su caja. */
+:root[data-ornaments='si'][data-dropcaps='si']
+  .catechism-entry
+  .prose
+  > p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--font-serif);
+  font-size: 2.7em;
+  line-height: 0.84;
+  margin-inline-end: 0.14em;
+  padding: 0.09em 0.13em 0.03em 0.09em;
+  border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--red);
+}
+
+/* La cinta del margen, a la izquierda de la respuesta. */
+:root[data-ornaments='si'] .catechism-entry .prose {
+  padding-inline-start: var(--sp-4);
+  border-inline-start: 3px double color-mix(in srgb, var(--gold) 30%, transparent);
+}
+
+/* En pantalla estrecha la orla adelgaza y la capitular pierde su caja: a esa
+   anchura una letra de tres líneas deja el párrafo en una columna de dos
+   palabras, y un marco de dieciséis píxeles se come el ancho de lectura. */
+@media (max-width: 30rem) {
+  :root[data-ornaments='si'] .catechism-entry {
+    border-width: 10px;
+    padding-inline: var(--sp-3);
+  }
+
+  :root[data-ornaments='si'] .catechism-entry .prose {
+    padding-inline-start: var(--sp-3);
+  }
+
+  :root[data-ornaments='si'][data-dropcaps='si']
+    .catechism-entry
+    .prose
+    > p:first-of-type::first-letter {
+    border: none;
+    background: none;
+    padding: 0.06em 0.1em 0 0;
+  }
+}
+
+/* El resumen de una parte, entre dos filetes dobles. */
+:root[data-ornaments='si'] .catechism-lead {
+  margin-block: var(--sp-4);
+  padding-block: var(--sp-3);
+  border-block: 3px double color-mix(in srgb, var(--gold) 35%, transparent);
+  text-align: center;
+}
+
 /* ---------------- Cronología ---------------- */
 .timeline {
   list-style: none;

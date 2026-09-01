@@ -12,6 +12,7 @@ import { CATECHISM_LEVELS, CATECHISM_META, type CatechismLevel } from '@/content
 import { CATECHISM_PARTS } from '@/content/catechism-parts';
 import { ButtonLink, Empty, Notice, PageHead, SourceNote, Tag } from '@/components/ui';
 import { RichText } from '@/components/RichText';
+import { Interlace, Tailpiece } from '@/components/Ornament';
 import { useHashScroll } from '@/hooks/useHashScroll';
 import { useVisitLog } from '@/hooks/useVisitLog';
 import es from '@/locales/es';
@@ -46,10 +47,15 @@ export function CatechismPartPage() {
 
   return (
     <article className="page page--reading">
-      <PageHead eyebrow={es.catechism.title} title={parte.title} subtitle={parte.summary} />
+      <PageHead ornate eyebrow={es.catechism.title} title={parte.title} />
+      <p className="catechism-lead muted">{parte.summary}</p>
 
-      {entradas.map((entrada) => (
+      {entradas.map((entrada, indice) => (
         <section key={entrada.id} id={entrada.id} className="catechism-entry">
+          {/* Una cinta entre pregunta y pregunta, como el filete que separa
+              las cuestiones en un manuscrito. La primera no la lleva: la
+              abre la puerta de la cabecera. */}
+          {indice > 0 ? <Interlace width={140} /> : null}
           <h2 className="catechism-entry__q">{entrada.question}</h2>
 
           <div className="tag-row" style={{ margin: 'var(--sp-2) 0 var(--sp-3)' }}>
@@ -115,6 +121,8 @@ export function CatechismPartPage() {
           {es.catechism.allParts}
         </ButtonLink>
       </div>
+
+      <Tailpiece />
 
       <SourceNote meta={CATECHISM_META} />
     </article>

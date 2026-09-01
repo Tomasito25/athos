@@ -12,6 +12,7 @@ import { CATECHISM_LEVELS, CATECHISM_META, type CatechismLevel } from '@/content
 import { CATECHISM_INDEX, CATECHISM_PARTS } from '@/content/catechism-parts';
 import { ListRow, PageHead, Panel, Section, Segmented, SourceNote } from '@/components/ui';
 import { normalize } from '@/lib/text';
+import { Tailpiece } from '@/components/Ornament';
 import es from '@/locales/es';
 
 type Filtro = CatechismLevel | 'todo';
@@ -54,6 +55,7 @@ export function CatechismPage() {
   return (
     <div className="page page--reading">
       <PageHead
+        ornate
         eyebrow={es.nav.library}
         title={es.catechism.title}
         subtitle={es.catechism.subtitle.replace('{{count}}', String(total))}
@@ -131,6 +133,8 @@ export function CatechismPage() {
           <Link to="/orar/oraciones/pedir-la-bendicion">{es.catechism.howToAsk}</Link>
         </p>
       </Panel>
+
+      <Tailpiece />
 
       <SourceNote meta={CATECHISM_META} />
     </div>

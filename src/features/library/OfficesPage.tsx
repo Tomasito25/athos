@@ -1,7 +1,7 @@
 import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
 import { OFFICES_NOTE, OFFICE_KIND_LABELS } from '@/content/offices';
-import { ListRow, Loading, PageHead, Section, StatusTag } from '@/components/ui';
+import { ListRow, PageHead, Section, SkeletonList, StatusTag } from '@/components/ui';
 import type { OfficeKind } from '@/types';
 import es from '@/locales/es';
 
@@ -18,7 +18,7 @@ export function OfficesPage() {
   return (
     <div className="page">
       <PageHead title={es.library.liturgy} subtitle="Para seguir los oficios." />
-      {offices.loading ? <Loading /> : null}
+      {offices.loading ? <SkeletonList rows={6} /> : null}
 
       {[...groups.entries()].map(([kind, list]) => (
         <Section key={kind} title={OFFICE_KIND_LABELS[kind]}>

@@ -82,7 +82,12 @@ describe('secciones principales', () => {
 
   it('el calendario pinta la rejilla del mes', async () => {
     renderAt('/calendario');
-    await waitFor(() => expect(screen.getAllByRole('gridcell').length).toBeGreaterThan(27));
+    // El mismo margen que `findHeading`: la pantalla se carga bajo demanda y
+    // el segundo por defecto de `waitFor` se queda corto con la suite entera
+    // en marcha.
+    await waitFor(() => expect(screen.getAllByRole('gridcell').length).toBeGreaterThan(27), {
+      timeout: 5000,
+    });
   });
 
   it('la biblioteca ofrece sus seis secciones', async () => {

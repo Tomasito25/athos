@@ -518,6 +518,60 @@
   color: var(--ink-muted);
 }
 
+/* ---------------- Tarjeta de índice ----------------
+   La de la portada de la biblioteca. Baja a propósito: el icono, el título y
+   la cuenta comparten renglón, y la descripción se recorta a dos líneas. Con
+   nueve secciones, la diferencia entre ver el índice entero y recorrerlo a
+   ciegas. */
+.card--index {
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+}
+
+.card__head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.card--index .card__title {
+  /* Se come el espacio libre para que la cuenta quede pegada al margen. */
+  flex: 1;
+  min-width: 0;
+}
+
+.card__count {
+  flex: none;
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.card__count b {
+  color: var(--gold);
+}
+
+/* En un móvil estrecho la unidad («preguntas», «concilios con ficha») empuja
+   al título hasta partirlo. El número solo ya informa. */
+@media (max-width: 26rem) {
+  .card__unit {
+    display: none;
+  }
+}
+
+.card__text--clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Dos columnas en cuanto hay sitio: las tarjetas ya no necesitan 20rem. */
+.grid--index {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+}
+
 /* ---------------- El arca del icono ----------------
    Una tabla de icono no es plana: se rebaja el centro y queda un reborde
    alrededor, el kovcheg. Es lo que hace que la imagen esté «dentro» de la
@@ -1059,6 +1113,59 @@ mark {
   .keyboard-hint {
     display: block;
   }
+}
+
+/* ---------------- Versículo del día ---------------- */
+
+/* Se pinta como una inscripción, no como un párrafo: es lo que uno se lleva
+   en la cabeza el resto del día. Las dos reglas de oro la enmarcan sin cerrar
+   una caja, que pesaría demasiado en lo alto de la portada. */
+.verse-day {
+  margin: var(--sp-5) 0 var(--sp-4);
+  padding: var(--sp-4) 0;
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+  text-align: center;
+}
+
+.verse-day__label {
+  margin-bottom: var(--sp-3);
+}
+
+.verse-day__link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  border-radius: var(--radius);
+}
+
+.verse-day__text {
+  font-family: var(--font-serif);
+  font-size: var(--text-lg);
+  line-height: 1.6;
+  color: var(--ink-strong);
+  /* Se abre con comilla latina, como una cita de verdad. */
+  text-wrap: pretty;
+}
+
+.verse-day__text::before {
+  content: '«';
+}
+
+.verse-day__text::after {
+  content: '»';
+}
+
+.verse-day__ref {
+  margin-top: var(--sp-2);
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-wide);
+  color: var(--gold);
+}
+
+.verse-day__link:hover .verse-day__ref,
+.verse-day__link:focus-visible .verse-day__ref {
+  text-decoration: underline;
 }
 
 /* ---------------- Esqueletos ---------------- */

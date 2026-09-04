@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
+import { OFFICE_KIND_LABELS } from '@/content/offices';
 import { Blocks, Loading, Panel, SourceNote, NotFound } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { useVisitLog } from '@/hooks/useVisitLog';
@@ -12,7 +13,13 @@ export function OfficePage() {
   const office = useAsync(() => db.liturgies.get(officeId), [officeId]);
   const path = `/biblioteca/liturgia/${officeId}`;
 
-  useVisitLog(office.data ? { path, title: office.data.title, kind: es.library.liturgy } : null);
+  // La clase de oficio, no «Divina Liturgia» para todos: en «Por dónde ibas»
+  // una Hora tiene que decir que es una Hora.
+  useVisitLog(
+    office.data
+      ? { path, title: office.data.title, kind: OFFICE_KIND_LABELS[office.data.kind] }
+      : null,
+  );
 
   if (office.loading) return <Loading />;
   if (!office.data) {
@@ -28,7 +35,10 @@ export function OfficePage() {
   return (
     <article className="page page--reading">
       <header style={{ paddingTop: 'var(--sp-5)', marginBottom: 'var(--sp-4)' }}>
-        <p className="eyebrow">{es.library.liturgy}</p>
+        {/* El epígrafe dice de qué clase de oficio se trata. Antes decía
+            «Divina Liturgia» en todos, y una Hora o unas Vísperas quedaban
+            mal rotuladas en su propia ficha. */}
+        <p className="eyebrow">{OFFICE_KIND_LABELS[item.kind]}</p>
         <h1 className="display" style={{ fontSize: 'var(--text-2xl)', margin: 'var(--sp-2) 0' }}>
           {item.title}
         </h1>

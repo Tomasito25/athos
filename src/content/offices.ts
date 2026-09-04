@@ -11,6 +11,7 @@
  */
 import type { Office, OfficeSection, SourceMeta, TextBlock } from '@/types';
 import { OFFICE_ABOUT } from './hymns-about';
+import { HORAS_OFFICES, HORAS_RESUMEN } from './horas';
 
 const meta: SourceMeta = {
   source: 'Ieratikón y Horologion bizantinos; textos de uso tradicional',
@@ -334,34 +335,29 @@ const seeds: OfficeSeed[] = [
     status: 'partial',
     sections: [
       section('sentido', 'Las cuatro horas del día', [
-        rub('Cada hora recuerda un momento de la Pasión y de Pentecostés, y las cuatro tienen la misma forma: tres salmos, un tropario propio de la hora, el Trisagio, un kontakion y una oración final.'),
+        rub('El día antiguo se contaba desde el amanecer y se marcaba de tres en tres horas. La Iglesia rezó en esas cuatro señales, y a cada una le quedó la memoria de un momento de la Pasión o de Pentecostés.'),
+        rub('Las cuatro tienen la misma forma: tres salmos fijos, el tropario propio de la hora con su theotokion, el Trisagio, cuarenta veces «Señor, ten piedad», la oración de toda hora y una oración final distinta en cada una.'),
+        t('Cada una está entera en su propia ficha. Aquí van las cuatro de un vistazo, para saber cuál toca.'),
       ]),
-      section('prima', 'Primera Hora · al amanecer', [
-        rub('Salmos 5, 89 y 100. Están en Leer → Salterio.'),
-        rub('Tropario de la hora:'),
-        t('Por la mañana escucha mi voz, Rey mío y Dios mío.'),
-        rub('Y al final, la oración que cierra la hora:'),
-        t('Cristo, luz verdadera, que iluminas y santificas a todo hombre que viene al mundo: imprime en nosotros la luz de tu rostro, para que en ella veamos la luz inaccesible. Endereza nuestros pasos al cumplimiento de tus mandamientos, por las súplicas de tu purísima Madre y de todos tus santos.'),
+      section('prima', 'Hora Primera', [
+        rub(HORAS_RESUMEN.find((x) => x.id === 'hora-primera')!.cuando),
+        t(HORAS_RESUMEN.find((x) => x.id === 'hora-primera')!.memoria),
+        rub(`Salmos ${HORAS_RESUMEN.find((x) => x.id === 'hora-primera')!.salmos.join(', ')}. El oficio entero está en Biblioteca → Liturgia → Hora Primera.`),
       ]),
-      section('tercia', 'Tercera Hora · media mañana', [
-        rub('La hora en que el Espíritu Santo descendió sobre los apóstoles. Salmos 16, 24 y 50.'),
-        rub('Tropario de la hora:'),
-        t('Señor, que a la hora tercia enviaste tu Santísimo Espíritu sobre tus apóstoles: no nos lo quites, oh Bueno, sino renuévalo en nosotros, que te suplicamos.'),
-        t('Crea en mí, oh Dios, un corazón limpio, y renueva un espíritu recto dentro de mí.'),
-        t('No me eches de tu presencia, y no quites de mí tu santo Espíritu.'),
+      section('tercia', 'Hora Tercera', [
+        rub(HORAS_RESUMEN.find((x) => x.id === 'hora-tercera')!.cuando),
+        t(HORAS_RESUMEN.find((x) => x.id === 'hora-tercera')!.memoria),
+        rub(`Salmos ${HORAS_RESUMEN.find((x) => x.id === 'hora-tercera')!.salmos.join(', ')}. El oficio entero está en Biblioteca → Liturgia → Hora Tercera.`),
       ]),
-      section('sexta', 'Sexta Hora · mediodía', [
-        rub('La hora de la Crucifixión. Salmos 53, 54 y 90.'),
-        rub('Tropario de la hora:'),
-        t('Tú, que a la hora sexta clavaste en la cruz el pecado que Adán se atrevió a cometer en el paraíso: rasga también el escrito de nuestras culpas, oh Cristo Dios, y sálvanos.'),
+      section('sexta', 'Hora Sexta', [
+        rub(HORAS_RESUMEN.find((x) => x.id === 'hora-sexta')!.cuando),
+        t(HORAS_RESUMEN.find((x) => x.id === 'hora-sexta')!.memoria),
+        rub(`Salmos ${HORAS_RESUMEN.find((x) => x.id === 'hora-sexta')!.salmos.join(', ')}. El oficio entero está en Biblioteca → Liturgia → Hora Sexta.`),
       ]),
-      section('nona', 'Novena Hora · media tarde', [
-        rub('La hora en que el Señor entregó el espíritu. Salmos 83, 84 y 85.'),
-        rub('Tropario de la hora:'),
-        t('Tú, que a la hora novena gustaste la muerte en la carne por nosotros: mortifica la soberbia de nuestra carne, oh Cristo Dios, y sálvanos.'),
-      ]),
-      section('propios', 'Lo que cambia cada día', [
-        pending('los troparios y kontakia propios del día y del tiempo litúrgico, que se toman del Menaion y del Triodion.'),
+      section('nona', 'Hora Novena', [
+        rub(HORAS_RESUMEN.find((x) => x.id === 'hora-novena')!.cuando),
+        t(HORAS_RESUMEN.find((x) => x.id === 'hora-novena')!.memoria),
+        rub(`Salmos ${HORAS_RESUMEN.find((x) => x.id === 'hora-novena')!.salmos.join(', ')}. El oficio entero está en Biblioteca → Liturgia → Hora Novena.`),
       ]),
     ],
   },
@@ -430,7 +426,7 @@ const plain = (sections: OfficeSection[]) =>
     .replace(/<[^>]+>/g, '')
     .toLowerCase();
 
-export const OFFICES: Office[] = seeds.map((s, i) => ({
+const base: Office[] = seeds.map((s, i) => ({
   ...OFFICE_ABOUT[s.id],
   id: s.id,
   title: s.title,
@@ -442,6 +438,14 @@ export const OFFICES: Office[] = seeds.map((s, i) => ({
   meta,
   searchText: `${s.title} ${s.subtitle ?? ''} ${plain(s.sections)}`,
 }));
+
+/**
+ * Las cuatro Horas van detrás de «Las Horas», que es su portada.
+ *
+ * Se definen aparte —en `horas.ts`— porque las cuatro comparten esqueleto y
+ * escribirlo cuatro veces a mano era pedir que se descolgaran entre sí.
+ */
+export const OFFICES: Office[] = [...base, ...HORAS_OFFICES];
 
 export const OFFICE_KIND_LABELS: Record<Office['kind'], string> = {
   liturgia: 'Divina Liturgia',

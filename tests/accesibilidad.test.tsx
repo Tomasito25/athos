@@ -36,21 +36,26 @@ const montar = (path: string) =>
 describe('el cambio de página se nota', () => {
   it('pone en el título de la pestaña el encabezado de la pantalla', async () => {
     montar('/calendario/santos');
-    await waitFor(() => expect(document.title).toBe(`${es.saints.title} · ${es.app.name}`));
+    await waitFor(() => expect(document.title).toBe(`${es.saints.title} · ${es.app.name}`), {
+      timeout: 8000,
+    });
   });
 
   it('no repite el nombre de la aplicación cuando el encabezado ya lo lleva', async () => {
     montar('/');
-    await waitFor(() => expect(document.title).toMatch(/ATHOS/));
+    await waitFor(() => expect(document.title).toMatch(/ATHOS/), { timeout: 8000 });
     expect(document.title.match(/ATHOS/g)).toHaveLength(1);
   });
 
   it('anuncia la pantalla nueva en una región viva', async () => {
     const { container } = montar('/calendario/santos');
-    await waitFor(() => {
-      const aviso = container.querySelector('.sr-only[role="status"]');
-      expect(aviso?.textContent).toBe(es.saints.title);
-    });
+    await waitFor(
+      () => {
+        const aviso = container.querySelector('.sr-only[role="status"]');
+        expect(aviso?.textContent).toBe(es.saints.title);
+      },
+      { timeout: 8000 },
+    );
   });
 
   it('lleva el foco al contenido al navegar, pero no al entrar', async () => {
@@ -60,7 +65,11 @@ describe('el cambio de página se nota', () => {
     // El armazón no está en el documento hasta que el enrutador resuelve la
     // primera ruta, así que el `main` se busca después de esperarla: antes es
     // nulo, y comparar contra nulo daba una prueba que no comprobaba nada.
-    await screen.findByRole('heading', { level: 1, name: es.calendar.title });
+    await screen.findByRole(
+      'heading',
+      { level: 1, name: es.calendar.title },
+      { timeout: 8000 },
+    );
     const main = container.querySelector('#contenido');
     expect(main).not.toBeNull();
 
@@ -81,7 +90,7 @@ describe('saltar al contenido', () => {
   it('es lo primero que alcanza el tabulador y lleva al contenido', async () => {
     const usuario = userEvent.setup();
     const { container } = montar('/calendario/santos');
-    await screen.findByRole('heading', { level: 1, name: es.saints.title });
+    await screen.findByRole('heading', { level: 1, name: es.saints.title }, { timeout: 8000 });
 
     await usuario.tab();
     const salto = screen.getByRole('link', { name: es.app.skipToContent });

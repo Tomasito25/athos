@@ -2,6 +2,63 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.22.0]
+
+### Añadido
+
+- **Las cuatro Horas, enteras y rezables.** Hasta ahora había una sola ficha que
+  las resumía en cuatro párrafos: servía para saber qué era la Hora Tercera, no
+  para rezarla. Ahora cada una —**Primera, Tercera, Sexta y Novena**— tiene su
+  propia página con la forma completa del Horologion: el comienzo, sus tres
+  salmos con la razón de que sean ésos, el tropario propio de la hora, su
+  theotokion, el Trisagio, las cuarenta invocaciones, la oración de toda hora y
+  la oración final, que es distinta en cada una.
+  - La Primera cierra con «Cristo, luz verdadera»; la Tercera con la de san
+    Mardario; la Sexta y la Novena con las dos de san Basilio el Grande.
+  - «Las Horas» sigue existiendo y ahora es su portada: las cuatro de un
+    vistazo, para saber cuál toca.
+- **El versículo del día, en lo alto de Inicio.** Ciento treinta y cinco
+  referencias elegidas —de los Evangelios, los Salmos, las cartas y el Antiguo
+  Testamento—, repartidas por día del año, de modo que el versículo de un día
+  concreto es siempre el mismo y dos personas que hablan del de hoy hablan del
+  mismo. Se pinta como una inscripción y lleva al capítulo entero.
+- **Por dónde ibas.** La biblioteca es de las secciones a las que se vuelve, y
+  ahora la portada abre con las últimas tres fichas visitadas.
+
+### Cambiado
+
+- **La portada de la biblioteca cabe de un vistazo.** Cada tarjeta ocupaba media
+  pantalla de móvil —icono en una línea, título en otra, cuatro renglones de
+  descripción y la cuenta debajo—: con nueve secciones, ver el índice costaba
+  seis pantallas de dedo. Ahora el icono, el título y la cuenta comparten
+  renglón y la descripción se recorta a dos líneas. **De 470 a 122 píxeles por
+  tarjeta**, y de seis pantallas a dos y media; en escritorio, dos columnas.
+
+### Arreglado
+
+- **Una Hora ya no se rotula «Divina Liturgia».** El epígrafe de la ficha de
+  cualquier oficio decía siempre lo mismo, así que unas Vísperas o unas
+  Completas quedaban mal rotuladas en su propia página. Ahora dice de qué clase
+  de oficio se trata, y el historial lo registra igual.
+- «Despedida» salía dos veces en las Horas: como título de sección y otra vez
+  como encabezado dentro.
+
+### Detalles
+
+- **De dónde salen los textos de las Horas.** El reparto de los salmos y el
+  orden de las partes son datos documentados del Horologion. Los troparios, los
+  theotokia y las oraciones finales son textos fijos, de dominio público en su
+  original griego, y van traducidos para ATHOS: la ficha lo dice y no se
+  presentan como tomados de un libro litúrgico español publicado. Lo que cambia
+  cada día —los kontakia del Menaion, del Octoecos y del Triodion— se marca como
+  pendiente y se dice de dónde habría que tomarlo.
+- **En el versículo del día ATHOS no escribe Escritura.** Pone sólo la
+  referencia; las palabras las saca de la Biblia que la aplicación ya lleva
+  dentro, por el mismo camino que las lecturas del día. Una prueba resuelve las
+  ciento treinta y cinco contra los archivos de verdad y falla si alguna no
+  señala a un versículo que existe.
+- 732 pruebas (151 nuevas).
+
 ## [1.21.0]
 
 Nada de contenido nuevo: esta versión es la aplicación por dentro. Seis cosas

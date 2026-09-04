@@ -14,6 +14,7 @@ import { formatLongDate, greeting, toneLabel } from '@/lib/format';
 import { ButtonLink, ListRow, Panel, ProgressBlocks, Rule, Section, Tag } from '@/components/ui';
 import { OfficeInvitation } from '@/features/office/OfficeInvitation';
 import { PericopeText } from '@/components/PericopeText';
+import { VerseOfDay } from '@/components/VerseOfDay';
 import { IconCandle, IconChotki, IconScroll, OrthodoxCross } from '@/components/icons';
 import { WEEKDAYS } from '@/lib/format';
 import { isFastDay } from '@/lib/calendar/fasting';
@@ -60,7 +61,10 @@ export function HomePage() {
         </p>
       </header>
 
-      {/* Lo primero al abrir: el oficio que toca a esta hora. */}
+      {/* La frase que uno se lleva puesta el resto del día. */}
+      <VerseOfDay />
+
+      {/* Después, el oficio que toca a esta hora. */}
       <OfficeInvitation />
 
       <Rule />

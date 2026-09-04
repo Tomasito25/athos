@@ -25,6 +25,8 @@ const es = {
     edit: 'Editar',
     add: 'Añadir',
     back: 'Volver',
+    skipToContent: 'Saltar al contenido',
+    goTo: 'Ir {{screen}}',
     done: 'Hecho',
     confirm: 'Confirmar',
     search: 'Buscar',
@@ -36,6 +38,47 @@ const es = {
     yesterday: 'Ayer',
     tomorrow: 'Mañana',
   },
+
+  /**
+   * A dónde lleva la salida de una pantalla que no existe.
+   *
+   * Se guarda la frase entera y no sólo el nombre porque en español el
+   * artículo cambia con cada destino —«al Salterio», «a la Biblia», «a los
+   * Padres de la Iglesia»— y no hay forma de deducirlo de un nombre suelto
+   * sin inventarse una gramática.
+   */
+  screens: {
+    '/': 'al inicio',
+
+    '/orar': 'a Orar',
+    '/orar/oraciones': 'a las Oraciones',
+    '/orar/regla': 'a la Regla de oración',
+
+    '/leer': 'a Leer',
+    '/leer/biblia': 'a la Biblia',
+    '/leer/salterio': 'al Salterio',
+    '/leer/planes': 'a los Planes de lectura',
+    '/leer/lecturas': 'a las Lecturas',
+
+    '/calendario': 'al Calendario',
+    '/calendario/santos': 'a los Santos',
+    '/calendario/fiestas': 'a las Fiestas',
+    '/calendario/ayuno': 'al Ayuno',
+
+    '/biblioteca': 'a la Biblioteca',
+    '/biblioteca/liturgia': 'a la Divina Liturgia',
+    '/biblioteca/akathistos': 'a los Akathistos',
+    '/biblioteca/canones': 'a los Cánones',
+    '/biblioteca/padres': 'a los Padres de la Iglesia',
+    '/biblioteca/athos': 'al Monte Athos',
+    '/biblioteca/historia': 'a la Historia de la Iglesia',
+    '/biblioteca/catecismo': 'al Catecismo',
+    '/biblioteca/estudio': 'al Estudio',
+    '/biblioteca/iconos': 'a la Iconografía',
+
+    '/favoritos': 'a Favoritos',
+    '/configuracion': 'a Configuración',
+  } as Record<string, string>,
 
   nav: {
     home: 'Inicio',
@@ -422,6 +465,7 @@ const es = {
     bibleNotIndexed: 'La Biblia todavía no está indexada, así que no aparece en los resultados.',
     indexNow: 'Indexar ahora',
     shortcut: 'Ctrl/⌘ + K',
+    keyboardHint: '↑ ↓ para moverte · Enter para abrir · Esc para cerrar',
     recent: 'Lo último que has leído',
     whereTitle: 'Dónde busca',
     whereText: 'Escribe dos letras y ATHOS busca a la vez en todo esto. También puedes entrar directamente.',

@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
 import { ICON_CATEGORY_LABELS } from '@/content/icons';
-import { Empty, Loading, Notice, PageHead, Section, SourceNote, Tag } from '@/components/ui';
+import { Loading, Notice, PageHead, Section, SourceNote, Tag, NotFound } from '@/components/ui';
 import { IconPlate } from './IconPlate';
 import { ReaderToolbar } from '@/components/Reader';
 import { useVisitLog } from '@/hooks/useVisitLog';
@@ -20,7 +20,7 @@ export function IconPage() {
   if (!icon.data) {
     return (
       <div className="page">
-        <Empty title="Ese icono no está en la lista" heading />
+        <NotFound title="Ese icono no está en la lista"  />
       </div>
     );
   }

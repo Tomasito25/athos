@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
-import { Blocks, Empty, Loading, Panel, SourceNote } from '@/components/ui';
+import { Blocks, Panel, SourceNote, Skeleton, NotFound } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { useVisitLog } from '@/hooks/useVisitLog';
 import es from '@/locales/es';
@@ -14,11 +14,11 @@ export function WorkPage() {
 
   useVisitLog(work ? { path, title: work.title, kind: es.library.fathers } : null);
 
-  if (father.loading) return <Loading />;
+  if (father.loading) return <Skeleton title lines={6} />;
   if (!work) {
     return (
       <div className="page">
-        <Empty title="Esa obra no está incorporada" text={es.app.pending} heading />
+        <NotFound title="Esa obra no está incorporada" text={es.app.pending}  to={'/biblioteca/padres'} />
       </div>
     );
   }

@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { EVENT_KINDS, HISTORY_META } from '@/content/history';
 import { HISTORY_PERIODS } from '@/content/history-all';
-import { ButtonLink, Empty, Notice, PageHead, Panel, SourceNote, Tag } from '@/components/ui';
+import { ButtonLink, Notice, PageHead, Panel, SourceNote, Tag, NotFound } from '@/components/ui';
 import { RichText } from '@/components/RichText';
 import { useHashScroll } from '@/hooks/useHashScroll';
 import { useVisitLog } from '@/hooks/useVisitLog';
@@ -28,7 +28,7 @@ export function HistoryPeriodPage() {
   if (!periodo) {
     return (
       <div className="page">
-        <Empty title="Esa época no existe" heading />
+        <NotFound title="Esa época no existe"  />
         <div className="btn-row">
           <ButtonLink to="/biblioteca/historia">{es.history.title}</ButtonLink>
         </div>

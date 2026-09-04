@@ -7,7 +7,7 @@ import { useAsync } from '@/hooks/useAsync';
 import { formatReference, getChapter } from '@/db/bible';
 import { BOOKS_BY_ID, RV1909 } from '@/content/bible';
 import { saveBookmark } from '@/db/user';
-import { Button, Empty, Loading, Notice, SourceNote } from '@/components/ui';
+import { Button, Notice, SourceNote, Skeleton, NotFound } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { Headpiece } from '@/components/Ornament';
 import { IconBookmark, IconChevronLeft, IconChevronRight } from '@/components/icons';
@@ -34,7 +34,7 @@ export function ChapterPage() {
   if (!book) {
     return (
       <div className="page">
-        <Empty title="Ese libro no existe" heading />
+        <NotFound title="Ese libro no existe"  to={'/leer/biblia'} />
       </div>
     );
   }
@@ -95,7 +95,7 @@ export function ChapterPage() {
       {book.status === 'pending' ? (
         <Notice variant="pending">{es.app.pending}</Notice>
       ) : verses.loading ? (
-        <Loading />
+        <Skeleton title lines={8} />
       ) : verses.error ? (
         <Notice variant="warn">
           No se ha podido cargar el texto. Si es la primera vez que abres este libro, hace falta

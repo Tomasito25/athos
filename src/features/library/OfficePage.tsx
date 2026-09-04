@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
-import { Blocks, Empty, Loading, Panel, SourceNote } from '@/components/ui';
+import { Blocks, Loading, Panel, SourceNote, NotFound } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { useVisitLog } from '@/hooks/useVisitLog';
 import es from '@/locales/es';
@@ -18,7 +18,7 @@ export function OfficePage() {
   if (!office.data) {
     return (
       <div className="page">
-        <Empty title="Ese oficio no está incorporado" heading />
+        <NotFound title="Ese oficio no está incorporado"  />
       </div>
     );
   }

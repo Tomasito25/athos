@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { BOOKS_BY_ID, SECTION_LABELS } from '@/content/bible';
-import { Empty, Notice, PageHead, Section } from '@/components/ui';
+import { Notice, PageHead, Section, NotFound } from '@/components/ui';
 import es from '@/locales/es';
 
 /** Rejilla de capítulos de un libro. */
@@ -11,7 +11,7 @@ export function BookPage() {
   if (!book) {
     return (
       <div className="page">
-        <Empty title="Ese libro no existe" heading />
+        <NotFound title="Ese libro no existe"  />
       </div>
     );
   }

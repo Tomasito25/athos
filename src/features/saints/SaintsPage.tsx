@@ -11,7 +11,7 @@ import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
 import { useLiturgicalDay, useToday } from '@/hooks/useLiturgicalDay';
 import { SAINTS_COVERAGE_NOTE, SAINT_CATEGORY_LABELS } from '@/content/saints';
-import { ListRow, Loading, PageHead, Section, Segmented, Tag } from '@/components/ui';
+import { ListRow, PageHead, Section, Segmented, Tag, SkeletonList } from '@/components/ui';
 import { normalize } from '@/lib/text';
 import { MONTHS, formatMonthDay } from '@/lib/format';
 import type { SaintCategory } from '@/types';
@@ -131,7 +131,7 @@ export function SaintsPage() {
 
       <Section title={titulo}>
         {saints.loading ? (
-          <Loading />
+          <SkeletonList rows={6} />
         ) : (
           <div className="list">
             {filtered.map((saint) => (

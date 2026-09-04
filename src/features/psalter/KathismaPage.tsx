@@ -2,7 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { getKathismaPsalms } from '@/db/psalter';
 import { KATHISMATA, PSALTER_META } from '@/content/psalter';
-import { Blocks, Empty, Loading, PageHead, Rule, SourceNote } from '@/components/ui';
+import { Blocks, Loading, PageHead, Rule, SourceNote, NotFound } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { IconChevronLeft, IconChevronRight } from '@/components/icons';
 import { useVisitLog } from '@/hooks/useVisitLog';
@@ -25,7 +25,7 @@ export function KathismaPage() {
   if (!kathisma) {
     return (
       <div className="page">
-        <Empty title="Ese kathisma no existe" text="El Salterio se divide en veinte kathismata." heading />
+        <NotFound title="Ese kathisma no existe" text="El Salterio se divide en veinte kathismata."  />
       </div>
     );
   }

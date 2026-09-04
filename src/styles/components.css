@@ -284,7 +284,7 @@
 
 @media (pointer: coarse), (max-width: 30rem) {
   .btn--sm {
-    min-height: 2.5rem;
+    min-height: 2.75rem;
     padding-inline: var(--sp-4);
   }
 }
@@ -338,9 +338,15 @@
   color: var(--ink-soft);
 }
 
+/* Con el dedo, 44 píxeles. Los 40 de antes se fallaban al vuelo en la fila
+   de meses del santoral, que es justo donde más se toca. */
 @media (pointer: coarse) {
   .chip {
-    min-height: 2.5rem;
+    min-height: 2.75rem;
+  }
+
+  .segmented__option {
+    min-height: 2.75rem;
   }
 }
 
@@ -1012,10 +1018,107 @@ body:has(.install-sheet) .toast-region {
 .loading {
   display: grid;
   place-items: center;
+  /* El hueco es el mismo con aviso y sin él: durante los primeros
+     milisegundos el recuadro está vacío a propósito, y la página no debe
+     pegar un salto cuando por fin aparece el texto. */
+  min-height: calc(var(--sp-8) * 2 + 1.5em);
   padding: var(--sp-8) var(--sp-4);
   color: var(--ink-faint);
   font-size: var(--text-sm);
   letter-spacing: var(--tracking-wide);
+}
+
+/* La coincidencia dentro de un resultado.
+   Sin esto el navegador la pinta de amarillo puro sobre negro, que en una
+   pantalla de tinta y oro se lee como un rotulador olvidado encima del
+   manuscrito. Basta con un baño de oro y un subrayado: se distingue igual y
+   no rompe la página. */
+mark {
+  background: var(--gold-wash);
+  color: inherit;
+  border-radius: var(--radius-sm);
+  box-shadow: inset 0 -1px 0 var(--gold-soft);
+  padding: 0 0.12em;
+}
+
+/* El resultado que señalan las flechas de la búsqueda. No usa :focus porque
+   el foco no se mueve del campo: se sigue pudiendo escribir mientras se
+   recorre la lista. */
+.list-item--active {
+  background: var(--surface-2);
+  box-shadow: inset 2px 0 0 var(--gold);
+}
+
+/* La ayuda de teclado sólo tiene sentido donde hay teclado. */
+.keyboard-hint {
+  display: none;
+  text-align: center;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .keyboard-hint {
+    display: block;
+  }
+}
+
+/* ---------------- Esqueletos ---------------- */
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.skeleton--row {
+  gap: var(--sp-2);
+  padding: var(--sp-4);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-lg);
+}
+
+.skeleton__bar {
+  display: block;
+  width: 100%;
+  height: 0.72em;
+  border-radius: var(--radius-sm);
+  background: var(--line-soft);
+  /* El destello va de izquierda a derecha, como quien pasa la mano por
+     encima. Sin él la silueta parece contenido roto, no contenido en
+     camino. */
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in oklab, var(--line-strong) 55%, transparent) 50%,
+    transparent 100%
+  );
+  background-size: 220% 100%;
+  animation: skeleton-sweep 1.6s ease-in-out infinite;
+}
+
+.skeleton__bar--strong {
+  background-color: var(--line);
+}
+
+.skeleton__bar--title {
+  height: 1.5em;
+  width: 58%;
+  margin-bottom: var(--sp-2);
+}
+
+@keyframes skeleton-sweep {
+  from {
+    background-position: 140% 0;
+  }
+  to {
+    background-position: -40% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton__bar {
+    animation: none;
+    background-image: none;
+  }
 }
 
 .pill-count {

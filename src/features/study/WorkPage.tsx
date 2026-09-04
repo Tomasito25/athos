@@ -2,7 +2,7 @@
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { STUDY_META, STUDY_WORKS, WORK_KINDS } from '@/content/study';
-import { Empty, Notice, PageHead, Panel, Section, SourceNote, Tag } from '@/components/ui';
+import { Notice, PageHead, Panel, Section, SourceNote, Tag, NotFound } from '@/components/ui';
 import es from '@/locales/es';
 
 export function StudyWorkPage() {
@@ -12,7 +12,7 @@ export function StudyWorkPage() {
   if (!obra) {
     return (
       <div className="page">
-        <Empty title="Esa obra no está en el catálogo" heading />
+        <NotFound title="Esa obra no está en el catálogo"  to={'/biblioteca/estudio'} />
       </div>
     );
   }

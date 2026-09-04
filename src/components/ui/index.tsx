@@ -3,16 +3,19 @@ import {
   useEffect,
   useId,
   useRef,
+  useState,
   type AnchorHTMLAttributes,
   type ButtonHTMLAttributes,
   type HTMLAttributes,
   type ReactNode,
 } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { IconCheck, IconChevronRight, IconClose, IconStar, IconStarFilled } from '@/components/icons';
 import { RichText } from '@/components/RichText';
 import { Headpiece } from '@/components/Ornament';
 import type { ContentStatus, LicenseId, SourceMeta, TextBlock } from '@/types';
+import { parentPath } from '@/lib/up-navigation';
+import { screenName } from '@/lib/screens';
 import { useSettings } from '@/stores/settings';
 import es from '@/locales/es';
 
@@ -439,6 +442,45 @@ export function Empty({
   );
 }
 
+/**
+ * Lo que se enseña cuando la dirección no lleva a ninguna parte.
+ *
+ * Pasa más de lo que parece: un enlace viejo guardado en favoritos, un
+ * marcador de una versión anterior, una dirección escrita a mano, contenido
+ * que cambió de nombre. Antes esto dejaba al usuario mirando una frase sin
+ * un solo enlace, y lo único que le quedaba era la barra de abajo.
+ *
+ * Ahora siempre hay una puerta, y dice a dónde da: la pantalla de la que
+ * cuelga ésta, con su nombre. `to` sólo hace falta cuando la madre tampoco
+ * existe —un capítulo de un libro que no está, por ejemplo—, porque entonces
+ * subir un escalón sería caer en otro callejón.
+ */
+export function NotFound({
+  title,
+  text,
+  to,
+}: {
+  title: string;
+  text?: string;
+  to?: string;
+}) {
+  const location = useLocation();
+  const destino = to ?? parentPath(location.pathname);
+
+  return (
+    <Empty
+      heading
+      title={title}
+      text={text}
+      action={
+        <ButtonLink to={destino} variant="primary">
+          {es.app.goTo.replace('{{screen}}', screenName(destino))}
+        </ButtonLink>
+      }
+    />
+  );
+}
+
 export function Notice({
   children,
   variant,
@@ -449,11 +491,107 @@ export function Notice({
   return <div className={`notice${variant ? ` notice--${variant}` : ''}`}>{children}</div>;
 }
 
-export function Loading({ label = es.app.loading }: { label?: string }) {
+/**
+ * Aviso de carga que no parpadea.
+ *
+ * Casi todo en ATHOS se lee de IndexedDB y llega en unas decenas de
+ * milisegundos: pintar «Cargando…» al instante sólo conseguía un destello de
+ * texto en cada paso. Durante los primeros `delay` milisegundos no se escribe
+ * nada, y quien no espere no verá el aviso nunca.
+ *
+ * El recuadro sí se pinta desde el principio, vacío y con `role="status"`:
+ * así reserva su sitio —la página no pega un salto cuando llega el
+ * contenido— y, cuando la espera se alarga de verdad, el texto entra en una
+ * región viva que ya existía, que es la única forma de que un lector de
+ * pantalla lo anuncie.
+ */
+export function Loading({
+  label = es.app.loading,
+  delay = 220,
+}: {
+  label?: string;
+  delay?: number;
+}) {
+  const [visible, setVisible] = useState(delay <= 0);
+
+  useEffect(() => {
+    if (delay <= 0) return;
+    const timer = setTimeout(() => setVisible(true), delay);
+    return () => clearTimeout(timer);
+  }, [delay]);
+
   return (
     <p className="loading" role="status" aria-live="polite">
-      {label}
+      {visible ? label : null}
     </p>
+  );
+}
+
+/* ---------------- Esqueletos ---------------- */
+
+/**
+ * Silueta de lo que está por llegar.
+ *
+ * Se usa donde se sabe la forma del contenido —una lista, un texto—, porque
+ * enseñar el hueco donde va a caer cada cosa se percibe más rápido que una
+ * palabra centrada, aunque tarde lo mismo.
+ */
+export function Skeleton({
+  lines = 3,
+  title = false,
+  className = '',
+}: {
+  lines?: number;
+  title?: boolean;
+  className?: string;
+}) {
+  return (
+    <div className={`skeleton ${className}`.trim()} aria-hidden="true">
+      {title ? <span className="skeleton__bar skeleton__bar--title" /> : null}
+      {Array.from({ length: lines }, (_, i) => (
+        <span
+          key={i}
+          className="skeleton__bar"
+          /* La última línea corta, como termina un párrafo de verdad. */
+          style={i === lines - 1 ? { width: '62%' } : undefined}
+        />
+      ))}
+    </div>
+  );
+}
+
+/** Esqueleto de una lista de fichas. */
+export function SkeletonList({ rows = 4 }: { rows?: number }) {
+  return (
+    <div className="stack" aria-hidden="true">
+      {Array.from({ length: rows }, (_, i) => (
+        <div key={i} className="skeleton skeleton--row">
+          <span className="skeleton__bar skeleton__bar--strong" style={{ width: '46%' }} />
+          <span className="skeleton__bar" style={{ width: '78%' }} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/**
+ * Lo que se ve mientras se descarga el código de una pantalla.
+ *
+ * Es la espera más larga de la aplicación —una petición de red la primera
+ * vez— y la única que casi siempre se nota, así que aquí el esqueleto se
+ * gana el sitio. Lleva además la región viva para quien no lo ve.
+ */
+export function PageSkeleton() {
+  return (
+    <div className="page page--reading">
+      <p className="sr-only" role="status" aria-live="polite">
+        {es.app.loading}
+      </p>
+      <div className="page-head">
+        <Skeleton title lines={1} />
+      </div>
+      <SkeletonList rows={4} />
+    </div>
   );
 }
 

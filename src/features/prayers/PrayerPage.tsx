@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
-import { Blocks, Empty, Loading, SourceNote, Tag } from '@/components/ui';
+import { Blocks, SourceNote, Tag, Skeleton, NotFound } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { Headpiece, Tailpiece } from '@/components/Ornament';
 import { useVisitLog } from '@/hooks/useVisitLog';
@@ -19,11 +19,11 @@ export function PrayerPage() {
       : null,
   );
 
-  if (prayer.loading) return <Loading />;
+  if (prayer.loading) return <Skeleton title lines={6} />;
   if (!prayer.data) {
     return (
       <div className="page">
-        <Empty title="Esta oración no está incorporada" heading />
+        <NotFound title="Esta oración no está incorporada"  />
       </div>
     );
   }

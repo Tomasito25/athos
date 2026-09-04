@@ -2,7 +2,6 @@ import { Link, useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
 import {
-  Empty,
   ListRow,
   Loading,
   Notice,
@@ -11,8 +10,7 @@ import {
   Section,
   SourceNote,
   StatusTag,
-  Tag,
-} from '@/components/ui';
+  Tag, NotFound } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { RichText } from '@/components/RichText';
 import { otraFicha } from '@/content/links';
@@ -31,7 +29,7 @@ export function FatherPage() {
   if (!father.data) {
     return (
       <div className="page">
-        <Empty title="Ese Padre no está incorporado" heading />
+        <NotFound title="Ese Padre no está incorporado"  />
       </div>
     );
   }

@@ -4,7 +4,6 @@ import { useAsync } from '@/hooks/useAsync';
 import { HYMNS_NOTE } from '@/content/hymns';
 import {
   Blocks,
-  Empty,
   ListRow,
   Loading,
   PageHead,
@@ -12,8 +11,7 @@ import {
   Section,
   SourceNote,
   StatusTag,
-  Tag,
-} from '@/components/ui';
+  Tag, NotFound } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { useVisitLog } from '@/hooks/useVisitLog';
 import type { Akathist, Canon, FavoriteKind } from '@/types';
@@ -74,7 +72,7 @@ export function HymnDetail({
   if (!hymn.data) {
     return (
       <div className="page">
-        <Empty title="Ese himno no está incorporado" text={es.app.pending} heading />
+        <NotFound title="Ese himno no está incorporado" text={es.app.pending}  />
       </div>
     );
   }

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
 import { ICONS_NOTE, ICON_CATEGORY_LABELS } from '@/content/icons';
-import { Loading, PageHead, Section, Segmented } from '@/components/ui';
+import { PageHead, Section, Segmented, SkeletonList } from '@/components/ui';
 import { IconPlate } from './IconPlate';
 import type { IconCategory } from '@/types';
 import es from '@/locales/es';
@@ -25,7 +25,7 @@ export function IconsPage() {
       <PageHead title={es.library.icons} subtitle="Lo que la Iglesia ve cuando mira un icono." />
       <Segmented value={filter} options={FILTERS} onChange={setFilter} label={es.saints.category} />
 
-      {icons.loading ? <Loading /> : null}
+      {icons.loading ? <SkeletonList rows={4} /> : null}
 
       <Section>
         <div className="grid">

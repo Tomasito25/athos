@@ -12,6 +12,40 @@
     'nav';
 }
 
+/* Saltar al contenido: fuera de la pantalla hasta que el teclado lo alcanza,
+   y entonces aparece arriba del todo, por encima de la barra superior. */
+.skip-link {
+  position: fixed;
+  top: 0;
+  inset-inline-start: 50%;
+  z-index: 100;
+  transform: translate(-50%, -120%);
+  padding: var(--sp-3) var(--sp-5);
+  border: 1px solid var(--gold);
+  border-start-start-radius: 0;
+  border-start-end-radius: 0;
+  border-end-start-radius: var(--radius);
+  border-end-end-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink-strong);
+  text-decoration: none;
+  transition: transform var(--dur) var(--ease);
+}
+
+/* `:focus` a secas, no `:focus-visible`: el enlace sólo se alcanza con el
+   teclado, y su único cometido es aparecer en cuanto reciba el foco, venga
+   de donde venga. */
+.skip-link:focus {
+  transform: translate(-50%, 0);
+}
+
+/* El contenido recibe el foco al cambiar de página; el recuadro del navegador
+   alrededor de la pantalla entera sobra, porque el aviso ya lo da el lector
+   de pantalla. */
+.app-main:focus {
+  outline: none;
+}
+
 .app-main {
   grid-area: main;
   min-width: 0;

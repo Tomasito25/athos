@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
 import { AthosMap } from './AthosMap';
-import { Empty, Loading, PageHead, Panel, Section, SourceNote, Tag } from '@/components/ui';
+import { Loading, PageHead, Panel, Section, SourceNote, Tag, NotFound } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { RichText } from '@/components/RichText';
 import { useVisitLog } from '@/hooks/useVisitLog';
@@ -20,7 +20,7 @@ export function MonasteryPage() {
   if (!monastery.data) {
     return (
       <div className="page">
-        <Empty title="Ese monasterio no está en la lista" heading />
+        <NotFound title="Ese monasterio no está en la lista"  />
       </div>
     );
   }

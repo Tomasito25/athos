@@ -15,13 +15,11 @@ import {
 import {
   Button,
   Dialog,
-  Empty,
   Field,
   Loading,
   PageHead,
   Panel,
-  Section,
-} from '@/components/ui';
+  Section, NotFound } from '@/components/ui';
 import { IconChevronDown, IconPlus, IconTrash } from '@/components/icons';
 import { useUi } from '@/stores/ui';
 import type { PrayerRule, RuleItem, RuleScope, RuleTime } from '@/types';
@@ -61,7 +59,7 @@ export function RuleEditorPage() {
   if (!rule.data) {
     return (
       <div className="page">
-        <Empty title="Esta regla ya no existe" heading />
+        <NotFound title="Esta regla ya no existe"  />
       </div>
     );
   }

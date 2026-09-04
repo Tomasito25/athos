@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { IconChevronLeft, IconMore, IconSearch, OrthodoxCross } from '@/components/icons';
 import { useUi } from '@/stores/ui';
+import { hasAppHistory, parentPath } from '@/lib/up-navigation';
 import es from '@/locales/es';
 
 /**
@@ -39,6 +40,15 @@ export function TopBar({ title }: { title?: string }) {
 
   const isRoot = ['/', '/orar', '/leer', '/calendario', '/biblioteca'].includes(location.pathname);
 
+  // Volver es deshacer el último paso mientras haya pasos que deshacer. Si se
+  // ha entrado directamente aquí —un atajo, una notificación, un enlace— no
+  // los hay, y entonces la flecha sube a la pantalla de la que cuelga ésta en
+  // vez de echar al usuario fuera de ATHOS.
+  const goBack = () => {
+    if (hasAppHistory()) navigate(-1);
+    else navigate(parentPath(location.pathname), { replace: true });
+  };
+
   if (prayerMode) {
     return (
       <header className="app-topbar">
@@ -57,7 +67,7 @@ export function TopBar({ title }: { title?: string }) {
           <OrthodoxCross size={22} />
         </span>
       ) : (
-        <button type="button" className="icon-btn" onClick={() => navigate(-1)} aria-label={es.app.back}>
+        <button type="button" className="icon-btn" onClick={goBack} aria-label={es.app.back}>
           <IconChevronLeft size={22} />
         </button>
       )}

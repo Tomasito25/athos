@@ -10,7 +10,7 @@ import { useMemo } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { CATECHISM_LEVELS, CATECHISM_META, type CatechismLevel } from '@/content/catechism';
 import { CATECHISM_PARTS } from '@/content/catechism-parts';
-import { ButtonLink, Empty, Notice, PageHead, SourceNote, Tag } from '@/components/ui';
+import { ButtonLink, Notice, PageHead, SourceNote, Tag, NotFound } from '@/components/ui';
 import { RichText } from '@/components/RichText';
 import { Interlace, Tailpiece } from '@/components/Ornament';
 import { useHashScroll } from '@/hooks/useHashScroll';
@@ -37,7 +37,7 @@ export function CatechismPartPage() {
   if (!parte) {
     return (
       <div className="page">
-        <Empty title="Esa parte del catecismo no existe" heading />
+        <NotFound title="Esa parte del catecismo no existe"  />
         <div className="btn-row">
           <ButtonLink to="/biblioteca/catecismo">{es.catechism.title}</ButtonLink>
         </div>

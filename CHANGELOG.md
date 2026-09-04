@@ -2,6 +2,80 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.21.0]
+
+Nada de contenido nuevo: esta versión es la aplicación por dentro. Seis cosas
+que se notan al usarla, y cuatro de ellas eran fallos.
+
+### Arreglado
+
+- **La flecha de volver ya no echa fuera de ATHOS.** Llamaba a `navigate(-1)`
+  sin mirar si había algo detrás. Al abrir la aplicación directamente en una
+  pantalla interior —los cuatro atajos del manifiesto, una notificación, un
+  enlace compartido, un favorito— no lo había, y la flecha salía del programa.
+  Ahora, cuando no hay historia propia, sube a la pantalla de la que cuelga
+  ésta.
+- **Los resultados de la búsqueda vuelven a tener tildes.** `highlight()`
+  buscaba sobre el texto sin acentos —así «oracion» encuentra «oración»— pero
+  devolvía también ese texto pelado, y los extractos salían con faltas:
+  «senal de la Cruz», «tradicion», «esta». Quitar los acentos acorta la
+  cadena, así que ahora se guarda a qué letra del original corresponde cada
+  letra de la forma sin acentos y se recorta sobre el original.
+- **Ninguna dirección rota deja tirado al usuario.** Veintiséis pantallas
+  vacías no ofrecían ni un enlace. Las diecisiete de «esto no existe» ahora
+  salen a su pantalla madre con una frase que la nombra —«Ir al Salterio»,
+  «Ir a los Padres de la Iglesia»—, y cuando la madre tampoco existe se salta
+  al abuelo en vez de caer en otro callejón.
+- **La coincidencia de la búsqueda ya no es un amarillo de rotulador.** No
+  había estilo para `<mark>` y salía el del navegador. Ahora es un baño de oro
+  con el filo subrayado.
+
+### Añadido
+
+- **La búsqueda se recorre con el teclado.** Se abría con Ctrl/⌘ + K y ahí se
+  acababa el atajo: las flechas no hacían nada y Enter abría siempre el
+  primero. Ahora ↑ ↓ recorren todos los resultados de arriba abajo —cruzando
+  los grupos, que ordenan la vista pero no el camino—, Inicio y Fin saltan a
+  los extremos, y Enter abre el señalado. El foco no se mueve del campo, así
+  que se puede seguir escribiendo.
+- **Se nota que se ha cambiado de página.** El título de la pestaña se quedaba
+  en «ATHOS» para las sesenta y tantas rutas, y quien usa un lector de pantalla
+  no oía nada al pulsar un enlace. Ahora cada pantalla pone su encabezado en la
+  pestaña, lo anuncia en una región viva y lleva el foco al contenido.
+- **Saltar al contenido.** El `main` ya tenía `id` y `tabIndex` esperando a que
+  algo apuntara ahí. Con el teclado ya no hay que recorrer la barra lateral
+  entera para llegar al texto.
+
+### Cambiado
+
+- **La espera ya no parpadea.** Casi todo se lee de IndexedDB y llega en unas
+  decenas de milisegundos: pintar «Cargando…» al instante era un destello de
+  texto en cada paso. Ahora el aviso tarda 220 ms en escribirse y quien no
+  espere no lo verá nunca; el recuadro sí se pinta desde el principio, para
+  que la página no dé un salto y para que el texto entre en una región viva que
+  ya existía. Donde se sabe la forma de lo que viene —una lista, un texto, una
+  pantalla entera— se enseña su silueta.
+- **Cuarenta y cuatro píxeles donde se toca con el dedo.** Los chips, las
+  pestañas y los botones pequeños se quedaban en cuarenta con el puntero
+  grueso, y la fila de meses del santoral se fallaba al vuelo.
+
+### Detalles
+
+- `parentPath()` sabe saltarse los tramos que no son pantalla —`categoria`,
+  `editar`, `monasterio`, `obra`, `kathisma`, `dia`, `oficio`—. Una prueba
+  recorre la tabla de rutas de verdad y falla si alguna ruta nueva estrena un
+  tramo que no esté declarado, así que la lista no puede quedarse atrás en
+  silencio.
+- Las frases de destino («al Salterio», «a la Biblia», «a los Padres de la
+  Iglesia») viven en el archivo de idioma y se guardan enteras: en español el
+  artículo cambia con cada destino y no se deduce de un nombre suelto sin
+  inventarse una gramática.
+- El título de la pestaña sale del `h1` que acaba de pintarse, no de una tabla
+  aparte: lo que se anuncia y lo que se lee arriba no pueden discrepar.
+- 581 pruebas (32 nuevas): quince direcciones rotas montadas sobre el enrutador
+  real, el recorrido de la flecha por toda la tabla de rutas, y que marcar una
+  coincidencia no pierda ni duplique una letra del texto.
+
 ## [1.20.0]
 
 ### Añadido

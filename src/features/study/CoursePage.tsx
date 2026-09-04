@@ -11,14 +11,12 @@ import { db } from '@/db/db';
 import { STUDY_COURSES, STUDY_LEVELS, STUDY_META } from '@/content/study';
 import {
   CheckCircle,
-  Empty,
   Loading,
   PageHead,
   Panel,
   Progress,
   Rule,
-  SourceNote,
-} from '@/components/ui';
+  SourceNote, NotFound } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { useVisitLog } from '@/hooks/useVisitLog';
 import es from '@/locales/es';
@@ -37,7 +35,7 @@ export function CoursePage() {
   if (!curso) {
     return (
       <div className="page">
-        <Empty title="Ese itinerario no existe" heading />
+        <NotFound title="Ese itinerario no existe"  />
       </div>
     );
   }

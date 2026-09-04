@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useAsync } from '@/hooks/useAsync';
 import { listBookmarks, listFavorites, listNotes, removeBookmark, removeNote } from '@/db/user';
 import { KIND_LABELS } from '@/db/search';
-import { Button, Empty, ListRow, Loading, PageHead, Panel, Section, Segmented } from '@/components/ui';
+import { Button, Empty, ListRow, PageHead, Panel, Section, Segmented, SkeletonList } from '@/components/ui';
 import { IconTrash } from '@/components/icons';
 import es from '@/locales/es';
 
@@ -42,7 +42,7 @@ export function FavoritesPage() {
 
       {tab === 'favoritos' ? (
         favorites.loading ? (
-          <Loading />
+          <SkeletonList rows={4} />
         ) : favorites.data?.length ? (
           <Section>
             <div className="list">

@@ -7,7 +7,7 @@
 import { useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
-import { ButtonLink, Empty, ListRow, Loading, PageHead, StatusTag } from '@/components/ui';
+import { ButtonLink, Empty, ListRow, Loading, PageHead, StatusTag, NotFound } from '@/components/ui';
 import { PRAYER_CATEGORIES } from '@/content/prayers';
 import { MOMENT_GROUPS } from '@/content/moments';
 import es from '@/locales/es';
@@ -24,7 +24,7 @@ export function PrayerCategoryPage() {
   if (!category) {
     return (
       <div className="page">
-        <Empty title="Ese momento no existe" text="Vuelve al menú y elige otro." heading />
+        <NotFound title="Ese momento no existe" text="Vuelve al menú y elige otro."  />
         <div className="btn-row">
           <ButtonLink to="/orar/oraciones">{es.prayers.chooseMoment}</ButtonLink>
         </div>

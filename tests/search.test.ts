@@ -61,6 +61,28 @@ describe('resaltado', () => {
 
   it('encuentra la coincidencia aunque el texto lleve acentos', () => {
     expect(highlight('oración', ['oracion'])).toContain('<mark>');
+    // Y lo que se devuelve es el texto tal cual está escrito, con sus tildes:
+    // se busca sin acentos, no se contesta sin acentos.
+    expect(highlight('oración', ['oracion'])).toBe('<mark>oración</mark>');
+  });
+
+  it('conserva los acentos del texto que no se ha marcado', () => {
+    expect(highlight('La señal de la Cruz', ['cruz'])).toBe('La señal de la <mark>Cruz</mark>');
+    expect(highlight('esta tradición nuestra', ['tradicion'])).toBe(
+      'esta <mark>tradición</mark> nuestra',
+    );
+    // Varias marcas seguidas, con acentos antes, entre y después.
+    expect(highlight('álfa béta gámma', ['beta'])).toBe('álfa <mark>béta</mark> gámma');
+  });
+
+  it('no pierde ni duplica una letra al marcar', () => {
+    const textos = ['Señor, ten piedad', 'Kýrie eléison', 'Anunciación de la Theotokos'];
+    for (const texto of textos) {
+      for (const token of ['senor', 'eleison', 'anunciacion', 'theotokos']) {
+        const salida = highlight(texto, [token]);
+        expect(salida.replace(/<\/?mark>/g, '')).toBe(texto);
+      }
+    }
   });
 
   it('sin términos devuelve el texto escapado', () => {

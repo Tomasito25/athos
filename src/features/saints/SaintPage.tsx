@@ -2,7 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
 import { SAINT_CATEGORY_LABELS } from '@/content/saints';
-import { Blocks, Empty, Loading, Panel, Section, SourceNote, Tag } from '@/components/ui';
+import { Blocks, Panel, Section, SourceNote, Tag, Skeleton, NotFound } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { RichText } from '@/components/RichText';
 import { otraFicha } from '@/content/links';
@@ -25,11 +25,11 @@ export function SaintPage() {
 
   useVisitLog(saint.data ? { path, title: saint.data.name, kind: es.saints.title } : null);
 
-  if (saint.loading) return <Loading />;
+  if (saint.loading) return <Skeleton title lines={6} />;
   if (!saint.data) {
     return (
       <div className="page">
-        <Empty title="Ese santo no está incorporado" text={es.app.pending} heading />
+        <NotFound title="Ese santo no está incorporado" text={es.app.pending}  />
       </div>
     );
   }

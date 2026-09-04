@@ -7,7 +7,7 @@
 import { useMemo, useState } from 'react';
 import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
-import { Empty, ListRow, Loading, PageHead, Section, StatusTag } from '@/components/ui';
+import { Empty, ListRow, PageHead, Section, StatusTag, SkeletonList } from '@/components/ui';
 import { PRAYER_CATEGORIES } from '@/content/prayers';
 import { normalize } from '@/lib/text';
 import es from '@/locales/es';
@@ -41,7 +41,7 @@ export function AllPrayersPage() {
         aria-label="Buscar una oración"
       />
 
-      {prayers.loading ? <Loading /> : null}
+      {prayers.loading ? <SkeletonList rows={5} /> : null}
 
       {!prayers.loading && filtradas.length === 0 ? (
         <Empty title={es.app.empty} text="Ninguna oración coincide con lo que buscas." />

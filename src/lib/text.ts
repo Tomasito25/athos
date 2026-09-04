@@ -68,8 +68,26 @@ export function highlight(text: string, tokens: string[]): string {
   const source = escaped.normalize('NFD');
   const regex = new RegExp(`(${pattern})`, 'gi');
 
-  // Se busca sobre la forma sin acentos, pero se recorta el texto original.
-  const stripped = source.replace(/[̀-ͯ]/g, '');
+  /*
+   * Se busca sobre la forma sin acentos —«oracion» tiene que encontrar
+   * «oración»— pero lo que se devuelve es el texto original.
+   *
+   * Quitar los acentos acorta la cadena, así que las posiciones de una y otra
+   * no coinciden: hace falta guardar, para cada letra de la forma sin
+   * acentos, dónde estaba en el original. Sin este puente el resultado salía
+   * entero sin tildes, y en español eso se lee como una falta: «senal de la
+   * Cruz», «tradicion», «esta».
+   */
+  const donde: number[] = [];
+  let stripped = '';
+  for (let i = 0; i < source.length; i += 1) {
+    const ch = source[i]!;
+    if (ch >= '\u0300' && ch <= '\u036f') continue; // marca de combinación
+    donde.push(i);
+    stripped += ch;
+  }
+  donde.push(source.length);
+
   const marks: Array<[number, number]> = [];
   let match: RegExpExecArray | null;
   while ((match = regex.exec(stripped))) {
@@ -82,10 +100,16 @@ export function highlight(text: string, tokens: string[]): string {
   let cursor = 0;
   for (const [start, end] of marks) {
     if (start < cursor) continue;
-    out += stripped.slice(cursor, start) + '<mark>' + stripped.slice(start, end) + '</mark>';
+    // `donde[end]` es dónde empieza la letra siguiente: así el corte se lleva
+    // los acentos de la última letra marcada, que van detrás de ella.
+    out +=
+      source.slice(donde[cursor]!, donde[start]!) +
+      '<mark>' +
+      source.slice(donde[start]!, donde[end]!) +
+      '</mark>';
     cursor = end;
   }
-  return out + stripped.slice(cursor);
+  return (out + source.slice(donde[cursor]!)).normalize('NFC');
 }
 
 export function pluralize(count: number, one: string, many: string): string {

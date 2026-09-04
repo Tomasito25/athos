@@ -2,7 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { getPsalm } from '@/db/psalter';
 import { kathismaOf, PSALM_NOTES } from '@/content/psalter';
-import { Blocks, Empty, Loading, SourceNote, Tag } from '@/components/ui';
+import { Blocks, SourceNote, Tag, Skeleton, NotFound } from '@/components/ui';
 import { Headpiece, Tailpiece } from '@/components/Ornament';
 import { ReaderToolbar } from '@/components/Reader';
 import { IconChevronLeft, IconChevronRight } from '@/components/icons';
@@ -17,11 +17,11 @@ export function PsalmPage() {
 
   useVisitLog({ path, title: es.psalter.psalm.replace('{{n}}', String(lxx)), kind: es.psalter.title });
 
-  if (psalm.loading) return <Loading />;
+  if (psalm.loading) return <Skeleton title lines={8} />;
   if (!psalm.data) {
     return (
       <div className="page">
-        <Empty title="Ese salmo no existe" text="El Salterio va del 1 al 151." heading />
+        <NotFound title="Ese salmo no existe" text="El Salterio va del 1 al 151."  />
       </div>
     );
   }

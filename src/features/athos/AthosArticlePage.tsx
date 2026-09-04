@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
-import { Blocks, Empty, Loading, PageHead, SourceNote } from '@/components/ui';
+import { Blocks, Loading, PageHead, SourceNote, NotFound } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { useVisitLog } from '@/hooks/useVisitLog';
 import es from '@/locales/es';
@@ -17,7 +17,7 @@ export function AthosArticlePage() {
   if (!article.data) {
     return (
       <div className="page">
-        <Empty title="Ese artículo no existe" heading />
+        <NotFound title="Ese artículo no existe"  />
       </div>
     );
   }

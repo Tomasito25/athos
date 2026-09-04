@@ -3,7 +3,9 @@ import { Outlet, ScrollRestoration, useLocation } from 'react-router-dom';
 import { BottomNav } from './BottomNav';
 import { Sidebar } from './Sidebar';
 import { TopBar } from './TopBar';
-import { Loading } from '@/components/ui';
+import { PageSkeleton } from '@/components/ui';
+import { RouteAnnouncer } from '@/components/RouteAnnouncer';
+import { SkipLink } from '@/components/SkipLink';
 import { Toasts } from '@/components/Toasts';
 import { SearchDialog } from '@/components/SearchDialog';
 import { InstallBanner } from '@/components/InstallBanner';
@@ -30,10 +32,11 @@ export function AppShell() {
 
   return (
     <div className="app-shell">
+      <SkipLink />
       <Sidebar />
       <TopBar />
       <main className="app-main" id="contenido" tabIndex={-1}>
-        <Suspense fallback={<Loading />}>
+        <Suspense fallback={<PageSkeleton />}>
           <Outlet />
         </Suspense>
       </main>
@@ -42,6 +45,7 @@ export function AppShell() {
       <UpdateBanner />
       <InstallBanner />
       <SearchDialog />
+      <RouteAnnouncer />
       <Toasts />
       <ScrollRestoration />
     </div>

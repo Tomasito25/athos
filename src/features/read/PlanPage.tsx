@@ -14,13 +14,11 @@ import {
   Button,
   ButtonLink,
   CheckCircle,
-  Empty,
   ListRow,
   PageHead,
   Panel,
   Progress,
-  Section,
-} from '@/components/ui';
+  Section, NotFound } from '@/components/ui';
 import { useUi } from '@/stores/ui';
 import es from '@/locales/es';
 
@@ -43,7 +41,7 @@ export function PlanPage() {
   if (!plan) {
     return (
       <div className="page">
-        <Empty title="Ese plan no existe" heading />
+        <NotFound title="Ese plan no existe"  />
         <div className="btn-row">
           <ButtonLink to="/leer/planes">{es.plans.title}</ButtonLink>
         </div>

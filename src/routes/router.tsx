@@ -76,6 +76,7 @@ export const routes: RouteObject[] = [
       { path: 'biblioteca/catecismo', lazy: page(() => import('@/features/catechism/CatechismPage'), 'CatechismPage') },
       { path: 'biblioteca/catecismo/:partId', lazy: page(() => import('@/features/catechism/PartPage'), 'CatechismPartPage') },
       { path: 'biblioteca/estudio', lazy: page(() => import('@/features/study/StudyPage'), 'StudyPage') },
+      { path: 'biblioteca/glosario', lazy: page(() => import('@/features/study/GlossaryPage'), 'GlossaryPage') },
       { path: 'biblioteca/estudio/obra/:workId', lazy: page(() => import('@/features/study/WorkPage'), 'StudyWorkPage') },
       { path: 'biblioteca/estudio/:courseId', lazy: page(() => import('@/features/study/CoursePage'), 'CoursePage') },
       { path: 'biblioteca/iconos', lazy: page(() => import('@/features/icons/IconsPage'), 'IconsPage') },

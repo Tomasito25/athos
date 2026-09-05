@@ -15,6 +15,7 @@ import { COUNCILS, HISTORY_PERIODS } from './history-all';
 import { ICONS } from './icons';
 import { OFFICES } from './offices';
 import { STUDY_COURSES, STUDY_WORKS } from './study';
+import { GLOSSARY } from './glossary';
 import es from '@/locales/es';
 
 export interface LibrarySection {
@@ -79,6 +80,15 @@ export const LIBRARY_GROUPS: LibraryGroup[] = [
         text: 'Itinerarios con lecciones breves para leer despacio, y el catálogo de las obras que forman la tradición con lo que ATHOS tiene de cada una.',
         count: STUDY_COURSES.length + STUDY_WORKS.length,
         unit: 'lecciones y obras',
+      },
+      {
+        id: 'glosario',
+        to: '/biblioteca/glosario',
+        icon: 'scroll',
+        title: es.study.glossary,
+        text: 'Theotokos, autocéfala, hesicasmo, anáfora. Las palabras que ATHOS usa y que no se aprenden en la calle, explicadas para poder seguir leyendo. Se busca también por lo que significan.',
+        count: GLOSSARY.length,
+        unit: 'palabras',
       },
     ],
   },

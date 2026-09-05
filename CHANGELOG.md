@@ -2,6 +2,67 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.23.0]
+
+### Añadido
+
+- **La Iglesia y sus divisiones, en un dibujo.** Un tronco desde Pentecostés y
+  las seis ramas que se separan, cada una con su año y su motivo: 431, 451,
+  1054, 1517, 1596 y 1666. Deja claro de un vistazo lo que un texto seguido
+  explica mal —que **las reformas protestantes salen de Roma, no de Oriente**—.
+- **Los patriarcados en el mapa, época por época.** Cinco mapas: la Pentarquía,
+  después de Calcedonia, después de 1054, bajo el Imperio otomano y hoy. Cada
+  sede dice qué rango tenía y con quién estaba en comunión. Son **esquemas, no
+  mapas a escala**, y se dice: las sedes ocupan su posición relativa sobre una
+  retícula.
+- **Glosario: 39 palabras que ATHOS usaba sin explicar.** Theotokos, autocéfala,
+  hesicasmo, anáfora, antídoron. Cada una con una definición de una línea para
+  seguir leyendo y otra más despacio para quien quiera pararse. Se busca
+  **también por lo que significan**: «pan que se reparte» encuentra antídoron, y
+  «muro de iconos», iconostasio.
+- **Cada lección de estudio explica sus propias palabras.** No se apuntan a
+  mano: se buscan en el texto, así que una lección enseña exactamente el
+  vocabulario que usa. Van plegadas, para que quien ya lo conoce no lea el
+  doble.
+- **Las cuatro Horas siguen creciendo**: ahora el modo oración pasa a **pantalla
+  completa en el móvil**. Esconde también las barras del navegador, que es lo
+  que quedaba por esconder. Donde no se puede —Safari en iPhone no lo permite
+  fuera de un vídeo— el modo oración funciona igual, sin prometer lo que el
+  navegador no da.
+
+### Cambiado
+
+- **«Más» es ahora el mapa de la aplicación.** Antes sólo llevaba a los ajustes,
+  que es lo que menos falta hace encontrar; ahora están los **33 destinos** de
+  ATHOS en una pantalla. La biblioteca no se escribe dos veces: se lee de donde
+  ya vive, así que una sección nueva aparece sola.
+- En el escritorio, «Más» entra en la barra lateral: sin barra inferior, el mapa
+  sólo se alcanzaba escribiendo la dirección.
+
+### Arreglado
+
+- El glosario no reconocía las grafías que la propia aplicación usa
+  —«Hesychía», «oración del corazón»—, así que dos de las palabras más
+  características de la tradición no llegaban a ninguna lección. Lo encontró una
+  prueba, no una lectura.
+- La ficha de Antioquía decía sólo «Con sede en Damasco», cuatro palabras donde
+  las demás daban cinco líneas.
+
+### Detalles
+
+- Los dibujos son **SVG en línea**: se adaptan al tema claro y oscuro con las
+  mismas variables que el resto, escalan sin pixelarse y no añaden ni una
+  descarga a una aplicación que tiene que funcionar sin conexión.
+- El eje de la cronología no va a escala, y se dice en el pie. Éfeso (431) y
+  Calcedonia (451) caen a veinte años uno de otro: en cualquier eje que quepa en
+  una pantalla se pisarían, así que las separaciones se reparten con un hueco
+  mínimo para poder leerlas.
+- Las sedes no se mueven de un mapa a otro: las posiciones se definen una vez y
+  una prueba comprueba que ninguna baila.
+- 762 pruebas (30 nuevas): que las sedes caben en el esquema, que ninguna rama
+  sale de una posterior a ella, que las protestantes salen de Roma, y que el
+  modo oración sigue funcionando donde no hay pantalla completa.
+
 ## [1.22.0]
 
 ### Añadido

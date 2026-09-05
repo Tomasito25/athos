@@ -48,11 +48,17 @@ describe('una dirección rota siempre tiene salida', () => {
     const router = createMemoryRouter(routes, { initialEntries: [rota] });
     const { container } = render(<RouterProvider router={router} />);
 
-    const salida = await waitFor(() => {
-      const enlace = container.querySelector('.empty a');
-      expect(enlace).not.toBeNull();
-      return enlace!;
-    });
+    // Margen holgado: la pantalla se carga bajo demanda, y con la suite
+    // entera en marcha el segundo que trae `waitFor` por defecto se queda
+    // corto unas veces sí y otras no.
+    const salida = await waitFor(
+      () => {
+        const enlace = container.querySelector('.empty a');
+        expect(enlace).not.toBeNull();
+        return enlace!;
+      },
+      { timeout: 8000 },
+    );
 
     expect(salida.getAttribute('href')).toBe(destino);
     // Y el rótulo nombra el destino, en vez de un «Volver» que no dice nada.
@@ -62,7 +68,9 @@ describe('una dirección rota siempre tiene salida', () => {
   it('la pantalla de dirección desconocida también sale a alguna parte', async () => {
     const router = createMemoryRouter(routes, { initialEntries: ['/esto-no-existe-de-nada'] });
     render(<RouterProvider router={router} />);
-    await waitFor(() => expect(screen.getAllByRole('link').length).toBeGreaterThan(0));
+    await waitFor(() => expect(screen.getAllByRole('link').length).toBeGreaterThan(0), {
+      timeout: 8000,
+    });
   });
 });
 

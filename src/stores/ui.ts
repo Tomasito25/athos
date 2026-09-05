@@ -1,5 +1,11 @@
 /** Estado efímero de la interfaz: modo oración, búsqueda y avisos. */
 import { create } from 'zustand';
+import {
+  enterFullscreen,
+  exitFullscreen,
+  isFullscreen,
+  shouldGoFullscreen,
+} from '@/lib/fullscreen';
 
 export interface Toast {
   id: string;
@@ -40,6 +46,24 @@ export const useUi = create<UiState>((set, get) => ({
     set({ prayerMode: on });
     if (on) document.documentElement.dataset.prayerMode = 'on';
     else delete document.documentElement.dataset.prayerMode;
+
+    /*
+     * En el móvil, además, pantalla completa.
+     *
+     * El modo oración esconde las barras de ATHOS; las del navegador las
+     * esconde esto. Se pide sin esperar la respuesta: si el navegador se
+     * niega —o si es un iPhone, donde no se puede—, el modo oración sigue
+     * funcionando igual, sólo que con las barras del navegador puestas.
+     *
+     * Al salir se deshace siempre, aunque no lo hubiéramos pedido nosotros:
+     * dejar al usuario en pantalla completa fuera del modo oración sería
+     * dejarlo sin la barra de direcciones y sin saber por qué.
+     */
+    if (on) {
+      if (shouldGoFullscreen()) void enterFullscreen();
+    } else if (isFullscreen()) {
+      void exitFullscreen();
+    }
   },
   togglePrayerMode: () => get().setPrayerMode(!get().prayerMode),
   setSearchOpen: (searchOpen) => set({ searchOpen }),

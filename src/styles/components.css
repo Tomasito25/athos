@@ -1115,6 +1115,177 @@ mark {
   }
 }
 
+/* ---------------- Glosario y palabras de una lección ---------------- */
+
+/* Plegado: quien ya conoce el vocabulario no tiene que pasar por encima de
+   doce líneas de diccionario para llegar al párrafo siguiente. */
+.terminos {
+  margin-top: var(--sp-4);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-lg);
+  background: var(--surface-sunken);
+}
+
+.terminos__resumen {
+  padding: var(--sp-3) var(--sp-4);
+  /* 44 píxeles de alto para el dedo, aunque el texto sea pequeño. */
+  min-height: 2.75rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-wide);
+  color: var(--gold);
+}
+
+.terminos__resumen::marker,
+.terminos__resumen::-webkit-details-marker {
+  color: var(--gold);
+}
+
+.terminos[open] .terminos__resumen {
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.terminos .terminos__lista {
+  padding: 0 var(--sp-4) var(--sp-2);
+}
+
+.terminos__entrada {
+  padding: var(--sp-3) 0;
+  border-top: 1px solid var(--line-soft);
+}
+
+.terminos__entrada:first-child {
+  border-top: 0;
+}
+
+.terminos__entrada dt {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-2);
+  font-family: var(--font-serif);
+  font-size: var(--text-md);
+  color: var(--ink-strong);
+}
+
+.terminos__alias {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  color: var(--ink-faint);
+}
+
+.terminos__entrada dd {
+  margin-top: var(--sp-1);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+/* Lo que se añade «cuando hay tiempo» va aparte y en otro tono: la primera
+   línea basta para seguir leyendo, y esto es para quien quiera pararse. */
+.terminos__mas {
+  display: block;
+  margin-top: var(--sp-2);
+  padding-left: var(--sp-3);
+  border-left: 2px solid var(--line);
+  color: var(--ink-faint);
+}
+
+/* ---------------- Mapas y cronología de la historia ---------------- */
+
+.mapa__titulo {
+  margin: var(--sp-4) 0 var(--sp-2);
+  font-family: var(--font-serif);
+  font-size: var(--text-md);
+  color: var(--ink-strong);
+}
+
+.mapa__figura {
+  margin: var(--sp-4) 0 0;
+}
+
+.mapa__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--surface-sunken);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-2);
+}
+
+.mapa__pie {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-4);
+  margin-top: var(--sp-3);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.mapa__clave {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+}
+
+.mapa__lista {
+  margin-top: var(--sp-4);
+}
+
+.mapa__entrada {
+  padding: var(--sp-3) 0;
+  border-top: 1px solid var(--line-soft);
+}
+
+.mapa__entrada dt {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-2);
+  font-family: var(--font-serif);
+  color: var(--ink-strong);
+}
+
+.mapa__rango {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.mapa__entrada dd {
+  margin-top: var(--sp-1);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+/* La cronología es alta y estrecha: se deja desplazar a lo ancho dentro de su
+   propio recuadro antes que encoger los rótulos hasta no poder leerlos. */
+.cronologia {
+  margin: 0;
+  overflow-x: auto;
+}
+
+.cronologia__svg {
+  display: block;
+  width: 100%;
+  min-width: 20rem;
+  height: auto;
+  background: var(--surface-sunken);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-3) var(--sp-2);
+}
+
+.cronologia__pie {
+  margin-top: var(--sp-3);
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
 /* ---------------- Versículo del día ---------------- */
 
 /* Se pinta como una inscripción, no como un párrafo: es lo que uno se lleva

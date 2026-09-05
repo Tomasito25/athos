@@ -74,6 +74,7 @@ const es = {
     '/biblioteca/historia': 'a la Historia de la Iglesia',
     '/biblioteca/catecismo': 'al Catecismo',
     '/biblioteca/estudio': 'al Estudio',
+    '/biblioteca/glosario': 'al Glosario',
     '/biblioteca/iconos': 'a la Iconografía',
 
     '/favoritos': 'a Favoritos',
@@ -87,6 +88,7 @@ const es = {
     calendar: 'Calendario',
     library: 'Biblioteca',
     more: 'Más',
+    moreSubtitle: 'Todo lo que hay en ATHOS, en una sola pantalla.',
     settings: 'Configuración',
     search: 'Búsqueda',
     favorites: 'Favoritos',
@@ -373,6 +375,9 @@ const es = {
     openInAthos: 'Abrir en ATHOS',
     markRead: 'Marcar como leída',
     progress: '{{done}} de {{total}} lecciones',
+    terms: 'Palabras que salen aquí ({{count}})',
+    glossary: 'Glosario',
+    glossarySubtitle: 'Las palabras que ATHOS usa y que no se aprenden en la calle.',
   },
 
   history: {
@@ -396,6 +401,12 @@ const es = {
       'Los {{total}} hechos tienen su reseña escrita, y los {{councils}} concilios, su ficha. Cuando se añada un hecho nuevo aparecerá con su fecha aunque todavía no tenga párrafo: el hueco se ve antes de taparlo.',
     disputedNote:
       'Las diferencias doctrinales con otras confesiones se explican aparte, en el',
+    divisions: 'La Iglesia y sus divisiones',
+    divisionsIntro:
+      'Quién se separó de quién, y cuándo. Es la primera pregunta de casi todo el que llega, y la que peor contesta un texto seguido.',
+    map: 'Los patriarcados en el mapa',
+    mapIntro:
+      'Dónde estaban las sedes en cada época, con qué rango y en comunión con quién. Cambia el siglo y cambia el mapa.',
   },
   catechism: {
     title: 'Catecismo',

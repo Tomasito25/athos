@@ -12,6 +12,7 @@ import { InstallBanner } from '@/components/InstallBanner';
 import { UpdateBanner } from '@/components/UpdateBanner';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useUi } from '@/stores/ui';
+import { isFullscreen } from '@/lib/fullscreen';
 
 /**
  * Armazón de la aplicación.
@@ -29,6 +30,28 @@ export function AppShell() {
     // Se ignora `prayerMode` a propósito: sólo interesa el cambio de ruta.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
+
+  /*
+   * Salir de pantalla completa es salir del modo oración.
+   *
+   * En Android se sale deslizando desde el borde, y en el escritorio con
+   * `Escape`: son gestos del sistema que ATHOS no controla. Si no se
+   * escucharan, el usuario vería volver las barras del navegador y seguiría
+   * atrapado en un modo oración que ya no parece modo oración.
+   */
+  useEffect(() => {
+    const alCambiar = () => {
+      if (!isFullscreen() && useUi.getState().prayerMode) {
+        useUi.getState().setPrayerMode(false);
+      }
+    };
+    document.addEventListener('fullscreenchange', alCambiar);
+    document.addEventListener('webkitfullscreenchange', alCambiar);
+    return () => {
+      document.removeEventListener('fullscreenchange', alCambiar);
+      document.removeEventListener('webkitfullscreenchange', alCambiar);
+    };
+  }, []);
 
   return (
     <div className="app-shell">

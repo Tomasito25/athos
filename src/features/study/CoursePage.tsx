@@ -18,6 +18,7 @@ import {
   Rule,
   SourceNote, NotFound } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
+import { LessonTerms } from '@/components/LessonTerms';
 import { useVisitLog } from '@/hooks/useVisitLog';
 import es from '@/locales/es';
 
@@ -105,6 +106,10 @@ export function CoursePage() {
                 <p key={i}>{parrafo}</p>
               ))}
             </div>
+
+            {/* Nada se da por supuesto: las palabras propias de la tradición
+                que salgan en la lección se explican aquí mismo. */}
+            <LessonTerms text={`${leccion.title} ${leccion.body.join(' ')}`} />
 
             {leccion.readings?.length ? (
               <Panel variant="quiet" style={{ marginTop: 'var(--sp-3)' }}>

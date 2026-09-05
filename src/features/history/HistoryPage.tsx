@@ -8,6 +8,9 @@ import { Link } from 'react-router-dom';
 import { HISTORY_META } from '@/content/history';
 import { COUNCILS, ECUMENICAL, HISTORY_PERIODS, HISTORY_TIMELINE } from '@/content/history-all';
 import { ListRow, PageHead, Panel, Section, SourceNote } from '@/components/ui';
+import { PatriarchateMap } from './PatriarchateMap';
+import { ChurchBranchList, ChurchTimeline } from './ChurchTimeline';
+import { MAPS_NOTE } from '@/content/history-maps';
 import es from '@/locales/es';
 
 export function HistoryPage() {
@@ -22,6 +25,26 @@ export function HistoryPage() {
           .replace('{{events}}', String(HISTORY_TIMELINE.length))
           .replace('{{councils}}', String(COUNCILS.length))}
       />
+
+      {/* Antes de la cronología, las dos preguntas que se hace todo el que
+          llega: quién se separó de quién, y dónde estaban las sedes. */}
+      <Section title={es.history.divisions}>
+        <p className="muted text-sm" style={{ margin: 'calc(-1 * var(--sp-2)) 0 var(--sp-4)' }}>
+          {es.history.divisionsIntro}
+        </p>
+        <ChurchTimeline />
+        <div style={{ marginTop: 'var(--sp-5)' }}>
+          <ChurchBranchList />
+        </div>
+      </Section>
+
+      <Section title={es.history.map}>
+        <p className="muted text-sm" style={{ margin: 'calc(-1 * var(--sp-2)) 0 var(--sp-4)' }}>
+          {es.history.mapIntro}
+        </p>
+        <PatriarchateMap />
+        <p className="source-note" style={{ marginTop: 'var(--sp-4)' }}>{MAPS_NOTE}</p>
+      </Section>
 
       <Section title={es.history.periods}>
         <div className="list">

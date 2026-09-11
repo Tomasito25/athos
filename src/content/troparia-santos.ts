@@ -65,6 +65,8 @@ const ESPIRIDON = tropario(
   'Te mostraste campeón del primer Concilio y taumaturgo, padre nuestro Espiridón portador de Dios. Por eso hablaste a la muerta en el sepulcro y convertiste la serpiente en oro; y mientras cantabas las santas oraciones, ángeles oficiaban contigo, oh santísimo. Gloria a Aquel que te glorificó; gloria a Aquel que te coronó; gloria a Aquel que obra por ti curaciones para todos.',
 );
 
+const CIRILO_METODIO = tropario('Tropario de los santos Cirilo y Metodio', 'Tono 4', 'Como iguales en costumbres a los apóstoles y maestros de los pueblos eslavos, Cirilo y Metodio, sabios en Dios, interceded ante el Soberano de todos para que confirme a todas las naciones eslavas en la ortodoxia y la concordia, pacifique al mundo y salve nuestras almas.');
+
 /** Por identificador de ficha. Dos fichas del mismo santo comparten el mismo. */
 export const SAINT_PROPER_TROPARIA: Record<string, ProperTroparion> = {
   'basilio-magno': tropario('Tropario de san Basilio el Grande', 'Tono 1', 'Por toda la tierra ha salido tu voz, pues ella recibió tu palabra, con la que enseñaste de modo digno de Dios, explicaste la naturaleza de los seres y ordenaste las costumbres de los hombres. Oh sacerdocio real, padre santo Basilio, intercede ante Cristo Dios para que salve nuestras almas.'),
@@ -92,7 +94,8 @@ export const SAINT_PROPER_TROPARIA: Record<string, ProperTroparion> = {
   'juan-teologo-dormicion': JUAN_TEOLOGO,
   'andres-apostol': tropario('Tropario de san Andrés el Primer Llamado', 'Tono 4', 'Como primer llamado de los apóstoles y hermano del corifeo, suplica, Andrés, al Soberano de todos que conceda paz al mundo y a nuestras almas la gran misericordia.'),
   'cosme-damian': tropario('Tropario de los santos anárgiros', 'Tono 8', 'Santos anárgiros y taumaturgos, visitad nuestras enfermedades: gratis recibisteis, dad gratis.'),
-  'cirilo-metodio-c': tropario('Tropario de los santos Cirilo y Metodio', 'Tono 4', 'Como iguales en costumbres a los apóstoles y maestros de los pueblos eslavos, Cirilo y Metodio, sabios en Dios, interceded ante el Soberano de todos para que confirme a todas las naciones eslavas en la ortodoxia y la concordia, pacifique al mundo y salve nuestras almas.'),
+  'cirilo-metodio': CIRILO_METODIO,
+  'cirilo-metodio-c': CIRILO_METODIO,
   'miguel-arcangel': tropario('Tropario de los Arcángeles', 'Tono 4', 'Jefes de los ejércitos celestiales, os suplicamos siempre nosotros, indignos, que con vuestras súplicas nos protejáis al amparo de las alas de vuestra gloria inmaterial, guardándonos a los que caemos ante vosotros y clamamos con insistencia: libradnos de los peligros, capitanes de las potestades de lo alto.'),
   'santiago-hermano-señor': tropario('Tropario de Santiago, hermano del Señor', 'Tono 2', 'Como discípulo del Señor recibiste el Evangelio, justo; como mártir tienes lo inquebrantable; como hermano de Dios, la libertad de palabra; como jerarca, la intercesión. Intercede ante Cristo Dios para que salve nuestras almas.'),
 };

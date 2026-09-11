@@ -24,6 +24,7 @@
  * «versión de uso corriente» cuando es propia, sí lo sería.
  */
 import type { SaintCategory, SourceMeta, TextBlock } from '@/types';
+import { SAINT_PROPER_TROPARIA } from './troparia-santos';
 
 export const GENERAL_TROPARION_META: SourceMeta = {
   source:
@@ -263,7 +264,11 @@ export function generalTroparionFor(
   saintId?: string,
 ): GeneralTroparion | null {
   // Una gran fiesta no tiene general: tiene el suyo, y es el que se canta.
-  const propio = saintId ? (FIESTAS[saintId] ?? FIESTAS[COMPARTEN[saintId] ?? '']) : undefined;
+  // Primero la fiesta; después, el propio del santo si ATHOS lo tiene. Sólo
+  // cuando no hay ninguno de los dos se recurre al general del rango.
+  const propio = saintId
+    ? (FIESTAS[saintId] ?? FIESTAS[COMPARTEN[saintId] ?? ''] ?? SAINT_PROPER_TROPARIA[saintId])
+    : undefined;
   if (propio) {
     return { ...propio, category: categories[0] ?? 'justo', own: true };
   }

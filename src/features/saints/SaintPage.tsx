@@ -4,7 +4,8 @@ import { db } from '@/db/db';
 import { SAINT_CATEGORY_LABELS } from '@/content/saints';
 import { Blocks, Panel, Section, SourceNote, Tag, Skeleton, NotFound } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
-import { RichText } from '@/components/RichText';
+import { RichParagraphs } from '@/components/RichText';
+import { PROPER_TROPARION_META } from '@/content/troparia-santos';
 import { otraFicha } from '@/content/links';
 import {
   GENERAL_TROPARION_META,
@@ -78,9 +79,9 @@ export function SaintPage() {
 
       <Section title={es.saints.biography}>
         <div className="prose book-surface">
-          <p>
-            <RichText>{item.biography}</RichText>
-          </p>
+          {/* Las vidas largas van en párrafos: un bloque de mil caracteres
+              seguidos no se lee, se abandona. */}
+          <RichParagraphs paragraphs={item.biography.split(/\n{2,}/)} />
         </div>
       </Section>
 
@@ -97,7 +98,11 @@ export function SaintPage() {
             <>
               <Panel variant="quiet">
                 <p className="text-sm">
-                  {general.own ? es.saints.feastTroparion : es.saints.generalIntro}
+                  {general.own
+                    ? item.category.every((c) => c === 'senor' || c === 'theotokos')
+                      ? es.saints.feastTroparion
+                      : es.saints.ownTroparion
+                    : es.saints.generalIntro}
                 </p>
               </Panel>
               <div className="tag-row" style={{ margin: 'var(--sp-3) 0' }}>
@@ -105,7 +110,7 @@ export function SaintPage() {
                 <Tag>{general.tone}</Tag>
               </div>
               <Blocks blocks={general.blocks} />
-              <SourceNote meta={GENERAL_TROPARION_META} />
+              <SourceNote meta={general.own ? PROPER_TROPARION_META : GENERAL_TROPARION_META} />
             </>
           ) : (
             <Panel variant="quiet">

@@ -81,7 +81,6 @@ export const SAINT_PROPER_TROPARIA: Record<string, ProperTroparion> = {
   'gregorio-palamas': PALAMAS,
   'gregorio-palamas-nov': PALAMAS,
   'espiridón-diciembre': ESPIRIDON,
-  'espiridon-trimitunte': ESPIRIDON,
   'constantino-elena': tropario('Tropario de los santos Constantino y Elena', 'Tono 8', 'Contemplando en el cielo la figura de tu Cruz, y habiendo recibido, como Pablo, la llamada no de los hombres, tu apóstol entre los reyes, Señor, puso en tus manos la ciudad reinante. Guárdala siempre en paz, por las intercesiones de la Theotokos, oh único amante de los hombres.'),
   'pedro-pablo': tropario('Tropario de los santos Pedro y Pablo', 'Tono 4', 'Primeros en el trono de los apóstoles y maestros del orbe, interceded ante el Soberano de todos para que conceda paz al mundo y a nuestras almas la gran misericordia.'),
   'elias-profeta': tropario('Tropario del santo profeta Elías', 'Tono 4', 'Ángel en la carne, fundamento de los profetas y segundo precursor de la venida de Cristo, el glorioso Elías envió desde lo alto a Eliseo la gracia para ahuyentar las enfermedades y purificar a los leprosos. Por eso derrama también curaciones sobre quienes lo honran.'),

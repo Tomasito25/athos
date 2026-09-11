@@ -291,7 +291,6 @@ export function generalTroparionFor(
 const COMPARTEN: Record<string, string> = {
   'aparicion-cruz': 'exaltacion-s',
   'procesion-cruz-ago': 'exaltacion-s',
-  'exaltacion-cruz': 'exaltacion-s',
   'clausura-dormicion': 'dormicion',
   'sinaxis-theotokos': 'natividad-senor',
 };

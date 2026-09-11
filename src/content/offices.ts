@@ -44,8 +44,14 @@ const section = (
 
 const crisostomoSections: OfficeSection[] = [
   section('proscomidia', 'Proscomidia', [
-    rub('Antes de la Liturgia, el sacerdote y el diácono preparan los dones en la prótesis. El pueblo aún no participa; entre tanto se leen las Horas.'),
-    pending('las oraciones de la preparación de los dones.'),
+    rub('Antes de la Liturgia, el sacerdote y el diácono preparan los dones en la prótesis, una mesa a la izquierda del altar. El pueblo aún no participa; entre tanto se leen las Horas.'),
+    rub('Del primero de los panes ofrecidos, la prósfora, el sacerdote corta con la lanza un cubo marcado con el sello IC XC NIKA: es el Cordero, que será consagrado. Mientras corta dice las palabras del profeta Isaías: «Como oveja fue llevado al matadero; como cordero sin mancha, mudo ante el que lo esquila, así no abrió su boca».'),
+    rub('Después atraviesa el Cordero por el costado recordando el Evangelio de Juan: «Uno de los soldados le abrió el costado con una lanza, y al instante salió sangre y agua». Y vierte en el cáliz vino y agua.'),
+    rub('De los demás panes saca partículas que coloca en la patena alrededor del Cordero: una por la Theotokos, a su derecha; nueve por los órdenes de los santos —el Precursor, los profetas, los apóstoles, los jerarcas, los mártires, los monjes, los anárgiros, los antepasados de Dios y el santo del día—; y otras por los vivos y los difuntos cuyos nombres le han entregado los fieles. Así la Iglesia entera, del cielo y de la tierra, queda reunida en torno a Cristo.'),
+    rub('Cubre los dones con la estrella y los velos, los inciensa y dice la oración de la prótesis:'),
+    t('Oh Dios, Dios nuestro, que enviaste el Pan celestial, alimento de todo el mundo, a nuestro Señor y Dios Jesucristo, Salvador, Redentor y Bienhechor, que nos bendice y santifica: bendice Tú mismo esta ofrenda y recíbela en tu altar celestial. Acuérdate, como bueno y amante de los hombres, de los que la ofrecieron y de aquellos por quienes la ofrecieron, y guárdanos sin condenación en la celebración sagrada de tus divinos misterios. Porque santificado y glorificado es tu honorabilísimo y magnífico nombre, del Padre, y del Hijo, y del Espíritu Santo, ahora y siempre, y por los siglos de los siglos. Amén.'),
+    rub('Traducción para ATHOS a partir del original griego, que es de dominio público; no procede de un libro litúrgico español publicado.'),
+    pending('las oraciones del revestimiento y de la entrada en el santuario.'),
   ], 'sacerdote'),
 
   section('bendicion-inicial', 'Bendición inicial', [
@@ -268,8 +274,24 @@ const seeds: OfficeSeed[] = [
         rub('Los seis salmos están en Leer → Salterio.'),
       ]),
       section('doxologia', 'Gran Doxología', [
-        t('Gloria a Dios en las alturas, y en la tierra paz, benevolencia entre los hombres. Te alabamos, te bendecimos, te adoramos, te glorificamos, te damos gracias por tu gran gloria.'),
-        pending('el texto completo de la Gran Doxología.'),
+        rub('Al amanecer, con las puertas reales abiertas, el sacerdote exclama: «Gloria a Ti, que nos has mostrado la luz». Y se canta:'),
+        t('Gloria a Dios en las alturas, y en la tierra paz, benevolencia entre los hombres.'),
+        t('Te alabamos, te bendecimos, te adoramos, te glorificamos, te damos gracias por tu gran gloria.'),
+        t('Señor, Rey celestial, Dios Padre todopoderoso; Señor, Hijo unigénito, Jesucristo, y Espíritu Santo.'),
+        t('Señor Dios, Cordero de Dios, Hijo del Padre, que quitas el pecado del mundo, ten piedad de nosotros; Tú que quitas los pecados del mundo, recibe nuestra súplica; Tú que estás sentado a la derecha del Padre, ten piedad de nosotros.'),
+        t('Porque sólo Tú eres santo, sólo Tú eres Señor, Jesucristo, para gloria de Dios Padre. Amén.'),
+        t('Cada día te bendeciré y alabaré tu nombre por los siglos, y por los siglos de los siglos.'),
+        t('Concédenos, Señor, guardarnos este día sin pecado.'),
+        t('Bendito eres, Señor, Dios de nuestros padres, y alabado y glorificado es tu nombre por los siglos. Amén.'),
+        t('Venga, Señor, tu misericordia sobre nosotros, como lo esperamos de Ti.'),
+        t('Bendito eres, Señor, enséñame tus mandamientos.'),
+        rub('Tres veces.'),
+        t('Señor, Tú has sido nuestro refugio de generación en generación. Yo dije: Señor, ten piedad de mí, sana mi alma, porque he pecado contra Ti.'),
+        t('Señor, en Ti me refugio: enséñame a hacer tu voluntad, porque Tú eres mi Dios.'),
+        t('Porque en Ti está la fuente de la vida, y en tu luz veremos la luz. Extiende tu misericordia sobre los que te conocen.'),
+        t('Santo Dios, Santo Fuerte, Santo Inmortal, ten piedad de nosotros.'),
+        rub('Tres veces. Y después: Gloria al Padre… ahora y siempre… Santo Inmortal, ten piedad de nosotros. Y una vez más, con canto más solemne: Santo Dios, Santo Fuerte, Santo Inmortal, ten piedad de nosotros.'),
+        rub('Traducción para ATHOS a partir del original griego, que es de dominio público; no procede de un libro litúrgico español publicado.'),
       ]),
     ],
   },
@@ -318,7 +340,13 @@ const seeds: OfficeSeed[] = [
         rub('Se recita entero. Está en Orar → Oraciones → Símbolo de la Fe.'),
       ]),
       section('propios', 'Troparios y oraciones del oficio', [
-        pending('los troparios de compunción y la oración de san Marcos el Monje.'),
+        rub('Después del Símbolo de la Fe y del Trisagio se cantan los troparios de la vigilia, que dan sentido a todo el oficio: la espera del Esposo que llega a medianoche.'),
+        t('He aquí que el Esposo viene a medianoche, y bienaventurado el siervo a quien encuentre velando; pero indigno aquel a quien halle negligente. Mira, pues, alma mía, no te dejes vencer por el sueño, no sea que seas entregada a la muerte y quedes fuera del Reino; antes bien, despierta clamando: Santo, Santo, Santo eres, oh Dios; por la intercesión de la Theotokos, ten piedad de nosotros.'),
+        t('Pensando en aquel día terrible, alma mía, vela, enciende tu lámpara y hazla brillar con aceite; porque no sabes cuándo vendrá a ti la voz que dice: He aquí el Esposo. Mira, pues, alma mía, no te duermas, no sea que te quedes fuera llamando, como las cinco vírgenes; vela, en cambio, sin descanso, para salir con aceite abundante al encuentro de Cristo Dios, y que Él te dé la cámara nupcial divina de su gloria.'),
+        rub('Y la oración del oficio, atribuida a san Basilio:'),
+        t('Te bendecimos, oh Dios altísimo y Señor de la misericordia, que siempre haces con nosotros cosas grandes e inescrutables, gloriosas y admirables, sin número; que nos concediste el sueño para descanso de nuestra debilidad y reposo de las fatigas de nuestra carne. Te damos gracias porque no nos has hecho perecer con nuestras iniquidades, sino que, amando a los hombres como siempre, nos has levantado cuando yacíamos sin esperanza, para que glorifiquemos tu poder. Por eso suplicamos a tu bondad inconmensurable: ilumina los ojos de nuestro entendimiento y levanta nuestra mente del pesado sueño de la pereza; abre nuestra boca y llénala de tu alabanza, para que podamos cantarte, confesarte y glorificarte sin distracción, a Ti, Dios glorificado en todo y por todos, Padre sin principio, con tu Hijo unigénito y tu santísimo, bueno y vivificador Espíritu, ahora y siempre, y por los siglos de los siglos. Amén.'),
+        rub('Traducción para ATHOS a partir del original griego, que es de dominio público; no procede de un libro litúrgico español publicado.'),
+        pending('la oración de san Marcos el Monje y los troparios propios del sábado y del domingo.'),
       ]),
       section('difuntos', 'Conmemoración de los difuntos', [
         rub('El oficio de Medianoche termina cada día con una conmemoración de los difuntos: en la tradición monástica es el momento fijo en que se reza por ellos.'),

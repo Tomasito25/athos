@@ -203,15 +203,49 @@ export const THIRD_PRAYERS: ThirdPrayerSeed[] = [
     title: 'La panihida',
     subtitle: 'El oficio breve por los difuntos',
     category: 'duelo',
-    blocks: PENDING,
-    status: 'pending',
-    meta: pendiente({
-      source: 'Oficio de la panihida (mnemósynon), del Euchologion',
+    blocks: [
+      rub('El oficio breve por los difuntos, llamado también litía. Donde dice N. se dice el nombre del difunto; para una mujer se cambian las formas.'),
+      rub('Se empieza como toda oración: Bendito sea nuestro Dios, y el comienzo habitual —Rey celestial, Trisagio, Padre Nuestro—, que está entero en Orar → Oraciones → Comienzo habitual.'),
+      head('Troparios'),
+      t('Con los espíritus de los justos que han muerto, da descanso, Salvador, al alma de tu siervo N., guardándola en la vida bienaventurada que está junto a Ti, oh amante de los hombres.'),
+      t('En tu lugar de descanso, Señor, donde reposan todos tus santos, da descanso también al alma de tu siervo N., porque sólo Tú amas a los hombres.'),
+      rub('Gloria al Padre, y al Hijo, y al Espíritu Santo.'),
+      t('Tú eres el Dios que descendió al Hades y desató las cadenas de los cautivos: da descanso Tú mismo también al alma de tu siervo N.'),
+      rub('Ahora y siempre, y por los siglos de los siglos. Amén.'),
+      t('Oh Virgen, única pura e inmaculada, que sin semilla diste a luz a Dios: intercede para que su alma sea salvada.'),
+      head('Letanía'),
+      rub('La dice el sacerdote. Si lee un laico, en su lugar dice «Señor, ten piedad» doce veces.'),
+      t('Ten piedad de nosotros, oh Dios, según tu gran misericordia; te rogamos, escúchanos y ten piedad.'),
+      t('Pidamos también por el descanso del alma del siervo de Dios N., que se ha dormido, y para que le sea perdonado todo pecado voluntario e involuntario.'),
+      t('Para que el Señor Dios coloque su alma donde reposan los justos.'),
+      t('Pidamos la misericordia de Dios, el reino de los cielos y el perdón de sus pecados a Cristo, Rey inmortal y Dios nuestro.'),
+      rub('Pueblo: Concédelo, Señor. Señor, ten piedad.'),
+      head('Oración'),
+      t('Dios de los espíritus y de toda carne, que pisoteaste la muerte, aniquilaste al diablo y diste la vida a tu mundo: da Tú mismo, Señor, descanso al alma de tu siervo N., que se ha dormido, en un lugar de luz, en un lugar verde, en un lugar de reposo, de donde han huido todo dolor, toda tristeza y todo gemido. Perdónale, como Dios bueno y amante de los hombres, todo pecado que haya cometido de palabra, de obra o de pensamiento, porque no hay hombre que viva y no peque: sólo Tú estás sin pecado, tu justicia es justicia eterna y tu palabra es verdad.'),
+      t('Porque Tú eres la resurrección, la vida y el descanso de tu siervo N., que se ha dormido, oh Cristo Dios nuestro, y a Ti te damos gloria, junto con tu Padre sin principio y tu santísimo, bueno y vivificador Espíritu, ahora y siempre, y por los siglos de los siglos. Amén.'),
+      head('Kontakion'),
+      t('Con los santos da descanso, oh Cristo, al alma de tu siervo, donde no hay dolor, ni tristeza, ni gemido, sino vida sin fin.'),
+      head('Ikos'),
+      t('Tú solo eres inmortal, que creaste y formaste al hombre; y nosotros, los mortales, fuimos formados de la tierra y a la tierra volveremos, como mandaste Tú, que me formaste y me dijiste: «Tierra eres y a la tierra volverás». Allí iremos todos los mortales, haciendo de nuestro canto fúnebre un canto: Aleluya, aleluya, aleluya.'),
+      head('Final'),
+      t('Más honorable que los querubines e incomparablemente más gloriosa que los serafines, tú que sin mancha diste a luz al Verbo de Dios, verdadera Theotokos, te engrandecemos.'),
+      t('Cristo, nuestro Dios verdadero, que tiene poder sobre vivos y muertos, por las intercesiones de su purísima Madre y de todos los santos, coloque el alma de su siervo N., que se ha separado de nosotros, en las moradas de los justos, le dé descanso en el seno de Abraham y lo cuente entre los justos, y tenga piedad de nosotros, porque es bueno y ama a los hombres. Amén.'),
+      rub('Si lee un laico, termina así: Por las oraciones de nuestros santos padres, Señor Jesucristo, Dios nuestro, ten piedad de nosotros. Amén.'),
+      head('Memoria eterna'),
+      t('Eterna sea tu memoria, hermano nuestro, digno de bienaventuranza e inolvidable.'),
+      rub('Tres veces.'),
+      { kind: 'pending', content: 'Contenido pendiente de incorporar: el canon por los difuntos, que se canta en la panihida completa entre la letanía y el kontakion.' },
+    ],
+    status: 'partial',
+    meta: meta({
+      source:
+        'Oficio de la panihida (mnemósynon), del Euchologion bizantino. Traducción al español hecha para ATHOS a partir del original griego, que es de dominio público',
+      license: 'cc-by-sa-4.0',
+      copyright:
+        'Texto litúrgico tradicional; el original griego es de dominio público. Esta versión española es una traducción hecha para ATHOS y se publica bajo CC BY-SA 4.0.',
       notes:
-        'Dura unos veinte minutos y se puede pedir cualquier día salvo en los grandes tiempos ' +
-        'festivos. Se compone de una letanía, el salmo 90, el canon por los difuntos, el kontakion ' +
-        '«Con los santos da descanso» y la memoria eterna final. Existe una forma abreviada, la ' +
-        'litía, que un sacerdote puede rezar en cualquier sitio y en pocos minutos.',
+        'Es una traducción de un texto que existe, no una oración escrita para ATHOS: lo propio es sólo la versión española, que no procede de un libro litúrgico publicado. ' +
+        'Están las partes fijas del oficio breve por los difuntos, que puede leer también un laico; el canon por los difuntos sigue pendiente.',
     }),
   },
 

@@ -238,11 +238,21 @@ describe('procedencia: lo que ATHOS escribe no se disfraza de texto litúrgico',
   });
 
   it('lo pendiente se marca como pendiente y explica por qué', () => {
+    // Hasta la panihida, una oración o estaba entera o no estaba, y esta prueba
+    // exigía «pendiente» a todo lo que tuviera un hueco. Ahora hay oraciones con
+    // casi todo su texto y una parte por incorporar, como pasa desde siempre en
+    // los oficios. Lo que se protege no cambia: nada con huecos se declara
+    // completo, y lo parcial tiene que tener texto de verdad, no sólo el aviso.
     for (const prayer of PRAYERS) {
       const tienePendiente = prayer.blocks.some((b) => b.kind === 'pending');
+      const tieneTexto = prayer.blocks.some((b) => b.kind === 'text' || b.kind === 'verse');
       if (tienePendiente) {
-        expect(prayer.status, prayer.id).toBe('pending');
+        expect(['pending', 'partial'], prayer.id).toContain(prayer.status);
         expect(prayer.meta.notes?.length ?? 0, `${prayer.id} no explica qué falta`).toBeGreaterThan(30);
+      }
+      if (prayer.status === 'partial') {
+        expect(tieneTexto, `${prayer.id} se declara parcial sin una línea que rezar`).toBe(true);
+        expect(tienePendiente, `${prayer.id} se declara parcial sin decir qué falta`).toBe(true);
       }
       if (prayer.status === 'complete') {
         expect(tienePendiente, `${prayer.id} se declara completa con huecos`).toBe(false);

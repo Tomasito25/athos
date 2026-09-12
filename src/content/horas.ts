@@ -89,7 +89,8 @@ const TRAS_LOS_SALMOS: TextBlock[] = [
  * Es la misma oración en las cuatro Horas, y en las cuatro va en el mismo
  * sitio: después de las cuarenta invocaciones y antes de la oración propia.
  */
-const TODA_HORA: TextBlock[] = [
+/** La oración «Tú que en todo tiempo», común a las Horas y a las Completas. */
+export const TODA_HORA: TextBlock[] = [
   t(
     'Tú que en todo tiempo y a toda hora, en el cielo y en la tierra, eres adorado y glorificado, Cristo Dios, longánime, de gran misericordia y gran compasión, que amas a los justos y te apiadas de los pecadores, que a todos llamas a la salvación por la promesa de los bienes futuros: recibe, Señor, en esta hora nuestras súplicas y endereza nuestra vida hacia tus mandamientos. Santifica nuestras almas, purifica nuestros cuerpos, endereza nuestros pensamientos, limpia nuestras intenciones y líbranos de toda tribulación, mal y dolor. Rodéanos con tus santos ángeles, para que, guardados y guiados por ellos, alcancemos la unidad de la fe y el conocimiento de tu gloria inaccesible, porque bendito eres por los siglos de los siglos. Amén.',
   ),

@@ -97,7 +97,7 @@ export const OFFICE_ABOUT: Record<string, Explicacion> = {
   },
   presantificados: {
     about:
-      'No es propiamente una Liturgia, porque en ella no se consagra: se comulga de los dones consagrados el domingo anterior, de ahí el nombre. La Iglesia no celebra la Eucaristía en los días de ayuno estricto de Gran Cuaresma, pero tampoco quiere dejar al pueblo sin comunión, y de esa tensión nace este oficio. Lleva el nombre de san Gregorio Dialogista, papa de Roma.',
+      'No es propiamente una Liturgia, porque en ella no se consagra: se comulga de los dones consagrados el domingo anterior, de ahí el nombre. La Iglesia no celebra la Eucaristía en los días de ayuno estricto de Gran Cuaresma, pero tampoco quiere dejar al pueblo sin comunión, y de esa tensión nace este oficio. Los libros lo atribuyen a san Gregorio Dialogista, papa de Roma, aunque la atribución es tardía y el oficio es de formación oriental.',
     structure:
       'Es una Vísperas a la que se añade la comunión. Se celebra los miércoles y viernes de Gran Cuaresma, y algunos otros días; siempre por la tarde, porque quien va a comulgar ha ayunado todo el día. En ella se canta «Ahora las potestades celestiales», y las lecturas son del Génesis y de los Proverbios, no del Evangelio.',
   },

@@ -2,6 +2,59 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.24.0]
+
+### Añadido
+
+- **Las 380 vidas de santos, escritas enteras.** Ninguna ficha se queda ya en
+  dos líneas: la media pasa de unos 260 caracteres a **1.233**, en tres o
+  cuatro párrafos. No son sólo fechas y tormentos; cada vida sitúa al santo en
+  su siglo y explica lo que hace falta para entenderla —qué era una laura, qué
+  pedía de verdad el primer edicto de Diocleciano, por qué la persecución persa
+  fue política—. Los **366 días** del año siguen teniendo conmemoración.
+- **Troparios propios para 40 santos**, traducidos del original griego. Cuando
+  no hay tropario propio comprobado, se sigue cantando el **tropario general
+  del rango**, y la ficha dice cuál de los dos está leyendo.
+- **Las Completas, el oficio entero.** Era una nota de cuatro líneas. Ahora
+  trae los tres salmos, los troparios de los días ordinarios, la oración de
+  san Basilio, la de Pablo de Evergetis a la Theotokos, la de san Antíoco, «Mi
+  esperanza es el Padre», el **rito del perdón mutuo** y la oración de san Juan
+  Damasceno al acostarse. De las Grandes, las tres partes, el estribillo «Señor
+  de las potestades» y la **oración de Manasés** completa.
+- **Las oraciones del revestimiento**, cada vestidura con su versículo, puestas
+  antes de la Proscomidia, que es cuando ocurren.
+- **La Gran Doxología** entera en Maitines, los **troparios del Esposo** y la
+  oración de san Basilio en el Oficio de Medianoche, y el **rito de la
+  prótesis** con su oración en la Liturgia de san Juan Crisóstomo.
+- **La panihida**, el oficio de difuntos, con sus textos fijos.
+- **Los Presantificados**: el orden de las nueve partes, «La luz de Cristo
+  ilumina a todos» con su postración, y por qué existe un oficio que da la
+  comunión sin consagrar.
+
+### Corregido
+
+- **Nueve santos estaban duplicados** en su propio día —Jorge, Atanasio,
+  Espiridón, Ignacio y otros cinco—. Fuera. La prueba que lo vigila ya no
+  compara nombres enteros, que es como se colaron.
+- **San Juan «el Antiguo» no existe**: el epíteto griego significa «de la Laura
+  Antigua», la de Farán. Y **san Basilio no fue obispo de Paros** sino de
+  Parion, en el Helesponto. Las dos fichas decían otra cosa.
+- Los Presantificados afirmaban en una sección la atribución a san Gregorio
+  Dialogista y **la negaban en otra**. Ahora se dice una sola cosa: que la
+  atribución es tardía.
+- Varias fichas hacían afirmaciones que no se sostienen —la ceguera de Limneo,
+  san Tijón comprando templos, los dos Esteban de Mar Sabas—. Reescritas.
+
+### Sobre lo que sigue faltando
+
+Nada de lo anterior es un texto inventado. Lo incorporado es **traducción para
+ATHOS del original griego**, que es de dominio público, y cada sección lo dice;
+las vidas son **prosa histórica escrita para ATHOS**, no himnos. Lo que no se ha
+podido comprobar se sigue declarando pendiente y no se rellena: las 24 estrofas
+de los cuatro akathistos, los cerca de 250 troparios del Gran Canon, los propios
+del Menaion y del Triodion, la oración de san Marcos el Monje y los libros
+deuterocanónicos.
+
 ## [1.23.0]
 
 ### Añadido

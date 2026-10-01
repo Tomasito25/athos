@@ -36,7 +36,7 @@ export function HomePage() {
   return (
     <div className="page page--reading">
       {/* ---------- La oración, antes que nada ---------- */}
-      <header style={{ paddingTop: 'var(--sp-6)', textAlign: 'center' }}>
+      <header className="home-hero" style={{ paddingTop: 'var(--sp-6)', textAlign: 'center' }}>
         {/* La portada enseña la oración, no un título; pero toda página
             necesita su encabezado de primer nivel, y aquí va para quien
             navega con lector de pantalla. */}
@@ -44,12 +44,11 @@ export function HomePage() {
         <p className="eyebrow" style={{ marginBottom: 'var(--sp-4)' }}>
           {greeting()}
         </p>
-        <OrthodoxCross
-          size={30}
-          style={{ margin: '0 auto var(--sp-4)', color: 'var(--gold)', opacity: 0.85 }}
-        />
+        <span className="home-hero__halo" aria-hidden="true">
+          <OrthodoxCross size={30} style={{ color: 'var(--gold)' }} />
+        </span>
         <p
-          className="display"
+          className="display home-hero__prayer"
           style={{
             fontSize: 'var(--text-xl)',
             lineHeight: 1.45,

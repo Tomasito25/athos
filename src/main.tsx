@@ -11,6 +11,7 @@ import '@/styles/base.css';
 import '@/styles/typography.css';
 import '@/styles/shell.css';
 import '@/styles/components.css';
+import '@/styles/byzantine.css';
 
 const container = document.getElementById('root');
 if (!container) throw new Error('Falta el elemento raíz');

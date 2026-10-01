@@ -1,0 +1,737 @@
+/* ============================================================
+   ATHOS — la capa bizantina
+   ------------------------------------------------------------
+   Lo que da a la aplicación el aire de un templo y no de un
+   formulario: el oro en pan, el mosaico, el arco del ábside,
+   el halo, las esquinas del arca del icono. Y un poco de vida:
+   las páginas entran, el oro brilla al pasar, el halo gira
+   despacio como la luz de una lámpara.
+
+   Tres reglas:
+   - El texto se lee siempre igual de bien. El oro va en los
+     títulos grandes y en los adornos, nunca en la letra menuda.
+   - Lo decorativo depende del interruptor de ornamentos
+     (`data-ornaments`). Quien lo apaga se queda con la página
+     limpia, pero con el mismo color.
+   - El movimiento es breve y se apaga solo con «reducir
+     movimiento» del sistema (ver base.css) y en alto contraste.
+   ============================================================ */
+
+/* ---------- Paleta ampliada ---------- */
+:root,
+:root[data-theme='light'] {
+  /* Lapislázuli y pórfido: el azul de los mantos y el púrpura imperial. */
+  --lapis: #1f3a6b;
+  --porphyry: #5a2142;
+  --cinnabar: #a2331f;
+
+  /* El oro en pan de los títulos: oscuro sobre el pergamino, para que se
+     lea; con una veta clara en medio que es la que brilla. */
+  --gold-leaf-text: linear-gradient(
+    100deg,
+    #6b4d0e 0%,
+    #8c6a19 30%,
+    #a8822a 46%,
+    #c39a3c 50%,
+    #a8822a 54%,
+    #8c6a19 70%,
+    #6b4d0e 100%
+  );
+  --gold-leaf: linear-gradient(135deg, #e7c76f 0%, #b88d2c 38%, #8a6817 62%, #c9a24a 100%);
+  --halo: radial-gradient(circle, rgba(201, 162, 74, 0.26) 0%, rgba(201, 162, 74, 0.08) 46%, transparent 70%);
+  --apse-glow: radial-gradient(ellipse 70% 42% at 50% -6%, rgba(201, 162, 74, 0.16), transparent 70%);
+
+  /* Las teselas: un mosaico de cuatro piezas con el oro desigual, como lo
+     está el de verdad. Va muy tenue, detrás de todo. */
+  --tesserae: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14'%3E%3Cg fill='%239a761f'%3E%3Crect x='1' y='1' width='5.6' height='5.6' rx='.6' opacity='.55'/%3E%3Crect x='7.4' y='1' width='5.6' height='5.6' rx='.6' opacity='.32'/%3E%3Crect x='1' y='7.4' width='5.6' height='5.6' rx='.6' opacity='.28'/%3E%3Crect x='7.4' y='7.4' width='5.6' height='5.6' rx='.6' opacity='.5'/%3E%3C/g%3E%3C/svg%3E");
+  /* La banda de colores: oro, lapislázuli, oro, cinabrio, como el borde de
+     un mosaico de ábside. */
+  --mosaic-band: repeating-linear-gradient(
+    90deg,
+    #b88d2c 0 9px,
+    transparent 9px 11px,
+    #1f3a6b 11px 20px,
+    transparent 20px 22px,
+    #c9a24a 22px 31px,
+    transparent 31px 33px,
+    #a2331f 33px 42px,
+    transparent 42px 44px
+  );
+}
+
+:root[data-theme='dark'] {
+  --lapis: #3a5c96;
+  --porphyry: #7d3a62;
+  --cinnabar: #c4553c;
+
+  --gold-leaf-text: linear-gradient(
+    100deg,
+    #b8913d 0%,
+    #d6b25e 30%,
+    #ecd08a 46%,
+    #fff1c4 50%,
+    #ecd08a 54%,
+    #d6b25e 70%,
+    #b8913d 100%
+  );
+  --halo: radial-gradient(circle, rgba(236, 208, 138, 0.3) 0%, rgba(201, 162, 74, 0.1) 46%, transparent 70%);
+  --apse-glow: radial-gradient(ellipse 70% 42% at 50% -6%, rgba(201, 162, 74, 0.13), transparent 72%);
+  --tesserae: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14'%3E%3Cg fill='%23c9a24a'%3E%3Crect x='1' y='1' width='5.6' height='5.6' rx='.6' opacity='.55'/%3E%3Crect x='7.4' y='1' width='5.6' height='5.6' rx='.6' opacity='.32'/%3E%3Crect x='1' y='7.4' width='5.6' height='5.6' rx='.6' opacity='.28'/%3E%3Crect x='7.4' y='7.4' width='5.6' height='5.6' rx='.6' opacity='.5'/%3E%3C/g%3E%3C/svg%3E");
+  --mosaic-band: repeating-linear-gradient(
+    90deg,
+    #c9a24a 0 9px,
+    transparent 9px 11px,
+    #3a5c96 11px 20px,
+    transparent 20px 22px,
+    #ecd08a 22px 31px,
+    transparent 31px 33px,
+    #c4553c 33px 42px,
+    transparent 42px 44px
+  );
+}
+
+/* ---------- El fondo: la bóveda ---------- */
+
+/* La luz del ábside arriba, el azul de la noche en un rincón y el pórfido en
+   el otro. Sustituye a las dos manchas que había, con más hondura. */
+body::before {
+  opacity: 1;
+  background-image:
+    var(--apse-glow),
+    radial-gradient(circle at 6% 100%, color-mix(in srgb, var(--lapis) 9%, transparent), transparent 42%),
+    radial-gradient(circle at 100% 18%, color-mix(in srgb, var(--porphyry) 7%, transparent), transparent 40%);
+}
+
+:root[data-theme='dark'] body::before {
+  opacity: 1;
+  background-image:
+    var(--apse-glow),
+    radial-gradient(circle at 4% 100%, color-mix(in srgb, var(--lapis) 16%, transparent), transparent 46%),
+    radial-gradient(circle at 100% 14%, color-mix(in srgb, var(--porphyry) 13%, transparent), transparent 42%);
+}
+
+/* El mosaico, sólo con ornamentos y sólo en lo alto, desvaneciéndose como el
+   oro de una cúpula hacia los muros. */
+:root[data-ornaments='si'] body::after {
+  content: '';
+  position: fixed;
+  inset: 0 0 auto;
+  height: 46vh;
+  z-index: 0;
+  pointer-events: none;
+  background-image: var(--tesserae);
+  opacity: 0.07;
+  mask-image: radial-gradient(ellipse 60% 100% at 50% 0%, #000, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 60% 100% at 50% 0%, #000, transparent 75%);
+}
+
+:root[data-theme='dark'][data-ornaments='si'] body::after {
+  opacity: 0.09;
+}
+
+/* En una pantalla pequeña la tesela se ve más grande en proporción y llega a
+   parecer grano: se rebaja. */
+@media (max-width: 40rem) {
+  :root[data-ornaments='si'] body::after {
+    opacity: 0.045;
+  }
+}
+
+::selection {
+  background: color-mix(in srgb, var(--gold) 32%, transparent);
+  color: var(--ink-strong);
+}
+
+html {
+  scrollbar-color: color-mix(in srgb, var(--gold) 38%, transparent) transparent;
+}
+
+/* ---------- Animaciones ---------- */
+
+@keyframes athos-entra {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes athos-sube {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+    scale: 0.985;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+  }
+}
+
+/* El brillo que recorre el oro: la veta clara pasa de un lado al otro. */
+@keyframes athos-oro {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0% 0;
+  }
+}
+
+/* El filete del título se dibuja desde el centro hacia fuera. */
+@keyframes athos-traza {
+  from {
+    clip-path: inset(0 50% 0 50%);
+    opacity: 0.2;
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+/* La luz de una lámpara de aceite: no late con regularidad, tiembla. */
+@keyframes athos-vela {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 4px color-mix(in srgb, var(--gold) 45%, transparent));
+  }
+  37% {
+    filter: drop-shadow(0 0 9px color-mix(in srgb, var(--gold) 70%, transparent));
+  }
+  52% {
+    filter: drop-shadow(0 0 6px color-mix(in srgb, var(--gold) 55%, transparent));
+  }
+  78% {
+    filter: drop-shadow(0 0 11px color-mix(in srgb, var(--gold) 75%, transparent));
+  }
+}
+
+@keyframes athos-giro {
+  to {
+    rotate: 1turn;
+  }
+}
+
+@keyframes athos-halo {
+  from {
+    scale: 0.4;
+    opacity: 0;
+  }
+  60% {
+    scale: 1.12;
+    opacity: 1;
+  }
+  to {
+    scale: 1;
+    opacity: 1;
+  }
+}
+
+/* Cada página entra al abrirse. */
+.page {
+  animation: athos-entra 480ms var(--ease) both;
+}
+
+/* Las tarjetas y las filas llegan una tras otra, como quien enciende las
+   lámparas de un iconostasio. A partir de la duodécima, todas a la vez: en
+   una lista de cien no se espera a nadie. */
+.grid > *,
+.list > * {
+  animation: athos-sube 460ms var(--ease) both;
+  animation-delay: 480ms;
+}
+
+.grid > :nth-child(1),
+.list > :nth-child(1) {
+  animation-delay: 40ms;
+}
+.grid > :nth-child(2),
+.list > :nth-child(2) {
+  animation-delay: 80ms;
+}
+.grid > :nth-child(3),
+.list > :nth-child(3) {
+  animation-delay: 120ms;
+}
+.grid > :nth-child(4),
+.list > :nth-child(4) {
+  animation-delay: 160ms;
+}
+.grid > :nth-child(5),
+.list > :nth-child(5) {
+  animation-delay: 200ms;
+}
+.grid > :nth-child(6),
+.list > :nth-child(6) {
+  animation-delay: 240ms;
+}
+.grid > :nth-child(7),
+.list > :nth-child(7) {
+  animation-delay: 280ms;
+}
+.grid > :nth-child(8),
+.list > :nth-child(8) {
+  animation-delay: 320ms;
+}
+.grid > :nth-child(9),
+.list > :nth-child(9) {
+  animation-delay: 360ms;
+}
+.grid > :nth-child(10),
+.list > :nth-child(10) {
+  animation-delay: 400ms;
+}
+.grid > :nth-child(11),
+.list > :nth-child(11) {
+  animation-delay: 440ms;
+}
+
+/* En las páginas largas, cada sección se levanta al entrar en pantalla. Es
+   una mejora: donde el navegador no sabe atar una animación al scroll, las
+   secciones simplemente están. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .page .section ~ .section {
+      animation: athos-sube linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 45%;
+    }
+  }
+}
+
+/* ---------- Títulos en oro ---------- */
+
+/* Sólo los títulos de página: son grandes, se leen bien en oro, y es donde un
+   manuscrito ponía el oro. La veta brilla una vez al entrar y se queda. */
+.page-head__title,
+h1.display,
+.app-sidebar__brand-name,
+.app-topbar__title--brand {
+  background-image: var(--gold-leaf-text);
+  background-size: 260% 100%;
+  background-position: 0% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.page-head__title,
+h1.display {
+  animation: athos-oro 2600ms var(--ease) 250ms both;
+}
+
+/* En alto contraste y con colores forzados, el oro cede a la tinta. */
+:root[data-contrast='high'] .page-head__title,
+:root[data-contrast='high'] h1.display,
+:root[data-contrast='high'] .app-sidebar__brand-name,
+:root[data-contrast='high'] .app-topbar__title--brand {
+  background: none;
+  color: var(--ink-strong);
+  -webkit-text-fill-color: currentColor;
+  animation: none;
+}
+
+@media (forced-colors: active) {
+  .page-head__title,
+  h1.display,
+  .app-sidebar__brand-name,
+  .app-topbar__title--brand {
+    background: none;
+    color: CanvasText;
+    -webkit-text-fill-color: CanvasText;
+  }
+}
+
+/* El filete bajo el título pasa a ser una cinta: línea, rombo, cruz, rombo,
+   línea, en oro, que se dibuja desde el centro. */
+:root[data-ornaments='si'] .page-head::after {
+  width: 9.5rem;
+  height: 12px;
+  border-radius: 0;
+  background: var(--gold-leaf);
+  opacity: 0.9;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 152 12'%3E%3Cg fill='none' stroke='%23000' stroke-linecap='round'%3E%3Cpath d='M1 6H58' stroke-width='1.2'/%3E%3Cpath d='M94 6H151' stroke-width='1.2'/%3E%3Cpath d='M76 .8V11.2M70.5 5.2H81.5' stroke-width='1.8'/%3E%3Cpath d='M71.5 9H80.5' stroke-width='1.2'/%3E%3C/g%3E%3Cpath d='M64 2.6 67.4 6 64 9.4 60.6 6Z M88 2.6 91.4 6 88 9.4 84.6 6Z'/%3E%3C/svg%3E")
+    center / 100% 100% no-repeat;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 152 12'%3E%3Cg fill='none' stroke='%23000' stroke-linecap='round'%3E%3Cpath d='M1 6H58' stroke-width='1.2'/%3E%3Cpath d='M94 6H151' stroke-width='1.2'/%3E%3Cpath d='M76 .8V11.2M70.5 5.2H81.5' stroke-width='1.8'/%3E%3Cpath d='M71.5 9H80.5' stroke-width='1.2'/%3E%3C/g%3E%3Cpath d='M64 2.6 67.4 6 64 9.4 60.6 6Z M88 2.6 91.4 6 88 9.4 84.6 6Z'/%3E%3C/svg%3E")
+    center / 100% 100% no-repeat;
+  animation: athos-traza 700ms var(--ease) 180ms both;
+}
+
+/* ---------- Secciones ---------- */
+
+/* Un rombo de oro delante del título y la raya teñida de oro. */
+.section__title::before {
+  content: '';
+  display: inline-block;
+  width: 0.42em;
+  height: 0.42em;
+  margin-inline-end: 0.7em;
+  vertical-align: 0.12em;
+  rotate: 45deg;
+  background: var(--gold);
+  opacity: 0.85;
+}
+
+.section__head::before {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--gold) 42%, transparent), transparent 80%);
+}
+
+/* ---------- Tarjetas: el arca del icono ---------- */
+
+.card {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Las cuatro escuadras de oro en las esquinas, por dentro del doble filete que
+   ya tenía la tarjeta: el marco de una tabla de icono. */
+:root[data-ornaments='si'] .card {
+  --escuadra: color-mix(in srgb, var(--gold) 58%, transparent);
+  background:
+    linear-gradient(var(--escuadra), var(--escuadra)) left 8px top 8px / 11px 1px no-repeat,
+    linear-gradient(var(--escuadra), var(--escuadra)) left 8px top 8px / 1px 11px no-repeat,
+    linear-gradient(var(--escuadra), var(--escuadra)) right 8px top 8px / 11px 1px no-repeat,
+    linear-gradient(var(--escuadra), var(--escuadra)) right 8px top 8px / 1px 11px no-repeat,
+    linear-gradient(var(--escuadra), var(--escuadra)) left 8px bottom 8px / 11px 1px no-repeat,
+    linear-gradient(var(--escuadra), var(--escuadra)) left 8px bottom 8px / 1px 11px no-repeat,
+    linear-gradient(var(--escuadra), var(--escuadra)) right 8px bottom 8px / 11px 1px no-repeat,
+    linear-gradient(var(--escuadra), var(--escuadra)) right 8px bottom 8px / 1px 11px no-repeat,
+    var(--surface-glow),
+    var(--surface-raised);
+}
+
+/* Al pasar por encima, una veta de luz cruza la tarjeta como el reflejo de
+   una lámpara sobre el oro. */
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    112deg,
+    transparent 34%,
+    color-mix(in srgb, var(--gold) 15%, transparent) 48%,
+    color-mix(in srgb, #fff3c8 12%, transparent) 50%,
+    color-mix(in srgb, var(--gold) 15%, transparent) 52%,
+    transparent 66%
+  );
+  translate: -120% 0;
+}
+
+.card:hover::after,
+.card:focus-visible::after {
+  translate: 120% 0;
+  transition: translate 950ms var(--ease);
+}
+
+.card:active {
+  scale: 0.99;
+}
+
+/* El icono de la tarjeta, en un halo de oro: el nimbo de los santos. */
+.card__head > svg:first-child {
+  box-sizing: content-box;
+  padding: 7px;
+  border-radius: 50%;
+  background: var(--halo);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gold) 34%, transparent);
+  transition: box-shadow var(--dur) var(--ease), scale var(--dur) var(--ease);
+}
+
+.card:hover .card__head > svg:first-child {
+  scale: 1.08;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--gold) 60%, transparent),
+    0 0 14px color-mix(in srgb, var(--gold) 35%, transparent);
+}
+
+/* Los paneles que son enlaces responden igual que las tarjetas. */
+a.panel {
+  display: block;
+  transition: border-color var(--dur) var(--ease), translate var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+a.panel:hover {
+  border-color: var(--gold-soft);
+  box-shadow: var(--shadow);
+  translate: 0 -2px;
+}
+
+/* Un filo de oro arriba en los paneles, cuando hay ornamentos. */
+:root[data-ornaments='si'] .panel:not(.panel--quiet):not(.panel--sunken) {
+  background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--gold) 45%, transparent), transparent) top / 100% 1px
+      no-repeat,
+    var(--surface-glow),
+    var(--surface-raised);
+}
+
+/* ---------- Botones ---------- */
+
+.btn {
+  transition: background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease),
+    box-shadow var(--dur) var(--ease), filter var(--dur) var(--ease), scale var(--dur-fast) var(--ease);
+}
+
+.btn:active:not(:disabled) {
+  scale: 0.97;
+}
+
+/* El botón principal es una pieza de oro: al pasar, la luz la recorre. */
+.btn--primary {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.btn--primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 246, 214, 0.42) 50%, transparent 70%);
+  translate: -130% 0;
+}
+
+.btn--primary:hover:not(:disabled)::after,
+.btn--primary:focus-visible::after {
+  translate: 130% 0;
+  transition: translate 800ms var(--ease);
+}
+
+/* ---------- Barra lateral ---------- */
+
+/* Una banda de mosaico en lo alto, como el borde de un ábside. */
+.app-sidebar::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: var(--mosaic-band);
+  opacity: 0.85;
+}
+
+.app-sidebar {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--gold) 5%, transparent), transparent 30%),
+    var(--surface-sunken);
+  border-right-color: color-mix(in srgb, var(--gold) 18%, var(--line));
+}
+
+.app-sidebar__brand svg {
+  animation: athos-vela 5.5s ease-in-out infinite;
+}
+
+.side-link svg {
+  transition: color var(--dur-fast) var(--ease), scale var(--dur) var(--ease), opacity var(--dur-fast);
+}
+
+.side-link:hover svg {
+  color: var(--gold);
+  opacity: 1;
+  scale: 1.1;
+}
+
+.side-link[aria-current='page'] {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--gold) 13%, var(--surface)), var(--surface) 70%);
+}
+
+.side-link[aria-current='page'] svg {
+  color: var(--gold);
+  opacity: 1;
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--gold) 55%, transparent));
+}
+
+.side-link[aria-current='page']::before {
+  width: 3px;
+  top: 14%;
+  bottom: 14%;
+  background: var(--gold-leaf);
+}
+
+/* ---------- Barra inferior (móvil) ---------- */
+
+/* La píldora del activo se convierte en un halo que se enciende al tocar. */
+.bottom-nav {
+  border-top-color: color-mix(in srgb, var(--gold) 22%, var(--line));
+}
+
+.bottom-nav::before {
+  content: '';
+  position: absolute;
+  inset: -1px 0 auto;
+  height: 2px;
+  background: var(--mosaic-band);
+  opacity: 0.55;
+}
+
+.bottom-nav__item::before {
+  width: 2.4rem;
+  height: 2.4rem;
+  top: 2px;
+  border-radius: 50%;
+  background: var(--halo);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gold) 30%, transparent);
+}
+
+.bottom-nav__item[aria-current='page']::before {
+  animation: athos-halo 420ms var(--ease) both;
+}
+
+.bottom-nav__item[aria-current='page'] svg {
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--gold) 55%, transparent));
+}
+
+/* ---------- La portada ---------- */
+
+/* El halo de la cruz: un nimbo de oro con su borde punteado, que gira tan
+   despacio que sólo se nota si uno se queda mirando. Los halos bizantinos se
+   decoraban así, punteando el oro con un punzón. */
+.home-hero__halo {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  margin: 0 auto var(--sp-4);
+  border-radius: 50%;
+  background: var(--halo);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gold) 32%, transparent);
+  animation: athos-halo 900ms var(--ease) both;
+}
+
+.home-hero__halo svg {
+  animation: athos-vela 5s ease-in-out 900ms infinite;
+}
+
+:root[data-ornaments='si'] .home-hero__halo::before {
+  content: '';
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 1.5px dotted color-mix(in srgb, var(--gold) 55%, transparent);
+  animation: athos-giro 90s linear infinite;
+}
+
+.home-hero__prayer {
+  animation: athos-entra 1100ms var(--ease) 250ms both;
+}
+
+/* ---------- La invitación al oficio: el arco del ábside ---------- */
+
+:root[data-ornaments='si'] .office-invite {
+  /* Estrecha y centrada, para que el arco sea una hornacina y no un óvalo
+     estirado de lado a lado. */
+  max-width: 30rem;
+  margin-inline: auto;
+  border-radius: 50% 50% var(--radius-lg) var(--radius-lg) / 9rem 9rem var(--radius-lg) var(--radius-lg);
+  padding-top: var(--sp-7);
+  background:
+    var(--apse-glow),
+    linear-gradient(180deg, transparent 55%, color-mix(in srgb, var(--surface-2) 60%, transparent)),
+    var(--surface-raised);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--gold) 34%, transparent),
+    inset 0 0 0 6px var(--surface-2),
+    inset 0 0 0 7px color-mix(in srgb, var(--gold) 18%, transparent),
+    var(--shadow);
+}
+
+/* Al pasar, el marco se aviva y el arco se levanta un poco. */
+:root[data-ornaments='si'] .office-invite:hover {
+  translate: 0 -2px;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--gold) 55%, transparent),
+    inset 0 0 0 6px var(--surface-2),
+    inset 0 0 0 7px color-mix(in srgb, var(--gold) 30%, transparent),
+    0 10px 30px color-mix(in srgb, var(--gold) 16%, transparent),
+    var(--shadow);
+}
+
+/* Dentro del arco, el mosaico de oro muy tenue, que se apaga hacia abajo. */
+:root[data-ornaments='si'] .office-invite::before {
+  content: '';
+  position: absolute;
+  inset: 7px;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: var(--tesserae);
+  opacity: 0.08;
+  mask-image: linear-gradient(180deg, #000, transparent 70%);
+  -webkit-mask-image: linear-gradient(180deg, #000, transparent 70%);
+}
+
+.office-invite {
+  position: relative;
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease), translate var(--dur) var(--ease);
+}
+
+.office-invite__mark {
+  animation: athos-vela 4.5s ease-in-out infinite;
+}
+
+/* ---------- Pequeños oros ---------- */
+
+.tag--gold {
+  border-color: color-mix(in srgb, var(--gold) 45%, transparent);
+  background: linear-gradient(135deg, var(--gold-wash), transparent);
+}
+
+:focus-visible {
+  outline-color: var(--gold);
+}
+
+/* ---------- Alto contraste: sin adornos que estorben ---------- */
+:root[data-contrast='high'] body::after,
+:root[data-contrast='high'] .card::after,
+:root[data-contrast='high'] .home-hero__halo::before {
+  display: none;
+}
+
+/* ---------- Reducir movimiento ----------
+   base.css acorta todas las animaciones a nada, pero los retrasos seguirían
+   dejando la página en blanco medio segundo. Aquí se quitan del todo: lo que
+   tenía que aparecer, aparece. */
+@media (prefers-reduced-motion: reduce) {
+  .page,
+  .grid > *,
+  .list > *,
+  .page-head__title,
+  h1.display,
+  .page-head::after,
+  .home-hero__halo,
+  .home-hero__halo::before,
+  .home-hero__halo svg,
+  .home-hero__prayer,
+  .office-invite__mark,
+  .app-sidebar__brand svg,
+  .bottom-nav__item::before {
+    animation: none !important;
+  }
+
+  .card::after,
+  .btn--primary::after {
+    display: none;
+  }
+}
+
+@media print {
+  body::after,
+  .card::after {
+    display: none !important;
+  }
+
+  .page,
+  .grid > *,
+  .list > * {
+    animation: none !important;
+  }
+}

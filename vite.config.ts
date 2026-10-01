@@ -171,7 +171,11 @@ export default defineConfig({
         globPatterns: [
           '**/*.{js,css,html,ico,svg,png}',
           'fonts/*-latin.woff2',
-          'fonts/*-latin-ext.woff2',
+          // El español entero cabe en el subconjunto latino. El extendido sólo
+          // hace falta para nombres como Popović o Brâncoveanu: se precachea el
+          // grosor normal, y la negrita y la cursiva se guardan la primera vez
+          // que se usan, como el griego. Son casi 500 KB menos que esperar.
+          'fonts/*-400-latin-ext.woff2',
           'content/lectionary/lectionary.json',
           'content/icons/origen.json',
           // De los iconos se precachea la miniatura; la imagen grande se

@@ -9,7 +9,6 @@
  * incorpore un texto la lista se acorta sola; y cada hueco dice de qué clase
  * es, porque no todos se arreglan igual.
  */
-import { BIBLE_BOOKS } from './bible';
 import { AKATHISTS, CANONS } from './hymns';
 import { CHURCH_FATHERS } from './fathers';
 import { OFFICES } from './offices';
@@ -79,12 +78,6 @@ export const GAPS: Gap[] = [
     count: sinTexto(OFFICES),
     kind: 'propio',
     what: 'Los diez oficios tienen ya su estructura, sus salmos y las partes que canta el pueblo. Lo que falta en cada uno es lo variable: los troparios del día, que se toman del Menaion, del Octoecos y del Triodion.',
-  },
-  {
-    label: 'Libros deuterocanónicos',
-    count: BIBLE_BOOKS.filter((b) => b.status === 'pending').length,
-    kind: 'licencia',
-    what: 'Tobías, Judit, Sabiduría, Eclesiástico, Baruc y los Macabeos, entre otros. La ficha de cada uno está y aparece en el índice, para que el canon ortodoxo se vea completo; lo que falta es el texto.',
   },
   {
     label: 'Oraciones',

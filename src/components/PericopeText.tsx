@@ -13,7 +13,7 @@ import { useAsync } from '@/hooks/useAsync';
 import { getChapter } from '@/db/bible';
 import { chaptersOf, inPericope, parsePassage, type Pericope } from '@/lib/pericope';
 import { Loading, Notice } from '@/components/ui';
-import { RV1909 } from '@/content/bible';
+import { translationOf } from '@/content/bible';
 import type { BibleVerse } from '@/types';
 
 async function versiculosDe(pericopa: Pericope): Promise<BibleVerse[]> {
@@ -101,7 +101,8 @@ export function PericopeText({
       {maxVerses && total > maxVerses ? <p className="muted text-sm">…</p> : null}
       {!compact ? (
         <p className="source-note" style={{ marginTop: 'var(--sp-4)' }}>
-          {bloques.map((b) => b.pericopa.bookName).join(' · ')} · {RV1909.name}
+          {bloques.map((b) => b.pericopa.bookName).join(' · ')} ·{' '}
+          {[...new Set(bloques.map((b) => translationOf(b.pericopa.bookId).name))].join(' y ')}
         </p>
       ) : null}
     </div>

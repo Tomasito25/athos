@@ -5,7 +5,7 @@
 import { Link, useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { formatReference, getChapter } from '@/db/bible';
-import { BOOKS_BY_ID, RV1909 } from '@/content/bible';
+import { BOOKS_BY_ID, translationOf } from '@/content/bible';
 import { saveBookmark } from '@/db/user';
 import { Button, Notice, SourceNote, Skeleton, NotFound } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
@@ -61,7 +61,7 @@ export function ChapterPage() {
             kind: 'bible-chapter',
             refId: `${bookId}.${chapterNumber}`,
             title: `${book.name} ${chapterNumber}`,
-            subtitle: RV1909.abbr,
+            subtitle: translationOf(bookId).abbr,
             path,
           }}
           note={{
@@ -133,7 +133,7 @@ export function ChapterPage() {
         )}
       </nav>
 
-      <SourceNote meta={RV1909.meta} status={book.status} />
+      <SourceNote meta={translationOf(bookId).meta} status={book.status} />
     </article>
   );
 }

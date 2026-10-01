@@ -147,6 +147,11 @@ export interface BibleBook {
   /** Libros presentes en la Septuaginta y el canon ortodoxo. */
   deuterocanonical?: boolean;
   alternateNames?: string[];
+  /**
+   * De qué traducción se toma el texto. Los libros del canon hebreo vienen de
+   * la Reina-Valera 1909; los que ésta no trae, de otra de dominio público.
+   */
+  translationId: string;
   status: ContentStatus;
 }
 

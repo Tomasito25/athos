@@ -19,6 +19,7 @@
     "test:watch": "vitest",
     "icons": "node scripts/generate-icons.mjs",
     "build:bible": "node scripts/build-bible.mjs",
+    "build:deuterocanon": "node scripts/build-deuterocanon.mjs",
     "check": "npm run lint && npm run typecheck && npm run test && npm run build",
     "deploy": "./deploy.sh",
     "screenshots": "node scripts/screenshots.mjs",

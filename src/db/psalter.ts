@@ -8,6 +8,7 @@
  */
 import type { Psalm, TextBlock } from '@/types';
 import {
+  PSALM_151_META,
   PSALM_151_NOTE,
   PSALM_NOTES,
   PSALTER_META,
@@ -18,18 +19,28 @@ import {
 import { db, getSetting, setSetting } from './db';
 import { chapterVerses, loadBookFile, DEFAULT_TRANSLATION } from './bible';
 
-const PSALTER_KEY = 'psalter.built';
+// La versión 2 añade el Salmo 151: hay que reconstruir el Salterio ya guardado.
+const PSALTER_KEY = 'psalter.built.v2';
 const PSALM_COUNT = 151;
 
 let building: Promise<void> | null = null;
 
-function buildPsalm(lxx: number, verses: Map<number, { verse: number; text: string }[]>): Psalm {
+function buildPsalm(
+  lxx: number,
+  verses: Map<number, { verse: number; text: string }[]>,
+  ps151: { verse: number; text: string }[] = [],
+): Psalm {
   const ranges = hebrewSourceFor(lxx);
   const kathisma = kathismaOf(lxx);
   const blocks: TextBlock[] = [];
 
   if (!ranges) {
-    blocks.push({ kind: 'pending', content: PSALM_151_NOTE });
+    // Sólo el 151 carece de equivalente hebreo; su texto llega aparte.
+    if (ps151.length) {
+      for (const v of ps151) blocks.push({ kind: 'verse', content: v.text, ref: String(v.verse) });
+    } else {
+      blocks.push({ kind: 'pending', content: PSALM_151_NOTE });
+    }
   } else {
     for (const range of ranges) {
       const chapterVerseList = verses.get(range.chapter) ?? [];
@@ -56,8 +67,8 @@ function buildPsalm(lxx: number, verses: Map<number, { verse: number; text: stri
     kathisma: kathisma?.number ?? 0,
     stasis: kathisma ? kathisma.stases.findIndex((st) => st.includes(lxx)) + 1 : 0,
     blocks,
-    status: ranges ? 'complete' : 'pending',
-    meta: PSALTER_META,
+    status: ranges || ps151.length ? 'complete' : 'pending',
+    meta: ranges ? PSALTER_META : PSALM_151_META,
     searchText: `salmo ${lxx} ${hebrew ? `(${hebrew} hebreo)` : ''} ${plain}`.toLowerCase(),
   };
 }
@@ -79,8 +90,18 @@ export async function ensurePsalterBuilt(force = false): Promise<void> {
       );
     }
 
+    // El 151 viene de los libros de la Biblia griega. Si no se puede cargar,
+    // queda como pendiente en vez de impedir que se construya el resto.
+    let ps151: { verse: number; text: string }[] = [];
+    try {
+      const extra = await loadBookFile('PS2', 'blm');
+      ps151 = chapterVerses(extra, 1, 'blm').map((v) => ({ verse: v.verse, text: v.text }));
+    } catch {
+      // Sin red y sin caché: el 151 se queda como pendiente.
+    }
+
     const psalms: Psalm[] = [];
-    for (let lxx = 1; lxx <= PSALM_COUNT; lxx++) psalms.push(buildPsalm(lxx, byChapter));
+    for (let lxx = 1; lxx <= PSALM_COUNT; lxx++) psalms.push(buildPsalm(lxx, byChapter, ps151));
 
     await db.psalms.bulkPut(psalms);
     await setSetting(PSALTER_KEY, true);

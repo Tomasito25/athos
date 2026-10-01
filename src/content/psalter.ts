@@ -90,6 +90,7 @@ export function kathismaOf(lxx: number): Kathisma | undefined {
 /** Salmos con un lugar propio en el oficio, para orientar al lector. */
 export const PSALM_NOTES: Record<number, string> = {
   1: 'Abre el Salterio y el primer kathisma. Se canta en las Vísperas dominicales.',
+  151: 'Fuera de número: está en la Biblia griega y no en la hebrea. Lo canta David, el más pequeño de sus hermanos, que venció a Goliat.',
   3: 'Primero de los Seis Salmos del Orthros.',
   22: 'El Señor es mi pastor. Se canta tras la Comunión en algunas tradiciones.',
   33: 'Bendeciré al Señor en todo tiempo. Se canta al final de la Liturgia.',
@@ -113,3 +114,15 @@ export const SIX_PSALMS = [3, 37, 62, 87, 102, 142];
 export const PSALM_151_NOTE =
   'El Salmo 151 se conserva en la Septuaginta y se lee en la tradición ortodoxa, pero no ' +
   'forma parte de la Reina-Valera 1909. Contenido pendiente de incorporar.';
+
+/**
+ * El Salmo 151 no está en la Reina-Valera: se toma de la Biblia libre para el
+ * mundo, como los demás libros que sólo trae la Biblia griega.
+ */
+export const PSALM_151_META: SourceMeta = {
+  ...PSALTER_META,
+  translator: 'Santa Biblia libre para el mundo',
+  source: 'Santa Biblia libre para el mundo (eBible.org), de dominio público',
+  notes:
+    'El Salmo 151 está en la Biblia griega de los Setenta y no en la Reina-Valera de 1909, así que su texto procede de otra traducción de dominio público. Sus autores la presentan como un borrador en revisión.',
+};

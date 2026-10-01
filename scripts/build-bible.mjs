@@ -58,7 +58,9 @@ export function parseUsfx(xml) {
       const chapterBody = chunks[i + 1] ?? '';
       const verses = {};
 
-      const vChunks = chapterBody.split(/<v id="([\dA-Za-z\-–]+)"\s*\/?>/);
+      // eBible añade atributos al versículo (`<v id="1" bcv="TOB.1.1" />`);
+      // open-bibles no. Se aceptan los dos.
+      const vChunks = chapterBody.split(/<v id="([\dA-Za-z\-–]+)"[^>]*?\/?>/);
       for (let j = 1; j < vChunks.length; j += 2) {
         const rawId = vChunks[j];
         const num = Number.parseInt(rawId, 10);

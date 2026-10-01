@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { bibleIndexStatus, indexWholeBible } from '@/db/bible';
-import { AT_ORDER, BIBLE_BOOKS, DEUTEROCANON_NOTE, NT_ORDER, RV1909, SECTION_LABELS, TESTAMENT_LABELS } from '@/content/bible';
+import { AT_ORDER, BIBLE_BOOKS, BLM, DEUTEROCANON_NOTE, NT_ORDER, RV1909, SECTION_LABELS, TESTAMENT_LABELS } from '@/content/bible';
 import { Button, ListRow, Notice, PageHead, Progress, Section, StatusTag, Tag } from '@/components/ui';
 import { parsePassage } from '@/lib/pericope';
 import { normalize } from '@/lib/text';
@@ -61,7 +61,10 @@ export function BiblePage() {
 
   return (
     <div className="page">
-      <PageHead title={es.bible.title} subtitle={`${RV1909.name} · ${es.licenses['public-domain']}`} />
+      <PageHead
+        title={es.bible.title}
+        subtitle={`${RV1909.name} y ${BLM.name} · ${es.licenses['public-domain']}`}
+      />
 
       <input
         type="search"

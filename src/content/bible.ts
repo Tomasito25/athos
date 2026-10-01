@@ -1,12 +1,16 @@
 /**
  * Canon bíblico ortodoxo.
  *
- * ATHOS distingue entre la *estructura* del canon —que se muestra siempre— y
- * el *texto* disponible. La traducción incorporada es la Reina-Valera de 1909,
- * de dominio público, que sigue el canon hebreo corto: los libros
- * deuterocanónicos de la Septuaginta figuran en la lista con su ficha, pero su
- * texto aparece como pendiente hasta que se incorpore una traducción con
- * licencia compatible.
+ * ATHOS distingue entre la *estructura* del canon y el *texto* de cada libro.
+ * El texto viene de dos traducciones de dominio público:
+ *
+ * - la **Reina-Valera de 1909**, para los libros del canon hebreo corto;
+ * - la **Santa Biblia libre para el mundo**, para los que la Reina-Valera no
+ *   trae y la Iglesia ortodoxa lee porque están en la Biblia griega de los
+ *   Setenta: Tobías, Judit, Sabiduría, Eclesiástico, Baruc, los Macabeos y los
+ *   demás, además de los textos griegos de Ester y Daniel.
+ *
+ * Cada capítulo dice de cuál de las dos procede.
  */
 import type { BibleBook, BibleSection, BibleTranslation, Testament } from '@/types';
 
@@ -26,6 +30,26 @@ export const RV1909: BibleTranslation = {
       'Sigue el canon hebreo corto y la numeración hebrea de los Salmos. ATHOS muestra además la numeración de los Setenta, que es la usada en el culto ortodoxo.',
   },
 };
+
+export const BLM: BibleTranslation = {
+  id: 'blm',
+  name: 'Biblia libre para el mundo',
+  abbr: 'BLM',
+  meta: {
+    title: 'Santa Biblia libre para el mundo',
+    translator: 'David Williams y Michael Paul Johnson',
+    source: 'eBible.org, edición de agosto de 2026 en formato USFX (spablm)',
+    language: 'es',
+    license: 'public-domain',
+    copyright: 'Dominio público, por voluntad de sus autores.',
+    dateAdded: '2026-10-01',
+    notes:
+      'ATHOS la usa sólo para los libros que la Reina-Valera de 1909 no trae. Es una traducción española moderna, publicada por eBible.org, que en estos libros sigue el texto griego de los Setenta, el que lee la Iglesia ortodoxa; es la única de dominio público que lo hace. Sus autores la presentan como un borrador en revisión, así que puede tener erratas y cambiar en ediciones futuras.',
+  },
+};
+
+/** Las traducciones de las que ATHOS toma el texto bíblico, por identificador. */
+export const TRANSLATIONS: Record<string, BibleTranslation> = { rv1909: RV1909, blm: BLM };
 
 export const SECTION_LABELS: Record<BibleSection, string> = {
   pentateuco: 'Pentateuco',
@@ -78,6 +102,7 @@ const SEED: BookSeed[] = [
   { id: 'TOB', name: 'Tobías', abbr: 'Tb', testament: 'at', section: 'historicos', chapters: 14, deutero: true },
   { id: 'JDT', name: 'Judit', abbr: 'Jdt', testament: 'at', section: 'historicos', chapters: 16, deutero: true },
   { id: 'EST', name: 'Ester', abbr: 'Est', testament: 'at', section: 'historicos', chapters: 10 },
+  { id: 'ESG', name: 'Ester (texto griego)', abbr: 'Est gr', testament: 'at', section: 'historicos', chapters: 10, deutero: true, alt: ['Ester griego'] },
   { id: '1MA', name: '1 Macabeos', abbr: '1 M', testament: 'at', section: 'historicos', chapters: 16, deutero: true },
   { id: '2MA', name: '2 Macabeos', abbr: '2 M', testament: 'at', section: 'historicos', chapters: 15, deutero: true },
   { id: '3MA', name: '3 Macabeos', abbr: '3 M', testament: 'at', section: 'historicos', chapters: 7, deutero: true },
@@ -110,6 +135,7 @@ const SEED: BookSeed[] = [
   { id: 'LJE', name: 'Carta de Jeremías', abbr: 'CJr', testament: 'at', section: 'profetas', chapters: 1, deutero: true },
   { id: 'EZK', name: 'Ezequiel', abbr: 'Ez', testament: 'at', section: 'profetas', chapters: 48 },
   { id: 'DAN', name: 'Daniel', abbr: 'Dn', testament: 'at', section: 'profetas', chapters: 12 },
+  { id: 'DAG', name: 'Daniel (texto griego)', abbr: 'Dn gr', testament: 'at', section: 'profetas', chapters: 14, deutero: true, alt: ['Daniel griego', 'Susana', 'Bel y el dragón'] },
   { id: '4MA', name: '4 Macabeos', abbr: '4 M', testament: 'at', section: 'historicos', chapters: 18, deutero: true },
   // --- Evangelios ---
   { id: 'MAT', name: 'Evangelio según San Mateo', abbr: 'Mt', testament: 'nt', section: 'evangelios', chapters: 28, alt: ['Mateo', 'Matt', 'Matthew', 'San Mateo'] },
@@ -154,8 +180,9 @@ export const BIBLE_BOOKS: BibleBook[] = SEED.map((b, i) => ({
   chapters: b.chapters,
   deuterocanonical: b.deutero,
   alternateNames: b.alt,
-  // Los deuterocanónicos no están en la Reina-Valera 1909.
-  status: b.deutero ? 'pending' : 'complete',
+  // Los deuterocanónicos no están en la Reina-Valera 1909: vienen de la BLM.
+  translationId: b.deutero ? BLM.id : RV1909.id,
+  status: 'complete',
 }));
 
 export const BOOKS_BY_ID = new Map(BIBLE_BOOKS.map((b) => [b.id, b]));
@@ -164,9 +191,16 @@ export const NT_ORDER: BibleSection[] = ['evangelios', 'hechos', 'epistolas', 'a
 export const AT_ORDER: BibleSection[] = ['pentateuco', 'historicos', 'sapienciales', 'profetas'];
 
 export const DEUTEROCANON_NOTE =
-  'La traducción incorporada (Reina-Valera 1909) sigue el canon hebreo corto y no incluye ' +
-  'los libros deuterocanónicos de la Septuaginta. Su ficha se mantiene para que el canon ' +
-  'ortodoxo aparezca completo; el texto puede añadirse desde Configuración → Datos.';
+  'La Reina-Valera de 1909 sigue el canon hebreo corto. Los libros que la Iglesia ortodoxa lee ' +
+  'además, porque están en la Biblia griega de los Setenta, se toman de la Santa Biblia libre ' +
+  'para el mundo, de dominio público, que en ellos sigue el griego. Van marcados como ' +
+  'deuterocanónicos, y Ester y Daniel aparecen dos veces: con el texto hebreo y con el griego, ' +
+  'que es el que se lee en la Iglesia.';
+
+/** La traducción de la que se toma el texto de un libro. */
+export function translationOf(bookId: string): BibleTranslation {
+  return TRANSLATIONS[BOOKS_BY_ID.get(bookId)?.translationId ?? RV1909.id] ?? RV1909;
+}
 
 /**
  * Resuelve nombres y abreviaturas a un identificador de libro.

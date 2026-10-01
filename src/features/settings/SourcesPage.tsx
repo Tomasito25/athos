@@ -7,7 +7,7 @@
  */
 import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
-import { DEUTEROCANON_NOTE, RV1909 } from '@/content/bible';
+import { BLM, DEUTEROCANON_NOTE, RV1909 } from '@/content/bible';
 import { PRAYER_LICENSE_NOTE } from '@/content/prayers';
 import { FATHERS_NOTE } from '@/content/fathers';
 import { ICONS_NOTE } from '@/content/icons';
@@ -121,6 +121,10 @@ export function SourcesPage() {
         <Panel>
           <p className="panel__title">{RV1909.name}</p>
           <SourceNote meta={RV1909.meta} status="complete" />
+        </Panel>
+        <Panel>
+          <p className="panel__title">{BLM.name}</p>
+          <SourceNote meta={BLM.meta} status="complete" />
         </Panel>
       </Section>
 

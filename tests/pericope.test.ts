@@ -66,9 +66,12 @@ describe('lo que no se entiende no se recorta', () => {
     expect(parsePericope('')).toBeNull();
   });
 
-  it('rechaza libros que ATHOS no tiene incorporados', () => {
-    // Los deuterocanónicos figuran en el canon pero sin texto.
-    expect(parsePericope('Sabiduría 3, 1-9')).toBeNull();
+  it('acepta los deuterocanónicos, que ya tienen texto', () => {
+    // Hasta octubre de 2026 figuraban en el canon sin texto y se rechazaban.
+    // Sabiduría 3 es la lectura de las Vísperas de los mártires.
+    const p = parsePericope('Sabiduría 3, 1-9');
+    expect(p?.bookId).toBe('WIS');
+    expect(p?.ranges).toEqual([{ chapter: 3, from: 1, to: 9 }]);
   });
 });
 
@@ -158,7 +161,8 @@ describe('las formas que traía el leccionario y no se entendían', () => {
 
   it('si una parte no se entiende, no se muestra la otra a medias', () => {
     // Mostrar media lectura y callar la otra media sería peor que remitir.
-    expect(parsePassage('Mateo 5, 1-3; Sabiduría 3, 1-9')).toBeNull();
+    // Enoc no está en el canon ortodoxo griego: es la parte que no se entiende.
+    expect(parsePassage('Mateo 5, 1-3; Enoc 1, 1-9')).toBeNull();
   });
 
   it('las abreviaturas inglesas que orthocal deja sin traducir', () => {

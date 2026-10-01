@@ -71,9 +71,10 @@ describe('siembra del contenido', () => {
     expect(await db.prayers.count()).toBeGreaterThan(20);
     expect(await db.saints.count()).toBeGreaterThan(30);
     expect(await db.monasteries.count()).toBe(20);
-    // 66 libros del canon corto más los 12 deuterocanónicos de la Septuaginta.
-    expect(await db.bible_books.count()).toBe(78);
-    expect(await db.bible_books.filter((b) => b.deuterocanonical === true).count()).toBe(12);
+    // 66 libros del canon corto más los 12 deuterocanónicos de la Septuaginta,
+    // y los textos griegos de Ester y de Daniel, que son los que lee la Iglesia.
+    expect(await db.bible_books.count()).toBe(80);
+    expect(await db.bible_books.filter((b) => b.deuterocanonical === true).count()).toBe(14);
     expect(await getSetting('content.version', 0)).toBe(CONTENT_VERSION);
   });
 

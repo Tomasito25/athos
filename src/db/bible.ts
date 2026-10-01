@@ -24,11 +24,24 @@ const inFlight = new Map<string, Promise<BibleBookFile>>();
 const fileUrl = (bookId: string, translationId: string) =>
   `${import.meta.env.BASE_URL}content/bible/${translationId}/${bookId}.json`;
 
+/**
+ * La traducción de la que hay que leer un libro.
+ *
+ * Quien pide la traducción por defecto pide en realidad «la Biblia de ATHOS»,
+ * y en ella cada libro viene de donde viene: Tobías no está en la Reina-Valera.
+ * Si se pide otra traducción expresamente, se respeta.
+ */
+export function effectiveTranslation(bookId: string, translationId = DEFAULT_TRANSLATION): string {
+  if (translationId !== DEFAULT_TRANSLATION) return translationId;
+  return BOOKS_BY_ID.get(bookId)?.translationId ?? DEFAULT_TRANSLATION;
+}
+
 /** Descarga (o recupera de memoria) el archivo de un libro. */
 export async function loadBookFile(
   bookId: string,
-  translationId = DEFAULT_TRANSLATION,
+  requested = DEFAULT_TRANSLATION,
 ): Promise<BibleBookFile> {
+  const translationId = effectiveTranslation(bookId, requested);
   const key = `${translationId}:${bookId}`;
   const cached = memory.get(key);
   if (cached) return cached;
@@ -73,8 +86,9 @@ export function chapterVerses(
 export async function getChapter(
   bookId: string,
   chapter: number,
-  translationId = DEFAULT_TRANSLATION,
+  requested = DEFAULT_TRANSLATION,
 ): Promise<BibleVerse[]> {
+  const translationId = effectiveTranslation(bookId, requested);
   const stored = await db.bible_verses
     .where('[translationId+bookId+chapter]')
     .equals([translationId, bookId, chapter])
@@ -139,12 +153,13 @@ export async function indexWholeBible(
     if (signal?.aborted) return;
     if (already.has(book.id)) continue;
 
-    const file = await loadBookFile(book.id, translationId);
+    const efectiva = effectiveTranslation(book.id, translationId);
+    const file = await loadBookFile(book.id, efectiva);
     const verses: BibleVerse[] = [];
     const chapters = Object.keys(file.chapters).map(Number).sort((a, b) => a - b);
 
     for (const chapter of chapters) {
-      verses.push(...chapterVerses(file, chapter, translationId));
+      verses.push(...chapterVerses(file, chapter, efectiva));
     }
 
     await db.transaction('rw', [db.bible_verses, db.bible_chapters], async () => {
@@ -156,7 +171,7 @@ export async function indexWholeBible(
           chapter,
           verseCount: Object.keys(file.chapters[String(chapter)]).length,
           status: 'complete' as const,
-          translationId,
+          translationId: efectiva,
         })),
       );
     });

@@ -2,6 +2,60 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.25.0]
+
+### Añadido
+
+- **La Biblia entera, con los libros que faltaban.** Tobías, Judit, Sabiduría,
+  Eclesiástico, Baruc, la Carta de Jeremías, los cuatro de los Macabeos,
+  1 Esdras, la Oración de Manasés, el **Salmo 151** y los textos griegos de
+  **Ester y Daniel**, que entran como libros propios porque son los que lee la
+  Iglesia. Vienen de la *Santa Biblia libre para el mundo*, de dominio público,
+  la única traducción española libre que en estos libros sigue el griego de
+  los Setenta. Sus autores la presentan como borrador en revisión, y cada
+  capítulo dice de qué traducción procede.
+- **Una estética más bizantina, y con vida.** Oro en pan en los títulos, el
+  fondo como una bóveda con su mosaico, las tarjetas como tablas de icono con
+  escuadras de oro y halo, la invitación al oficio en forma de arco de ábside,
+  la cruz de la portada en un nimbo que gira despacio. Las páginas entran, las
+  tarjetas llegan una tras otra y el oro brilla al pasar. Todo lo decorativo se
+  apaga con el interruptor de ornamentos, y con «reducir movimiento» no se
+  anima nada.
+- **Las Horas, rezables de principio a fin.** Los salmos se leen dentro de la
+  Hora —y dentro de Vísperas, Maitines, Completas y Medianoche— sin cambiar de
+  pantalla. El **tropario de hoy aparece solo**, según el calendario elegido:
+  el de la Resurrección del tono de la semana los domingos, el de la fiesta o
+  el del santo. Nuevos los ocho troparios de la Resurrección y los del ciclo
+  pascual. El orden es el del Horologion, con los versículos fijos, la oración
+  de san Efrén en Cuaresma y «A ti, caudilla defensora» al cerrar la Primera.
+- **Veinticuatro oraciones más** del libro de oraciones: de la mañana y de la
+  noche —entre ellas las veinticuatro peticiones de san Juan Crisóstomo—, antes
+  y después de comulgar, para la angustia, y ocho salmos para momentos
+  concretos, enteros dentro de la oración.
+- **161 santos más, con su vida entera**: el santoral pasa de 380 a **541**
+  fichas. Grandes santos de Oriente que faltaban, la Iglesia hispana anterior
+  a 1054 —Isidoro, Leandro, Eulalia, Vicente, Ildefonso, los mártires de
+  Prudencio—, Britania e Irlanda, Rusia, los Balcanes, Georgia, América y el
+  siglo XX.
+
+### Corregido
+
+- Las vidas nuevas se revisaron una a una antes de entrar, y se corrigieron
+  una veintena de errores propios: anécdotas atribuidas al santo equivocado,
+  fechas imposibles y episodios incómodos que se habían suavizado.
+- El Domingo de san Juan Clímaco apuntaba a una ficha que no existía.
+- Las fichas de los salmos 50 y 90 se presentaban «de uso corriente en las
+  parroquias», que no es cierto de la Reina-Valera.
+- El precaché había pasado de los 5 MB. Ahora se precachea sólo el grosor
+  normal de la tipografía latina extendida y queda en 4,6 MB.
+
+### Limitación conocida
+
+- Los santos rusos, serbios y georgianos van en la fecha de su calendario
+  juliano, como ya estaban san Serafín o san Sergio. Con el calendario nuevo
+  activado, algunos santos del siglo XX aparecen en una fecha distinta de la
+  que usa Grecia; cada vida explica su otra fecha.
+
 ## [1.24.0]
 
 ### Añadido

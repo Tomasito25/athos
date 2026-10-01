@@ -1,5 +1,7 @@
 /** Piezas de interfaz reutilizables. */
 import {
+  lazy,
+  Suspense,
   useEffect,
   useId,
   useRef,
@@ -630,6 +632,14 @@ const VECES: Record<number, string> = {
 
 const veces = (n: number) => VECES[n] ?? `${n} veces`;
 
+/*
+ * Los bloques que traen su texto de otra parte —el salmo, del Salterio; el
+ * tropario del día, del calendario— se cargan aparte: así este módulo, que usa
+ * toda la aplicación, no arrastra la base de datos ni el cálculo del día.
+ */
+const InlinePsalm = lazy(() => import('@/components/office/InlinePsalm'));
+const DayTroparion = lazy(() => import('@/components/office/DayTroparion'));
+
 /** El griego y su transliteración, debajo del español. */
 function GreekLines({ block }: { block: TextBlock }) {
   const modo = useSettings((s) => s.greekMode);
@@ -705,6 +715,18 @@ export function Blocks({
               <p key={key} className="notice notice--pending" style={{ marginTop: '1em' }}>
                 {block.content}
               </p>
+            );
+          case 'psalm':
+            return (
+              <Suspense key={key} fallback={<p className="muted">{block.content}</p>}>
+                <InlinePsalm n={Number(block.ref)} />
+              </Suspense>
+            );
+          case 'day-troparion':
+            return (
+              <Suspense key={key} fallback={<p className="muted">{block.content}</p>}>
+                <DayTroparion />
+              </Suspense>
             );
           default:
             // Con `linked` no se usa `dangerouslySetInnerHTML`: la prosa de

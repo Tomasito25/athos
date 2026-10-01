@@ -36,8 +36,9 @@ export const HORAS_META: SourceMeta = {
   license: 'public-domain',
   dateAdded: '2026-09-04',
   notes:
-    'No procede de un libro litúrgico español publicado. Los propios variables del día —kontakia del ' +
-    'Menaion, del Octoecos y del Triodion— siguen pendientes de incorporar.',
+    'No procede de un libro litúrgico español publicado. Los salmos se toman del Salterio de ATHOS ' +
+    '(Reina-Valera 1909). El tropario del día se elige según el calendario entre los que ATHOS tiene ' +
+    'traducidos; los kontakia del Menaion, del Octoecos y del Triodion siguen pendientes de incorporar.',
 };
 
 /* ---------------- Utilidades ---------------- */
@@ -56,6 +57,12 @@ const gr = (clave: keyof typeof G, times?: number): TextBlock => ({
   roman: G[clave].roman,
   times,
 });
+
+/** El salmo entero, tomado del Salterio de ATHOS al mostrarse. */
+const salmo = (n: number): TextBlock => ({ kind: 'psalm', content: `Salmo ${n}`, ref: String(n) });
+
+/** El tropario que toca el día en que se abre la Hora. */
+const TROPARIO_DEL_DIA: TextBlock = { kind: 'day-troparion', content: 'Tropario del día' };
 
 const section = (id: string, title: string, blocks: TextBlock[]): OfficeSection => ({
   id,
@@ -123,9 +130,16 @@ interface HoraSeed {
   salmos: [number, number, number];
   /** Por qué esos tres salmos y no otros. */
   porQueEsosSalmos: string;
+  /** El tropario propio de la Hora, que se canta en los días de diario de Cuaresma. */
   tropario: TextBlock[];
   theotokion: { titulo: string; texto: string };
+  /** Los versículos fijos que siguen al theotokion. */
+  versiculos: TextBlock[];
+  /** Lo que la Cuaresma añade a esta Hora en particular, si añade algo. */
+  cuaresmaNota?: string;
   oracionFinal: { titulo: string; atribucion?: string; texto: string };
+  /** Lo que se dice después de la oración final y antes de la despedida. */
+  alFinal?: { id: string; titulo: string; bloques: TextBlock[] };
 }
 
 const HORAS: HoraSeed[] = [
@@ -145,16 +159,31 @@ const HORAS: HoraSeed[] = [
       t('Por la mañana escucha mi voz, Rey mío y Dios mío.'),
       rub('Con sus versículos, del salmo 5.'),
       t('Presta oído a mis palabras, Señor; atiende a mi clamor.'),
+      t('Porque a Ti oraré, Señor; por la mañana escucharás mi voz.'),
     ],
     theotokion: {
       titulo: '¿Cómo te llamaremos?',
       texto:
         '¿Cómo te llamaremos, oh Llena de gracia? ¿Cielo, porque hiciste brillar al Sol de justicia? ¿Paraíso, porque diste la flor de la incorrupción? ¿Virgen, porque permaneciste incorrupta? ¿Madre pura, porque tuviste en tus santos brazos al Hijo, Dios de todos? Ruégale que salve nuestras almas.',
     },
+    versiculos: [
+      rub('Del salmo 118:'),
+      t('Dirige mis pasos según tu palabra, y que no me domine ninguna iniquidad. Líbrame de la calumnia de los hombres, y guardaré tus mandamientos. Haz brillar tu rostro sobre tu siervo y enséñame tus justificaciones.'),
+      rub('Y tres veces, del salmo 70:'),
+      { kind: 'text', content: 'Llénese mi boca de tu alabanza, Señor, para que cante tu gloria, todo el día tu magnificencia.', times: 3 },
+    ],
     oracionFinal: {
       titulo: 'Cristo, luz verdadera',
       texto:
         'Cristo, luz verdadera, que iluminas y santificas a todo hombre que viene al mundo: imprime en nosotros la luz de tu rostro, para que en ella veamos la luz inaccesible; y endereza nuestros pasos al cumplimiento de tus mandamientos, por las súplicas de tu purísima Madre y de todos tus santos. Amén.',
+    },
+    alFinal: {
+      id: 'caudilla',
+      titulo: 'A ti, caudilla defensora',
+      bloques: [
+        rub('La Hora Primera, que abre el día, se cierra entregándolo a la Theotokos con el kontakion que abre también el Akáthistos:'),
+        t('A ti, caudilla defensora, los cantos de victoria; a ti, que me libraste de lo terrible, las acciones de gracias te dedico yo, tu ciudad, oh Theotokos. Y tú, que tienes un poder invencible, líbrame de toda clase de peligros, para que te aclame: Alégrate, Esposa no desposada.'),
+      ],
     },
   },
 
@@ -181,6 +210,10 @@ const HORAS: HoraSeed[] = [
       texto:
         'Theotokos, tú eres la vid verdadera que engendró el fruto de la vida. A ti te suplicamos: intercede, Soberana, junto con los apóstoles y con todos los santos, para que se tenga misericordia de nuestras almas.',
     },
+    versiculos: [
+      rub('Del salmo 67:'),
+      t('Bendito sea el Señor Dios; bendito sea el Señor día tras día. Que nos dé buen camino el Dios de nuestra salvación; nuestro Dios es el Dios que salva.'),
+    ],
     oracionFinal: {
       titulo: 'Soberano Dios, Padre todopoderoso',
       atribucion: 'De san Mardario',
@@ -203,12 +236,21 @@ const HORAS: HoraSeed[] = [
       'El 53 y el 54 son gritos del perseguido —«sálvame por tu nombre», «me rodean los terrores de la muerte»— y llevan al pie de la cruz; el 90, «el que habita al abrigo del Altísimo», es la respuesta: el amparo bajo el que se pasa la hora oscura.',
     tropario: [
       t('Tú que en el día sexto y a la hora sexta clavaste en la cruz el pecado que Adán cometió temerariamente en el paraíso: rasga también el documento de nuestras culpas, Cristo Dios, y sálvanos.'),
+      rub('Con sus dos versículos, del salmo 54, después de cada repetición.'),
+      t('Escucha, oh Dios, mi oración, y no desprecies mi súplica.'),
+      t('Yo clamé a Dios, y el Señor me escuchó.'),
     ],
     theotokion: {
       titulo: 'Como no tenemos audacia',
       texto:
         'Como no tenemos audacia por causa de nuestros muchos pecados, ruega tú, Virgen Theotokos, a Aquel que de ti nació; porque mucho puede la súplica de una Madre para alcanzar el favor del Soberano. No desprecies las plegarias de los pecadores, oh Purísima, porque es misericordioso y poderoso para salvar Aquel que quiso padecer por nosotros.',
     },
+    versiculos: [
+      rub('Del salmo 78:'),
+      t('Que tus misericordias nos salgan pronto al encuentro, Señor, porque estamos muy empobrecidos. Ayúdanos, oh Dios, Salvador nuestro, por la gloria de tu nombre; Señor, líbranos y perdona nuestros pecados por causa de tu nombre.'),
+    ],
+    cuaresmaNota:
+      'En la Sexta de Cuaresma se lee además la profecía de Isaías que corresponde al día, con su tropario y sus dos prokímena; todo ello se toma del Triodion y no está incorporado.',
     oracionFinal: {
       titulo: 'Dios y Señor de las potestades',
       atribucion: 'De san Basilio el Grande',
@@ -231,12 +273,19 @@ const HORAS: HoraSeed[] = [
       'El 83 es la nostalgia de los atrios de Dios; el 84 anuncia la reconciliación de la tierra con el cielo, que es lo que se cumple en la cruz; el 85 es la súplica del pobre a la hora de la prueba.',
     tropario: [
       t('Tú que a la hora novena por nosotros gustaste la muerte en la carne: mortifica la soberbia de nuestra carne, Cristo Dios, y sálvanos.'),
+      rub('Con sus dos versículos, del salmo 118, después de cada repetición.'),
+      t('Llegue mi súplica a tu presencia, Señor; dame entendimiento según tu palabra.'),
+      t('Entre mi petición ante Ti, Señor; líbrame según tu palabra.'),
     ],
     theotokion: {
       titulo: 'Tú que por nosotros naciste de la Virgen',
       texto:
         'Tú que por nosotros naciste de la Virgen y soportaste la crucifixión, oh Bueno; que con tu muerte despojaste a la muerte y como Dios manifestaste la resurrección: no desprecies a los que formaste con tu mano. Muestra tu amor por los hombres, oh Misericordioso; acoge a la Theotokos que te dio a luz y que intercede por nosotros, y salva, Salvador nuestro, a un pueblo desesperado.',
     },
+    versiculos: [
+      rub('Del cántico de los tres jóvenes, en el libro de Daniel:'),
+      t('No nos entregues para siempre, por causa de tu nombre, ni rompas tu alianza; no apartes de nosotros tu misericordia, por Abrahán tu amado, por Isaac tu siervo y por Israel tu santo.'),
+    ],
     oracionFinal: {
       titulo: 'Soberano Señor Jesucristo',
       atribucion: 'De san Basilio el Grande',
@@ -250,6 +299,18 @@ const HORAS: HoraSeed[] = [
    De cada Hora, un oficio entero
    ============================================================ */
 
+/** La oración de san Efrén, que la Cuaresma añade a cada Hora. */
+const EFREN: TextBlock[] = [
+  rub('Fuera de la Gran Cuaresma esta parte no se dice: se pasa directamente a la oración final.'),
+  rub('En los días de diario de la Cuaresma, antes de la oración final, se dice la oración de san Efrén el Sirio, con una gran postración después de cada una de sus tres peticiones:'),
+  t('Señor y Soberano de mi vida: no me des espíritu de ociosidad, de desaliento, de dominio ni de vaniloquio.'),
+  t('Concede en cambio a mí, tu siervo, espíritu de castidad, de humildad, de paciencia y de amor.'),
+  t('Sí, Señor y Rey: concédeme ver mis propios pecados y no juzgar a mi hermano, porque bendito eres por los siglos de los siglos. Amén.'),
+  rub('Después, doce inclinaciones profundas, diciendo en cada una:'),
+  { kind: 'text', content: 'Oh Dios, purifícame a mí, pecador.', times: 12 },
+  rub('Y otra vez la oración entera, con una sola postración al final.'),
+];
+
 const secciones = (hora: HoraSeed): OfficeSection[] => [
   section('sentido', 'Qué se reza en esta hora', [
     rub(hora.cuando),
@@ -260,32 +321,38 @@ const secciones = (hora: HoraSeed): OfficeSection[] => [
 
   section('salmos', `Los tres salmos · ${hora.salmos.join(', ')}`, [
     rub(hora.porQueEsosSalmos),
-    ...hora.salmos.map((n) =>
-      rub(`Salmo ${n} — se lee entero. Está en Leer → Salterio → Salmo ${n}.`),
-    ),
+    rub('Se leen seguidos, sin prisa. Si te los sabes, puedes plegarlos.'),
+    ...hora.salmos.map(salmo),
     ...TRAS_LOS_SALMOS,
   ]),
 
-  section('tropario', 'Tropario de la hora', [
-    rub('Es lo propio de esta Hora y no cambia nunca: dice por qué se reza precisamente ahora.'),
+  section('tropario', 'Tropario del día', [
+    rub('Aquí se canta el tropario del día: el de la Resurrección los domingos, el de la fiesta o el del santo. ATHOS pone el que corresponde hoy según tu calendario.'),
+    TROPARIO_DEL_DIA,
+    rub('En los días de diario de la Gran Cuaresma, en lugar del tropario del día, se canta tres veces, con una postración cada vez, el tropario propio de esta Hora:'),
     ...hora.tropario,
-    gr('doxa'),
+    rub('Gloria al Padre, y al Hijo, y al Espíritu Santo.'),
   ]),
 
   section('theotokion', `Theotokion · ${hora.theotokion.titulo}`, [
-    rub('El theotokion propio de esta Hora, después del tropario.'),
+    rub('Ahora y siempre, y por los siglos de los siglos. Amén.'),
     t(hora.theotokion.texto),
   ]),
 
-  section('propios', 'Lo que cambia cada día', [
-    rub('Aquí van el tropario del santo o de la fiesta y el kontakion del día.'),
-    pending(
-      'los troparios y kontakia propios del día, que se toman del Menaion, del Octoecos y —en Cuaresma— del Triodion.',
-    ),
+  section('versiculos', 'Versículos', [
+    rub('Después del theotokion, unos versículos de la Escritura que son siempre los mismos en esta Hora:'),
+    ...hora.versiculos,
   ]),
 
   section('trisagio', 'Trisagio y Padre Nuestro', [
-    rub('El comienzo habitual otra vez, ahora hacia el final. Está en Orar → Oraciones → Comienzo habitual.'),
+    rub('El comienzo habitual otra vez, ahora hacia el final: Trisagio, «Santísima Trinidad» y Padre Nuestro. Está en Orar → Oraciones → Comienzo habitual.'),
+  ]),
+
+  section('kontakion', 'Kontakion del día', [
+    rub('Después del Padre Nuestro se dice el kontakion del día, del santo o de la fiesta.'),
+    pending(
+      'el kontakion propio de cada día, que se toma del Menaion, del Octoecos y —en Cuaresma— del Triodion.',
+    ),
   ]),
 
   section('kyrie', 'Señor, ten piedad', [
@@ -298,17 +365,27 @@ const secciones = (hora: HoraSeed): OfficeSection[] => [
     ...TODA_HORA,
   ]),
 
+  section('cuaresma', 'En la Gran Cuaresma', [
+    ...EFREN,
+    ...(hora.cuaresmaNota ? [rub(hora.cuaresmaNota)] : []),
+  ]),
+
   section('final', `Oración final · ${hora.oracionFinal.titulo}`, [
     ...(hora.oracionFinal.atribucion ? [rub(hora.oracionFinal.atribucion)] : []),
     t(hora.oracionFinal.texto),
   ]),
+
+  ...(hora.alFinal ? [section(hora.alFinal.id, hora.alFinal.titulo, hora.alFinal.bloques)] : []),
 
   section('despedida', 'Despedida', CIERRE),
 ];
 
 const plain = (sections: OfficeSection[]) =>
   sections
-    .flatMap((s) => [s.title, ...s.blocks.filter((b) => b.kind !== 'pending').map((b) => b.content)])
+    .flatMap((s) => [
+      s.title,
+      ...s.blocks.filter((b) => b.kind !== 'pending' && b.kind !== 'day-troparion').map((b) => b.content),
+    ])
     .join(' ')
     .replace(/<[^>]+>/g, '')
     .toLowerCase();
@@ -323,9 +400,10 @@ export const HORAS_OFFICES: Office[] = HORAS.map((hora, i) => ({
   sections: secciones(hora),
   about: `${hora.memoria} ${hora.cuando}`,
   structure:
-    'Como las otras tres: el comienzo, tres salmos fijos, el tropario propio de la hora con su ' +
-    'theotokion, los propios del día, el Trisagio, cuarenta veces «Señor, ten piedad», la oración ' +
-    'de toda hora y una oración final que sólo se dice en esta Hora.',
+    'Como las otras tres: el comienzo, tres salmos fijos, el tropario del día —en Cuaresma, el propio ' +
+    'de la Hora— con su theotokion, unos versículos fijos, el Trisagio, el kontakion del día, cuarenta ' +
+    'veces «Señor, ten piedad», la oración de toda hora, en Cuaresma la oración de san Efrén, y una ' +
+    'oración final que sólo se dice en esta Hora.',
   status: 'partial' as const,
   meta: HORAS_META,
   searchText: `${hora.title} ${hora.subtitle} ${hora.greekName} ${plain(secciones(hora))}`,

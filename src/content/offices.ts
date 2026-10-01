@@ -26,6 +26,8 @@ const meta: SourceMeta = {
 const t = (content: string): TextBlock => ({ kind: 'text', content });
 const rub = (content: string): TextBlock => ({ kind: 'rubric', content });
 const ref = (content: string): TextBlock => ({ kind: 'refrain', content });
+/** El salmo entero, tomado del Salterio de ATHOS al mostrarse. */
+const psalm = (n: number): TextBlock => ({ kind: 'psalm', content: `Salmo ${n}`, ref: String(n) });
 const pending = (what: string): TextBlock => ({
   kind: 'pending',
   content: `Contenido pendiente de incorporar: ${what}`,
@@ -212,7 +214,8 @@ const visperasSections: OfficeSection[] = [
     rub('Comienzo habitual: Rey celestial, Trisagio, Padre Nuestro.'),
   ]),
   section('salmo-103', 'Salmo introductorio', [
-    rub('Se lee o canta el salmo 103, el salmo de la creación: «Bendice, alma mía, al Señor…». El texto íntegro está en Leer → Salterio → Salmo 103.'),
+    rub('Se lee o canta el salmo 103, el salmo de la creación: «Bendice, alma mía, al Señor…». Mientras se lee, el sacerdote, con las puertas cerradas, reza en voz baja las oraciones de la luz.'),
+    psalm(103),
   ]),
   section('letania-paz', 'Gran Letanía', [
     rub('La misma Letanía de la Paz de la Divina Liturgia.'),
@@ -322,7 +325,18 @@ const seeds: OfficeSeed[] = [
       ]),
       section('exapsalmos', 'Los Seis Salmos', [
         rub('Se leen en silencio y a media luz los salmos 3, 37, 62, 87, 102 y 142. Está prohibido moverse por la iglesia durante su lectura.'),
-        rub('Los seis salmos están en Leer → Salterio.'),
+        rub('Empiezan así, tres veces el canto de los ángeles en Belén y dos veces el versículo del salmo 50:'),
+        { kind: 'text', content: 'Gloria a Dios en las alturas, y en la tierra paz, buena voluntad entre los hombres.', times: 3 },
+        { kind: 'text', content: 'Señor, abre mis labios, y mi boca proclamará tu alabanza.', times: 2 },
+        psalm(3),
+        psalm(37),
+        psalm(62),
+        rub('Gloria al Padre, y al Hijo, y al Espíritu Santo, ahora y siempre, y por los siglos de los siglos. Amén. Aleluya, aleluya, aleluya, gloria a Ti, oh Dios (tres veces). Señor, ten piedad (tres veces). Gloria al Padre… ahora y siempre…'),
+        psalm(87),
+        psalm(102),
+        psalm(142),
+        rub('Y se cierra igual: Gloria…, Aleluya tres veces, Señor, ten piedad tres veces.'),
+        rub('Mientras se leen, el sacerdote reza en voz baja las doce oraciones de la mañana.'),
       ]),
       section('doxologia', 'Gran Doxología', [
         rub('Al amanecer, con las puertas reales abiertas, el sacerdote exclama: «Gloria a Ti, que nos has mostrado la luz». Y se canta:'),
@@ -367,7 +381,9 @@ const seeds: OfficeSeed[] = [
       section('salmos', 'Los tres salmos', [
         rub('Se leen seguidos, sin canto, tres salmos que dicen lo mismo de tres maneras: el 50, el 69 y el 142.'),
         rub('El 50 es el de la penitencia, el mismo que abre casi todos los oficios. El 69 es un grito breve: «Dios mío, ven en mi auxilio». El 142 es la última súplica del día: «No entres en juicio con tu siervo».'),
-        rub('Están en Leer → Salterio, salmos 50, 69 y 142.'),
+        psalm(50),
+        psalm(69),
+        psalm(142),
       ]),
 
       section('doxologia', 'Doxología', [
@@ -467,7 +483,7 @@ const seeds: OfficeSeed[] = [
 
       section('salmo-90', 'Salmo de protección', [
         rub('El salmo 90, «El que habita al abrigo del Altísimo», se lee en las Completas Grandes y es el salmo nocturno por excelencia de la tradición cristiana.'),
-        rub('Está en Leer → Salterio → Salmo 90.'),
+        psalm(90),
       ]),
     ],
   },
@@ -487,11 +503,11 @@ const seeds: OfficeSeed[] = [
       ]),
       section('salmo-50', 'Salmo 50', [
         rub('El salmo del arrepentimiento, que abre casi todos los oficios.'),
-        rub('Se lee entero. Está en Leer → Salterio → Salmo 50.'),
+        psalm(50),
       ]),
       section('kathisma-17', 'Salmo 118', [
         rub('El salmo más largo del Salterio, la kathisma decimoséptima, dividida en tres estasis. Es el corazón del oficio los días de diario.'),
-        rub('Está en Leer → Salterio → Kathisma 17.'),
+        psalm(118),
         rub('Los domingos se sustituye por el canon a la Santísima Trinidad, del Octoecos, cuyo texto no está incorporado todavía.'),
       ]),
       section('simbolo', 'Símbolo de la Fe', [

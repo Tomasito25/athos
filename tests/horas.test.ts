@@ -45,21 +45,27 @@ describe('las cuatro Horas', () => {
   });
 
   it('tiene todas las partes del oficio, en su orden', () => {
+    // El orden del Horologion: el kontakion va después del Padre Nuestro, y
+    // la oración de san Efrén, en Cuaresma, antes de la oración final.
     const ORDEN = [
       'sentido',
       'comienzo',
       'salmos',
       'tropario',
       'theotokion',
-      'propios',
+      'versiculos',
       'trisagio',
+      'kontakion',
       'kyrie',
       'toda-hora',
+      'cuaresma',
       'final',
-      'despedida',
     ];
     for (const hora of HORAS_OFFICES) {
-      expect(hora.sections.map((s) => s.id), hora.id).toEqual(ORDEN);
+      const ids = hora.sections.map((s) => s.id);
+      // La Primera cierra con el kontakion a la Theotokos antes de despedir.
+      const cierre = hora.id === 'hora-primera' ? ['caudilla', 'despedida'] : ['despedida'];
+      expect(ids, hora.id).toEqual([...ORDEN, ...cierre]);
     }
   });
 
@@ -92,12 +98,71 @@ describe('las cuatro Horas', () => {
     }
   });
 
-  it('marca como pendiente lo que cambia cada día en vez de inventarlo', () => {
+  it('marca como pendiente el kontakion del día en vez de inventarlo', () => {
     for (const hora of HORAS_OFFICES) {
-      const propios = hora.sections.find((s) => s.id === 'propios')!;
-      const pendiente = propios.blocks.find((b) => b.kind === 'pending');
+      const kontakion = hora.sections.find((s) => s.id === 'kontakion')!;
+      const pendiente = kontakion.blocks.find((b) => b.kind === 'pending');
       expect(pendiente, hora.id).toBeDefined();
       expect(pendiente!.content).toMatch(/Menaion|Octoecos|Triodion/);
+    }
+  });
+
+  it('trae los salmos dentro de la Hora, no un aviso de dónde buscarlos', () => {
+    for (const hora of HORAS_OFFICES) {
+      const salmos = hora.sections.find((s) => s.id === 'salmos')!;
+      const enLinea = salmos.blocks.filter((b) => b.kind === 'psalm').map((b) => Number(b.ref));
+      expect(enLinea, hora.id).toEqual(SALMOS[hora.id]);
+      expect(salmos.blocks.some((b) => /Está en Leer/.test(b.content)), hora.id).toBe(false);
+    }
+  });
+
+  it('pone el tropario del día y, para la Cuaresma, el propio de la Hora', () => {
+    for (const hora of HORAS_OFFICES) {
+      const tropario = hora.sections.find((s) => s.id === 'tropario')!;
+      expect(tropario.blocks.some((b) => b.kind === 'day-troparion'), hora.id).toBe(true);
+      const texto = tropario.blocks.map((b) => b.content).join(' ');
+      expect(texto, hora.id).toMatch(/Gran Cuaresma/);
+    }
+  });
+
+  it('cada Hora tiene sus versículos fijos, y son distintos', () => {
+    const vistos = new Set<string>();
+    const FRASE: Record<string, string> = {
+      'hora-primera': 'Dirige mis pasos según tu palabra',
+      'hora-tercera': 'bendito sea el Señor día tras día',
+      'hora-sexta': 'Que tus misericordias nos salgan pronto al encuentro',
+      'hora-novena': 'No nos entregues para siempre',
+    };
+    for (const hora of HORAS_OFFICES) {
+      const v = hora.sections.find((s) => s.id === 'versiculos')!;
+      const texto = v.blocks.filter((b) => b.kind === 'text').map((b) => b.content).join(' ');
+      expect(texto, hora.id).toContain(FRASE[hora.id]!);
+      vistos.add(texto);
+    }
+    expect(vistos.size).toBe(4);
+  });
+
+  it('en Cuaresma añade la oración de san Efrén, y fuera de ella dice que se omite', () => {
+    for (const hora of HORAS_OFFICES) {
+      const c = hora.sections.find((s) => s.id === 'cuaresma')!;
+      const texto = c.blocks.map((b) => b.content).join(' ');
+      expect(texto, hora.id).toContain('Señor y Soberano de mi vida');
+      expect(texto, hora.id).toMatch(/Fuera de la Gran Cuaresma/);
+      expect(c.blocks.some((b) => b.times === 12), hora.id).toBe(true);
+    }
+  });
+
+  it('la Primera termina con «A ti, caudilla defensora», como en el Akáthistos', () => {
+    const primera = HORAS_OFFICES.find((h) => h.id === 'hora-primera')!;
+    const caudilla = primera.sections.find((s) => s.id === 'caudilla')!;
+    expect(caudilla.blocks.map((b) => b.content).join(' ')).toContain('A ti, caudilla defensora');
+  });
+
+  it('la búsqueda encuentra cada Hora por sus salmos', () => {
+    for (const hora of HORAS_OFFICES) {
+      for (const n of SALMOS[hora.id]!) {
+        expect(hora.searchText, `${hora.id} · ${n}`).toContain(`salmo ${n}`);
+      }
     }
   });
 });

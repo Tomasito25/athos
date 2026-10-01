@@ -2158,3 +2158,86 @@ input[type='range']:focus-visible::-webkit-slider-thumb {
 .council__list li + li {
   margin-top: var(--sp-2);
 }
+
+/* ------------------------------------------------------------
+   Salmo dentro de un oficio, y tropario del día
+   ------------------------------------------------------------ */
+
+.inline-psalm {
+  margin: var(--sp-4) 0;
+  border-inline-start: 2px solid var(--gold-wash);
+  padding-inline-start: var(--sp-3);
+}
+
+.inline-psalm__head {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-1) var(--sp-3);
+  padding: var(--sp-1) 0;
+}
+
+.inline-psalm__head::-webkit-details-marker {
+  display: none;
+}
+
+.inline-psalm__head::before {
+  content: '▸';
+  color: var(--gold);
+  font-size: 0.8em;
+  transition: transform 0.15s ease;
+}
+
+.inline-psalm[open] > .inline-psalm__head::before {
+  transform: rotate(90deg);
+}
+
+.inline-psalm__title {
+  font-weight: 600;
+  color: var(--ink-strong);
+}
+
+.inline-psalm__note {
+  color: var(--red);
+  font-size: var(--text-sm);
+  font-style: italic;
+}
+
+.inline-psalm__body p {
+  margin: 0.35em 0;
+}
+
+.inline-psalm__foot {
+  font-size: var(--text-sm);
+  margin-top: var(--sp-2);
+}
+
+.day-troparion {
+  margin: var(--sp-3) 0 var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--gold-wash);
+}
+
+.day-troparion__date {
+  margin: 0 0 var(--sp-2);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.day-troparion__item + .day-troparion__item {
+  margin-top: var(--sp-3);
+}
+
+.day-troparion__notice p {
+  margin: 0.4em 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inline-psalm__head::before {
+    transition: none;
+  }
+}

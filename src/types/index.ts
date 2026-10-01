@@ -45,7 +45,13 @@ export type ContentStatus = 'complete' | 'partial' | 'pending';
 
 /** Un bloque de texto litúrgico. Las rúbricas se marcan aparte del texto orante. */
 export interface TextBlock {
-  kind: 'text' | 'rubric' | 'heading' | 'verse' | 'refrain' | 'pending';
+  /**
+   * `psalm` muestra entero, dentro del oficio, el salmo cuyo número (de los
+   * Setenta) va en `ref`. `day-troparion` pone el tropario que corresponde al
+   * día en que se abre la página. Ninguno de los dos guarda texto: lo traen del
+   * Salterio y del calendario, y `content` es sólo su rótulo para la búsqueda.
+   */
+  kind: 'text' | 'rubric' | 'heading' | 'verse' | 'refrain' | 'pending' | 'psalm' | 'day-troparion';
   content: string;
   /** Número de versículo, estrofa u oda, cuando aplica. */
   ref?: string;

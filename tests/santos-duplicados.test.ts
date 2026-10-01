@@ -40,6 +40,10 @@ const DISTINTOS = new Set([
   // San Justino Popović tomó el nombre del Filósofo al hacerse monje, y la
   // Iglesia serbia los celebra el mismo día a propósito.
   'justino-filosofo|justino-popovic',
+  // Lo mismo con Eutimio de Tárnovo y Máximo el Griego: el calendario los pone
+  // el día del santo cuyo nombre recibieron.
+  'eutimio-grande|eutimio-tarnovo',
+  'maximo-confesor|maximo-griego',
 ]);
 
 describe('el santoral', () => {

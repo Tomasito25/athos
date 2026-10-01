@@ -11,6 +11,8 @@ import { MORE_SAINTS } from './saints-more';
 import { THIRD_SAINTS } from './saints-third';
 import { YEAR_SAINTS_1 } from './saints-year-1';
 import { YEAR_SAINTS_2 } from './saints-year-2';
+import { YEAR_SAINTS_3 } from './saints-year-3';
+import { SAINT_PROPER_TROPARIA } from './troparia-santos';
 
 const bio: SourceMeta = {
   source: 'Reseña histórica redactada para ATHOS a partir de fuentes hagiográficas comunes',
@@ -121,6 +123,7 @@ const allSeeds: SaintSeed[] = [
   ...THIRD_SAINTS,
   ...YEAR_SAINTS_1,
   ...YEAR_SAINTS_2,
+  ...YEAR_SAINTS_3,
 ].sort((a, b) =>
   a.day === b.day ? a.name.localeCompare(b.name, 'es') : a.day.localeCompare(b.day),
 );
@@ -173,11 +176,11 @@ export const SAINTS_COVERAGE_NOTE =
   `El santoral de ATHOS reúne ${SAINTS.length} conmemoraciones con su vida escrita, y no queda ` +
   'ningún día del año sin al menos una. Aun así, esto no es el Menaion: el libro completo trae ' +
   'varios santos cada día, y aquí hay una selección. Las vidas son reseñas históricas redactadas ' +
-  'para ATHOS. En cuanto a los troparios: el propio de cada santo sigue sin incorporarse —son ' +
-  'cientos y ATHOS no los escribe—, pero ninguna ficha se queda muda, porque se muestra el ' +
-  'tropario general de su rango, que es justo lo que la Iglesia canta cuando no dispone del ' +
-  'propio. Las grandes fiestas llevan el suyo. Ambos van traducidos del griego para ATHOS y su ' +
-  'ficha lo dice.';
+  'para ATHOS. En cuanto a los troparios: ATHOS tiene el propio de las grandes fiestas y de ' +
+  `${new Set(Object.values(SAINT_PROPER_TROPARIA)).size} santos principales; los demás son cientos ` +
+  'y no se escriben de memoria. Pero ninguna ficha se queda muda, porque se muestra el tropario ' +
+  'general de su rango, que es justo lo que la Iglesia canta cuando no dispone del propio. Todos ' +
+  'van traducidos del griego para ATHOS y su ficha lo dice.';
 
 /** Cuántos días del año tienen conmemoración. Los 366 desde agosto de 2026. */
 export const SAINT_DAYS_COVERED = new Set(SAINTS.map((s) => s.day)).size;

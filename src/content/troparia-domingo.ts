@@ -241,7 +241,7 @@ export const MOVABLE_TROPARIA: Record<string, DayHymn> = {
 export const MOVABLE_SAINT_OF: Record<string, string> = {
   palamas: 'gregorio-palamas',
   'adoracion-cruz': 'exaltacion-s',
-  'juan-climaco': 'juan-climaco',
+  'juan-climaco': 'juan-escala-marzo',
   'maria-egipciaca': 'maria-egipcia',
 };
 

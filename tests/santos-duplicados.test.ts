@@ -35,7 +35,12 @@ const claves = (nombre: string) =>
   );
 
 /** Santos distintos que el mismo día comparten una palabra del nombre. */
-const DISTINTOS = new Set(['efren-sirio-santo|isaac-sirio']);
+const DISTINTOS = new Set([
+  'efren-sirio-santo|isaac-sirio',
+  // San Justino Popović tomó el nombre del Filósofo al hacerse monje, y la
+  // Iglesia serbia los celebra el mismo día a propósito.
+  'justino-filosofo|justino-popovic',
+]);
 
 describe('el santoral', () => {
   it('no repite la misma conmemoración el mismo día con otro nombre', () => {

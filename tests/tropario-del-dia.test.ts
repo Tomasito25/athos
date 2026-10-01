@@ -19,6 +19,7 @@ import {
   RESURRECTION_TROPARIA,
 } from '@/content/troparia-domingo';
 import { MOVABLE_FEASTS } from '@/content/feasts';
+import { SAINTS } from '@/content/saints';
 
 const PASCUA = paschaIso(2026);
 const dia = (offset: number) => computeLiturgicalDay(addDaysIso(PASCUA, offset), 'nuevo');
@@ -112,6 +113,13 @@ describe('qué tropario toca cada día', () => {
 });
 
 describe('las fiestas móviles', () => {
+  it('las que celebran a un santo apuntan a una ficha que existe', () => {
+    const ids = new Set(SAINTS.map((s) => s.id));
+    for (const [fiesta, santo] of Object.entries(MOVABLE_SAINT_OF)) {
+      expect(ids.has(santo), `${fiesta} → ${santo}`).toBe(true);
+    }
+  });
+
   it('cada tropario móvil es de una fiesta que existe en el calendario', () => {
     const ids = new Set(MOVABLE_FEASTS.map((f) => f.id));
     for (const id of [...Object.keys(MOVABLE_TROPARIA), ...Object.keys(MOVABLE_SAINT_OF)]) {

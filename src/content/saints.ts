@@ -14,6 +14,7 @@ import { YEAR_SAINTS_2 } from './saints-year-2';
 import { YEAR_SAINTS_3 } from './saints-year-3';
 import { YEAR_SAINTS_4 } from './saints-year-4';
 import { YEAR_SAINTS_5 } from './saints-year-5';
+import { YEAR_SAINTS_6 } from './saints-year-6';
 import { SAINT_PROPER_TROPARIA } from './troparia-santos';
 
 const bio: SourceMeta = {
@@ -128,6 +129,7 @@ const allSeeds: SaintSeed[] = [
   ...YEAR_SAINTS_3,
   ...YEAR_SAINTS_4,
   ...YEAR_SAINTS_5,
+  ...YEAR_SAINTS_6,
 ].sort((a, b) =>
   a.day === b.day ? a.name.localeCompare(b.name, 'es') : a.day.localeCompare(b.day),
 );

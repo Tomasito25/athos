@@ -44,6 +44,12 @@ const DISTINTOS = new Set([
   // el día del santo cuyo nombre recibieron.
   'eutimio-grande|eutimio-tarnovo',
   'maximo-confesor|maximo-griego',
+  // Y santos sin relación que coinciden de nombre y de día. Las fichas de
+  // Sofronio de Vratsa y Néstor el Cronista ya avisan de que no son el otro.
+  'sofronio-jerusalen|sofronio-vratsa',
+  'ciril-alejandria|cirilo-lago-blanco',
+  'alejandro-svir|patriarcas-alejandro',
+  'nestor-cronista|nestor-tesalonica',
 ]);
 
 describe('el santoral', () => {

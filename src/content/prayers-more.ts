@@ -306,12 +306,14 @@ export const MORE_PRAYERS: MorePrayerSeed[] = [
     subtitle: 'El que habita al amparo del Altísimo',
     category: 'tentacion',
     blocks: [
-      rub('El salmo que la tradición pone en la boca del que teme. Se lee íntegro desde el Salterio: Leer → Salterio → Salmo 90.'),
-      t('El que habita al abrigo del Altísimo morará bajo la sombra del Omnipotente. Diré yo al Señor: esperanza mía y castillo mío, mi Dios, en quien confiaré.'),
+      rub('El salmo que la tradición pone en la boca del que teme. Se reza en las Completas y en la Hora Sexta, y muchos lo saben de memoria para decirlo en el peligro.'),
+      { kind: 'psalm', content: 'Salmo 90', ref: '90' },
     ],
     meta: meta({
       source: 'Salterio, salmo 90 según la numeración de los Setenta (91 hebreo). Reina-Valera 1909',
       license: 'public-domain',
+      copyright: 'La Reina-Valera de 1909 es de dominio público.',
+      notes: 'El texto es el de la Reina-Valera 1909, el mismo del Salterio de ATHOS, con la numeración litúrgica de los Setenta.',
     }),
   },
 

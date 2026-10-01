@@ -245,7 +245,10 @@ describe('procedencia: lo que ATHOS escribe no se disfraza de texto litúrgico',
     // completo, y lo parcial tiene que tener texto de verdad, no sólo el aviso.
     for (const prayer of PRAYERS) {
       const tienePendiente = prayer.blocks.some((b) => b.kind === 'pending');
-      const tieneTexto = prayer.blocks.some((b) => b.kind === 'text' || b.kind === 'verse');
+      // Un salmo en línea es texto que se reza: se trae entero del Salterio.
+      const tieneTexto = prayer.blocks.some(
+        (b) => b.kind === 'text' || b.kind === 'verse' || b.kind === 'psalm',
+      );
       if (tienePendiente) {
         expect(['pending', 'partial'], prayer.id).toContain(prayer.status);
         expect(prayer.meta.notes?.length ?? 0, `${prayer.id} no explica qué falta`).toBeGreaterThan(30);
@@ -266,7 +269,10 @@ describe('procedencia: lo que ATHOS escribe no se disfraza de texto litúrgico',
       if (prayer.status !== 'complete') continue;
       const esGuia = /Guía redactada para ATHOS/i.test(prayer.meta.source);
       if (esGuia) continue;
-      const tieneTexto = prayer.blocks.some((b) => b.kind === 'text' || b.kind === 'verse');
+      // Un salmo en línea es texto que se reza: se trae entero del Salterio.
+      const tieneTexto = prayer.blocks.some(
+        (b) => b.kind === 'text' || b.kind === 'verse' || b.kind === 'psalm',
+      );
       expect(tieneTexto, `${prayer.id} no tiene ni una línea que rezar`).toBe(true);
     }
   });

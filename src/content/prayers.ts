@@ -10,6 +10,7 @@
 import type { Prayer, PrayerCategory, PrayerCategoryId, SourceMeta, TextBlock } from '@/types';
 import { MORE_PRAYERS } from './prayers-more';
 import { THIRD_PRAYERS } from './prayers-third';
+import { FOURTH_PRAYERS } from './prayers-fourth';
 
 export const PRAYER_CATEGORIES: PrayerCategory[] = [
   /* ---- El día ---- */
@@ -341,12 +342,14 @@ const seeds: Seed[] = [
     subtitle: 'Ten piedad de mí, oh Dios',
     category: 'arrepentimiento',
     blocks: [
-      t('Ten piedad de mí, oh Dios, conforme a tu misericordia; conforme a la multitud de tus piedades borra mis rebeliones. Lávame más y más de mi maldad, y límpiame de mi pecado.'),
-      rub('El salmo se lee íntegro desde el Salterio: Leer → Salterio → Salmo 50.'),
+      rub('El salmo del arrepentimiento: David lo compuso después de su pecado, y la Iglesia lo reza en casi todos los oficios.'),
+      { kind: 'psalm', content: 'Salmo 50', ref: '50' },
     ],
     meta: meta({
       source: 'Salterio, salmo 50 según la numeración de los Setenta (51 hebreo). Reina-Valera 1909',
       license: 'public-domain',
+      copyright: 'La Reina-Valera de 1909 es de dominio público.',
+      notes: 'El texto es el de la Reina-Valera 1909, el mismo del Salterio de ATHOS, con la numeración litúrgica de los Setenta.',
     }),
   },
   {
@@ -653,7 +656,7 @@ const plain = (blocks: TextBlock[]) =>
  */
 const CATEGORY_ORDER = new Map(PRAYER_CATEGORIES.map((c) => [c.id, c.order]));
 
-const allSeeds: Seed[] = [...seeds, ...MORE_PRAYERS, ...THIRD_PRAYERS].sort(
+const allSeeds: Seed[] = [...seeds, ...MORE_PRAYERS, ...THIRD_PRAYERS, ...FOURTH_PRAYERS].sort(
   (a, b) => (CATEGORY_ORDER.get(a.category) ?? 99) - (CATEGORY_ORDER.get(b.category) ?? 99),
 );
 

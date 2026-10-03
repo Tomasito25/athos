@@ -65,13 +65,13 @@ export const GAPS: Gap[] = [
     label: 'Akathistos',
     count: sinTexto(AKATHISTS),
     kind: 'extension',
-    what: 'El Akáthistos a la Theotokos está entero: las veinticuatro estrofas con sus ciento cuarenta y cuatro saludos, traducidas del griego. De los otros cuatro están el proimion, los estribillos y la forma, que es con lo que se sigue el himno cuando lo canta otro; sus estrofas siguen pendientes.',
+    what: 'Los cuatro akathistos están enteros: el de la Theotokos, traducido del griego, y los del Dulcísimo Jesús, san Nicolás y la Pasión, del eslavo.',
   },
   {
     label: 'Cánones',
     count: sinTexto(CANONS),
     kind: 'extension',
-    what: 'El Canon Pascual está entero. De los otros cuatro están los irmoi de las nueve odas, los kontakia y los estribillos, que es la parte fija y con la que se canta. Los troparios que van entre irmos e irmos siguen pendientes: el Gran Canon tiene doscientos cincuenta.',
+    what: 'Los seis cánones están enteros, con todos sus troparios: el Pascual, el Gran Canon, la Paráclesis, el de la Comunión, el del Ángel de la Guarda y el canon por un difunto.',
   },
   {
     label: 'Propios de los oficios',
@@ -83,7 +83,7 @@ export const GAPS: Gap[] = [
     label: 'Oraciones',
     count: sinTexto(PRAYERS),
     kind: 'licencia',
-    what: 'Cinco fichas remiten a un canon o a un akathistos que todavía no tiene texto. Ninguna oración del libro de oración diario está pendiente.',
+    what: 'Las fichas que remitían a un canon sin texto ya lo tienen. Ninguna oración del libro de oración diario está pendiente.',
   },
 ];
 
@@ -93,5 +93,5 @@ export const PENDING_NOTE =
   'traduciendo el original griego —que es de dominio público— y diciendo que la traducción es ' +
   'suya, o dejando la ficha con la explicación de qué falta. Lo que no hace, y no va a hacer, es ' +
   'escribir un himno y presentarlo como de la Iglesia. ' +
-  'Por eso ninguna de estas cuentas llegará nunca a cero de golpe: bajan cuando alguien traduce, ' +
-  'y traducir doscientas cincuenta estrofas lleva lo que lleva.';
+  'Por eso ninguna de estas cuentas llegará a cero de golpe: bajan cuando se traduce del original, ' +
+  'texto a texto. Así se han completado los cánones y los akathistos.';

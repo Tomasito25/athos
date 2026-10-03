@@ -26,27 +26,21 @@ export const HYMN_ABOUT: Record<string, Explicacion> = {
   },
   'akathistos-jesus': {
     about:
-      'Akáthistos al Dulcísimo Señor Jesús, compuesto en el ámbito eslavo y muy extendido en la piedad rusa y griega. Donde el de la Theotokos saluda a la Madre, éste invoca el Nombre: cada ikos termina llamando a Jesús con una cadena de títulos —Hijo de Dios, pastor, médico, luz—. Es la oración de Jesús desplegada en himno.',
+      'Akáthistos al Dulcísimo Señor Jesús, el más rezado después del de la Theotokos, sobre todo en la piedad rusa. Donde el de la Theotokos saluda a la Madre, éste invoca el Nombre: cada ikos termina llamando a Jesús con una cadena de títulos —Hijo de Dios, pastor, médico, luz—. Es la oración de Jesús desplegada en himno.',
     structure:
-      'La misma forma que el de la Theotokos: doce kontakia y doce ikos, con «Aleluya» y el estribillo «Jesús, Hijo de Dios, ten piedad de mí». Se reza en cualquier momento; no está atado a un día del año.',
+      'La misma forma que el de la Theotokos: trece kontakia y doce ikos, con «Aleluya» y el estribillo «Jesús, Hijo de Dios, ten piedad de mí». Cada ikos tiene doce invocaciones que empiezan por «Jesús». Se reza en cualquier momento; no está atado a un día del año.',
   },
   'akathistos-nicolas': {
     about:
       'Uno de los akáthistos a un santo más difundidos, sobre todo en Rusia y en Grecia. Recorre lo que se cuenta de san Nicolás —las dotes echadas por la ventana, los inocentes salvados del verdugo, los marineros socorridos— y de cada episodio saca un saludo. Se reza los jueves, día en que la semana litúrgica lo conmemora junto a los apóstoles.',
     structure:
-      'Doce kontakia y doce ikos, como todos. El estribillo de los ikos es «Alégrate, Nicolás, gran taumaturgo».',
-  },
-  'akathistos-difuntos': {
-    about:
-      'Akáthistos por los que se han dormido en el Señor, de uso extendido en la tradición rusa. No es un lamento: pide descanso, y a la vez pone delante la esperanza de la resurrección. Se canta en los días de conmemoración de los difuntos y en los aniversarios.',
-    structure:
-      'Doce kontakia y doce ikos. El estribillo recurrente es «Da descanso, Señor, a tus siervos difuntos».',
+      'Trece kontakia y doce ikos, como todos. Los ikos tienen doce saludos que empiezan por «Alégrate», y el estribillo «Alégrate, Nicolás, gran taumaturgo».',
   },
   'akathistos-pasion': {
     about:
-      'Akáthistos a la Pasión de Cristo, que recorre paso a paso lo que ocurrió desde Getsemaní hasta el sepulcro: el sudor de sangre, el beso, el juicio, los azotes, la cruz, las tres horas de oscuridad. No narra desde fuera, como una crónica: en cada estación se detiene a decirle algo al que padece. Se reza sobre todo en Gran Cuaresma y en Semana Santa, junto a los oficios de esos días, y en muchas parroquias los viernes de todo el año.',
+      'Akáthistos a la Pasión de Cristo, que recorre paso a paso lo que ocurrió desde Getsemaní hasta el sepulcro: el sudor de sangre, el beso, Caifás y Pilato, los azotes, la cruz, el sepulcro. No narra desde fuera, como una crónica: en cada estación se detiene a decirle algo al que padece. Se reza en Gran Cuaresma, en los oficios de la Pasión de la tradición rusa, y en la Semana Santa.',
     structure:
-      'Doce kontakia y doce ikos, con el estribillo «Jesús mío, Dios mío, gloria a Ti».',
+      'Trece kontakia y doce ikos, como todos, pero los ikos son breves: cinco súplicas que empiezan por «Jesús» y el estribillo del buen ladrón, «Jesús, Hijo de Dios, acuérdate de nosotros cuando vengas en tu Reino».',
   },
 
   /* ---------------- Cánones ---------------- */
@@ -78,6 +72,12 @@ export const HYMN_ABOUT: Record<string, Explicacion> = {
       'El canon de san Juan Damasceno que se canta en Maitines de Pascua, y el único que la Iglesia repite entero cada día durante toda la Semana Radiante. Es puro júbilo, sin una línea de penitencia: «Día de la resurrección, alegrémonos, pueblos». De él sale el irmos que todo ortodoxo reconoce, «Ilumínate, ilumínate, nueva Jerusalén».',
     structure:
       'Ocho odas —la segunda se omite—, cada una empezando por su irmos, con el estribillo «Cristo ha resucitado de entre los muertos». Se canta con las puertas abiertas y a toda voz.',
+  },
+  'canon-difuntos': {
+    about:
+      'El canon que el libro de oraciones eslavo da para leer en casa por un difunto: pide para él el descanso «en un lugar de verdor, en un lugar de descanso», y en algunas estrofas habla el propio difunto por boca de los que rezan. Se lee sobre todo en los cuarenta días que siguen a la muerte y en los aniversarios. Es el que se recomienda en lugar del llamado «akathistos por los difuntos», que la Iglesia no aprueba.',
+    structure:
+      'Ocho odas en el tono octavo, con el estribillo «Da descanso, Señor, al alma de tu siervo difunto», precedidas de los salmos 90 y 50 y del tropario «Tú, que con la profundidad de tu sabiduría». Después de la sexta oda, el kontakion «Con los santos da descanso», que es el de todos los oficios por los difuntos.',
   },
 };
 

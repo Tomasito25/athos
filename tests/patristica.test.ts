@@ -109,29 +109,20 @@ const partesDe = (himno: (typeof todos)[number]) =>
     }
   });
 
-  it('los que aún no tienen el texto entero, también', () => {
-    // Antes esto miraba el estado «pendiente». Ya no queda ninguno: todos los
-    // himnos tienen texto, unos entero y otros con las estrofas por traducir.
-    // Lo que sigue importando es que el que tenga huecos los explique, así que
-    // la prueba mira los huecos y no la etiqueta.
-    const conHuecos = todos.filter((h) =>
-      partesDe(h).some((s) => s.blocks.some((b) => b.kind === 'pending')),
-    );
-    expect(conHuecos.length, 'ningún himno declara huecos: ¿se han tapado?').toBeGreaterThan(2);
-    for (const himno of conHuecos) {
-      expect((himno.about ?? '').length, himno.title).toBeGreaterThan(200);
-      // Y que diga qué falta, no sólo que falta.
-      const huecos = partesDe(himno)
-        .flatMap((s) => s.blocks)
-        .filter((b) => b.kind === 'pending');
-      for (const hueco of huecos) {
-        expect(hueco.content.length, `${himno.title}: hueco sin explicar`).toBeGreaterThan(40);
-      }
+  it('ya no queda ninguno con huecos, y ninguno se declara completo si los tiene', () => {
+    // Durante meses la mitad de los himnos tenía sólo los irmoi o los
+    // estribillos, y esta prueba comprobaba que el hueco se explicara. Desde la
+    // versión 1.26 todos están enteros, traducidos de su original. Si alguno
+    // vuelve a tener huecos, que no se llame completo.
+    for (const himno of todos) {
+      const huecos = partesDe(himno).some((s) => s.blocks.some((b) => b.kind === 'pending'));
+      expect(huecos && himno.status === 'complete', `${himno.title}: completo con huecos`).toBe(false);
     }
+    expect(todos.every((h) => h.status === 'complete')).toBe(true);
   });
 
-  it('los dos que están enteros no declaran ningún hueco', () => {
-    for (const id of ['akathistos-theotokos', 'canon-pascual']) {
+  it('los que están enteros no declaran ningún hueco', () => {
+    for (const id of ['akathistos-theotokos', 'canon-pascual', 'gran-canon-andres', 'canon-theotokos-paraclisis']) {
       const himno = todos.find((h) => h.id === id);
       expect(himno?.status, id).toBe('complete');
       expect(

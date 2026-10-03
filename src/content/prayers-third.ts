@@ -15,6 +15,7 @@
  * texto litúrgico.
  */
 import type { PrayerCategoryId, SourceMeta, TextBlock, ContentStatus } from '@/types';
+import { CANON_SEPARACION_BLOCKS } from './canones-difuntos';
 
 const TRAD: SourceMeta = {
   source: 'Libro de oraciones ortodoxo (Horologion y Molitvoslov), uso tradicional',
@@ -67,23 +68,9 @@ const guia = (over: Partial<SourceMeta> = {}): SourceMeta =>
       (over.notes ?? 'El uso varía de una iglesia local a otra: pregunta en tu parroquia.'),
   });
 
-/** Ficha de un rito cuyo texto todavía no se puede incorporar. */
-const pendiente = (over: Partial<SourceMeta> = {}): SourceMeta =>
-  meta({
-    ...over,
-    license: 'pending',
-    copyright: undefined,
-    source: `${over.source ?? 'Euchologion'}. Original de dominio público; versión española pendiente de incorporar con licencia compatible.`,
-    notes:
-      'El texto del rito lo lee el sacerdote del libro litúrgico. ATHOS no lo transcribe de ' +
-      'memoria: mientras no haya una versión española verificable, queda la explicación de qué es. ' +
-      (over.notes ?? ''),
-  });
-
 const t = (content: string): TextBlock => ({ kind: 'text', content });
 const rub = (content: string): TextBlock => ({ kind: 'rubric', content });
 const head = (content: string): TextBlock => ({ kind: 'heading', content });
-const PENDING: TextBlock[] = [{ kind: 'pending', content: 'Contenido pendiente de incorporar.' }];
 
 export interface ThirdPrayerSeed {
   id: string;
@@ -127,14 +114,16 @@ export const THIRD_PRAYERS: ThirdPrayerSeed[] = [
     title: 'Canon para la separación del alma',
     subtitle: 'El oficio que se lee junto al lecho',
     category: 'agonia',
-    blocks: PENDING,
-    status: 'pending',
-    meta: pendiente({
-      source: 'Canon eis psychorragounta, del Euchologion bizantino',
+    blocks: CANON_SEPARACION_BLOCKS,
+    status: 'complete',
+    meta: meta({
+      source:
+        'Canon de súplica en la separación del alma y el cuerpo, del libro de oraciones eslavo (edición digital de Azbuka Very, azbyka.ru). Traducción al español hecha para ATHOS a partir del texto en eslavo eclesiástico, que es de dominio público',
+      license: 'cc-by-sa-4.0',
+      copyright:
+        'Texto litúrgico tradicional; el original eslavo es de dominio público. Esta versión española es una traducción hecha para ATHOS y se publica bajo CC BY-SA 4.0.',
       notes:
-        'Es un canon de ocho odas que se lee junto a quien agoniza, dirigido en buena parte a la ' +
-        'Madre de Dios y en algunas estrofas puesto en boca del propio moribundo. Puede leerlo un ' +
-        'laico. Existe también un segundo oficio para cuando la agonía se prolonga.',
+        'Es una traducción de un texto que existe, no una oración escrita para ATHOS. Está el canon entero, con sus ocho odas, el kontakion y el ikos. Existe también un segundo oficio para cuando la agonía se prolonga, que lee el sacerdote.',
     }),
   },
   {
@@ -234,9 +223,9 @@ export const THIRD_PRAYERS: ThirdPrayerSeed[] = [
       head('Memoria eterna'),
       t('Eterna sea tu memoria, hermano nuestro, digno de bienaventuranza e inolvidable.'),
       rub('Tres veces.'),
-      { kind: 'pending', content: 'Contenido pendiente de incorporar: el canon por los difuntos, que se canta en la panihida completa entre la letanía y el kontakion.' },
+      rub('En la panihida que celebra el sacerdote se canta, entre los troparios y el kontakion, un canon por los difuntos. En casa se puede leer el canon por un difunto del libro de oraciones, que está entero en Biblioteca → Cánones.'),
     ],
-    status: 'partial',
+    status: 'complete',
     meta: meta({
       source:
         'Oficio de la panihida (mnemósynon), del Euchologion bizantino. Traducción al español hecha para ATHOS a partir del original griego, que es de dominio público',
@@ -245,7 +234,7 @@ export const THIRD_PRAYERS: ThirdPrayerSeed[] = [
         'Texto litúrgico tradicional; el original griego es de dominio público. Esta versión española es una traducción hecha para ATHOS y se publica bajo CC BY-SA 4.0.',
       notes:
         'Es una traducción de un texto que existe, no una oración escrita para ATHOS: lo propio es sólo la versión española, que no procede de un libro litúrgico publicado. ' +
-        'Están las partes fijas del oficio breve por los difuntos, que puede leer también un laico; el canon por los difuntos sigue pendiente.',
+        'Están las partes fijas del oficio breve por los difuntos, que puede leer también un laico. El canon que se canta en la panihida completa varía según los libros; el del libro de oraciones para un difunto está entero en Biblioteca → Cánones.',
     }),
   },
 

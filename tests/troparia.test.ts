@@ -47,8 +47,6 @@ describe('cobertura', () => {
     );
     expect(sin.map((s) => s.name).sort()).toEqual([
       'Concepción de santa Ana',
-      'Deposición del cinturón de la Theotokos',
-      'Deposición del manto de la Theotokos',
       'Traslado de la Santa Imagen no hecha por mano',
     ]);
   });

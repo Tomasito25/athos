@@ -13,6 +13,7 @@
  * público, y la ficha lo dice.
  */
 import type { SourceMeta, TextBlock } from '@/types';
+import { MENAION_HYMNS } from './himnos-menaion';
 
 export interface ProperTroparion {
   name: string;
@@ -67,8 +68,16 @@ const ESPIRIDON = tropario(
 
 const CIRILO_METODIO = tropario('Tropario de los santos Cirilo y Metodio', 'Tono 4', 'Como iguales en costumbres a los apóstoles y maestros de los pueblos eslavos, Cirilo y Metodio, sabios en Dios, interceded ante el Soberano de todos para que confirme a todas las naciones eslavas en la ortodoxia y la concordia, pacifique al mundo y salve nuestras almas.');
 
+/** Los del Menaion, santo a santo (véase `himnos-menaion.ts`). */
+const DEL_MENAION: Record<string, ProperTroparion> = Object.fromEntries(
+  Object.entries(MENAION_HYMNS)
+    .filter(([, e]) => e.tropario)
+    .map(([id, e]) => [id, tropario(`Tropario de ${e.nombre}`, e.tropario!.tone, e.tropario!.text)]),
+);
+
 /** Por identificador de ficha. Dos fichas del mismo santo comparten el mismo. */
 export const SAINT_PROPER_TROPARIA: Record<string, ProperTroparion> = {
+  ...DEL_MENAION,
   'basilio-magno': tropario('Tropario de san Basilio el Grande', 'Tono 1', 'Por toda la tierra ha salido tu voz, pues ella recibió tu palabra, con la que enseñaste de modo digno de Dios, explicaste la naturaleza de los seres y ordenaste las costumbres de los hombres. Oh sacerdocio real, padre santo Basilio, intercede ante Cristo Dios para que salve nuestras almas.'),
   'juan-bautista-sinaxis': BAUTISTA,
   'degollacion-s': BAUTISTA,

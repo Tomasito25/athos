@@ -25,6 +25,7 @@
  * uno ni se pone el de otro.
  */
 import type { SourceMeta, TextBlock } from '@/types';
+import { MENAION_HYMNS } from './himnos-menaion';
 
 export interface Kontakion {
   name: string;
@@ -153,8 +154,16 @@ const JUAN_TEOLOGO = k('Kontakion de san Juan el Teólogo', 'Tono 2', '¿Quién 
 const ARCANGEL = (tono: string, verbo: string) =>
   k('Kontakion del arcángel', tono, `Arcángel de Dios, servidor de la gloria divina, guía de los hombres y príncipe de los incorpóreos: ${verbo} lo que nos conviene y la gran misericordia, como arcángel de los incorpóreos.`);
 
+/** Los del Menaion, santo a santo (véase `himnos-menaion.ts`). */
+const DEL_MENAION: Record<string, Kontakion> = Object.fromEntries(
+  Object.entries(MENAION_HYMNS)
+    .filter(([, e]) => e.kontakion)
+    .map(([id, e]) => [id, k(`Kontakion de ${e.nombre}`, e.kontakion!.tone, e.kontakion!.text)]),
+);
+
 /** Por el id del santo o de la fiesta fija, como en la ficha. */
 export const SAINT_KONTAKIA: Record<string, Kontakion> = {
+  ...DEL_MENAION,
   /* Fiestas del Señor y de la Theotokos */
   'natividad-senor': k('Kontakion de la Natividad', 'Tono 3', 'La Virgen da hoy a luz al que está por encima de todo ser, y la tierra ofrece una cueva al Inaccesible. Los ángeles con los pastores lo glorifican, y los magos con la estrella van de camino; porque por nosotros ha nacido un Niño nuevo, el Dios de antes de los siglos.'),
   'teofania-señor': k('Kontakion de la Teofanía', 'Tono 4', 'Te has manifestado hoy al mundo, y tu luz, Señor, ha quedado impresa en nosotros, que te cantamos con conocimiento: Has venido, te has manifestado, oh Luz inaccesible.'),

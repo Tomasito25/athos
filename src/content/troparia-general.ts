@@ -283,13 +283,13 @@ export function generalTroparionFor(
 /**
  * Fiestas que cantan el tropario de otra.
  *
- * No es un atajo: es lo que manda el libro. Las tres fiestas de la Cruz
- * comparten tropario; la clausura de una fiesta repite el oficio del día
- * grande, tropario incluido; y la Sínaxis de la Theotokos cae dentro de los
- * días de la Natividad y canta el de la Natividad.
+ * No es un atajo: es lo que manda el libro. La Procesión de la Cruz del 1 de
+ * agosto canta el de la Exaltación; la clausura de una fiesta repite el oficio
+ * del día grande, tropario incluido; y la Sínaxis de la Theotokos cae dentro
+ * de los días de la Natividad y canta el de la Natividad. La Aparición de la
+ * Cruz del 7 de mayo tiene el suyo propio, en `himnos-menaion.ts`.
  */
 const COMPARTEN: Record<string, string> = {
-  'aparicion-cruz': 'exaltacion-s',
   'procesion-cruz-ago': 'exaltacion-s',
   'clausura-dormicion': 'dormicion',
   'sinaxis-theotokos': 'natividad-senor',

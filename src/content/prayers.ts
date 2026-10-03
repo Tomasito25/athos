@@ -11,6 +11,7 @@ import type { Prayer, PrayerCategory, PrayerCategoryId, SourceMeta, TextBlock } 
 import { MORE_PRAYERS } from './prayers-more';
 import { THIRD_PRAYERS } from './prayers-third';
 import { FOURTH_PRAYERS } from './prayers-fourth';
+import { CANON_COMUNION_BLOCKS } from './canon-comunion';
 
 export const PRAYER_CATEGORIES: PrayerCategory[] = [
   /* ---- El día ---- */
@@ -358,7 +359,7 @@ const seeds: Seed[] = [
     subtitle: 'Lo que se reza de él fuera del templo',
     category: 'arrepentimiento',
     blocks: [
-      rub('El canon entero se canta en la iglesia las cuatro primeras noches de Cuaresma y el jueves de la quinta semana. Sus irmoi y su kontakion están en Biblioteca → Cánones.'),
+      rub('El canon se canta en la iglesia las cuatro primeras noches de Cuaresma y el jueves de la quinta semana. Está entero en Biblioteca → Cánones.'),
       rub('Lo que se reza a solas, y basta, es su estribillo, con una postración:'),
       t('Ten piedad de mí, oh Dios, ten piedad de mí.'),
       head('Y su estrofa más conocida'),
@@ -373,7 +374,7 @@ const seeds: Seed[] = [
       copyright:
         'Texto litúrgico del siglo VIII; el original griego es de dominio público. Esta versión española es una traducción hecha para ATHOS y se publica bajo CC BY-SA 4.0.',
       notes:
-        'Es una traducción de un texto que existe, no una redacción de ATHOS. Aquí van el estribillo y el kontakion, que es lo que se reza fuera del templo; las doscientas cincuenta estrofas del canon siguen pendientes y su ficha está en Biblioteca → Cánones.',
+        'Es una traducción de un texto que existe, no una redacción de ATHOS. Aquí van el estribillo y el kontakion, que es lo que se reza fuera del templo; el canon entero está en Biblioteca → Cánones.',
     }),
   },
 
@@ -547,23 +548,18 @@ const seeds: Seed[] = [
   {
     id: 'canon-comunion',
     title: 'Canon de preparación para la Comunión',
-    subtitle: 'Lo que se reza de él la víspera',
+    subtitle: 'Se lee la víspera de comulgar',
     category: 'comunion',
-    blocks: [
-      rub('Se lee la víspera de comulgar, junto con el canon al Ángel de la Guarda y el de la Theotokos. Sus irmoi están en Biblioteca → Cánones, y las oraciones de después, en esta misma sección.'),
-      rub('El estribillo se repite antes de cada estrofa:'),
-      t('Jesús dulcísimo, sálvame.'),
-      head('La estrofa con que termina'),
-      t('Pan de vida eterna sea para mí tu Cuerpo santo, oh Cristo Dios compasivo, y tu Sangre preciosa, remedio de mis dolencias.'),
-    ],
+    blocks: CANON_COMUNION_BLOCKS,
     status: 'complete',
     meta: meta({
-      source: 'Oficio de preparación para la Santa Comunión. Traducción al español hecha para ATHOS a partir del original griego, que es de dominio público',
+      source:
+        'Akolouthía de la Divina Comunión, del Horologion griego (glt.goarch.org). Traducción al español hecha para ATHOS a partir del original griego, que es de dominio público',
       license: 'cc-by-sa-4.0',
       copyright:
         'Texto litúrgico tradicional; el original griego es de dominio público. Esta versión española es una traducción hecha para ATHOS y se publica bajo CC BY-SA 4.0.',
       notes:
-        'Es una traducción de un texto que existe, no una redacción de ATHOS. Van el estribillo y la estrofa final; los troparios de las nueve odas siguen pendientes y su ficha está en Biblioteca → Cánones.',
+        'Es una traducción de un texto que existe, no una redacción de ATHOS. Está el canon entero: las ocho odas con sus irmoi, las veinticinco estrofas del acróstico alfabético y el kontakion.',
     }),
   },
 

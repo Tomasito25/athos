@@ -569,7 +569,7 @@ export const MORE_PRAYERS: MorePrayerSeed[] = [
       rub('Rezar el oficio de preparación: el canon y las oraciones antes de la comunión, la noche anterior o esa mañana.'),
       rub('Ayunar. Lo habitual es no comer ni beber nada desde la medianoche, y guardar los días de ayuno de la semana. La medida concreta —y las excepciones por enfermedad, edad o medicación— las fija tu padre espiritual, no una aplicación.'),
       rub('Se acerca uno con las manos cruzadas sobre el pecho, se dice el nombre de bautismo y se recibe. Después, el antídoron y las oraciones de acción de gracias.'),
-      rub('En esta sección están «Creo, Señor, y confieso» y «Después de la Santa Comunión». El canon completo está pendiente de incorporar y así se indica en su ficha.'),
+      rub('En esta sección están el canon de preparación, «Creo, Señor, y confieso», las oraciones ante la Comunión y la acción de gracias de después.'),
     ],
     meta: guia({
       source: 'Uso corriente de las parroquias ortodoxas; cita del Evangelio según San Mateo 5, 24',

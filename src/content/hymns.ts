@@ -131,13 +131,14 @@ const canonSeeds: CanonSeed[] = [
     id: 'gran-canon-andres',
     title: 'Gran Canon de san Andrés de Creta',
     dedication: 'Arrepentimiento',
-    status: 'partial',
+    tone: 6,
+    status: 'complete',
     meta: canonMeta({
       author: 'San Andrés de Creta († 740)',
       source:
-        'Triodion. Se canta partido las cuatro primeras noches de la Gran Cuaresma y entero el jueves de la quinta semana.',
+        'Triodion griego, Maitines del jueves de la quinta semana de Cuaresma (edición digital de la Archidiócesis Ortodoxa Griega de América, glt.goarch.org). Se canta partido las cuatro primeras noches de la Gran Cuaresma y entero el jueves de la quinta semana.',
       notes:
-        'Están los irmoi de las nueve odas, el kontakion y la estrofa inicial, que es con lo que se sigue y se canta el canon. Las cerca de doscientas cincuenta estrofas que van entre irmos e irmos siguen pendientes.',
+        'Está entero, tal como se canta el jueves de la quinta semana: los irmoi y los troparios de las nueve odas, las estrofas de santa María Egipcíaca y de san Andrés, las doxologías y los theotokía, el kontakion con su ikos y las Bienaventuranzas. Son unas doscientas ochenta estrofas.',
     }),
     odes: GRAN_CANON,
   },
@@ -146,10 +147,12 @@ const canonSeeds: CanonSeed[] = [
     title: 'Canon de preparación para la Santa Comunión',
     dedication: 'Comunión',
     tone: 2,
-    status: 'partial',
+    status: 'complete',
     meta: canonMeta({
-      source: 'Del oficio de preparación para la Comunión, en el libro de oraciones.',
-      notes: 'Están el estribillo, el irmos de la primera oda y la estrofa final; los troparios de las nueve odas siguen pendientes.',
+      source:
+        'Akolouthía de la Divina Comunión, del Horologion griego, y Heirmologion (edición digital de la Archidiócesis Ortodoxa Griega de América, glt.goarch.org).',
+      notes:
+        'Están las ocho odas enteras, con sus irmoi y las veinticinco estrofas del acróstico alfabético, y el kontakion. El estribillo que se daba antes, «Jesús dulcísimo, sálvame», era el de otro canon y se ha corregido.',
     }),
     odes: CANON_COMUNION,
   },
@@ -169,11 +172,13 @@ const canonSeeds: CanonSeed[] = [
     title: 'Canon de la Pequeña Paráclesis',
     dedication: 'Theotokos',
     tone: 8,
-    status: 'partial',
+    status: 'complete',
     meta: canonMeta({
       author: 'Teosteriktos el Monje (siglo IX)',
-      source: 'Se canta las dos primeras semanas de agosto y en cualquier momento de aflicción.',
-      notes: 'Están los irmoi de las ocho odas, el kontakion y el himno final «No callaremos jamás»; los troparios intermedios siguen pendientes.',
+      source:
+        'Horologion griego (edición digital de la Archidiócesis Ortodoxa Griega de América, glt.goarch.org). Se canta las dos primeras semanas de agosto y en cualquier momento de aflicción.',
+      notes:
+        'Están las ocho odas enteras, con sus irmoi, troparios, doxologías y theotokía, y el kontakion. Los irmoi son los del libro griego. El oficio completo del que forma parte está en Oficios → Paráclesis a la Theotokos.',
     }),
     odes: CANON_PARACLISIS,
   },

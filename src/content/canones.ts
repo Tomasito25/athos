@@ -87,96 +87,13 @@ export const CANON_PASCUAL: OfficeSection[] = [
 
 /* ═══════════════════ Gran Canon ═══════════════════ */
 
-export const GRAN_CANON: OfficeSection[] = [
-  s('sobre', 'El canon del arrepentimiento', [
-    rub('Obra de san Andrés de Creta († 740). Es el canon más largo de la Iglesia: unas doscientas cincuenta estrofas que recorren la Escritura entera, del Génesis al Evangelio, poniendo al alma frente a cada figura bíblica. Se canta partido las cuatro primeras noches de la Gran Cuaresma y entero el jueves de la quinta semana.'),
-    ref('Ten piedad de mí, oh Dios, ten piedad de mí.'),
-    rub('El estribillo se repite con una postración después de cada estrofa. En las odas dedicadas a santa María Egipcíaca se dice «Santa madre María, ruega a Dios por nosotros», y en las últimas, «Padre venerable Andrés, ruega a Dios por nosotros».'),
-  ]),
-  s('comienzo', 'Primera estrofa', [
-    rub('Con ella empieza el canon, y da el tono de todo lo demás:'),
-    t('¿Por dónde empezaré a llorar las acciones de mi vida miserable? ¿Qué principio pondré, oh Cristo, a este lamento? Pero Tú, que eres compasivo, dame el perdón de mis culpas.'),
-  ]),
-  s('irmos-1', 'Irmos de la oda 1', [
-    t('Auxiliador y protector se ha hecho para mi salvación. Éste es mi Dios, y le glorificaré; el Dios de mi padre, y le exaltaré, porque gloriosamente se ha glorificado.'),
-  ]),
-  s('irmos-2', 'Irmos de la oda 2', [
-    rub('El Gran Canon es de los pocos que conservan la segunda oda, que se canta sólo en Cuaresma.'),
-    t('Atiende, cielo, y hablaré; y cantaré a Cristo, que vino de la Virgen a habitar en la carne.'),
-  ]),
-  s('irmos-3', 'Irmos de la oda 3', [
-    t('Sobre la piedra inconmovible de tus mandamientos afianza, oh Cristo, a tu Iglesia.'),
-  ]),
-  s('irmos-4', 'Irmos de la oda 4', [
-    t('Oyó el profeta tu venida, Señor, y temió: que ibas a nacer de una Virgen y a manifestarte a los hombres, y decía: Oí tu fama y temí. Gloria a tu poder, Señor.'),
-  ]),
-  s('irmos-5', 'Irmos de la oda 5', [
-    t('De noche madruga mi espíritu hacia Ti, oh Dios, porque son luz tus mandamientos. Ilumínanos en ellos y enséñanos, oh Salvador, a hacer tu voluntad.'),
-  ]),
-  s('irmos-6', 'Irmos de la oda 6', [
-    t('Clamé con todo mi corazón al Dios compasivo, y me escuchó desde el infierno más hondo, y sacó mi vida de la corrupción.'),
-  ]),
-  s('kontakion', 'Kontakion', [
-    rub('Se canta después de la sexta oda, y es la estrofa más conocida del canon:'),
-    t('Alma mía, alma mía, levántate: ¿por qué duermes? El fin se acerca y vas a turbarte. Despierta, pues, para que se compadezca de ti Cristo Dios, que está en todo lugar y todo lo llena.'),
-  ]),
-  s('irmos-7', 'Irmos de la oda 7', [
-    t('Pecamos, cometimos iniquidad, obramos injusticia delante de Ti; no guardamos ni cumplimos lo que nos mandaste. Pero no nos entregues hasta el fin, Dios de nuestros padres.'),
-  ]),
-  s('irmos-8', 'Irmos de la oda 8', [
-    t('A quien glorifican los ejércitos de los cielos y ante quien tiemblan los querubines y los serafines, todo aliento y toda criatura cantadle, bendecidle y exaltadle por todos los siglos.'),
-  ]),
-  s('irmos-9', 'Irmos de la oda 9', [
-    t('Es imposible que los hombres vean a Dios, a quien no se atreven a mirar de frente los ejércitos de los ángeles; pero por ti, Purísima, apareció a los hombres el Verbo encarnado, y a quien engrandecemos con los ejércitos del cielo y a ti te llamamos bienaventurada.'),
-  ]),
-  s('lo-que-falta', 'Los troparios', [
-    rub('Los irmoi de las nueve odas están arriba, y con ellos se puede seguir y cantar el canon.'),
-    pending('las cerca de doscientas cincuenta estrofas que van entre irmos e irmos, cada una sobre una figura de la Escritura. Es el texto litúrgico más extenso de la Iglesia y su traducción es un trabajo aparte.'),
-  ]),
-];
+// Entero, en su propio archivo: son casi trescientas estrofas.
+export { GRAN_CANON } from './gran-canon';
 
 /* ═══════════════════ Pequeña Paráclesis ═══════════════════ */
 
-export const CANON_PARACLISIS: OfficeSection[] = [
-  s('sobre', 'El canon de súplica', [
-    rub('Obra de Teosteriktos el Monje (siglo IX). Se canta las dos primeras semanas de agosto, en el ayuno de la Dormición, y en cualquier momento de aflicción. Puede rezarlo un laico en casa.'),
-    ref('Santísima Theotokos, sálvanos.'),
-    rub('El estribillo se dice antes de cada estrofa.'),
-  ]),
-  s('irmos-1', 'Irmos de la oda 1', [
-    t('Habiendo atravesado el agua como tierra firme y escapado de la maldad de Egipto, el israelita clamaba: Cantemos a nuestro Redentor y Dios.'),
-  ]),
-  s('irmos-3', 'Irmos de la oda 3', [
-    t('Oh Theotokos, techo y protección de los que a ti acuden, roca viva e inagotable: a ti, refugio celestial, te cantamos. Afiánzame en tu casa espiritual.'),
-  ]),
-  s('irmos-4', 'Irmos de la oda 4', [
-    t('Oí, Señor, el misterio de tu economía; comprendí tus obras y glorifiqué tu divinidad.'),
-  ]),
-  s('irmos-5', 'Irmos de la oda 5', [
-    t('Ilumina, Señor amante de los hombres, con la luz de tu conocimiento divino, a los que madrugan hacia Ti, y guíanos por el camino de tus mandamientos.'),
-  ]),
-  s('irmos-6', 'Irmos de la oda 6', [
-    t('Al ver el mar de la vida levantado por la tempestad de las tentaciones, acudo a tu puerto sereno y te clamo: Saca mi vida de la corrupción, oh Misericordioso.'),
-  ]),
-  s('kontakion', 'Kontakion', [
-    t('Protección de los cristianos que no se avergüenza, mediación ante el Creador que no se rechaza: no desprecies las voces de los pecadores que te suplican, sino adelántate, como buena, a socorrer a los que fielmente te claman. Apresúrate a interceder y date prisa en suplicar, oh Theotokos, que proteges siempre a los que te honran.'),
-  ]),
-  s('irmos-7', 'Irmos de la oda 7', [
-    t('Los jóvenes venidos de Judea, que en Babilonia pisaron la llama del horno confiando en Ti, cantaban: Dios de nuestros padres, bendito eres.'),
-  ]),
-  s('irmos-8', 'Irmos de la oda 8', [
-    t('Al Rey del cielo, a quien cantan los ejércitos de los ángeles, alabadle y exaltadle por todos los siglos.'),
-  ]),
-  s('irmos-9', 'Irmos de la oda 9', [
-    t('Es cosa propia de las madres el parto, y ajena a las vírgenes el dar a luz; por eso en ti, Theotokos, se hizo nuevo lo uno y lo otro. Por eso te engrandecemos.'),
-  ]),
-  s('final', 'Al terminar', [
-    t('No callaremos jamás, oh Theotokos, de proclamar tus proezas, los indignos; porque si tú no te adelantaras a interceder, ¿quién nos habría librado de tantos peligros, o quién nos habría guardado libres hasta ahora? No nos apartemos de ti, Señora, porque tú salvas siempre a tus siervos de toda clase de males.'),
-  ]),
-  s('lo-que-falta', 'Los troparios', [
-    pending('las estrofas que van entre irmos e irmos, distintas en cada oda.'),
-  ]),
-];
+// Entera, con el oficio del que forma parte, en su propio archivo.
+export { PARACLISIS_CANON as CANON_PARACLISIS } from './paraclesis';
 
 /* ═══════════════════ Canon al Ángel de la Guarda ═══════════════════ */
 
@@ -200,18 +117,4 @@ export const CANON_ANGEL: OfficeSection[] = [
 
 /* ═══════════════════ Canon de la Comunión ═══════════════════ */
 
-export const CANON_COMUNION: OfficeSection[] = [
-  s('sobre', 'Antes de comulgar', [
-    rub('Se lee la víspera, junto con el canon al Ángel de la Guarda y el de la Theotokos, y va seguido de las oraciones ante la Comunión, que sí están incorporadas: Orar → Oraciones → Preparación para la comunión.'),
-    ref('Jesús dulcísimo, sálvame.'),
-  ]),
-  s('irmos-1', 'Irmos de la oda 1', [
-    t('Venid, pueblos, cantemos un cántico a Cristo Dios, que dividió el mar y condujo al pueblo que había sacado de la servidumbre de Egipto, porque se ha glorificado.'),
-  ]),
-  s('final', 'La estrofa final', [
-    t('Pan de vida eterna sea para mí tu Cuerpo santo, oh Cristo Dios compasivo, y tu Sangre preciosa, remedio de mis dolencias.'),
-  ]),
-  s('lo-que-falta', 'Las odas', [
-    pending('los troparios de las nueve odas.'),
-  ]),
-];
+export { CANON_COMUNION } from './canon-comunion';

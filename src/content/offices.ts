@@ -12,6 +12,7 @@
 import type { Office, OfficeSection, SourceMeta, TextBlock } from '@/types';
 import { OFFICE_ABOUT } from './hymns-about';
 import { HORAS_OFFICES, HORAS_RESUMEN, TODA_HORA } from './horas';
+import { PARACLISIS_OFICIO } from './paraclesis';
 
 const meta: SourceMeta = {
   source: 'Ieratikón y Horologion bizantinos; textos de uso tradicional',
@@ -596,29 +597,10 @@ const seeds: OfficeSeed[] = [
   {
     id: 'paraclesis',
     title: 'Paráclesis a la Theotokos',
-    subtitle: 'Canon de súplica',
+    subtitle: 'La Pequeña Paráclesis, entera',
     kind: 'paraclesis',
-    status: 'partial',
-    sections: [
-      section('sentido', 'Qué es', [
-        rub('Canon de súplica a la Madre de Dios en la aflicción. Hay dos: la Pequeña Paráclesis, que se canta durante las dos primeras semanas de agosto en el ayuno de la Dormición, y la Grande, que se alterna con ella. La Pequeña puede rezarla un laico en casa, y es de los oficios que más se rezan fuera del templo.'),
-      ]),
-      section('orden', 'Cómo va', [
-        rub('1. Comienzo habitual y salmo 142 (Leer → Salterio → Salmo 142).'),
-        rub('2. «Dios es el Señor» y los troparios a la Theotokos.'),
-        rub('3. Salmo 50.'),
-        rub('4. El canon, en ocho odas, con su estribillo repetido en cada tropario.'),
-        rub('5. Evangelio y la letanía con los nombres de los vivos.'),
-        rub('6. Despedida.'),
-      ]),
-      section('estribillo', 'El estribillo del canon', [
-        rub('Se repite antes de cada tropario del canon, y es lo que da nombre al oficio:'),
-        ref('Santísima Theotokos, sálvanos.'),
-      ]),
-      section('propios', 'El texto del canon', [
-        pending('los troparios de las ocho odas del canon, obra de Teosteriktos el Monje en el siglo IX.'),
-      ]),
-    ],
+    status: 'complete',
+    sections: PARACLISIS_OFICIO,
   },
 ];
 

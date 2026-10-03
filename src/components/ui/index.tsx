@@ -639,6 +639,7 @@ const veces = (n: number) => VECES[n] ?? `${n} veces`;
  */
 const InlinePsalm = lazy(() => import('@/components/office/InlinePsalm'));
 const DayTroparion = lazy(() => import('@/components/office/DayTroparion'));
+const InlineReading = lazy(() => import('@/components/office/InlineReading'));
 
 /** El griego y su transliteración, debajo del español. */
 function GreekLines({ block }: { block: TextBlock }) {
@@ -726,6 +727,12 @@ export function Blocks({
             return (
               <Suspense key={key} fallback={<p className="muted">{block.content}</p>}>
                 <DayTroparion />
+              </Suspense>
+            );
+          case 'reading':
+            return (
+              <Suspense key={key} fallback={<p className="muted">{block.content}</p>}>
+                <InlineReading reference={block.ref ?? block.content} />
               </Suspense>
             );
           default:

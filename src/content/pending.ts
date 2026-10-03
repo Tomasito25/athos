@@ -14,6 +14,8 @@ import { CHURCH_FATHERS } from './fathers';
 import { OFFICES } from './offices';
 import { PRAYERS } from './prayers';
 import { SAINTS } from './saints';
+import { generalTroparionFor } from './troparia-general';
+import { SAINT_KONTAKIA } from './kontakia';
 
 /** Por qué falta algo. Es lo que decide si se puede arreglar y cómo. */
 export type GapKind =
@@ -51,9 +53,15 @@ const sinTexto = <T extends { status: string }>(rows: T[]) =>
 export const GAPS: Gap[] = [
   {
     label: 'Troparios propios de los santos',
-    count: SAINTS.length,
+    count: SAINTS.filter((s) => !generalTroparionFor(s.category, s.id)?.own).length,
     kind: 'propio',
-    what: 'El tropario y el kontakion propios de cada conmemoración. Ninguna ficha se queda muda: se muestra el tropario general de su rango, y las grandes fiestas llevan el suyo.',
+    what: 'El tropario propio de cada conmemoración. Las grandes fiestas y los santos más venerados ya tienen el suyo, traducido del Menaion griego. Los demás no se quedan mudos: se muestra el tropario general de su rango, que es lo que la Iglesia canta cuando no se dispone del propio.',
+  },
+  {
+    label: 'Kontakia propios de los santos',
+    count: SAINTS.filter((s) => !SAINT_KONTAKIA[s.id]).length,
+    kind: 'propio',
+    what: 'El kontakion propio de cada conmemoración. Lo tienen ya las grandes fiestas y los mismos santos que tienen tropario propio. Para los demás, las Horas dicen el kontakion del día de la semana, que es el que trae el Horologion cuando no hay otro, y la ficha del santo lo explica.',
   },
   {
     label: 'Obras de los Padres',
@@ -77,7 +85,7 @@ export const GAPS: Gap[] = [
     label: 'Propios de los oficios',
     count: sinTexto(OFFICES),
     kind: 'propio',
-    what: 'Los diez oficios tienen ya su estructura, sus salmos y las partes que canta el pueblo. Lo que falta en cada uno es lo variable: los troparios del día, que se toman del Menaion, del Octoecos y del Triodion.',
+    what: 'Los oficios están enteros en todo lo que tienen de fijo: las tres Liturgias, Vísperas, Maitines, Completas, Medianoche, las cuatro Horas, el Moleben y la Paráclesis. El tropario y el kontakion del día se eligen según el calendario. Lo que cambia cada día y llena cientos de páginas —las estiqueras y los cánones del Octoecos, del Menaion y del Triodion— se indica en su lugar, con el libro del que se toma.',
   },
   {
     label: 'Oraciones',

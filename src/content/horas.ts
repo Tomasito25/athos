@@ -19,9 +19,11 @@
  * traducidos para ATHOS: la ficha lo dice, y no se presentan como tomados de
  * un libro litúrgico español publicado.
  *
- * Lo que cambia cada día —el kontakion del santo o de la fiesta, que se toma
- * del Menaion, del Octoecos o del Triodion— no se inventa: se marca como
- * pendiente y se dice de dónde habría que tomarlo.
+ * Lo que cambia cada día —el tropario y el kontakion del santo o de la
+ * fiesta— lo eligen `day-troparia` y `day-kontakia` según el calendario,
+ * entre los que ATHOS tiene traducidos. Cuando falta el propio del santo no
+ * se inventa: se dice el general de su rango, o el kontakion del día de la
+ * semana, y la pantalla lo avisa.
  */
 import type { Office, OfficeSection, SourceMeta, TextBlock } from '@/types';
 import { GREEK_FORMULAS as G } from './greek';
@@ -37,8 +39,9 @@ export const HORAS_META: SourceMeta = {
   dateAdded: '2026-09-04',
   notes:
     'No procede de un libro litúrgico español publicado. Los salmos se toman del Salterio de ATHOS ' +
-    '(Reina-Valera 1909). El tropario del día se elige según el calendario entre los que ATHOS tiene ' +
-    'traducidos; los kontakia del Menaion, del Octoecos y del Triodion siguen pendientes de incorporar.',
+    '(Reina-Valera 1909). El tropario y el kontakion del día se eligen según el calendario entre los que ' +
+    'ATHOS tiene traducidos; cuando falta el propio del santo, se dice el general de su rango o el del día ' +
+    'de la semana, como manda el Horologion.',
 };
 
 /* ---------------- Utilidades ---------------- */
@@ -46,10 +49,6 @@ export const HORAS_META: SourceMeta = {
 const t = (content: string): TextBlock => ({ kind: 'text', content });
 const rub = (content: string): TextBlock => ({ kind: 'rubric', content });
 const head = (content: string): TextBlock => ({ kind: 'heading', content });
-const pending = (what: string): TextBlock => ({
-  kind: 'pending',
-  content: `Contenido pendiente de incorporar: ${what}`,
-});
 const gr = (clave: keyof typeof G, times?: number): TextBlock => ({
   kind: 'text',
   content: G[clave].spanish,
@@ -349,10 +348,8 @@ const secciones = (hora: HoraSeed): OfficeSection[] => [
   ]),
 
   section('kontakion', 'Kontakion del día', [
-    rub('Después del Padre Nuestro se dice el kontakion del día, del santo o de la fiesta.'),
-    pending(
-      'el kontakion propio de cada día, que se toma del Menaion, del Octoecos y —en Cuaresma— del Triodion.',
-    ),
+    rub('Después del Padre Nuestro se dice el kontakion del día: el de la Resurrección los domingos, el de la fiesta o el del santo. ATHOS pone el que corresponde hoy según tu calendario.'),
+    { kind: 'day-kontakion', content: 'Kontakion del día', ref: hora.id },
   ]),
 
   section('kyrie', 'Señor, ten piedad', [
@@ -404,7 +401,7 @@ export const HORAS_OFFICES: Office[] = HORAS.map((hora, i) => ({
     'de la Hora— con su theotokion, unos versículos fijos, el Trisagio, el kontakion del día, cuarenta ' +
     'veces «Señor, ten piedad», la oración de toda hora, en Cuaresma la oración de san Efrén, y una ' +
     'oración final que sólo se dice en esta Hora.',
-  status: 'partial' as const,
+  status: 'complete' as const,
   meta: HORAS_META,
   searchText: `${hora.title} ${hora.subtitle} ${hora.greekName} ${plain(secciones(hora))}`,
 }));

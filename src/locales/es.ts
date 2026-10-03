@@ -353,6 +353,10 @@ const es = {
       'El tropario es la estrofa breve que resume por qué la Iglesia recuerda a este santo: qué hizo, qué enseñó o cómo murió. Se canta en su fiesta, en Vísperas y en Maitines, y es lo primero que se aprende de memoria de cualquier santo.',
     whatIsKontakion:
       'El kontakion es una segunda estrofa, algo más desarrollada, que se canta después de la sexta oda del canon. Suele detenerse en un episodio concreto de la vida del santo, donde el tropario da el conjunto.',
+    ownKontakion:
+      'Éste es el kontakion propio, el que se canta en la fiesta después de la sexta oda del canon y en las Horas. La versión española es una traducción hecha para ATHOS a partir del original griego, o del eslavo donde se indica, que son de dominio público.',
+    kontakionPending:
+      'ATHOS no tiene todavía el kontakion propio de esta conmemoración. No se redacta uno para llenar el hueco ni se pone el de otro santo: en las Horas de este día se dice el del día de la semana, que es lo que manda el Horologion cuando no hay otro.',
     hymnPending:
       'ATHOS no incorpora el suyo todavía: hacerlo exige una versión española cuya licencia se pueda comprobar, y aquí no se redacta un himno propio para llenar el hueco.',
     title: 'Santos',

@@ -98,12 +98,11 @@ describe('las cuatro Horas', () => {
     }
   });
 
-  it('marca como pendiente el kontakion del día en vez de inventarlo', () => {
+  it('pone el kontakion del día según el calendario, sin dejarlo pendiente', () => {
     for (const hora of HORAS_OFFICES) {
       const kontakion = hora.sections.find((s) => s.id === 'kontakion')!;
-      const pendiente = kontakion.blocks.find((b) => b.kind === 'pending');
-      expect(pendiente, hora.id).toBeDefined();
-      expect(pendiente!.content).toMatch(/Menaion|Octoecos|Triodion/);
+      expect(kontakion.blocks.some((b) => b.kind === 'pending'), hora.id).toBe(false);
+      expect(kontakion.blocks.find((b) => b.kind === 'day-kontakion')?.ref, hora.id).toBe(hora.id);
     }
   });
 

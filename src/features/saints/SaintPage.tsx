@@ -6,6 +6,7 @@ import { Blocks, Panel, Section, SourceNote, Tag, Skeleton, NotFound } from '@/c
 import { ReaderToolbar } from '@/components/Reader';
 import { RichParagraphs } from '@/components/RichText';
 import { PROPER_TROPARION_META } from '@/content/troparia-santos';
+import { KONTAKION_META, SAINT_KONTAKIA } from '@/content/kontakia';
 import { otraFicha } from '@/content/links';
 import {
   GENERAL_TROPARION_META,
@@ -40,6 +41,7 @@ export function SaintPage() {
   // trae lo que enseñaron. Sin este enlace hay que salir a buscarla.
   const comoPadre = otraFicha(item.name, 'santo');
   const general = generalTroparionFor(item.category, item.id);
+  const kontakion = SAINT_KONTAKIA[item.id];
 
   return (
     <article className="page page--reading">
@@ -127,9 +129,26 @@ export function SaintPage() {
 
       <Section title={es.saints.kontakion}>
         {esPendiente(item.kontakion) ? (
-          <Panel variant="quiet">
-            <p className="text-sm">{es.saints.whatIsKontakion}</p>
-          </Panel>
+          kontakion ? (
+            <>
+              <Panel variant="quiet">
+                <p className="text-sm">{es.saints.ownKontakion}</p>
+              </Panel>
+              <div className="tag-row" style={{ margin: 'var(--sp-3) 0' }}>
+                <Tag tone="gold">{kontakion.name}</Tag>
+                <Tag>{kontakion.tone}</Tag>
+              </div>
+              <Blocks blocks={kontakion.blocks} />
+              <SourceNote meta={KONTAKION_META} />
+            </>
+          ) : (
+            <Panel variant="quiet">
+              <p className="text-sm">{es.saints.whatIsKontakion}</p>
+              <p className="muted text-sm" style={{ marginTop: 'var(--sp-3)' }}>
+                {es.saints.kontakionPending}
+              </p>
+            </Panel>
+          )
         ) : (
           <Blocks blocks={item.kontakion ?? []} />
         )}

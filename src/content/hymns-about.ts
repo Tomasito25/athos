@@ -99,7 +99,7 @@ export const OFFICE_ABOUT: Record<string, Explicacion> = {
     about:
       'No es propiamente una Liturgia, porque en ella no se consagra: se comulga de los dones consagrados el domingo anterior, de ahí el nombre. La Iglesia no celebra la Eucaristía en los días de ayuno estricto de Gran Cuaresma, pero tampoco quiere dejar al pueblo sin comunión, y de esa tensión nace este oficio. Los libros lo atribuyen a san Gregorio Dialogista, papa de Roma, aunque la atribución es tardía y el oficio es de formación oriental.',
     structure:
-      'Es una Vísperas a la que se añade la comunión. Se celebra los miércoles y viernes de Gran Cuaresma, y algunos otros días; siempre por la tarde, porque quien va a comulgar ha ayunado todo el día. En ella se canta «Ahora las potestades celestiales», y las lecturas son del Génesis y de los Proverbios, no del Evangelio.',
+      'Es una Vísperas a la que se añade la comunión. Se celebra los miércoles y viernes de Gran Cuaresma, y algunos otros días; siempre por la tarde, porque quien va a comulgar ha ayunado todo el día. En ella se canta «Ahora las potestades celestiales», y las lecturas son del Génesis y de los Proverbios; el Apóstol y el Evangelio sólo se leen si hay un santo con fiesta y en la Semana Santa.',
   },
   visperas: {
     about:
@@ -117,7 +117,7 @@ export const OFFICE_ABOUT: Record<string, Explicacion> = {
     about:
       'El último oficio antes de dormir. Las Pequeñas Completas son breves y se rezan a diario; las Grandes Completas se usan en Gran Cuaresma y en las vísperas de las grandes fiestas, y en ellas se canta «Dios está con nosotros» y se lee la oración de Manasés. Terminan con el rito del perdón mutuo antes de retirarse.',
     structure:
-      'Salmos 50, 69 y 142 en las Pequeñas; en las Grandes, tres partes con más salmos, el canto «Dios está con nosotros» y los troparios de compunción. Después, la oración de san Juan Damasceno ante el lecho y el perdón mutuo.',
+      'Las Pequeñas: los salmos 50, 69 y 142, la doxología, el Símbolo de la Fe, los troparios, la oración de toda hora y las oraciones a la Theotokos y a Cristo. Las Grandes, en tres partes: «Dios está con nosotros» y la oración de san Basilio, la oración de Manasés y los troparios de compunción, y «Señor de las potestades» con la oración de san Efrén. Las dos terminan con el perdón mutuo y las peticiones por todos.',
   },
   medianoche: {
     about:

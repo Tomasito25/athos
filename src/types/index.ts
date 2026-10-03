@@ -48,10 +48,11 @@ export interface TextBlock {
   /**
    * `psalm` muestra entero, dentro del oficio, el salmo cuyo número (de los
    * Setenta) va en `ref`. `day-troparion` pone el tropario que corresponde al
-   * día en que se abre la página. `reading` muestra la lectura de la Escritura
-   * cuya referencia va en `ref` («Lucas 1, 39-49. 56»). Ninguno de los tres
-   * guarda texto: lo traen del Salterio, de la Biblia y del calendario, y
-   * `content` es sólo su rótulo para la búsqueda.
+   * día en que se abre la página, y `day-kontakion` el kontakion (con la Hora
+   * en `ref`, porque en Cuaresma cambia de una Hora a otra). `reading` muestra
+   * la lectura de la Escritura cuya referencia va en `ref` («Lucas 1, 39-49.
+   * 56»). Ninguno guarda texto: lo traen del Salterio, de la Biblia y del
+   * calendario, y `content` es sólo su rótulo para la búsqueda.
    */
   kind:
     | 'text'
@@ -62,6 +63,7 @@ export interface TextBlock {
     | 'pending'
     | 'psalm'
     | 'day-troparion'
+    | 'day-kontakion'
     | 'reading';
   content: string;
   /** Número de versículo, estrofa u oda, cuando aplica. */

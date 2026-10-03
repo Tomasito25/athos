@@ -11,9 +11,16 @@
  */
 import type { Office, OfficeSection, SourceMeta, TextBlock } from '@/types';
 import { OFFICE_ABOUT } from './hymns-about';
-import { HORAS_OFFICES, HORAS_RESUMEN, TODA_HORA } from './horas';
+import { HORAS_OFFICES, HORAS_RESUMEN } from './horas';
 import { PARACLISIS_OFICIO } from './paraclesis';
 import { LITURGIA_CRISOSTOMO } from './liturgia-crisostomo';
+import { LITURGIA_BASILIO } from './liturgia-basilio';
+import { VISPERAS } from './visperas';
+import { MAITINES } from './maitines';
+import { MEDIANOCHE } from './medianoche';
+import { PRESANTIFICADOS } from './presantificados';
+import { COMPLETAS } from './completas';
+import { MOLEBEN } from './moleben';
 
 const meta: SourceMeta = {
   source: 'Ieratikón y Horologion bizantinos; textos de uso tradicional',
@@ -22,18 +29,13 @@ const meta: SourceMeta = {
   license: 'traditional',
   copyright: 'Textos litúrgicos tradicionales, de dominio público en su original griego.',
   dateAdded: '2026-01-01',
-  notes: 'Se incluyen la estructura del oficio y las partes cantadas por el pueblo y el coro.',
+  translator: 'ATHOS',
+  notes:
+    'Traducción para ATHOS de los textos fijos del Hieratikon y del Horologion griegos (glt.goarch.org) y, donde se indica, del eslavo eclesiástico; no procede de un libro litúrgico español publicado. Los salmos y las lecturas se muestran tomados del Salterio y de la Biblia de la aplicación. Lo que cambia cada día —estiqueras, troparios y cánones del Octoecos, del Menaion y del Triodion— se indica en su lugar.',
 };
 
 const t = (content: string): TextBlock => ({ kind: 'text', content });
 const rub = (content: string): TextBlock => ({ kind: 'rubric', content });
-const ref = (content: string): TextBlock => ({ kind: 'refrain', content });
-/** El salmo entero, tomado del Salterio de ATHOS al mostrarse. */
-const psalm = (n: number): TextBlock => ({ kind: 'psalm', content: `Salmo ${n}`, ref: String(n) });
-const pending = (what: string): TextBlock => ({
-  kind: 'pending',
-  content: `Contenido pendiente de incorporar: ${what}`,
-});
 
 const section = (
   id: string,
@@ -87,39 +89,6 @@ const crisostomoSections: OfficeSection[] = [
 ];
 
 /* ============================================================
-   Vísperas
-   ============================================================ */
-
-const visperasSections: OfficeSection[] = [
-  section('inicio', 'Comienzo', [
-    rub('Sacerdote:'),
-    t('Bendito sea nuestro Dios, siempre, ahora y por los siglos de los siglos.'),
-    ref('Amén.'),
-    rub('Comienzo habitual: Rey celestial, Trisagio, Padre Nuestro.'),
-  ]),
-  section('salmo-103', 'Salmo introductorio', [
-    rub('Se lee o canta el salmo 103, el salmo de la creación: «Bendice, alma mía, al Señor…». Mientras se lee, el sacerdote, con las puertas cerradas, reza en voz baja las oraciones de la luz.'),
-    psalm(103),
-  ]),
-  section('letania-paz', 'Gran Letanía', [
-    rub('La misma Letanía de la Paz de la Divina Liturgia.'),
-  ]),
-  section('senor-clame', 'Señor, a Ti clamé', [
-    ref('Señor, a Ti clamé: escúchame. Escúchame, Señor.'),
-    ref('Suba mi oración como el incienso ante Ti; el alzar de mis manos, como sacrificio vespertino.'),
-    rub('Se intercalan los estijirá propios del día.'),
-  ]),
-  section('luz-alegre', 'Himno de la luz vespertina', [
-    t('Luz alegre de la santa gloria del Padre inmortal, celestial, santo, bienaventurado: Jesucristo. Llegados al ocaso del sol y viendo la luz de la tarde, cantamos al Padre, al Hijo y al Espíritu Santo, Dios. Digno eres de ser cantado en todo tiempo por voces santas, oh Hijo de Dios, que das la vida; por eso el mundo te glorifica.'),
-    rub('Es uno de los himnos cristianos más antiguos que se siguen cantando; ya san Basilio lo cita en el siglo IV como venerable y de autor desconocido.'),
-  ]),
-  section('nunc-dimittis', 'Cántico de san Simeón y despedida', [
-    t('Ahora, Señor, despides a tu siervo en paz, según tu palabra; porque han visto mis ojos tu salvación, la que has preparado ante la faz de todos los pueblos: luz para iluminar a las naciones y gloria de tu pueblo Israel.'),
-    rub('Trisagio, tropario del día y despedida.'),
-  ]),
-];
-
-/* ============================================================
    Fichas de los demás oficios
    ============================================================ */
 
@@ -140,286 +109,48 @@ const seeds: OfficeSeed[] = [
     title: 'Divina Liturgia de san Basilio el Grande',
     subtitle: 'Diez veces al año',
     kind: 'liturgia',
-    status: 'partial',
-    sections: [
-      section('estructura', 'Estructura', [
-        rub('Se celebra los cinco domingos de la Gran Cuaresma, el Jueves y el Sábado Santos, las vísperas de Navidad y Teofanía, y el 1 de enero, fiesta del santo.'),
-        t('La estructura visible es la misma de la Liturgia de san Juan Crisóstomo. Lo que cambia son las oraciones sacerdotales, mucho más extensas, y algunos himnos.'),
-        t('En lugar de «Digno es en verdad» se canta: «En ti se alegra, oh llena de gracia, toda la creación».'),
-        pending('las oraciones propias de la anáfora de san Basilio.'),
-      ]),
-    ],
+    status: 'complete',
+    sections: LITURGIA_BASILIO,
   },
   {
     id: 'presantificados',
     title: 'Liturgia de los Dones Presantificados',
     subtitle: 'Vísperas con comunión, propia de la Gran Cuaresma',
     kind: 'liturgia',
-    status: 'partial',
-    sections: [
-      section('sentido', 'Qué es', [
-        t('No es una Liturgia eucarística: no hay consagración. Se comulga de los dones consagrados el domingo anterior. Se celebra los miércoles y viernes de la Gran Cuaresma y algunos otros días, siempre por la tarde, tras un día de ayuno.'),
-        rub('Los libros lo llaman «de san Gregorio Dialogista, papa de Roma», pero esa atribución es tardía; la última sección explica de dónde viene realmente el oficio.'),
-      ]),
-      section('estructura', 'Cómo se ordena', [
-        rub('Es un oficio de Vísperas al que, después de las lecturas, se injerta la comunión. Su orden es éste:'),
-        rub('1. Bendición inicial, la misma de la Liturgia: «Bendito el Reino del Padre, y del Hijo, y del Espíritu Santo». Es lo único del comienzo que no es de Vísperas, y avisa desde la primera palabra de que aquí habrá comunión.'),
-        rub('2. Salmo 103, el de la creación, y la gran letanía.'),
-        rub('3. La kathisma decimoctava del Salterio —los salmos graduales, del 119 al 133—, leída en tres partes. Durante ella el sacerdote saca de la reserva el Cordero consagrado el domingo anterior, lo pone en la patena y prepara el cáliz.'),
-        rub('4. «Señor, a Ti clamo» con las estiqueras del día, la entrada con el incensario y el himno «Luz alegre».'),
-        pending('las estiqueras y los prokímena propios de cada día, que se toman del Triodion.'),
-        rub('5. Las dos lecturas del Antiguo Testamento: una del Génesis y otra de los Proverbios, cada una con su prokímenon.'),
-        rub('6. Entre las dos, el momento propio de este oficio.'),
-        rub('7. «Suba mi oración», con postraciones, y la oración de san Efrén.'),
-        rub('8. Las letanías, la gran entrada en silencio con los dones ya consagrados, el Padre Nuestro y la comunión.'),
-        rub('9. Acción de gracias, oración del ambón propia de este oficio y despedida.'),
-      ]),
-      section('luz-de-cristo', 'La luz de Cristo', [
-        rub('Terminada la primera lectura, el sacerdote toma el incensario y un cirio encendido, se vuelve al pueblo, traza con ellos la señal de la Cruz y proclama:'),
-        t('La luz de Cristo ilumina a todos.'),
-        rub('Todos se postran hasta el suelo mientras lo dice, y sólo se levantan cuando empieza la segunda lectura. Es uno de los pocos momentos del rito bizantino en que el pueblo no mira: la rúbrica antigua manda inclinarse porque aquella luz no es la del cirio.'),
-        rub('Los catecúmenos, que en la Iglesia antigua se preparaban en Cuaresma para el bautismo de Pascua, asistían hasta aquí; de ese uso quedan en este oficio unas letanías por ellos que no se dicen en ningún otro día del año.'),
-      ]),
-      section('himnos', 'Himnos propios', [
-        rub('Después de la segunda lectura se canta, con el sacerdote y el pueblo alternándose y con una postración en cada repetición, el versículo del salmo 140:'),
-        t('Suba mi oración como el incienso ante Ti; el alzar de mis manos, como sacrificio vespertino.'),
-        rub('En lugar del Querúbico, cuando entran los dones ya consagrados, se canta:'),
-        t('Ahora las Potestades celestiales invisiblemente concelebran con nosotros, pues he aquí que entra el Rey de la gloria. He aquí que es escoltado el sacrificio místico ya consumado. Acerquémonos con fe y amor para hacernos partícipes de la vida eterna. ¡Aleluya!'),
-        rub('Y en la comunión, en lugar del versículo de costumbre:'),
-        t('Gustad y ved qué bueno es el Señor. ¡Aleluya!'),
-        rub('Traducción para ATHOS a partir del original griego, que es de dominio público; no procede de un libro litúrgico español publicado.'),
-      ]),
-      section('por-que', 'Por qué no hay consagración', [
-        t('La Iglesia antigua no celebraba la Eucaristía en días de ayuno estricto, porque la Liturgia es siempre fiesta y la fiesta no cabe en un día de duelo. Pero tampoco quiso dejar a los fieles sin comunión durante seis semanas.'),
-        t('La solución fue ésta: consagrar el domingo un Cordero de más, guardarlo, y darlo a comulgar entre semana dentro de un oficio que no es la Liturgia sino Vísperas. Por eso se celebra al atardecer, tras un día entero de ayuno, y por eso en él no se oye nunca la anáfora.'),
-        rub('El canon 52 del Concilio Quinisexto, de 692, es el que fija esta práctica para toda la Cuaresma. Su atribución a san Gregorio Dialogista, papa de Roma, es posterior y no tiene fundamento histórico; el oficio es de formación oriental.'),
-      ]),
-    ],
+    status: 'complete',
+    sections: PRESANTIFICADOS,
   },
-  { id: 'visperas', title: 'Vísperas', subtitle: 'Hesperinós — el oficio con que empieza el día litúrgico', kind: 'visperas', sections: visperasSections, status: 'partial' },
+  { id: 'visperas', title: 'Vísperas', subtitle: 'Hesperinós — el oficio con que empieza el día litúrgico', kind: 'visperas', sections: VISPERAS, status: 'complete' },
   {
     id: 'maitines',
     title: 'Maitines',
     subtitle: 'Orthros — el oficio de la mañana',
     kind: 'maitines',
-    status: 'partial',
-    sections: [
-      section('estructura', 'Estructura', [
-        t('Salmos del rey, gran letanía, «Dios es el Señor» con los troparios, los kathismata del Salterio, el polieleos en las fiestas, el Evangelio matutino, el canon de nueve odas, los salmos de alabanza y la Gran Doxología.'),
-      ]),
-      section('exapsalmos', 'Los Seis Salmos', [
-        rub('Se leen en silencio y a media luz los salmos 3, 37, 62, 87, 102 y 142. Está prohibido moverse por la iglesia durante su lectura.'),
-        rub('Empiezan así, tres veces el canto de los ángeles en Belén y dos veces el versículo del salmo 50:'),
-        { kind: 'text', content: 'Gloria a Dios en las alturas, y en la tierra paz, buena voluntad entre los hombres.', times: 3 },
-        { kind: 'text', content: 'Señor, abre mis labios, y mi boca proclamará tu alabanza.', times: 2 },
-        psalm(3),
-        psalm(37),
-        psalm(62),
-        rub('Gloria al Padre, y al Hijo, y al Espíritu Santo, ahora y siempre, y por los siglos de los siglos. Amén. Aleluya, aleluya, aleluya, gloria a Ti, oh Dios (tres veces). Señor, ten piedad (tres veces). Gloria al Padre… ahora y siempre…'),
-        psalm(87),
-        psalm(102),
-        psalm(142),
-        rub('Y se cierra igual: Gloria…, Aleluya tres veces, Señor, ten piedad tres veces.'),
-        rub('Mientras se leen, el sacerdote reza en voz baja las doce oraciones de la mañana.'),
-      ]),
-      section('doxologia', 'Gran Doxología', [
-        rub('Al amanecer, con las puertas reales abiertas, el sacerdote exclama: «Gloria a Ti, que nos has mostrado la luz». Y se canta:'),
-        t('Gloria a Dios en las alturas, y en la tierra paz, benevolencia entre los hombres.'),
-        t('Te alabamos, te bendecimos, te adoramos, te glorificamos, te damos gracias por tu gran gloria.'),
-        t('Señor, Rey celestial, Dios Padre todopoderoso; Señor, Hijo unigénito, Jesucristo, y Espíritu Santo.'),
-        t('Señor Dios, Cordero de Dios, Hijo del Padre, que quitas el pecado del mundo, ten piedad de nosotros; Tú que quitas los pecados del mundo, recibe nuestra súplica; Tú que estás sentado a la derecha del Padre, ten piedad de nosotros.'),
-        t('Porque sólo Tú eres santo, sólo Tú eres Señor, Jesucristo, para gloria de Dios Padre. Amén.'),
-        t('Cada día te bendeciré y alabaré tu nombre por los siglos, y por los siglos de los siglos.'),
-        t('Concédenos, Señor, guardarnos este día sin pecado.'),
-        t('Bendito eres, Señor, Dios de nuestros padres, y alabado y glorificado es tu nombre por los siglos. Amén.'),
-        t('Venga, Señor, tu misericordia sobre nosotros, como lo esperamos de Ti.'),
-        t('Bendito eres, Señor, enséñame tus mandamientos.'),
-        rub('Tres veces.'),
-        t('Señor, Tú has sido nuestro refugio de generación en generación. Yo dije: Señor, ten piedad de mí, sana mi alma, porque he pecado contra Ti.'),
-        t('Señor, en Ti me refugio: enséñame a hacer tu voluntad, porque Tú eres mi Dios.'),
-        t('Porque en Ti está la fuente de la vida, y en tu luz veremos la luz. Extiende tu misericordia sobre los que te conocen.'),
-        t('Santo Dios, Santo Fuerte, Santo Inmortal, ten piedad de nosotros.'),
-        rub('Tres veces. Y después: Gloria al Padre… ahora y siempre… Santo Inmortal, ten piedad de nosotros. Y una vez más, con canto más solemne: Santo Dios, Santo Fuerte, Santo Inmortal, ten piedad de nosotros.'),
-        rub('Traducción para ATHOS a partir del original griego, que es de dominio público; no procede de un libro litúrgico español publicado.'),
-      ]),
-    ],
+    status: 'complete',
+    sections: MAITINES,
   },
   {
     id: 'completas',
     title: 'Completas',
     subtitle: 'Apódeipnon — después de la cena',
     kind: 'completas',
-    status: 'partial',
-    sections: [
-      section('que-es', 'Pequeñas y Grandes', [
-        t('Apódeipnon significa literalmente «después de la cena», y eso es: la última oración del día, hecha ya en casa o en el monasterio, antes de acostarse. No es un oficio de la iglesia catedral sino de la celda, y se nota en su tono: casi todo él está en primera persona del singular.'),
-        t('Hay dos formas. Las Completas Pequeñas son las de uso diario. Las Grandes se rezan en la Gran Cuaresma y en las vigilias de las grandes fiestas: son mucho más largas, están divididas en tres partes y llevan el canto «Dios está con nosotros».'),
-        rub('Lo que sigue son las Completas Pequeñas. Las Grandes están descritas en la última sección.'),
-      ]),
-
-      section('comienzo', 'Comienzo habitual', [
-        rub('Como toda regla: «Bendito sea nuestro Dios», el Trisagio, el Padre Nuestro y las oraciones iniciales.'),
-        rub('El texto completo está en Orar → Oraciones → Comienzo habitual.'),
-      ]),
-
-      section('salmos', 'Los tres salmos', [
-        rub('Se leen seguidos, sin canto, tres salmos que dicen lo mismo de tres maneras: el 50, el 69 y el 142.'),
-        rub('El 50 es el de la penitencia, el mismo que abre casi todos los oficios. El 69 es un grito breve: «Dios mío, ven en mi auxilio». El 142 es la última súplica del día: «No entres en juicio con tu siervo».'),
-        psalm(50),
-        psalm(69),
-        psalm(142),
-      ]),
-
-      section('doxologia', 'Doxología', [
-        rub('Se lee, no se canta, la misma doxología que en Maitines se canta al final: «Gloria a Dios en las alturas y en la tierra paz».'),
-        rub('El texto está en Biblioteca → Maitines → Gran Doxología.'),
-      ]),
-
-      section('simbolo', 'Símbolo de la Fe', [
-        rub('Se recita entero. Está en Orar → Oraciones → Símbolo de la Fe.'),
-        rub('Que el Credo aparezca aquí, dicho en voz baja por una persona sola antes de dormir, y no sólo en la Liturgia, dice bastante sobre lo que la Iglesia entiende por profesar la fe.'),
-      ]),
-
-      section('canon', 'El canon', [
-        rub('Después del Símbolo se canta un canon, que cambia según el día: el del Ángel Custodio, alguno de los cánones de arrepentimiento, o el canon a la Theotokos del Octoecos correspondiente al tono de la semana.'),
-        pending('los cánones variables que se cantan en este lugar, que se toman del Octoecos y del Triodion.'),
-      ]),
-
-      section('digno-es', 'Digno es en verdad', [
-        rub('Terminado el canon:'),
-        t('Digno es en verdad bendecirte a ti, Theotokos, siempre bienaventurada y purísima, y Madre de nuestro Dios. Más honorable que los querubines e incomparablemente más gloriosa que los serafines, tú que sin mancha diste a luz al Verbo de Dios, verdadera Theotokos, te engrandecemos.'),
-      ]),
-
-      section('trisagio-troparios', 'Trisagio y troparios', [
-        rub('El Trisagio y el Padre Nuestro otra vez, y después estos troparios, que son los de los días ordinarios:'),
-        t('Ten piedad de nosotros, Señor, ten piedad de nosotros; porque, sin saber qué alegar en nuestra defensa, los pecadores te ofrecemos esta súplica como a Soberano: ten piedad de nosotros.'),
-        rub('Gloria al Padre, y al Hijo, y al Espíritu Santo.'),
-        t('Señor, ten piedad de nosotros, porque en Ti hemos confiado. No te enojes demasiado con nosotros ni recuerdes nuestras iniquidades; mira ahora, como compasivo, y líbranos de nuestros enemigos; porque Tú eres nuestro Dios y nosotros tu pueblo, todos obra de tus manos, y tu nombre invocamos.'),
-        rub('Ahora y siempre, y por los siglos de los siglos. Amén.'),
-        t('Ábrenos la puerta de tu compasión, bendita Theotokos; para que, esperando en ti, no perezcamos, sino que por ti nos veamos libres de las desgracias, porque tú eres la salvación del pueblo cristiano.'),
-        rub('Traducción para ATHOS a partir del original griego, que es de dominio público; no procede de un libro litúrgico español publicado.'),
-      ]),
-
-      section('kyrie', 'Señor, ten piedad', [
-        rub('Cuarenta veces, sin prisa, como en las Horas.'),
-      ]),
-
-      section('toda-hora', 'Oración de toda hora', [
-        rub('La misma que se dice en las cuatro Horas.'),
-        ...TODA_HORA,
-      ]),
-
-      section('basilio-noche', 'Oración de la noche', [
-        rub('Atribuida a san Basilio el Grande. Es la oración central de las Completas:'),
-        t('Señor, Señor, que nos libraste de toda saeta que vuela de día, líbranos de todo lo que anda en las tinieblas. Recibe como sacrificio vespertino la elevación de nuestras manos. Concédenos pasar sin culpa el curso de la noche, sin que nos alcance el mal, y líbranos de toda turbación y de todo temor que nos venga del diablo. Da compunción a nuestras almas, y a nuestra mente cuidado por el examen de tu juicio temible y justo. Clava nuestra carne en tu temor y mortifica nuestros miembros terrenos, para que también en la quietud del sueño quedemos iluminados por la contemplación de tus juicios. Aparta de nosotros toda imaginación indecente y todo deseo dañino. Y levántanos a la hora de la oración afianzados en la fe y adelantados en tus mandamientos. Por la benevolencia y la bondad de tu Hijo unigénito, con quien eres bendito, junto con tu santísimo, bueno y vivificador Espíritu, ahora y siempre, y por los siglos de los siglos. Amén.'),
-        rub('Traducción para ATHOS a partir del original griego, que es de dominio público; no procede de un libro litúrgico español publicado.'),
-      ]),
-
-      section('theotokos-noche', 'Oración a la Theotokos', [
-        rub('De Pablo, monje del monasterio de Evergetis, en el siglo XI:'),
-        t('Inmaculada, incontaminada, incorrupta, purísima y casta Virgen, Esposa de Dios y Soberana, que por tu admirable alumbramiento uniste a Dios Verbo con los hombres y juntaste con las cosas del cielo la naturaleza caída de nuestro linaje; única esperanza de los desesperados y auxilio de los combatidos, pronta protección de los que acuden a ti y refugio de todos los cristianos: no me desprecies a mí, pecador y manchado, que con pensamientos, palabras y obras vergonzosas me he hecho inútil del todo y, por pereza de la mente, me he vuelto esclavo de los placeres de la vida.'),
-        t('Antes bien, como Madre del Dios que ama a los hombres, ten compasión de mí, pecador y pródigo, y acoge esta súplica que te ofrezco con labios impuros. Usando de tu confianza de madre, pide a tu Hijo, Soberano y Señor nuestro, que me abra las entrañas compasivas de su bondad, que pase por alto mis faltas incontables y me convierta al arrepentimiento, y me haga cumplidor probado de sus mandamientos. Y quédate siempre a mi lado, como misericordiosa, compasiva y amante del bien; sé en esta vida mi defensora ardiente y auxiliadora, apartando los asaltos de los enemigos y guiándome hacia la salvación; y en la hora de mi muerte abraza mi alma desdichada y aleja de ella lejos las tenebrosas apariencias de los espíritus malignos.'),
-        t('Y en el día terrible del juicio líbrame del castigo eterno, y muéstrame heredero de la gloria inefable de tu Hijo y Dios nuestro; alcánzalo, Señora mía, santísima Theotokos, por tu intercesión y tu amparo, por la gracia y el amor a los hombres de tu Hijo unigénito, Señor y Dios y Salvador nuestro Jesucristo, a quien corresponde toda gloria, honor y adoración, con su Padre sin principio y su santísimo, bueno y vivificador Espíritu, ahora y siempre, y por los siglos de los siglos. Amén.'),
-        rub('Traducción para ATHOS a partir del original griego, que es de dominio público; no procede de un libro litúrgico español publicado.'),
-      ]),
-
-      section('antioco', 'Oración a Cristo', [
-        rub('De san Antíoco, monje de la laura de San Sabas, en el siglo VII:'),
-        t('Y danos, Soberano, al ir a dormir, descanso de cuerpo y alma; y guárdanos del sombrío sueño del pecado y de todo placer oscuro de la noche. Aplaca los ímpetus de las pasiones, apaga los dardos encendidos del maligno que vienen contra nosotros con engaño. Calma las rebeliones de nuestra carne y adormece todo pensamiento nuestro terreno y material.'),
-        t('Y concédenos, oh Dios, mente vigilante, pensamiento casto, corazón sobrio, y un sueño ligero y libre de toda fantasía del enemigo. Levántanos a la hora de la oración afianzados en tus mandamientos y guardando firme dentro de nosotros el recuerdo de tus juicios. Concédenos glorificarte toda la noche, para que cantemos, bendigamos y glorifiquemos tu nombre honorabilísimo y magnífico, del Padre, y del Hijo, y del Espíritu Santo, ahora y siempre, y por los siglos de los siglos. Amén.'),
-        rub('Traducción para ATHOS a partir del original griego, que es de dominio público; no procede de un libro litúrgico español publicado.'),
-      ]),
-
-      section('esperanza', 'Mi esperanza', [
-        rub('El verso con que se cierra el oficio, que resume en una línea todo lo dicho:'),
-        ref('Mi esperanza es el Padre, mi refugio el Hijo, mi protección el Espíritu Santo. Trinidad Santa, gloria a Ti.'),
-      ]),
-
-      section('perdon', 'El perdón mutuo', [
-        rub('Las Completas no terminan con una bendición sino con una petición de perdón, que en los monasterios se hace en voz alta y con una inclinación. Es lo último que se dice en el día.'),
-        t('Perdonadme, padres y hermanos, a mí, pecador, todo aquello en que he pecado hoy de obra, de palabra y de pensamiento, y con todos mis sentidos.'),
-        rub('Y se responde:'),
-        t('Dios te perdone, hermano, y tenga piedad de nosotros.'),
-        rub('Después no se habla más hasta el día siguiente. La regla del silencio nocturno no es un castigo: es lo que hace posible que la última palabra del día sea ésa y no otra.'),
-      ]),
-
-      section('damasceno', 'Al acostarse', [
-        rub('Ya en el lecho, antes de dormirse, se dice esta oración de san Juan Damasceno, que es lo último del día:'),
-        t('Soberano amante de los hombres: ¿será este lecho mi sepulcro, o iluminarás todavía con otro día mi alma miserable? He aquí que el sepulcro está delante de mí, he aquí que la muerte se me presenta. Tu juicio temo, Señor, y el castigo sin fin; y sin embargo no dejo de hacer el mal. A Ti, Señor Dios mío, te irrito continuamente, y a tu Madre purísima, y a todas las Potestades celestiales, y a mi santo ángel custodio.'),
-        t('Sé, Señor, que soy indigno de tu amor a los hombres, y que merezco toda condena y todo castigo. Pero, Señor, quieras o no, sálvame. Porque salvar a un justo no tiene mérito, ni es maravilla tener piedad de los puros, que son dignos de tu misericordia; muestra en mí, pecador, la maravilla de tu piedad. En eso se manifiesta tu amor a los hombres: en que mi maldad no venza tu bondad y tu misericordia, que no tienen medida. Y dispón de mí como quieras.'),
-        rub('Traducción para ATHOS a partir del original griego, que es de dominio público; no procede de un libro litúrgico español publicado.'),
-      ]),
-
-      section('grandes', 'Las Completas Grandes', [
-        t('Se rezan en la Gran Cuaresma, en las vigilias de Navidad, Teofanía y Anunciación, y en algunas fiestas. Duran más de una hora y están divididas en tres partes, cada una con su propio comienzo y su propio final, de modo que pueden separarse.'),
-        rub('Primera parte. Los salmos 4, 6 y 12; después el canto «Dios está con nosotros», tomado de Isaías, con su estribillo repetido:'),
-        ref('Porque Dios está con nosotros.'),
-        rub('Los versículos son de Isaías 8 y 9, y están en Leer → Biblia → Isaías. Siguen unos troparios de la noche, el Símbolo de la Fe y la letanía «Santísima Soberana Theotokos, intercede por nosotros, pecadores», en la que se invoca por orden a los ángeles, al Precursor, a los apóstoles y a todos los santos.'),
-        rub('Segunda parte. Los salmos 24, 30 y 90; troparios de penitencia; y la oración de Manasés, rey de Judá, que es uno de los textos del Antiguo Testamento griego:'),
-        t('Señor omnipotente, Dios de nuestros padres, de Abrahán, de Isaac y de Jacob, y de su descendencia justa; Tú que hiciste el cielo y la tierra con todo su ornato; que encadenaste el mar con la palabra de tu mandato; que cerraste el abismo y lo sellaste con tu nombre temible y glorioso; ante quien todas las cosas se estremecen y tiemblan delante de tu poder, porque nadie puede resistir la magnificencia de tu gloria, y es insoportable la ira de tu amenaza contra los pecadores. Pero es inmensa e insondable la misericordia de tu promesa, porque Tú eres el Señor altísimo, compasivo, paciente y de mucha misericordia, y te arrepientes de los males de los hombres.'),
-        t('Tú, Señor, según la muchedumbre de tu bondad, prometiste el arrepentimiento y el perdón a los que han pecado contra Ti, y en tu inmensa compasión determinaste la penitencia para los pecadores, para su salvación. Tú, pues, Señor, Dios de los justos, no pusiste el arrepentimiento para los justos, para Abrahán, Isaac y Jacob, que no pecaron contra Ti, sino que pusiste el arrepentimiento para mí, pecador; porque he pecado más que la arena del mar. Mis iniquidades se han multiplicado, Señor, se han multiplicado, y no soy digno de levantar los ojos y ver la altura del cielo por la multitud de mis injusticias.'),
-        t('Estoy encorvado bajo el peso de muchas cadenas de hierro, de modo que no puedo levantar la cabeza, y no hay para mí respiro; porque provoqué tu ira e hice lo malo delante de Ti: no cumplí tu voluntad ni guardé tus mandamientos, puse abominaciones y multipliqué los escándalos. Y ahora doblo las rodillas de mi corazón, suplicando tu bondad. He pecado, Señor, he pecado, y reconozco mis iniquidades. Pero pido y te ruego: perdóname, Señor, perdóname, y no me pierdas con mis iniquidades, ni guardes para siempre rencor a mis males, ni me condenes a lo profundo de la tierra; porque Tú, Señor, eres el Dios de los que se arrepienten. Y en mí mostrarás toda tu bondad, porque, indigno como soy, me salvarás según tu gran misericordia, y te alabaré sin cesar todos los días de mi vida. Porque a Ti te alaban todas las potestades de los cielos, y tuya es la gloria por los siglos de los siglos. Amén.'),
-        rub('Traducción para ATHOS a partir del original griego de los Setenta, que es de dominio público; no procede de una Biblia española publicada.'),
-        rub('Tercera parte. Los salmos 69 y 142, la doxología y el canon; en la primera semana de Cuaresma, el Gran Canon de san Andrés de Creta repartido en cuatro noches. Después, el Trisagio, el estribillo propio de estas Completas:'),
-        ref('Señor de las potestades, quédate con nosotros, porque no tenemos otro auxilio en las tribulaciones sino a Ti. Señor de las potestades, ten piedad de nosotros.'),
-        rub('Y el final es el mismo de las Completas Pequeñas: la oración de san Basilio, las oraciones a la Theotokos y a Cristo, y el perdón mutuo. En Cuaresma se añade la oración de san Efrén con postraciones, que está en Orar → Oraciones.'),
-      ]),
-
-      section('salmo-90', 'Salmo de protección', [
-        rub('El salmo 90, «El que habita al abrigo del Altísimo», se lee en las Completas Grandes y es el salmo nocturno por excelencia de la tradición cristiana.'),
-        psalm(90),
-      ]),
-    ],
+    status: 'complete',
+    sections: COMPLETAS,
   },
   {
     id: 'medianoche',
     title: 'Oficio de Medianoche',
     subtitle: 'Mesonyktikón',
     kind: 'medianoche',
-    status: 'partial',
-    sections: [
-      section('sentido', 'Por qué a medianoche', [
-        rub('Se reza al levantarse de noche, esperando al Esposo que llega a medianoche. En los monasterios abre el ciclo diario: es el primer oficio del día, antes de Maitines.'),
-      ]),
-      section('comienzo', 'Comienzo habitual', [
-        rub('Se empieza como toda regla: Trisagio, Padre Nuestro y las oraciones iniciales.'),
-        rub('El texto completo está en Orar → Oraciones → Comienzo habitual.'),
-      ]),
-      section('salmo-50', 'Salmo 50', [
-        rub('El salmo del arrepentimiento, que abre casi todos los oficios.'),
-        psalm(50),
-      ]),
-      section('kathisma-17', 'Salmo 118', [
-        rub('El salmo más largo del Salterio, la kathisma decimoséptima, dividida en tres estasis. Es el corazón del oficio los días de diario.'),
-        psalm(118),
-        rub('Los domingos se sustituye por el canon a la Santísima Trinidad, del Octoecos, cuyo texto no está incorporado todavía.'),
-      ]),
-      section('simbolo', 'Símbolo de la Fe', [
-        rub('Se recita entero. Está en Orar → Oraciones → Símbolo de la Fe.'),
-      ]),
-      section('propios', 'Troparios y oraciones del oficio', [
-        rub('Después del Símbolo de la Fe y del Trisagio se cantan los troparios de la vigilia, que dan sentido a todo el oficio: la espera del Esposo que llega a medianoche.'),
-        t('He aquí que el Esposo viene a medianoche, y bienaventurado el siervo a quien encuentre velando; pero indigno aquel a quien halle negligente. Mira, pues, alma mía, no te dejes vencer por el sueño, no sea que seas entregada a la muerte y quedes fuera del Reino; antes bien, despierta clamando: Santo, Santo, Santo eres, oh Dios; por la intercesión de la Theotokos, ten piedad de nosotros.'),
-        t('Pensando en aquel día terrible, alma mía, vela, enciende tu lámpara y hazla brillar con aceite; porque no sabes cuándo vendrá a ti la voz que dice: He aquí el Esposo. Mira, pues, alma mía, no te duermas, no sea que te quedes fuera llamando, como las cinco vírgenes; vela, en cambio, sin descanso, para salir con aceite abundante al encuentro de Cristo Dios, y que Él te dé la cámara nupcial divina de su gloria.'),
-        rub('Y la oración del oficio, atribuida a san Basilio:'),
-        t('Te bendecimos, oh Dios altísimo y Señor de la misericordia, que siempre haces con nosotros cosas grandes e inescrutables, gloriosas y admirables, sin número; que nos concediste el sueño para descanso de nuestra debilidad y reposo de las fatigas de nuestra carne. Te damos gracias porque no nos has hecho perecer con nuestras iniquidades, sino que, amando a los hombres como siempre, nos has levantado cuando yacíamos sin esperanza, para que glorifiquemos tu poder. Por eso suplicamos a tu bondad inconmensurable: ilumina los ojos de nuestro entendimiento y levanta nuestra mente del pesado sueño de la pereza; abre nuestra boca y llénala de tu alabanza, para que podamos cantarte, confesarte y glorificarte sin distracción, a Ti, Dios glorificado en todo y por todos, Padre sin principio, con tu Hijo unigénito y tu santísimo, bueno y vivificador Espíritu, ahora y siempre, y por los siglos de los siglos. Amén.'),
-        rub('Traducción para ATHOS a partir del original griego, que es de dominio público; no procede de un libro litúrgico español publicado.'),
-        rub('Los sábados y los domingos el oficio cambia: el domingo la kathisma 118 se sustituye por el canon a la Santísima Trinidad del Octoecos, y el sábado por unos troparios propios. En los dos casos se añade además una oración atribuida a san Marcos el Monje, asceta del siglo V.'),
-        pending('la oración de san Marcos el Monje y los troparios propios del sábado y del domingo. No se transcriben de memoria: hasta comprobar el texto, es preferible decir que faltan.'),
-      ]),
-      section('difuntos', 'Conmemoración de los difuntos', [
-        rub('El oficio de Medianoche termina cada día con una conmemoración de los difuntos: en la tradición monástica es el momento fijo en que se reza por ellos.'),
-        t('Acuérdate, Señor, de los que se han dormido en la esperanza de la resurrección y de la vida eterna, y da descanso a sus almas donde brilla la luz de tu rostro.'),
-        rub('Traducción para ATHOS a partir del uso corriente del oficio; no procede de un libro litúrgico español publicado.'),
-      ]),
-    ],
+    status: 'complete',
+    sections: MEDIANOCHE,
   },
   {
     id: 'horas',
     title: 'Las Horas',
     subtitle: 'Primera, Tercera, Sexta y Novena',
     kind: 'horas',
-    status: 'partial',
+    status: 'complete',
     sections: [
       section('sentido', 'Las cuatro horas del día', [
         rub('El día antiguo se contaba desde el amanecer y se marcaba de tres en tres horas. La Iglesia rezó en esas cuatro señales, y a cada una le quedó la memoria de un momento de la Pasión o de Pentecostés.'),
@@ -453,29 +184,8 @@ const seeds: OfficeSeed[] = [
     title: 'Moleben',
     subtitle: 'Oficio de súplica',
     kind: 'moleben',
-    status: 'partial',
-    sections: [
-      section('sentido', 'Cuándo se pide', [
-        rub('Oficio breve de intercesión que se celebra por una necesidad concreta: por un enfermo, por los que viajan, al empezar el curso o una obra, o en acción de gracias. Se pide al sacerdote y dura entre veinte minutos y media hora.'),
-      ]),
-      section('orden', 'Cómo va', [
-        rub('1. Bendición inicial y la gran letanía de la paz.'),
-        rub('2. «Dios es el Señor» con el tropario del santo o de la necesidad por la que se pide.'),
-        rub('3. Salmo 50 (Leer → Salterio → Salmo 50).'),
-        rub('4. El canon del santo o de la ocasión, con sus odas.'),
-        rub('5. Evangelio.'),
-        rub('6. Letanía intensa, con los nombres de aquellos por quienes se pide.'),
-        rub('7. Oración de súplica del sacerdote y despedida.'),
-      ]),
-      section('letania', 'La letanía intensa', [
-        rub('Es el momento en que se leen los nombres. El coro responde a cada petición:'),
-        ref('Señor, ten piedad. <em>(tres veces)</em>'),
-        rub('Los nombres se entregan por escrito antes de empezar, de bautismo y sin apellidos.'),
-      ]),
-      section('propios', 'Lo que cambia según la ocasión', [
-        pending('los cánones y las oraciones propias de cada moleben: por los enfermos, por los viajeros, de acción de gracias.'),
-      ]),
-    ],
+    status: 'complete',
+    sections: MOLEBEN,
   },
   {
     id: 'paraclesis',

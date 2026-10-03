@@ -191,6 +191,10 @@ export default defineConfig({
           // aplicación no las usa nunca. Casi un mega que no hace falta tener
           // descargado antes de poder empezar a rezar.
           'icons/screenshot-*.png',
+          // Las pantallas de arranque de iOS las lee Safari al añadir la
+          // aplicación a la pantalla de inicio, y las guarda él; la aplicación
+          // no las pide nunca. Son casi 240 KB.
+          'icons/splash-*.png',
           'icons/og-image.png',
           'icons/icon-192.png',
           'icons/icon-512.png',

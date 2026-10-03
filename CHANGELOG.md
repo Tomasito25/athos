@@ -2,6 +2,64 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.26.0]
+
+### Añadido
+
+- **Los oficios, enteros.** Ninguno se queda ya en esqueleto ni con huecos
+  pendientes. Traducidos del Hieratikon y del Horologion griegos, oración por
+  oración:
+  - la **Divina Liturgia de san Juan Crisóstomo**, de la preparación a la
+    despedida, con la anáfora entera y las oraciones que el sacerdote dice en
+    voz baja;
+  - la **Liturgia de san Basilio**, con su anáfora, que recorre la historia de
+    la salvación, y «En ti se alegra»;
+  - la **Liturgia de los Presantificados**: la kathisma 18 mientras se
+    traslada el Cordero, «La luz de Cristo ilumina a todos», «Suba mi
+    oración», la gran entrada en silencio, la oración detrás del ambón propia
+    de la Cuaresma y, del eslavo, la letanía por los que se preparan para el
+    bautismo;
+  - **Vísperas**, con las siete oraciones de la luz y los prokímena de cada
+    día; **Maitines**, con el Hexapsalmo, las doce oraciones de la mañana y
+    las odas bíblicas del canon; el **Oficio de Medianoche**, diario, del
+    sábado y del domingo;
+  - las **Completas Pequeñas y Grandes**, con «Dios está con nosotros», el
+    himno de los ángeles, la oración de Manasés y «Señor de las potestades».
+- **El kontakion del día en las Horas**, como ya lo estaba el tropario: el de
+  la Resurrección del tono los domingos, el de la fiesta, el del santo, y si
+  no hay ninguno, el del día de la semana. En los días de diario de la
+  Cuaresma, lo que el Horologion pone en su lugar, distinto en cada Hora.
+  Nuevos los ocho kontakia de la Resurrección, los del Triodion y el
+  Pentecostarion, los de las grandes fiestas y los de los santos que tienen
+  tropario propio, que ahora lo muestran también en su ficha.
+- **El Moleben**, con su orden común y tres enteros, traducidos del Trebnik
+  eslavo: el de **acción de gracias**, con «A Ti, Dios, te alabamos», el de
+  los **enfermos** y el de los que **se ponen en camino**.
+- **Los cánones y los akathistos, todos enteros**: el Gran Canon de san
+  Andrés, la Paráclesis con su oficio, el canon de la Comunión, el Canon
+  Pascual con todos sus troparios, el del Ángel de la Guarda, el de la
+  separación del alma y el canon por un difunto; los akathistos al Dulcísimo
+  Jesús, a san Nicolás y a la Pasión.
+- Las lecturas de la Escritura que forman parte de un oficio —las odas
+  bíblicas de Maitines, los Evangelios de la Paráclesis y del Moleben— se leen
+  dentro del oficio, tomadas de la Biblia de ATHOS.
+
+### Corregido
+
+- Los troparios «Ten piedad de nosotros, Señor» estaban en las Completas
+  Pequeñas y son de la segunda parte de las Grandes; la oración de san
+  Basilio, también de las Grandes. La de san Juan Damasceno se presentaba como
+  parte del oficio y es de las oraciones antes de dormir: ahora lo dice.
+- El Canon Pascual se declaraba completo y sólo tenía los irmos.
+- El estribillo del canon de la Comunión era el de otro canon, y el del
+  akathistos de la Pasión estaba mal.
+- La oración de Medianoche que se atribuía a san Marcos el Monje es de san
+  Mardario.
+- Se retira el llamado «akathistos por los difuntos», que la Iglesia rusa
+  desaconseja; en su lugar está el canon por un difunto del libro de oración.
+- Las pantallas de arranque de iOS ya no entran en el precaché: Safari las
+  guarda por su cuenta. El precaché queda en 4,7 MB.
+
 ## [1.25.0]
 
 ### Añadido

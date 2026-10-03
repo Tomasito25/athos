@@ -1,10 +1,14 @@
 /**
- * Leccionario — lecturas del día.
+ * Leccionario — la tabla verificada a mano.
  *
- * ATHOS incorpora únicamente las perícopas que se han podido verificar. El
- * ciclo diario completo (Octoecos + Menaion) es muy extenso y no se inventa:
- * los días sin entrada muestran «Contenido pendiente de incorporar» y pueden
- * completarse importando una tabla desde Configuración → Datos.
+ * Las lecturas de cada día las sirve el leccionario completo generado desde
+ * orthocal (`src/db/lectionary.ts`), que cubre todos los días de 2024 a 2045.
+ * Esta tabla es la que ATHOS tenía antes, comprobada perícopa a perícopa: se
+ * usa como respaldo si el archivo generado no ha llegado a cargarse, y las
+ * pruebas comprueban en varios días que los dos dicen lo mismo. Fuera de esos años,
+ * o sin ninguno de los dos, el día muestra «Contenido pendiente de
+ * incorporar», y se puede completar importando una tabla desde
+ * Configuración → Datos.
  *
  * Clave `pascha:{offset}` para el ciclo móvil y `fixed:{MM-DD}` para el fijo.
  */

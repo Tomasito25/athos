@@ -31,7 +31,8 @@ export interface PsalmSourceRange {
 
 /**
  * Correspondencia LXX → hebreo.
- * Salmo 151 no forma parte del canon hebreo y queda pendiente de incorporar.
+ * El Salmo 151 no forma parte del canon hebreo: su texto llega aparte, de la
+ * Biblia libre para el mundo (véase `PSALM_151_META`).
  */
 export function hebrewSourceFor(lxx: number): PsalmSourceRange[] | null {
   if (lxx >= 1 && lxx <= 8) return [{ chapter: lxx }];

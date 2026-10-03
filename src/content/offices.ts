@@ -13,6 +13,7 @@ import type { Office, OfficeSection, SourceMeta, TextBlock } from '@/types';
 import { OFFICE_ABOUT } from './hymns-about';
 import { HORAS_OFFICES, HORAS_RESUMEN, TODA_HORA } from './horas';
 import { PARACLISIS_OFICIO } from './paraclesis';
+import { LITURGIA_CRISOSTOMO } from './liturgia-crisostomo';
 
 const meta: SourceMeta = {
   source: 'Ieratikón y Horologion bizantinos; textos de uso tradicional',
@@ -81,126 +82,8 @@ const crisostomoSections: OfficeSection[] = [
   ], 'sacerdote'),
 
 
-  section('bendicion-inicial', 'Bendición inicial', [
-    rub('Diácono:'),
-    t('Bendice, señor.'),
-    rub('Sacerdote:'),
-    t('Bendito sea el reino del Padre, y del Hijo, y del Espíritu Santo, ahora y siempre, y por los siglos de los siglos.'),
-    ref('Amén.'),
-  ]),
-
-  section('gran-letania', 'Gran Letanía de la Paz', [
-    rub('Diácono, y el coro responde «Señor, ten piedad» a cada petición:'),
-    t('En paz, oremos al Señor.'),
-    t('Por la paz de lo alto y por la salvación de nuestras almas, oremos al Señor.'),
-    t('Por la paz del mundo entero, por la estabilidad de las santas Iglesias de Dios y por la unión de todos, oremos al Señor.'),
-    t('Por esta santa casa y por quienes entran en ella con fe, piedad y temor de Dios, oremos al Señor.'),
-    t('Por los que navegan, los que viajan, los enfermos, los que sufren, los cautivos, y por su salvación, oremos al Señor.'),
-    t('Por que seamos librados de toda tribulación, ira, peligro y necesidad, oremos al Señor.'),
-    t('Socórrenos, sálvanos, ten piedad de nosotros y guárdanos, oh Dios, por tu gracia.'),
-    t('Conmemorando a la santísima, purísima, bendita y gloriosa Señora nuestra, la Theotokos y siempre Virgen María, junto con todos los santos, encomendémonos a nosotros mismos, unos a otros, y toda nuestra vida a Cristo Dios.'),
-    ref('A Ti, Señor.'),
-    rub('Exclamación del sacerdote:'),
-    t('Porque a Ti corresponde toda gloria, honor y adoración: al Padre, y al Hijo, y al Espíritu Santo, ahora y siempre, y por los siglos de los siglos.'),
-    ref('Amén.'),
-  ]),
-
-  section('antifonas', 'Antífonas', [
-    rub('Se cantan tres antífonas, separadas por pequeñas letanías. En los domingos ordinarios se emplean los salmos típicos; en las fiestas, las antífonas propias.'),
-    t('Por las oraciones de la Theotokos, Salvador, sálvanos.'),
-    rub('Segunda antífona, seguida del himno:'),
-    t('Hijo unigénito y Verbo de Dios, que siendo inmortal te dignaste, por nuestra salvación, encarnarte de la santa Theotokos y siempre Virgen María, y sin cambiar te hiciste hombre; y crucificado, oh Cristo Dios, con tu muerte venciste a la muerte: siendo uno de la santa Trinidad, glorificado con el Padre y el Espíritu Santo, sálvanos.'),
-    rub('Tercera antífona: las Bienaventuranzas o los versículos propios de la fiesta.'),
-  ]),
-
-  section('pequena-entrada', 'Pequeña Entrada', [
-    rub('Se lleva en procesión el Evangeliario. Diácono:'),
-    t('¡Sabiduría! ¡De pie!'),
-    ref('Venid, adoremos y postrémonos ante Cristo. Sálvanos, Hijo de Dios, que resucitaste de entre los muertos, a los que te cantamos: ¡Aleluya!'),
-    rub('Se cantan los troparios y kontakia del día.'),
-  ]),
-
-  section('trisagio', 'Himno Trisagio', [
-    ref('Santo Dios, Santo Fuerte, Santo Inmortal, ten piedad de nosotros. <em>(tres veces)</em>'),
-    t('Gloria al Padre, y al Hijo, y al Espíritu Santo, ahora y siempre, y por los siglos de los siglos. Amén.'),
-    ref('Santo Inmortal, ten piedad de nosotros.'),
-    ref('Santo Dios, Santo Fuerte, Santo Inmortal, ten piedad de nosotros.'),
-    rub('En Pascua, Navidad, Teofanía, Pentecostés y el Sábado Santo se canta en su lugar: «Cuantos habéis sido bautizados en Cristo, de Cristo os habéis revestido. Aleluya». En la Exaltación de la Cruz: «Ante tu Cruz nos postramos, Soberano».'),
-  ]),
-
-  section('lecturas', 'Lecturas', [
-    rub('Diácono:'),
-    t('¡Atendamos! ¡Sabiduría! ¡Atendamos!'),
-    rub('Se canta el prokímenon, se lee el Apóstol, se canta el Aleluya y se proclama el Evangelio. Las lecturas del día se muestran en la pantalla de Inicio y en el Calendario.'),
-    ref('Gloria a Ti, Señor, gloria a Ti.'),
-  ]),
-
-  section('letania-ferviente', 'Letanía ferviente y letanía de los catecúmenos', [
-    rub('Diácono; el coro responde «Señor, ten piedad» tres veces a cada petición:'),
-    t('Digamos todos con toda el alma y con todo el entendimiento, digamos.'),
-    t('Señor todopoderoso, Dios de nuestros padres, te rogamos: escúchanos y ten piedad.'),
-    rub('Después, la letanía por los catecúmenos y su despedida.'),
-    t('Cuantos sois catecúmenos, salid. Que ninguno de los catecúmenos permanezca.'),
-  ]),
-
-  section('gran-entrada', 'Gran Entrada · Himno Querúbico', [
-    ref('Nosotros, que místicamente representamos a los querubines y cantamos el himno tres veces santo a la Trinidad vivificante, dejemos ahora toda preocupación mundana.'),
-    rub('Se lleva en procesión el pan y el vino desde la prótesis al altar. Después:'),
-    ref('Para recibir al Rey de todos, escoltado invisiblemente por los ejércitos angélicos. ¡Aleluya, aleluya, aleluya!'),
-    rub('El Jueves Santo y el Sábado Santo se cantan himnos propios en lugar del Querúbico.'),
-  ]),
-
-  section('credo', 'El beso de la paz y el Símbolo de la Fe', [
-    rub('Diácono:'),
-    t('Amémonos los unos a los otros, para que en un mismo espíritu confesemos.'),
-    ref('Al Padre, y al Hijo, y al Espíritu Santo: Trinidad consustancial e indivisible.'),
-    rub('Diácono:'),
-    t('¡Las puertas, las puertas! ¡Con sabiduría, atendamos!'),
-    rub('El pueblo recita el Símbolo de la Fe. El texto completo está en Orar → Oraciones → Otras.'),
-  ]),
-
-  section('anafora', 'Anáfora', [
-    rub('Diácono:'),
-    t('Estemos en pie con dignidad, estemos con temor, atendamos para ofrecer en paz la santa oblación.'),
-    ref('Misericordia de paz, sacrificio de alabanza.'),
-    rub('Sacerdote:'),
-    t('La gracia de nuestro Señor Jesucristo, el amor de Dios Padre y la comunión del Espíritu Santo sean con todos vosotros.'),
-    ref('Y con tu espíritu.'),
-    t('Elevemos los corazones.'),
-    ref('Los tenemos levantados hacia el Señor.'),
-    t('Demos gracias al Señor.'),
-    ref('Es digno y justo adorar al Padre, al Hijo y al Espíritu Santo: Trinidad consustancial e indivisible.'),
-    rub('Sigue la oración de la Anáfora, que culmina en:'),
-    ref('Santo, santo, santo es el Señor Sabaot. Llenos están el cielo y la tierra de tu gloria. ¡Hosanna en las alturas! ¡Bendito el que viene en el nombre del Señor! ¡Hosanna en las alturas!'),
-    rub('Palabras de la institución:'),
-    t('Tomad, comed: esto es mi Cuerpo, que por vosotros es partido para el perdón de los pecados.'),
-    ref('Amén.'),
-    t('Bebed de él todos: esta es mi Sangre de la nueva alianza, que por vosotros y por muchos es derramada para el perdón de los pecados.'),
-    ref('Amén.'),
-    t('Lo tuyo, de lo tuyo, te ofrecemos, en todo y por todo.'),
-    ref('A Ti te cantamos, a Ti te bendecimos, a Ti te damos gracias, Señor, y te rogamos, Dios nuestro.'),
-    rub('Epíclesis: el sacerdote invoca al Espíritu Santo sobre los dones. Después:'),
-    ref('Digno es en verdad bendecirte a Ti, Theotokos, siempre bienaventurada y toda pura, y Madre de nuestro Dios. Más venerable que los querubines e incomparablemente más gloriosa que los serafines, tú que sin mancha diste a luz al Verbo de Dios: verdadera Theotokos, te magnificamos.'),
-  ]),
-
-  section('comunion', 'Comunión', [
-    rub('Se canta el Padre Nuestro. Después, el sacerdote eleva el pan:'),
-    t('Las cosas santas, para los santos.'),
-    ref('Uno solo es Santo, uno solo es Señor: Jesucristo, para gloria de Dios Padre. Amén.'),
-    rub('Se canta el koinonikón, el versículo de comunión del día. Al acercarse los fieles:'),
-    t('Creo, Señor, y confieso que Tú eres en verdad el Cristo, el Hijo de Dios vivo…'),
-    rub('El texto íntegro está en Orar → Oraciones → Preparación para la comunión.'),
-    ref('Hemos visto la luz verdadera, hemos recibido el Espíritu celestial, hemos hallado la fe verdadera, adorando a la Trinidad indivisible, porque ella nos ha salvado.'),
-  ]),
-
-  section('despedida', 'Acción de gracias y despedida', [
-    rub('Diácono:'),
-    t('En paz, salgamos.'),
-    ref('En el nombre del Señor.'),
-    rub('Oración detrás del ambón, y después:'),
-    ref('Sea bendito el nombre del Señor, desde ahora y por siempre. <em>(tres veces)</em>'),
-    rub('El sacerdote da la despedida y se reparte el antídoron.'),
-  ]),
+  // De la bendición inicial a la despedida, entera, en su propio archivo.
+  ...LITURGIA_CRISOSTOMO,
 ];
 
 /* ============================================================
@@ -251,7 +134,7 @@ interface OfficeSeed {
 }
 
 const seeds: OfficeSeed[] = [
-  { id: 'liturgia-crisostomo', title: 'Divina Liturgia de san Juan Crisóstomo', subtitle: 'La que se celebra la mayor parte del año', kind: 'liturgia', sections: crisostomoSections, status: 'partial' },
+  { id: 'liturgia-crisostomo', title: 'Divina Liturgia de san Juan Crisóstomo', subtitle: 'La que se celebra la mayor parte del año', kind: 'liturgia', sections: crisostomoSections, status: 'complete' },
   {
     id: 'liturgia-basilio',
     title: 'Divina Liturgia de san Basilio el Grande',

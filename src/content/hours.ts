@@ -120,11 +120,14 @@ export const DAILY_OFFICES: DailyOfficeSeed[] = [
       { id: 'm-trisagio', title: 'Comienzo habitual', kind: 'texto', blocks: TRISAGIO },
       { id: 'm-kyrie', title: 'Señor, ten piedad', kind: 'texto', blocks: [gr('kyrie', 12), gr('doxa')] },
       { id: 'm-invitatorio', title: 'Venid, adoremos', kind: 'texto', blocks: INVITATORIO },
-      { id: 'm-despertar', title: 'Al levantarse del sueño', kind: 'prayer', prayerId: 'al-despertar' },
+      { id: 'm-despertar', title: 'Troparios a la Trinidad', kind: 'prayer', prayerId: 'al-despertar' },
       { id: 'm-macario', title: 'Oración de san Macario', kind: 'prayer', prayerId: 'macario-primera' },
       { id: 'm-salmo50', title: 'Salmo 50', kind: 'psalm', psalm: 50, note: 'El salmo del arrepentimiento, que se dice cada mañana.' },
       { id: 'm-credo', title: 'Símbolo de la Fe', kind: 'prayer', prayerId: 'simbolo-de-la-fe' },
-      { id: 'm-filareto', title: 'Oración para el día que empieza', kind: 'prayer', prayerId: 'filareto' },
+      // El identificador del paso se conserva porque la regla de cada usuario
+      // guarda su progreso por él; la oración es la de los ancianos de Óptina,
+      // que es la que pide el día que empieza.
+      { id: 'm-filareto', title: 'Oración para el día que empieza', kind: 'prayer', prayerId: 'optina' },
       { id: 'm-angel', title: 'Al Ángel de la Guarda', kind: 'prayer', prayerId: 'angel-guarda-manana' },
       { id: 'm-jesus', title: 'Oración de Jesús', kind: 'jesus-prayer', target: 33 },
       {

@@ -353,11 +353,13 @@ export const MORE_PRAYERS: MorePrayerSeed[] = [
     subtitle: 'Cosme y Damián, médicos que no cobraban',
     category: 'enfermedad',
     blocks: [
-      t('Santos anárgiros y taumaturgos: visitad nuestras dolencias. Gratis recibisteis, dad gratis.'),
+      t('Santos anárgiros y taumaturgos: visitad nuestras dolencias. Gratis recibisteis; dadnos gratis.'),
       rub('Los santos Cosme y Damián son invocados por los enfermos y por quienes los cuidan. Su memoria, el 1 de noviembre.'),
     ],
     meta: meta({
-      source: 'Menaion, 1 de noviembre; kontakion de los santos Anárgiros. Cita del Evangelio según San Mateo 10, 8',
+      // Es el tropario (el apolytikion, tono octavo), no el kontakion, y su
+      // final dice «dadnos», no «dad».
+      source: 'Menaion, 1 de noviembre; tropario de los santos Anárgiros, tono 8. Cita del Evangelio según San Mateo 10, 8',
     }),
   },
 

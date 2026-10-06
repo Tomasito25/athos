@@ -2,6 +2,82 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.27.0]
+
+### Añadido
+
+- **El libro de oración, entero.** Treinta y siete oraciones nuevas, y con
+  ellas completas las cuatro partes que todo libro de oraciones trae:
+  - las **diez oraciones de la mañana**: faltaban la tercera y la cuarta de
+    san Macario, las dos de san Basilio, «Canto tu gracia, Señora» y
+    «Misericordiosísimo Dios mío», además del tropario de la Cruz;
+  - las **once de antes del sueño**: faltaban la de san Antíoco, «¿Qué te
+    ofreceré?», la quinta, la sexta, la octava, la de san Pedro Estudita, las
+    súplicas a la Theotokos con la oración de san Joanicio, «Ilumina mis ojos»
+    y la **confesión diaria de los pecados**;
+  - las **diez de antes de comulgar** del Horologion griego, con los
+    troparios, los versos de Simeón Metafrastes y el poema de san Simeón el
+    Nuevo Teólogo, y las **cinco de acción de gracias** de después.
+- **Los cuatro órdenes, de corrido.** Las oraciones de la mañana, las de
+  antes del sueño, las de antes de comulgar y la acción de gracias se pueden
+  rezar seguidas, en el orden del libro, con los salmos dentro, un índice
+  plegado para retomar donde se dejó y el tropario del día después de
+  comulgar. Están en Orar, en Oraciones y en cada momento, y el buscador los
+  encuentra por su nombre. Un paso de la regla puede apuntar a uno de ellos.
+- **Para los momentos que se quedaban cortos**, lo que el libro eslavo tiene
+  para ellos: el tropario y el kontakion antes de toda obra, por el amor de
+  unos a otros, por los que nos odian, en la calamidad y por los beneficios
+  recibidos; la oración antes de la lectura espiritual, la del camino de la
+  iglesia, la de la prósfora y el agua bendita, la conmemoración larga de los
+  vivos y los difuntos, «Señor, tu nombre es Amor» de san Juan de Kronstadt y
+  la oración de cada hora de san Joasaf.
+- **De una oración a la siguiente**: cada oración termina con la anterior y
+  la siguiente de su momento, el enlace a todas las del momento y, si es
+  parte de un orden del libro, el sitio que ocupa en él.
+- **Orar, reorganizado**: los oficios del día, el libro de oración con sus
+  cuatro órdenes, la oración personal —ahora con la oración de Jesús, que no
+  tenía enlace desde aquí— y lo que se reza con la Iglesia: el Salterio, los
+  akathistos, los cánones y los oficios.
+
+### Corregido
+
+- **Fichas que se presentaban como «versión de uso corriente en las
+  parroquias» y no lo eran**, encontradas al cotejar con el libro de
+  oraciones eslavo y el Horologion griego:
+  - «Al levantarse del sueño» llevaba un texto que no es el del libro: ahora
+    son los troparios a la Trinidad;
+  - la ficha de san Filareto llevaba la oración de los ancianos de Óptina,
+    que ya tenía la suya: ahora lleva «Señor, no sé qué pedirte», la que se
+    le atribuye; el oficio de la mañana usa la de Óptina, como pretendía;
+  - «Perdón antes de dormir» tenía dos frases añadidas y le faltaba la mitad;
+  - «Antes del estudio», «Por un enfermo», «Por los enemigos», «Por los
+    difuntos» y «Antes de emprender viaje» no coincidían con el libro o iban
+    recortadas: ahora llevan el texto del libro, con la misma traducción del
+    Moleben cuando la hay;
+  - la primera acción de gracias después de comulgar iba recortada;
+  - el tropario de los santos Anárgiros se daba por kontakion y le faltaba
+    el «dadnos» final;
+  - a «Antes de la confesión» se le había añadido una oración que no es del
+    Euchologion; se ha quitado y remite a la confesión diaria;
+  - «Por la familia», «Por los hijos», «Por los amigos», «En la propia
+    enfermedad», «Acción de gracias por todo beneficio» y «Entrega del día»
+    no tienen original: las ha escrito ATHOS, y ahora lo dicen la ficha y una
+    línea dentro de la propia oración.
+- Dentro de la mañana, la noche y la comunión, las oraciones salen en el
+  orden del libro, no en el orden en que se fueron incorporando.
+- En un oficio, «Abrir» sobre una oración propia llevaba a una pantalla que
+  no existía. Ahora abre esa oración para leerla o corregirla.
+- El índice de los oficios de la biblioteca no bajaba a la sección elegida.
+- En la regla de oración, el selector de días no cabía en un móvil y la
+  cuarta opción quedaba cortada.
+
+### Nota
+
+- Quien ya tenía ATHOS instalada conserva su oficio de la mañana tal como lo
+  dejó: si el paso «Oración para el día que empieza» muestra ahora la
+  oración de san Filareto, «Restaurar el oficio», al final del propio oficio,
+  lo vuelve a la de Óptina.
+
 ## [1.26.0]
 
 ### Añadido

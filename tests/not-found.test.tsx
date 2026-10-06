@@ -28,6 +28,7 @@ beforeAll(async () => {
 const ROTAS: Array<[string, string]> = [
   ['/orar/oraciones/no-existe', '/orar/oraciones'],
   ['/orar/oraciones/categoria/no-existe', '/orar/oraciones'],
+  ['/orar/oraciones/orden/no-existe', '/orar/oraciones'],
   ['/leer/biblia/no-existe', '/leer/biblia'],
   ['/leer/biblia/no-existe/3', '/leer/biblia'],
   ['/leer/salterio/999', '/leer/salterio'],

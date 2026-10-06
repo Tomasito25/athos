@@ -164,7 +164,8 @@ describe('armazón', () => {
       .find((el) => el.getAttribute('href') === '/orar/regla');
     expect(enlace).toBeTruthy();
     await user.click(enlace!);
-    await findHeading(/Días normales/i);
+    // La regla de hoy ya está a la vista: el selector de cuándo se aplica.
+    await findHeading(/Diario/);
   });
 });
 
@@ -197,6 +198,8 @@ const PANTALLAS = [
   '/orar/oraciones/todas',
   '/orar/oraciones/categoria/manana',
   '/orar/oraciones/efren-sirio',
+  '/orar/oraciones/orden/manana',
+  '/orar/oraciones/orden/despues-de-comulgar',
   '/orar/mis-oraciones',
   '/orar/regla',
   '/orar/oracion-de-jesus',
@@ -228,6 +231,7 @@ const INEXISTENTES = [
   '/calendario/santos/no-existe',
   '/orar/oraciones/no-existe',
   '/orar/oraciones/categoria/no-existe',
+  '/orar/oraciones/orden/no-existe',
   '/leer/salterio/999',
   '/leer/biblia/NADA',
   '/biblioteca/estudio/no-existe',

@@ -28,6 +28,7 @@ export const routes: RouteObject[] = [
       { path: 'orar/oraciones', lazy: page(() => import('@/features/prayers/PrayersPage'), 'PrayersPage') },
       { path: 'orar/oraciones/todas', lazy: page(() => import('@/features/prayers/AllPrayersPage'), 'AllPrayersPage') },
       { path: 'orar/oraciones/categoria/:categoryId', lazy: page(() => import('@/features/prayers/PrayerCategoryPage'), 'PrayerCategoryPage') },
+      { path: 'orar/oraciones/orden/:orderId', lazy: page(() => import('@/features/prayers/PrayerOrderPage'), 'PrayerOrderPage') },
       { path: 'orar/oraciones/:prayerId', lazy: page(() => import('@/features/prayers/PrayerPage'), 'PrayerPage') },
       { path: 'orar/oficio/:time', lazy: page(() => import('@/features/office/OfficePage'), 'OfficePage') },
       { path: 'orar/mis-oraciones', lazy: page(() => import('@/features/office/MyPrayersPage'), 'MyPrayersPage') },

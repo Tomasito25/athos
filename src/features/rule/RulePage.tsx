@@ -39,10 +39,10 @@ import { newId } from '@/db/user';
 import es from '@/locales/es';
 
 const SCOPE_OPTIONS: Array<{ value: RuleScope; label: string }> = [
-  { value: 'diario', label: es.rule.scopeDaily },
+  { value: 'diario', label: es.rule.scopeDailyShort },
   { value: 'domingo', label: es.rule.scopeSunday },
   { value: 'fiesta', label: es.rule.scopeFeast },
-  { value: 'ayuno', label: es.rule.scopeFast },
+  { value: 'ayuno', label: es.rule.scopeFastShort },
 ];
 
 /** Ámbito que corresponde de forma natural al día de hoy. */
@@ -243,6 +243,8 @@ function itemLink(item: RuleItem): string | null {
       return '/orar/mis-oraciones';
     case 'jesus-prayer':
       return `/orar/oracion-de-jesus${item.target ? `?objetivo=${item.target}` : ''}`;
+    case 'prayer-order':
+      return `/orar/oraciones/orden/${item.linkId}`;
     case 'komboskini':
       return '/orar/komboskini';
     default:

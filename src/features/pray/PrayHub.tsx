@@ -1,8 +1,10 @@
 /**
  * Portada de Orar.
  *
- * Los tres oficios del día en primer lugar —con el de ahora destacado—, y
- * debajo lo demás: la biblioteca de oraciones, las propias, el komboskini.
+ * Los tres oficios del día en primer lugar —con el de ahora destacado—; debajo,
+ * el libro de oración con sus cuatro órdenes de corrido; después, la oración
+ * personal —las oraciones por momentos, la de Jesús, el komboskini, la regla—,
+ * y al final lo que se reza con la Iglesia y está en la biblioteca.
  */
 import { Link } from 'react-router-dom';
 import { useLiturgicalDay, useToday } from '@/hooks/useLiturgicalDay';
@@ -12,8 +14,10 @@ import { DAILY_OFFICES, OFFICES_STRUCTURE_NOTE } from '@/content/hours';
 import { officeNow } from '@/lib/office-time';
 import { useSettings } from '@/stores/settings';
 import { ListRow, PageHead, Panel, ProgressBlocks, Section, Tag } from '@/components/ui';
-import { IconChotki, IconEdit, IconPray, IconScroll } from '@/components/icons';
+import { IconBook, IconCandle, IconChotki, IconChurch, IconCross, IconEdit, IconPray, IconScroll } from '@/components/icons';
 import { PRAYER_CATEGORIES } from '@/content/prayers';
+import { PRAYER_ORDERS } from '@/content/prayer-orders';
+import { MomentIcon } from '@/features/prayers/MomentIcon';
 import type { RuleTime } from '@/types';
 import es from '@/locales/es';
 
@@ -79,19 +83,45 @@ export function PrayHub() {
         <p className="source-note">{OFFICES_STRUCTURE_NOTE}</p>
       </Section>
 
-      <Section title="También">
+      <Section title={es.prayers.orders}>
+        <p className="muted text-sm" style={{ margin: 'calc(-1 * var(--sp-2)) 0 var(--sp-3)' }}>
+          {es.prayers.ordersHint}
+        </p>
+        <div className="order-grid">
+          {PRAYER_ORDERS.map((orden) => {
+            const esAhora = orden.category === ahora;
+            return (
+              <Link
+                key={orden.id}
+                to={`/orar/oraciones/orden/${orden.id}`}
+                className={`order-card${esAhora ? ' order-card--now' : ''}`}
+              >
+                <span className="moment__icon">
+                  <MomentIcon id={orden.category} />
+                </span>
+                <span className="order-card__name">{orden.title}</span>
+                <span className="order-card__meta">
+                  {orden.sections.length} partes{esAhora ? ' · Ahora' : ''}
+                </span>
+              </Link>
+            );
+          })}
+        </div>
+      </Section>
+
+      <Section title="Tu oración">
         <div className="list">
           <ListRow
             to="/orar/oraciones"
             leading={<IconPray size={20} style={{ color: 'var(--gold)' }} />}
             title={es.prayers.title}
-            meta={`${PRAYER_CATEGORIES.length} momentos, del despertar a la preparación para la comunión`}
+            meta={`${PRAYER_CATEGORIES.length} momentos, del despertar al duelo`}
           />
           <ListRow
-            to="/orar/mis-oraciones"
-            leading={<IconEdit size={20} style={{ color: 'var(--gold)' }} />}
-            title={es.office.myPrayers}
-            meta="Escribe las tuyas y añádelas a cualquier oficio"
+            to="/orar/oracion-de-jesus"
+            leading={<IconCross size={20} style={{ color: 'var(--gold)' }} />}
+            title={es.jesusPrayer.title}
+            meta="«Señor Jesucristo, Hijo de Dios, ten misericordia de mí, pecador», con su contador"
           />
           <ListRow
             to="/orar/komboskini"
@@ -108,6 +138,41 @@ export function PrayHub() {
             leading={<IconScroll size={20} style={{ color: 'var(--gold)' }} />}
             title={es.rule.title}
             meta="Reglas propias para domingos, fiestas o tiempos de ayuno"
+          />
+          <ListRow
+            to="/orar/mis-oraciones"
+            leading={<IconEdit size={20} style={{ color: 'var(--gold)' }} />}
+            title={es.office.myPrayers}
+            meta="Escribe las tuyas y añádelas a cualquier oficio"
+          />
+        </div>
+      </Section>
+
+      <Section title="Con la Iglesia">
+        <div className="list">
+          <ListRow
+            to="/leer/salterio"
+            leading={<IconBook size={20} style={{ color: 'var(--gold)' }} />}
+            title="Salterio"
+            meta="Los salmos, repartidos en sus veinte kathismas"
+          />
+          <ListRow
+            to="/biblioteca/akathistos"
+            leading={<IconCandle size={20} style={{ color: 'var(--gold)' }} />}
+            title="Akathistos"
+            meta="Himnos de alabanza para rezar de pie"
+          />
+          <ListRow
+            to="/biblioteca/canones"
+            leading={<IconScroll size={20} style={{ color: 'var(--gold)' }} />}
+            title="Cánones"
+            meta="El de preparación para la comunión, el del Ángel de la Guarda, la Paráclesis, el Gran Canon…"
+          />
+          <ListRow
+            to="/biblioteca/liturgia"
+            leading={<IconChurch size={20} style={{ color: 'var(--gold)' }} />}
+            title="Los oficios"
+            meta="Las Horas, las Completas, el Oficio de medianoche, el Moleben y las Liturgias"
           />
         </div>
       </Section>

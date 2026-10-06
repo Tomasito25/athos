@@ -23,6 +23,7 @@ import {
 import { IconChevronDown, IconPlus, IconTrash } from '@/components/icons';
 import { useUi } from '@/stores/ui';
 import type { PrayerRule, RuleItem, RuleScope, RuleTime } from '@/types';
+import { PRAYER_ORDERS } from '@/content/prayer-orders';
 import es from '@/locales/es';
 
 const SCOPES: Array<{ value: RuleScope; label: string }> = [
@@ -41,6 +42,7 @@ const TIMES: Array<{ value: RuleTime; label: string }> = [
 const LINK_KINDS: Array<{ value: RuleItem['linkKind'] | ''; label: string }> = [
   { value: '', label: es.rule.linkNone },
   { value: 'prayer', label: es.prayers.title },
+  { value: 'prayer-order', label: es.prayers.orders },
   { value: 'user-prayer', label: es.office.myPrayers },
   { value: 'psalm', label: es.psalter.title },
   { value: 'jesus-prayer', label: es.jesusPrayer.title },
@@ -335,6 +337,26 @@ function ItemDialogForm({
                 {(prayers.data ?? []).map((prayer) => (
                   <option key={prayer.id} value={prayer.id}>
                     {prayer.title}
+                  </option>
+                ))}
+              </select>
+            )}
+          </Field>
+        ) : null}
+
+        {draft.linkKind === 'prayer-order' ? (
+          <Field label={es.prayers.orders}>
+            {(id) => (
+              <select
+                id={id}
+                className="select"
+                value={draft.linkId ?? ''}
+                onChange={(event) => update({ linkId: event.target.value })}
+              >
+                <option value="">—</option>
+                {PRAYER_ORDERS.map((orden) => (
+                  <option key={orden.id} value={orden.id}>
+                    {orden.title}
                   </option>
                 ))}
               </select>

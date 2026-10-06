@@ -303,3 +303,118 @@ describe('procedencia: lo que ATHOS escribe no se disfraza de texto litúrgico',
     }
   });
 });
+
+/* ============================================================
+   El libro de oración, de corrido
+   ------------------------------------------------------------
+   Las oraciones de la mañana, las de antes del sueño y las de la
+   comunión se rezan en un orden fijo. Lo que se vigila es que el
+   orden no apunte a fichas que no existen, que no tenga partes
+   vacías y que el menú las enseñe en ese mismo orden.
+   ============================================================ */
+describe('los órdenes del libro de oración', async () => {
+  const { PRAYER_ORDERS, orderById, ordersForCategory } = await import('@/content/prayer-orders');
+  const porId = new Map(PRAYERS.map((p) => [p.id, p]));
+
+  it('son los cuatro, y cada uno cuelga de un momento que existe', () => {
+    expect(PRAYER_ORDERS.map((o) => o.id)).toEqual(['manana', 'noche', 'antes-de-comulgar', 'despues-de-comulgar']);
+    for (const orden of PRAYER_ORDERS) {
+      expect(categorias.has(orden.category), orden.id).toBe(true);
+      expect(orderById(orden.id)).toBe(orden);
+      expect(ordersForCategory(orden.category)).toContain(orden);
+    }
+  });
+
+  it('ninguna parte está vacía ni apunta a una oración que no existe', () => {
+    for (const orden of PRAYER_ORDERS) {
+      const ids = orden.sections.map((s) => s.id);
+      expect(new Set(ids).size, `${orden.id}: partes repetidas`).toBe(ids.length);
+      for (const seccion of orden.sections) {
+        expect(seccion.blocks.length, `${orden.id} → ${seccion.id} está vacía`).toBeGreaterThan(0);
+        if (seccion.prayerId) expect(porId.has(seccion.prayerId), `${orden.id} → ${seccion.prayerId}`).toBe(true);
+      }
+    }
+  });
+
+  it('las oraciones de la mañana son las diez del libro, en su orden', () => {
+    const manana = orderById('manana')!;
+    const titulos = manana.sections.map((s) => s.title);
+    const ordinales = ['Primera', 'Segunda', 'Tercera', 'Cuarta', 'Quinta', 'Sexta', 'Séptima', 'Octava', 'Novena', 'Décima'];
+    const posiciones = ordinales.map((o) => titulos.findIndex((t) => t.startsWith(`${o} oración`)));
+    expect(posiciones.every((p) => p >= 0), titulos.join(' | ')).toBe(true);
+    expect([...posiciones].sort((a, b) => a - b)).toEqual(posiciones);
+  });
+
+  it('las de antes del sueño son las once del libro, con la confesión de los pecados', () => {
+    const noche = orderById('noche')!;
+    const numeradas = noche.sections.filter((s) => / oración/.test(s.title) && !/Damasceno/.test(s.title));
+    expect(numeradas).toHaveLength(11);
+    expect(noche.sections.some((s) => s.prayerId === 'confesion-diaria')).toBe(true);
+    expect(noche.sections.at(-1)!.prayerId).toBe('oracion-final-noche');
+  });
+
+  it('antes de comulgar, las diez oraciones del Horologion; después, las cinco de acción de gracias', () => {
+    const antes = orderById('antes-de-comulgar')!.sections.filter((s) => / oración, /.test(s.title));
+    const despues = orderById('despues-de-comulgar')!.sections.filter((s) => / oración/.test(s.title));
+    expect(antes).toHaveLength(10);
+    expect(despues).toHaveLength(5);
+  });
+
+  it('el menú enseña esas oraciones en el orden del libro', () => {
+    for (const orden of PRAYER_ORDERS) {
+      const suyas = orden.sections
+        .map((s) => (s.prayerId ? porId.get(s.prayerId) : undefined))
+        .filter((p): p is (typeof PRAYERS)[number] => p?.category === orden.category);
+      const puestos = suyas.map((p) => p.order);
+      expect([...puestos].sort((a, b) => a - b), orden.id).toEqual(puestos);
+    }
+  });
+});
+
+describe('las fichas corregidas al revisar el libro de oraciones', () => {
+  /*
+   * Estas fichas se presentaban como «versión de uso corriente en las
+   * parroquias» y no lo eran: no coincidían con el libro, tenían frases
+   * añadidas o eran redacciones nuevas. Ahora dicen lo que son.
+   */
+  const CORREGIDAS = [
+    'al-despertar', 'filareto', 'entrega-del-dia', 'perdon-nocturno', 'antes-de-estudiar',
+    'antes-de-viajar', 'accion-gracias', 'por-el-enfermo', 'en-la-propia-enfermedad',
+    'por-la-familia', 'por-los-hijos', 'por-los-amigos', 'por-los-enemigos', 'por-los-difuntos',
+    'despues-de-comulgar',
+  ];
+
+  it('ninguna se declara ya versión tradicional de uso corriente', () => {
+    for (const id of CORREGIDAS) {
+      const p = PRAYERS.find((x) => x.id === id);
+      expect(p, id).toBeDefined();
+      expect(p!.meta.license, id).not.toBe('traditional');
+    }
+  });
+
+  it('las que ha escrito ATHOS lo dicen también dentro de la oración', () => {
+    for (const p of PRAYERS) {
+      if (p.meta.source !== 'Oración redactada para ATHOS') continue;
+      expect(
+        p.blocks.some((b) => b.kind === 'rubric' && /la ha escrito ATHOS/.test(b.content)),
+        p.id,
+      ).toBe(true);
+    }
+  });
+
+  it('la oración de Óptina ya no está dos veces', () => {
+    // La ficha de san Filareto llevaba la de los ancianos de Óptina, que ya
+    // tenía la suya. Ahora cada una tiene su texto.
+    const texto = (id: string) =>
+      PRAYERS.find((p) => p.id === id)!.blocks.map((b) => b.content).join(' ');
+    expect(texto('optina')).toContain('todo lo que este día me traiga');
+    expect(texto('filareto')).not.toContain('este día me traiga');
+    expect(texto('filareto')).toContain('no sé qué pedirte');
+  });
+
+  it('el oficio de la mañana pide el día que empieza con la oración de Óptina', async () => {
+    const { DAILY_OFFICES } = await import('@/content/hours');
+    const manana = DAILY_OFFICES.find((o) => o.time === 'manana')!;
+    expect(manana.steps.find((s) => s.id === 'm-filareto')?.prayerId).toBe('optina');
+  });
+});

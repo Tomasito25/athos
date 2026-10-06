@@ -91,7 +91,7 @@ export const GAPS: Gap[] = [
     label: 'Oraciones',
     count: sinTexto(PRAYERS),
     kind: 'licencia',
-    what: 'Las fichas que remitían a un canon sin texto ya lo tienen. Ninguna oración del libro de oración diario está pendiente.',
+    what: 'El libro de oración está entero: las diez oraciones de la mañana, las once de antes del sueño con la confesión de los pecados, las diez de antes de comulgar y las cinco de acción de gracias, cada orden también de corrido. Ninguna oración está pendiente. Algunas pocas, para momentos que el libro no tiene, las ha escrito ATHOS, y lo dicen.',
   },
 ];
 

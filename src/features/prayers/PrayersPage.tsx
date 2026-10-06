@@ -15,6 +15,7 @@ import { ButtonLink, ListRow, PageHead, Panel, Section, Tag } from '@/components
 import { IconPray } from '@/components/icons';
 import { PRAYER_CATEGORIES, PRAYER_LICENSE_NOTE } from '@/content/prayers';
 import { ANY_HOUR, MOMENT_GROUPS, momentById, momentNow } from '@/content/moments';
+import { PRAYER_ORDERS } from '@/content/prayer-orders';
 import { MomentIcon } from './MomentIcon';
 import type { PrayerCategoryId } from '@/types';
 import es from '@/locales/es';
@@ -69,6 +70,30 @@ export function PrayersPage() {
           </div>
         </Panel>
       )}
+
+      {/* ---- Los cuatro órdenes que se rezan de corrido ---- */}
+      <Section title={es.prayers.orders}>
+        <p className="muted text-sm" style={{ margin: 'calc(-1 * var(--sp-2)) 0 var(--sp-3)' }}>
+          {es.prayers.ordersHint}
+        </p>
+        <div className="order-grid">
+          {PRAYER_ORDERS.map((orden) => (
+            <Link
+              key={orden.id}
+              to={`/orar/oraciones/orden/${orden.id}`}
+              className={`order-card${orden.category === ahora ? ' order-card--now' : ''}`}
+            >
+              <span className="moment__icon">
+                <MomentIcon id={orden.category} />
+              </span>
+              <span className="order-card__name">{orden.title}</span>
+              <span className="order-card__meta">
+                {orden.sections.length} partes{orden.category === ahora ? ` · ${es.prayers.now}` : ''}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </Section>
 
       {favorites.data && favorites.data.length > 0 ? (
         <Section title={es.prayers.favorites}>

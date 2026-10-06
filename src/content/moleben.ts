@@ -27,6 +27,22 @@ const POR_LOS_SIGLOS = 'ahora y siempre, y por los siglos de los siglos.';
 const AMEN = ref('Amén.');
 const TRADUCCION = rub('Traducción para ATHOS a partir del Trebnik eslavo, que es de dominio público; no procede de un libro litúrgico español publicado.');
 
+/*
+ * Los troparios y las oraciones de los enfermos y de los viajeros se exportan:
+ * el libro de oraciones los usa tal cual, para que no haya dos traducciones
+ * del mismo texto.
+ */
+export const ENFERMOS_TROPARIO =
+  'Tú, el único pronto en socorrer, oh Cristo, muestra pronto desde lo alto tu visita a tu siervo que sufre; líbralo de la dolencia y de la amarga enfermedad, y levántalo para que te cante y te glorifique sin cesar, por las oraciones de la Theotokos, oh único amigo de los hombres.';
+export const ENFERMOS_KONTAKION =
+  'Como levantaste en otro tiempo, Salvador, a la suegra de Pedro, que yacía en el lecho de la enfermedad herida de muerte, y al paralítico llevado en su camilla, así también ahora, oh Misericordioso, visita y sana al que sufre; porque sólo Tú cargaste con las dolencias y las enfermedades de nuestro linaje, y todo lo puedes, porque eres de mucha misericordia.';
+export const VIAJEROS_TROPARIO =
+  'Oh Cristo, que eres el camino y la verdad: envía ahora a tus siervos, como en otro tiempo a Tobías, a tu ángel como compañero, que los guarde y los preserve indemnes, para tu gloria, de todo mal, en toda prosperidad, por las oraciones de la Theotokos, oh único amigo de los hombres.';
+export const VIAJEROS_KONTAKION =
+  'Tú, Salvador, que acompañaste a Lucas y a Cleofás en el camino de Emaús, acompaña también ahora a tus siervos que quieren ponerse en camino, librándolos de toda mala circunstancia; porque Tú, como amigo de los hombres, todo lo puedes cuando quieres.';
+export const ENFERMOS_ORACION = `Soberano todopoderoso, Rey santo, que castigas y no haces morir, que sostienes a los que caen y levantas a los abatidos, que remedias las aflicciones corporales de los hombres: te suplicamos, Dios nuestro, visita con tu misericordia a tu siervo N., que está enfermo; perdónale todo pecado, voluntario e involuntario. Sí, Señor: envía desde el cielo tu fuerza curativa, toca su cuerpo, apaga la fiebre, calma el sufrimiento y toda dolencia escondida; sé el médico de tu siervo N.; levántalo del lecho de la enfermedad y del lecho del dolor sano y entero, y devuélvelo a tu Iglesia agradándote y haciendo tu voluntad. Porque a Ti corresponde tener piedad de nosotros y salvarnos, Dios nuestro, y a Ti te damos gloria, al Padre, y al Hijo, y al Espíritu Santo, ${POR_LOS_SIGLOS} Amén.`;
+export const VIAJEROS_ORACION = `Jesucristo, Dios nuestro, camino verdadero y vivo, que quisiste ir de camino a Egipto con tu padre putativo José y con la purísima Virgen María, y acompañaste a Lucas y a Cleofás a Emaús: también ahora te rogamos humildemente, Soberano santísimo, acompaña con tu gracia a estos siervos tuyos. Y como a tu siervo Tobías, envíales un ángel custodio y guía, que los guarde y los libre de toda mala circunstancia de los enemigos visibles e invisibles, que los guíe en el cumplimiento de tus mandamientos y los conduzca en paz, con felicidad y con salud; y concédeles llevar a buen término, para tu gloria y de modo que te agrade, todo su buen propósito. Porque a Ti corresponde tener piedad de nosotros y salvarnos, y a Ti te damos gloria, con tu Padre sin principio y con tu santísimo, bueno y vivificante Espíritu, ${POR_LOS_SIGLOS} Amén.`;
+
 /** Lo que hay que decir antes de las peticiones propias de la gran letanía. */
 const LETANIA_COMIENZO: TextBlock[] = [
   rub('Diácono, o el sacerdote; a cada petición se responde «Señor, ten piedad»:'),
@@ -140,9 +156,9 @@ export const MOLEBEN: OfficeSection[] = [
     t('Para que, como escuchó la voz de la cananea, escuche con misericordia a nosotros, sus siervos indignos, que clamamos a Él, y, como a la hija de aquélla, tenga piedad de sus siervos enfermos N. y los cure, oremos al Señor.'),
     head('El tropario y el kontakion'),
     rub('Tropario, tono cuarto:'),
-    t('Tú, el único pronto en socorrer, oh Cristo, muestra pronto desde lo alto tu visita a tu siervo que sufre; líbralo de la dolencia y de la amarga enfermedad, y levántalo para que te cante y te glorifique sin cesar, por las oraciones de la Theotokos, oh único amigo de los hombres.'),
+    t(ENFERMOS_TROPARIO),
     rub('Kontakion, tono segundo:'),
-    t('Como levantaste en otro tiempo, Salvador, a la suegra de Pedro, que yacía en el lecho de la enfermedad herida de muerte, y al paralítico llevado en su camilla, así también ahora, oh Misericordioso, visita y sana al que sufre; porque sólo Tú cargaste con las dolencias y las enfermedades de nuestro linaje, y todo lo puedes, porque eres de mucha misericordia.'),
+    t(ENFERMOS_KONTAKION),
     head('Las lecturas'),
     rub('Prokímenon, tono séptimo: «Ten piedad de mí, Señor, porque estoy débil; sáname, porque mis huesos se han estremecido». Versículo: «Porque en la muerte no hay quien se acuerde de Ti».'),
     reading('Santiago 5, 10-16'),
@@ -154,7 +170,7 @@ export const MOLEBEN: OfficeSection[] = [
     t('Tú, que con tu contacto curaste la fiebre de la suegra de Pedro, cura también ahora, en tu bondad, la enfermedad de tus siervos N., que sufren cruelmente, dándoles pronto la salud; te rogamos con insistencia, fuente de las curaciones: escúchanos y ten piedad.'),
     t('Tú, que recibiste las lágrimas de Ezequías, el arrepentimiento de Manasés y de los ninivitas y la confesión de David, y pronto tuviste piedad de ellos: recibe también nuestras súplicas, que te ofrecemos con compunción, Rey infinitamente bueno, y, como generoso, ten piedad de tus siervos que sufren gravemente, dándoles la salud; te rogamos con lágrimas, fuente de la vida y de la inmortalidad: escúchanos y ten pronto piedad.'),
     head('Las oraciones'),
-    t(`Soberano todopoderoso, Rey santo, que castigas y no haces morir, que sostienes a los que caen y levantas a los abatidos, que remedias las aflicciones corporales de los hombres: te suplicamos, Dios nuestro, visita con tu misericordia a tu siervo N., que está enfermo; perdónale todo pecado, voluntario e involuntario. Sí, Señor: envía desde el cielo tu fuerza curativa, toca su cuerpo, apaga la fiebre, calma el sufrimiento y toda dolencia escondida; sé el médico de tu siervo N.; levántalo del lecho de la enfermedad y del lecho del dolor sano y entero, y devuélvelo a tu Iglesia agradándote y haciendo tu voluntad. Porque a Ti corresponde tener piedad de nosotros y salvarnos, Dios nuestro, y a Ti te damos gloria, al Padre, y al Hijo, y al Espíritu Santo, ${POR_LOS_SIGLOS} Amén.`),
+    t(ENFERMOS_ORACION),
     t(`Dios y Señor de los ejércitos, que con misericordia dispones todas las cosas para la salvación del linaje humano: visita también a tu siervo N., que invoca el nombre de tu Cristo, y sánalo de todo pecado de la carne y del alma, de toda tentación y desgracia; aleja de tu siervo todo asalto del enemigo, levántalo del lecho de la enfermedad y devuélvelo a tu santa Iglesia sano de alma y de cuerpo, adornado de buenas obras y de buenas palabras, para que te glorifique con todos, a Ti y a tu Cristo, nuestra esperanza, con quien eres bendito, junto con tu santísimo, bueno y vivificante Espíritu, ${POR_LOS_SIGLOS} Amén.`),
     rub('La primera oración es la misma que se dice en la Unción de los enfermos.'),
     TRADUCCION,
@@ -173,9 +189,9 @@ export const MOLEBEN: OfficeSection[] = [
     t('Para que bendiga su buen propósito y, con su gracia, lo haga prosperar para provecho del alma y del cuerpo, oremos al Señor.'),
     head('Los troparios'),
     rub('Tono segundo:'),
-    t('Oh Cristo, que eres el camino y la verdad: envía ahora a tus siervos, como en otro tiempo a Tobías, a tu ángel como compañero, que los guarde y los preserve indemnes, para tu gloria, de todo mal, en toda prosperidad, por las oraciones de la Theotokos, oh único amigo de los hombres.'),
+    t(VIAJEROS_TROPARIO),
     rub('Gloria al Padre, y al Hijo, y al Espíritu Santo. En el mismo tono:'),
-    t('Tú, Salvador, que acompañaste a Lucas y a Cleofás en el camino de Emaús, acompaña también ahora a tus siervos que quieren ponerse en camino, librándolos de toda mala circunstancia; porque Tú, como amigo de los hombres, todo lo puedes cuando quieres.'),
+    t(VIAJEROS_KONTAKION),
     rub('Ahora y siempre, y por los siglos de los siglos. Amén. Tono sexto:'),
     t('Protección de los cristianos que no defrauda, mediación constante ante el Creador: no desprecies las voces de las súplicas de los pecadores, sino adelántate, como buena, a ayudarnos a los que te invocamos con fe; apresúrate a la intercesión y date prisa a la súplica, tú que siempre proteges, Theotokos, a los que te honran.'),
     head('Las lecturas'),
@@ -189,7 +205,7 @@ export const MOLEBEN: OfficeSection[] = [
     t('Tú, que enviaste un ángel como compañero a Isaac y a Tobías, e hiciste su viaje y su regreso en paz y felicidad: envía también ahora, oh infinitamente bueno, un ángel de paz a tus siervos, por los que te rogamos, que los guíe a toda obra buena, los libre de los enemigos visibles e invisibles y de toda mala circunstancia, y los devuelva con salud, en paz y felicidad, para tu gloria; te rogamos con fervor: escúchanos y ten piedad.'),
     t('Tú, que acompañaste a Lucas y a Cleofás en el camino de Emaús y, dándote a conocer gloriosamente, los hiciste volver con alegría a Jerusalén: acompaña con tu gracia y tu bendición divina también ahora a estos siervos tuyos, por los que te rogamos con insistencia; hazlos prosperar en toda obra buena para gloria de tu santísimo nombre, guardándolos con salud y felicidad y devolviéndolos a su tiempo; te rogamos como a bienhechor generosísimo: escúchanos y ten piedad.'),
     head('La oración'),
-    t(`Jesucristo, Dios nuestro, camino verdadero y vivo, que quisiste ir de camino a Egipto con tu padre putativo José y con la purísima Virgen María, y acompañaste a Lucas y a Cleofás a Emaús: también ahora te rogamos humildemente, Soberano santísimo, acompaña con tu gracia a estos siervos tuyos. Y como a tu siervo Tobías, envíales un ángel custodio y guía, que los guarde y los libre de toda mala circunstancia de los enemigos visibles e invisibles, que los guíe en el cumplimiento de tus mandamientos y los conduzca en paz, con felicidad y con salud; y concédeles llevar a buen término, para tu gloria y de modo que te agrade, todo su buen propósito. Porque a Ti corresponde tener piedad de nosotros y salvarnos, y a Ti te damos gloria, con tu Padre sin principio y con tu santísimo, bueno y vivificante Espíritu, ${POR_LOS_SIGLOS} Amén.`),
+    t(VIAJEROS_ORACION),
     rub('El sacerdote asperja con agua bendita la cabeza de los que van a viajar, diciendo:'),
     t('Que el Señor os bendiga desde Sión, y veáis los bienes de Jerusalén todos los días de vuestra vida, y que enderece vuestro camino en paz, para gloria de su santo nombre. Amén.'),
     TRADUCCION,

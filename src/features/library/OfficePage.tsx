@@ -5,6 +5,7 @@ import { OFFICE_KIND_LABELS } from '@/content/offices';
 import { Blocks, Loading, Panel, SourceNote, NotFound } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { useVisitLog } from '@/hooks/useVisitLog';
+import { useHashScroll } from '@/hooks/useHashScroll';
 import es from '@/locales/es';
 
 /** Un oficio completo, sección a sección, pensado para seguirlo en la iglesia. */
@@ -12,6 +13,8 @@ export function OfficePage() {
   const { officeId = '' } = useParams();
   const office = useAsync(() => db.liturgies.get(officeId), [officeId]);
   const path = `/biblioteca/liturgia/${officeId}`;
+  // El índice enlaza con cada sección; sin esto el salto no llegaba a ocurrir.
+  useHashScroll([officeId, office.data?.id]);
 
   // La clase de oficio, no «Divina Liturgia» para todos: en «Por dónde ibas»
   // una Hora tiene que decir que es una Hora.

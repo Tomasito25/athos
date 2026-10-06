@@ -5,6 +5,7 @@
  * una oración de la biblioteca. No sale del dispositivo.
  */
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { deleteUserPrayer, listUserPrayers, newId, saveUserPrayer } from '@/db/user';
 import {
@@ -26,6 +27,16 @@ export function MyPrayersPage() {
   const toast = useUi((s) => s.toast);
   const oraciones = useAsync(() => listUserPrayers(), []);
   const [editando, setEditando] = useState<UserPrayer | null>(null);
+
+  // Desde un oficio, «Abrir» en una oración propia trae aquí su id: se abre
+  // directamente para leerla o corregirla.
+  const [params, setParams] = useSearchParams();
+  const pedida = params.get('editar');
+  const abierta = editando ?? (pedida ? (oraciones.data?.find((o) => o.id === pedida) ?? null) : null);
+  const cerrar = () => {
+    setEditando(null);
+    if (pedida) setParams({}, { replace: true });
+  };
 
   const nueva = () =>
     setEditando({
@@ -97,14 +108,14 @@ export function MyPrayersPage() {
         </p>
       </Panel>
 
-      {editando ? (
+      {abierta ? (
         <PrayerDialog
-          key={editando.id}
-          prayer={editando}
-          onClose={() => setEditando(null)}
+          key={abierta.id}
+          prayer={abierta}
+          onClose={cerrar}
           onSave={async (oracion) => {
             await saveUserPrayer(oracion);
-            setEditando(null);
+            cerrar();
             oraciones.reload();
             toast('Oración guardada');
           }}

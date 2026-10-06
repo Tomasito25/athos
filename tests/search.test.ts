@@ -185,3 +185,12 @@ describe('la búsqueda en blanco no es un callejón sin salida', () => {
     }
   });
 });
+
+describe('los órdenes del libro de oración', () => {
+  it('se encuentran por su nombre, antes que las oraciones sueltas', async () => {
+    const { searchAll } = await import('@/db/search');
+    const { groups } = await searchAll('oraciones de la mañana');
+    const oraciones = groups.find((g) => g.kind === 'prayer');
+    expect(oraciones?.results[0]?.path).toBe('/orar/oraciones/orden/manana');
+  });
+});

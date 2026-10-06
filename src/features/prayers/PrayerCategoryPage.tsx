@@ -4,12 +4,14 @@
  * Se llega desde el menú de momentos, y por eso la página dice antes que nada
  * a qué grupo pertenece y ofrece volver al menú.
  */
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
 import { ButtonLink, Empty, ListRow, Loading, PageHead, StatusTag, NotFound } from '@/components/ui';
 import { PRAYER_CATEGORIES } from '@/content/prayers';
 import { MOMENT_GROUPS } from '@/content/moments';
+import { ordersForCategory } from '@/content/prayer-orders';
+import { MomentIcon } from './MomentIcon';
 import es from '@/locales/es';
 
 export function PrayerCategoryPage() {
@@ -20,6 +22,7 @@ export function PrayerCategoryPage() {
     () => db.prayers.where('category').equals(categoryId ?? '').sortBy('order'),
     [categoryId],
   );
+  const ordenes = ordersForCategory(categoryId ?? '');
 
   if (!category) {
     return (
@@ -39,6 +42,22 @@ export function PrayerCategoryPage() {
         title={category.name}
         subtitle={category.description}
       />
+      {/* Donde el libro reza estas oraciones seguidas, lo primero es el orden
+          entero; debajo, cada una suelta. */}
+      {ordenes.length > 0 ? (
+        <div className="order-grid" style={{ marginBottom: 'var(--sp-5)' }}>
+          {ordenes.map((orden) => (
+            <Link key={orden.id} to={`/orar/oraciones/orden/${orden.id}`} className="order-card order-card--now">
+              <span className="moment__icon">
+                <MomentIcon id={orden.category} />
+              </span>
+              <span className="order-card__name">{orden.title}</span>
+              <span className="order-card__meta">{es.prayers.inOrder}</span>
+            </Link>
+          ))}
+        </div>
+      ) : null}
+
       {prayers.loading ? <Loading /> : null}
       {prayers.data?.length === 0 ? (
         <Empty title={es.app.empty} text="Todavía no hay oraciones incorporadas en este momento." />

@@ -137,6 +137,16 @@ const es = {
     readingMode: 'Modo lectura',
     addNote: 'Añadir nota',
     yourNotes: 'Tus notas',
+    orders: 'El libro de oración, de corrido',
+    ordersHint: 'Las cuatro partes que no se rezan sueltas, sino seguidas y en el orden del libro.',
+    orderEyebrow: 'El libro de oración',
+    orderIndex: 'Índice · {{count}} partes',
+    orderSource: 'Ficha',
+    otherOrders: 'Los otros órdenes',
+    inOrder: 'Rezarlas en el orden del libro',
+    previous: 'Anterior',
+    next: 'Siguiente',
+    backToMoment: 'Todas las de «{{name}}»',
   },
 
   rule: {
@@ -154,6 +164,9 @@ const es = {
     scopeSunday: 'Domingos',
     scopeFeast: 'Fiestas',
     scopeFast: 'Periodos de ayuno',
+    // Las cuatro caben así en la fila de un móvil sin tener que desplazarla.
+    scopeDailyShort: 'Diario',
+    scopeFastShort: 'Ayuno',
     addItem: 'Añadir paso',
     itemTitle: 'Título del paso',
     linkTo: 'Enlazar con',

@@ -12,6 +12,15 @@ import { MORE_PRAYERS } from './prayers-more';
 import { THIRD_PRAYERS } from './prayers-third';
 import { FOURTH_PRAYERS } from './prayers-fourth';
 import { CANON_COMUNION_BLOCKS } from './canon-comunion';
+import { MOLITVOSLOV_PRAYERS } from './prayers-molitvoslov';
+import {
+  ENFERMOS_KONTAKION,
+  ENFERMOS_ORACION,
+  ENFERMOS_TROPARIO,
+  VIAJEROS_KONTAKION,
+  VIAJEROS_ORACION,
+  VIAJEROS_TROPARIO,
+} from './moleben';
 
 export const PRAYER_CATEGORIES: PrayerCategory[] = [
   /* ---- El día ---- */
@@ -68,9 +77,49 @@ const TRAD: SourceMeta = {
 
 const meta = (over: Partial<SourceMeta> = {}): SourceMeta => ({ ...TRAD, ...over });
 
+/**
+ * Una oración que existe, traducida para ATHOS.
+ *
+ * Varias fichas de este archivo se presentaban como «de uso corriente en las
+ * parroquias» y no lo eran: o el texto no coincidía con el del libro de
+ * oraciones, o era una paráfrasis con frases añadidas. Las que tienen original
+ * se han vuelto a traducir de él, y lo dicen.
+ */
+const traduccion = (fuente: string, original: string, autor?: string): SourceMeta =>
+  meta({
+    source: `${fuente}. Traducción al español hecha para ATHOS a partir del original ${original}, que es de dominio público`,
+    license: 'cc-by-sa-4.0',
+    copyright:
+      'Texto litúrgico tradicional; el original es de dominio público. Esta versión española es una traducción hecha para ATHOS y se publica bajo CC BY-SA 4.0.',
+    dateAdded: '2026-10-06',
+    author: autor,
+    notes:
+      'Es una traducción de un texto que existe, no una oración escrita para ATHOS. La versión española es de ATHOS: no procede de un libro litúrgico español publicado.',
+  });
+
+/**
+ * Una oración escrita por ATHOS.
+ *
+ * Las que siguen así no tienen texto en el libro de oraciones con el que
+ * sustituirlas. Se conservan porque sirven, pero la ficha y una línea dentro
+ * de la propia oración dicen de quién son.
+ */
+const propia = (nota: string): SourceMeta =>
+  meta({
+    source: 'Oración redactada para ATHOS',
+    license: 'cc-by-sa-4.0',
+    copyright:
+      'Texto redactado para ATHOS. No es un texto litúrgico ni procede de un libro litúrgico. Se publica bajo CC BY-SA 4.0.',
+    dateAdded: '2026-10-06',
+    notes: `No es un texto litúrgico: ${nota}`,
+  });
+
+const MOLITVOSLOV = 'Libro de oraciones ortodoxo eslavo (Molitvoslov), en la transcripción de Wikisource';
+
 const t = (content: string): TextBlock => ({ kind: 'text', content });
 const rub = (content: string): TextBlock => ({ kind: 'rubric', content });
 const head = (content: string): TextBlock => ({ kind: 'heading', content });
+const DE_ATHOS = rub('Esta oración la ha escrito ATHOS: no procede del libro de oraciones.');
 
 interface Seed {
   id: string;
@@ -133,42 +182,52 @@ const seeds: Seed[] = [
     meta: meta({ author: 'San Macario el Grande' }),
   },
   {
+    // Antes llevaba un texto que no es el del libro de oraciones. Éstos son los
+    // troparios a la Trinidad con que de verdad empieza la mañana.
     id: 'al-despertar',
-    title: 'Al levantarse del sueño',
+    title: 'Troparios a la Trinidad',
+    subtitle: 'Al levantarse del sueño',
     category: 'manana',
     blocks: [
-      t('Te adoramos, Trinidad santa, consustancial y vivificante: gloria a Ti.'),
-      t('Habiéndome levantado del sueño, te ofrezco esta súplica, oh Salvador, y clamo a Ti con las palabras del profeta: he pecado contra Ti, Señor; ten piedad de mí y sálvame.'),
+      t('Levantados del sueño, caemos ante Ti, oh Bueno, y te clamamos el himno de los ángeles, oh Poderoso: Santo, Santo, Santo eres, oh Dios; por la Theotokos, ten piedad de nosotros.'),
       t('Gloria al Padre, y al Hijo, y al Espíritu Santo.'),
-      t('Concédeme, Señor, empezar hoy a servirte de verdad, porque hasta ahora nada bueno he hecho delante de Ti.'),
+      t('Del lecho y del sueño me has levantado, Señor: ilumina mi mente y mi corazón, y abre mis labios para cantarte, Trinidad Santa: Santo, Santo, Santo eres, oh Dios; por la Theotokos, ten piedad de nosotros.'),
       t('Ahora y siempre, y por los siglos de los siglos. Amén.'),
-      t('Theotokos, esperanza y protección de los cristianos, no desprecies mi súplica, sino ayúdame en esta hora.'),
+      t('De repente vendrá el Juez, y quedarán al descubierto las obras de cada uno; pero con temor clamamos a medianoche: Santo, Santo, Santo eres, oh Dios; por la Theotokos, ten piedad de nosotros.'),
+      t('Señor, ten piedad. <em>(doce veces)</em>'),
     ],
+    meta: traduccion(`${MOLITVOSLOV}, oraciones de la mañana; también en el Horologion griego`, 'griego y eslavo'),
   },
   {
+    // Esta ficha llevaba la oración de los ancianos de Óptina, que ya tiene la
+    // suya, atribuida a san Filareto. La oración de cada día que se le
+    // atribuye a él es ésta.
     id: 'filareto',
-    title: 'Oración de la mañana',
-    subtitle: 'Atribuida a san Filareto de Moscú y a los ancianos de Óptina',
+    title: 'Señor, no sé qué pedirte',
+    subtitle: 'Oración de cada día, atribuida a san Filareto de Moscú',
     category: 'manana',
     blocks: [
-      t('Señor, concédeme aceptar con serenidad de alma todo lo que este día me traiga.'),
-      t('Concédeme entregarme por entero a tu santa voluntad.'),
-      t('En cada hora de este día, instrúyeme y sostenme en todo.'),
-      t('Cualesquiera que sean las noticias que reciba durante el día, enséñame a acogerlas con el alma tranquila y con la firme convicción de que en todo se cumple tu santa voluntad.'),
-      t('En todas mis palabras y en todas mis obras, guía mis pensamientos y mis sentimientos.'),
-      t('En los acontecimientos imprevistos, no me dejes olvidar que todo procede de Ti.'),
-      t('Enséñame a tratar con rectitud y sencillez a cuantos me rodean, sin turbar ni afligir a nadie.'),
-      t('Señor, dame fuerzas para soportar la fatiga de este día y todos los sucesos que traiga consigo.'),
-      t('Guía mi voluntad y enséñame a orar, a creer, a esperar, a sufrir, a perdonar y a amar. Amén.'),
+      t('Señor, no sé qué pedirte. Sólo Tú sabes lo que necesito. Tú me amas más de lo que yo sé amarme.'),
+      t('Padre, da a tu siervo lo que yo mismo no sé pedir. No me atrevo a pedir ni cruz ni consuelo: sólo me presento ante Ti. Mi corazón está abierto delante de Ti; Tú ves necesidades que yo no conozco. Mira, y haz conforme a tu misericordia.'),
+      t('Hiere y sana; derríbame y levántame. Ante tu santa voluntad y ante tus designios, que no alcanzo a comprender, me lleno de reverencia y callo. Me ofrezco a Ti en sacrificio. No tengo otro deseo que el de cumplir tu voluntad.'),
+      t('Enséñame a orar. Ora Tú mismo en mí. Amén.'),
     ],
     meta: meta({
-      author: 'San Filareto de Moscú († 1867); difundida también como oración de los ancianos de Óptina',
-      source: 'Texto de amplia difusión; original ruso de dominio público',
+      author: 'Atribuida a san Filareto (Drozdov), metropolitano de Moscú († 1867)',
+      source:
+        'Oración de cada día de san Filareto de Moscú, según los libros de oraciones rusos. Traducción al español hecha para ATHOS a partir del original ruso, que es de dominio público',
+      license: 'cc-by-sa-4.0',
+      copyright:
+        'El original ruso, del siglo XIX, es de dominio público. Esta versión española es una traducción hecha para ATHOS y se publica bajo CC BY-SA 4.0.',
+      dateAdded: '2026-10-06',
+      notes:
+        'Es una traducción de un texto que existe, no una oración escrita para ATHOS. Circula con el nombre de san Filareto; hay quien la hace derivar de una oración de Fénelon.',
     }),
   },
   {
     id: 'angel-guarda-manana',
     title: 'Al Ángel de la Guarda',
+    subtitle: 'Novena oración de la mañana',
     category: 'manana',
     blocks: [
       t('Santo Ángel, que velas sobre mi alma miserable y sobre mi vida atormentada: no me abandones, pecador, ni te apartes de mí por mi falta de dominio. No des lugar al espíritu maligno para que domine sobre mí con la violencia de este cuerpo mortal. Toma mi mano débil y desdichada y condúceme por el camino de la salvación. Sí, santo Ángel de Dios, guardián y protector de mi alma miserable y de mi cuerpo: perdóname todo aquello con lo que te he afligido todos los días de mi vida, y si algo he pecado en esta noche pasada, protégeme en el día presente y guárdame de toda tentación del enemigo, para que no irrite a Dios con ningún pecado. Ruega por mí al Señor, para que me confirme en su temor y me haga siervo digno de su bondad. Amén.'),
@@ -180,7 +239,9 @@ const seeds: Seed[] = [
     category: 'manana',
     blocks: [
       t('Señor, en tus manos encomiendo mi alma y mi cuerpo, mis obras y mis palabras, mi entrada y mi salida. Fortaléceme para hacer lo que te agrada, y guárdame de todo mal, hoy y siempre. Amén.'),
+      DE_ATHOS,
     ],
+    meta: propia('recoge fórmulas de los salmos y del Horologion, pero la redacción es de ATHOS.'),
   },
 
   /* ======================= NOCHE ======================= */
@@ -196,12 +257,20 @@ const seeds: Seed[] = [
     meta: meta({ author: 'San Juan Damasceno' }),
   },
   {
+    // Llevaba dos frases que no están en el original —«concede a los que
+    // gobiernan sabiduría y paz» y «de todos los que he olvidado nombrar»— y le
+    // faltaban la mitad de las peticiones. Ahora va entera, traducida del eslavo.
     id: 'perdon-nocturno',
     title: 'Perdón antes de dormir',
+    subtitle: 'Remite, perdona, absuelve',
     category: 'noche',
     blocks: [
-      t('Perdona, Señor, a cuantos me odian y me ofenden. Haz el bien a los que me hacen bien. Concede a mis hermanos y a mis allegados cuanto piden para su salvación. Visita a los enfermos y concédeles la curación. Guía a los que navegan. Acompaña a los que van de camino. Concede a los que gobiernan sabiduría y paz. Perdona a los que me han pedido, indigno de mí, que ore por ellos. Ten piedad, Señor, según tu gran misericordia, de todos los que he olvidado nombrar, porque Tú eres bendito por los siglos de los siglos. Amén.'),
+      t('Remite, perdona, absuelve, oh Dios, nuestras faltas, voluntarias e involuntarias, de palabra y de obra, a sabiendas o sin saberlo, de día y de noche, de la mente y del pensamiento: perdónanoslo todo, como bueno y amante de los hombres.'),
+      t('Perdona, Señor amante de los hombres, a los que nos odian y nos ofenden. Haz el bien a los que nos hacen bien. Concede a nuestros hermanos y parientes lo que piden para su salvación, y la vida eterna. Visita a los enfermos y dales la curación. Guía a los que están en el mar. Acompaña a los que van de camino. Concede el perdón de los pecados a los que nos sirven y tienen misericordia de nosotros. Ten piedad, según tu gran misericordia, de los que nos han pedido a nosotros, indignos, que oremos por ellos.'),
+      t('Acuérdate, Señor, de nuestros padres y hermanos que se durmieron antes que nosotros, y dales descanso donde brilla la luz de tu rostro. Acuérdate, Señor, de nuestros hermanos cautivos, y líbralos de toda angustia. Acuérdate, Señor, de los que dan fruto y hacen el bien en tus santas iglesias, y concédeles lo que piden para su salvación, y la vida eterna.'),
+      t('Acuérdate, Señor, también de nosotros, tus siervos humildes, pecadores e indignos; ilumina nuestra mente con la luz de tu conocimiento y guíanos por la senda de tus mandamientos, por las oraciones de nuestra purísima Señora, la Theotokos y siempre Virgen María, y de todos tus santos; porque bendito eres por los siglos de los siglos. Amén.'),
     ],
+    meta: traduccion(`${MOLITVOSLOV}, oraciones antes del sueño`, 'eslavo'),
   },
   {
     id: 'examen-del-dia',
@@ -280,9 +349,13 @@ const seeds: Seed[] = [
     id: 'antes-de-estudiar',
     title: 'Antes del estudio',
     category: 'antes-estudiar',
+    // El texto anterior no era el del libro de oraciones. Éste es el que va
+    // emparejado con el «Después del estudio» que ya estaba.
     blocks: [
-      t('Señor Jesucristo, Dios nuestro, que hiciste descender sobre tus santos discípulos y apóstoles el Espíritu Santo: envía también sobre mí, tu siervo, la gracia de ese mismo Espíritu, para que cuanto aprenda lo aprenda para gloria tuya y provecho del prójimo. Abre los ojos de mi entendimiento, ilumina mi mente y afirma mi memoria, por las oraciones de la Santísima Theotokos y de todos los santos. Amén.'),
+      rub('Se empieza con «Rey celestial». Después:'),
+      t('Señor bonísimo, envíanos la gracia de tu Espíritu Santo, que da y fortalece las fuerzas de nuestra alma, para que, atendiendo a la enseñanza que se nos da, crezcamos para gloria tuya, que eres nuestro Creador, para consuelo de nuestros padres y para provecho de la Iglesia y de la patria. Amén.'),
     ],
+    meta: traduccion(`${MOLITVOSLOV}, oración antes de la enseñanza`, 'eslavo'),
   },
   {
     id: 'antes-de-trabajar',
@@ -303,10 +376,20 @@ const seeds: Seed[] = [
   {
     id: 'antes-de-viajar',
     title: 'Antes de emprender viaje',
+    subtitle: 'El tropario, el kontakion y la oración por los que se ponen en camino',
     category: 'antes-viajar',
+    // Iba resumida. Ahora va entera, con la misma traducción del Moleben por
+    // los que se ponen en camino, de donde procede.
     blocks: [
-      t('Señor Jesucristo, Dios nuestro, verdadero y auténtico Camino, que acompañaste a tu siervo José y viajaste con Lucas y Cleofás hacia Emaús: acompaña también, Señor, a tus siervos que emprenden este camino. Líbralos de todo peligro y devuélvelos sanos y salvos, porque tuyo es el poder y la gloria, ahora y siempre, y por los siglos de los siglos. Amén.'),
+      head('Tropario, tono segundo'),
+      t(VIAJEROS_TROPARIO),
+      head('Kontakion, tono segundo'),
+      t(VIAJEROS_KONTAKION),
+      head('Oración'),
+      t(VIAJEROS_ORACION),
+      rub('Es la oración del Trebnik por los que se ponen en camino. Para el oficio entero, Biblioteca → Moleben.'),
     ],
+    meta: traduccion(`${MOLITVOSLOV} y Trebnik eslavo, oraciones por los que van de camino`, 'eslavo'),
   },
 
   /* ======================= ARREPENTIMIENTO ======================= */
@@ -385,7 +468,9 @@ const seeds: Seed[] = [
     category: 'accion-de-gracias',
     blocks: [
       t('Gloria a Ti, Señor, Rey de los siglos, que me has concedido bienes grandes e inescrutables. Gloria a Ti por lo que conozco y por lo que ignoro, por lo que veo y por lo que se me oculta. Recibe, Señor, esta acción de gracias de tu siervo indigno, y concédeme amarte con todo el corazón y servirte todos los días de mi vida. Amén.'),
+      DE_ATHOS,
     ],
+    meta: propia('recoge expresiones de la anáfora de san Juan Crisóstomo, pero la redacción es de ATHOS. Las del libro de oraciones están en «Por todos los beneficios de Dios».'),
   },
   {
     id: 'gloria-a-dios-por-todo',
@@ -395,7 +480,10 @@ const seeds: Seed[] = [
       t('Gloria a Dios por todas las cosas.'),
       rub('Últimas palabras de san Juan Crisóstomo, camino del destierro.'),
     ],
-    meta: meta({ author: 'San Juan Crisóstomo († 407)' }),
+    meta: meta({
+      author: 'San Juan Crisóstomo († 407)',
+      source: 'Palabras de san Juan Crisóstomo al morir, según Paladio, Diálogo sobre la vida de san Juan Crisóstomo, 11',
+    }),
   },
 
   /* ======================= TENTACIÓN ======================= */
@@ -416,10 +504,20 @@ const seeds: Seed[] = [
   {
     id: 'por-el-enfermo',
     title: 'Por un enfermo',
+    subtitle: 'El tropario, el kontakion y la oración del Trebnik',
     category: 'enfermedad',
+    // El texto anterior no era del libro de oraciones. Éste es el que se reza
+    // por los enfermos, con la traducción del Moleben de los enfermos.
     blocks: [
-      t('Señor Jesucristo, médico de las almas y de los cuerpos, que no viniste a llamar a los justos sino a los pecadores al arrepentimiento: visita a tu siervo N., sánalo de toda enfermedad del cuerpo y del alma, y levántalo del lecho del dolor, porque Tú eres nuestra vida y a Ti damos gloria, al Padre, y al Hijo, y al Espíritu Santo, ahora y siempre, y por los siglos de los siglos. Amén.'),
+      head('Tropario, tono cuarto'),
+      t(ENFERMOS_TROPARIO),
+      head('Kontakion, tono segundo'),
+      t(ENFERMOS_KONTAKION),
+      head('Oración'),
+      t(ENFERMOS_ORACION),
+      rub('Donde va N. se dice el nombre de bautismo del enfermo. La oración es la misma de la Unción de los enfermos; el oficio entero está en Biblioteca → Moleben.'),
     ],
+    meta: traduccion(`${MOLITVOSLOV} y Trebnik eslavo, oraciones por los enfermos`, 'eslavo'),
   },
   {
     id: 'en-la-propia-enfermedad',
@@ -427,7 +525,9 @@ const seeds: Seed[] = [
     category: 'enfermedad',
     blocks: [
       t('Señor, Tú conoces lo que me conviene. Concédeme llevar esta dolencia con paciencia y sin murmuración; y si es tu voluntad, devuélveme la salud para servirte. Pero no se haga mi voluntad, sino la tuya. Amén.'),
+      DE_ATHOS,
     ],
+    meta: propia('se apoya en la oración del Señor en Getsemaní (Lucas 22, 42), pero la redacción es de ATHOS.'),
   },
 
   /* ======================= FAMILIA, AMIGOS, ENEMIGOS ======================= */
@@ -437,7 +537,10 @@ const seeds: Seed[] = [
     category: 'familia',
     blocks: [
       t('Señor Jesucristo, guarda bajo tu protección a mis padres, a mis hermanos, a mi esposo o esposa y a mis hijos. Concédeles salud, paz y salvación, y a mí, un corazón paciente con ellos. Perdona lo que unos a otros nos hemos hecho, y únenos en tu amor. Amén.'),
+      DE_ATHOS,
+      rub('La del libro de oraciones es la conmemoración de los vivos, en este mismo momento.'),
     ],
+    meta: propia('no procede del libro de oraciones; la conmemoración de los vivos, que sí es suya, está aparte.'),
   },
   {
     id: 'por-los-hijos',
@@ -445,7 +548,9 @@ const seeds: Seed[] = [
     category: 'familia',
     blocks: [
       t('Señor Dios nuestro, fuente de toda bondad: concede a mis hijos crecer en tu temor y en tu amor. Guárdalos de la mala compañía y del mal ejemplo, incluso del mío. Que cuando yo falte, encuentren en Ti el Padre que no falta. Amén.'),
+      DE_ATHOS,
     ],
+    meta: propia('no procede del libro de oraciones; la redacción es de ATHOS.'),
   },
   {
     id: 'por-los-amigos',
@@ -453,16 +558,26 @@ const seeds: Seed[] = [
     category: 'amigos',
     blocks: [
       t('Señor, recuerda a quienes me han hecho bien y a quienes me acompañan. Devuélveles lo que yo no puedo devolverles y guárdalos de todo mal. Amén.'),
+      DE_ATHOS,
     ],
+    meta: propia('la redacción es de ATHOS. Lo que el libro de oraciones tiene para este momento es el tropario «Por el amor de unos a otros», que está aquí mismo.'),
   },
   {
     id: 'por-los-enemigos',
     title: 'Por los enemigos',
+    subtitle: 'La conmemoración, el tropario y el kontakion',
     category: 'enemigos',
+    // Llevaba una línea del libro de oraciones con un final añadido. Ahora va
+    // lo que el libro tiene de verdad para los que nos odian y nos ofenden.
     blocks: [
-      t('Señor, perdona a quienes me odian y me ofenden; haz el bien a quienes me hacen bien; concede a mis hermanos y allegados cuanto piden para su salvación, y a mí, no juzgar a ninguno.'),
+      t('Salva, Señor, y ten piedad de los que me odian y me ofenden y de los que me causan daño, y no los dejes perecer por mi causa, pecador.'),
+      head('Tropario, tono cuarto'),
+      t('Tú, Señor de alma amorosa, que oraste por los que te crucificaron y mandaste a tus siervos orar por sus enemigos: perdona a los que nos odian y nos ofenden, y guíalos de todo mal y de toda astucia a una vida de amor fraterno y de virtud. Te lo pedimos humildemente, para que con un mismo sentir te glorifiquemos a Ti, el único amante de los hombres.'),
+      head('Kontakion, tono quinto'),
+      t('Como tu protomártir Esteban oraba, Señor, por los que lo mataban, así también nosotros, postrados, te pedimos: perdona a todos los que nos odian y nos ofenden, para que ninguno de ellos perezca por nuestra causa, sino que todos se salven por tu gracia, oh Dios todo generoso.'),
       rub('«Amad a vuestros enemigos, bendecid a los que os maldicen» (Mt 5, 44).'),
     ],
+    meta: traduccion(`${MOLITVOSLOV}, conmemoración de los vivos y oraciones por los que nos odian y nos ofenden`, 'eslavo'),
   },
 
   /* ======================= DIFUNTOS ======================= */
@@ -478,11 +593,15 @@ const seeds: Seed[] = [
   {
     id: 'por-los-difuntos',
     title: 'Por los difuntos',
+    subtitle: 'La conmemoración de todos los que se han dormido',
     category: 'difuntos',
+    // Era un mosaico de frases de varias oraciones. Ahora es la conmemoración
+    // de los difuntos del libro de oraciones, tal cual.
     blocks: [
-      t('Acuérdate, Señor, de tus siervos que se han dormido en la esperanza de la resurrección y de la vida eterna, y perdónales todo pecado voluntario e involuntario, porque no hay hombre que viva y no peque: sólo Tú estás sin pecado, y tu justicia es justicia eterna y tu palabra es verdad.'),
-      t('Memoria eterna.'),
+      t('Acuérdate, Señor, de todos los que se han dormido en la esperanza de la resurrección y de la vida eterna, nuestros padres, hermanos y hermanas, los que yacen aquí y en todas partes, cristianos ortodoxos: hazlos habitar con tus santos, donde brilla la luz de tu rostro, y ten piedad de nosotros, porque eres bueno y amante de los hombres. Amén.'),
+      t('Concede, Señor, el perdón de los pecados a todos los que se durmieron antes que nosotros en la fe y en la esperanza de la resurrección, nuestros padres, hermanos y hermanas, y hazles memoria eterna. <em>(tres veces)</em>'),
     ],
+    meta: traduccion(`${MOLITVOSLOV}, conmemoración de los difuntos`, 'eslavo'),
   },
 
   /* ======================= CONFESIÓN Y COMUNIÓN ======================= */
@@ -493,8 +612,10 @@ const seeds: Seed[] = [
     blocks: [
       rub('El sacerdote es testigo, no juez. Se confiesa ante Cristo.'),
       t('He aquí, hermano, que Cristo está invisiblemente presente y recibe tu confesión. No te avergüences ni temas, ni ocultes nada; di sin reservas cuanto has hecho, y recibirás el perdón de nuestro Señor Jesucristo.'),
-      t('Señor Dios de nuestra salvación, que en tu bondad perdonas los pecados: acepta mi arrepentimiento y no me rechaces de tu presencia. Concédeme conocer mis faltas tal como son y no como yo quisiera verlas. Amén.'),
+      rub('Para prepararla, la confesión diaria de los pecados del libro de oraciones, que está en este mismo momento, recorre uno por uno los pecados más corrientes.'),
     ],
+    // La segunda oración que llevaba no era del Euchologion. Se ha quitado: lo
+    // que el libro tiene para este momento es la confesión diaria.
     meta: meta({ source: 'Exhortación del Euchologion antes de la confesión' }),
   },
   {
@@ -525,7 +646,7 @@ const seeds: Seed[] = [
   {
     id: 'creo-senor-y-confieso',
     title: 'Creo, Señor, y confieso',
-    subtitle: 'Antes de la Santa Comunión',
+    subtitle: 'Décima oración antes de comulgar, de san Juan Crisóstomo',
     category: 'comunion',
     blocks: [
       t('Creo, Señor, y confieso que Tú eres en verdad el Cristo, el Hijo de Dios vivo, que viniste al mundo para salvar a los pecadores, de los cuales yo soy el primero.'),
@@ -536,14 +657,20 @@ const seeds: Seed[] = [
     meta: meta({ source: 'Oraciones ante la Santa Comunión, Horologion' }),
   },
   {
+    // Iba recortada. Ahora es la primera oración de acción de gracias entera,
+    // traducida del Horologion griego, con los versos que la preceden.
     id: 'despues-de-comulgar',
-    title: 'Después de la Santa Comunión',
+    title: 'Te doy gracias, Señor Dios mío',
+    subtitle: 'Primera oración de acción de gracias después de comulgar',
     category: 'comunion',
     blocks: [
+      rub('Cuando hayas recibido la buena comunión de los dones místicos que dan la vida, canta enseguida, da gracias de verdad y dile a Dios de corazón, con fervor:'),
       t('Gloria a Ti, oh Dios. Gloria a Ti, oh Dios. Gloria a Ti, oh Dios.'),
-      t('Te doy gracias, Señor Dios mío, porque no me has rechazado a mí, pecador, sino que me has hecho digno de participar de tus santos Misterios. Te doy gracias porque a mí, indigno, me has concedido comulgar de tus purísimos dones celestiales. Soberano amante de los hombres, que por nosotros moriste y resucitaste: concede que estos Misterios sean para mí salud del alma y del cuerpo, y ahuyenten toda adversidad. Amén.'),
-      t('Ahora, Señor, despides a tu siervo en paz, según tu palabra; porque han visto mis ojos tu salvación.'),
+      t('Te doy gracias, Señor Dios mío, porque no me has rechazado a mí, pecador, sino que me has hecho digno de participar de tus santos dones. Te doy gracias porque a mí, indigno, me has hecho digno de recibir tus dones purísimos y celestiales.'),
+      t('Pero, Soberano amante de los hombres, que por nosotros moriste y resucitaste y nos regalaste estos Misterios temibles y vivificantes para bien y santificación de nuestras almas y de nuestros cuerpos: haz que sean también para mí curación del alma y del cuerpo, para alejar todo lo que me es contrario, para iluminar los ojos de mi corazón, para la paz de las fuerzas de mi alma, para una fe que no avergüence, para un amor sin fingimiento, para plenitud de sabiduría, para guardar tus mandamientos, para aumento de tu gracia divina y para hacerme propio tu Reino.'),
+      t('Para que, guardado por ellos en tu santificación, me acuerde siempre de tu gracia y no viva ya para mí mismo, sino para Ti, nuestro Soberano y bienhechor. Y así, al salir de esta vida con la esperanza de la vida eterna, llegue al descanso que no acaba, donde está la voz incesante de los que celebran la fiesta y el gozo sin fin de los que contemplan la belleza indecible de tu rostro. Porque Tú eres lo verdaderamente deseable y la alegría inefable de los que te aman, Cristo Dios nuestro, y a Ti te canta toda la creación por los siglos. Amén.'),
     ],
+    meta: traduccion('Horologion, acción de gracias después de la Divina Comunión; oración anónima (glt.goarch.org)', 'griego'),
   },
   {
     id: 'canon-comunion',
@@ -652,9 +779,45 @@ const plain = (blocks: TextBlock[]) =>
  */
 const CATEGORY_ORDER = new Map(PRAYER_CATEGORIES.map((c) => [c.id, c.order]));
 
-const allSeeds: Seed[] = [...seeds, ...MORE_PRAYERS, ...THIRD_PRAYERS, ...FOURTH_PRAYERS].sort(
-  (a, b) => (CATEGORY_ORDER.get(a.category) ?? 99) - (CATEGORY_ORDER.get(b.category) ?? 99),
-);
+/**
+ * Dentro de la mañana, la noche y la comunión, el orden del libro.
+ *
+ * Esas oraciones se fueron incorporando en tandas, y en el menú salían en el
+ * orden en que entraron: la novena oración de la mañana antes que la tercera.
+ * Las que el libro reza seguidas van primero y en su sitio; detrás, las demás
+ * de ese momento, en el orden en que se escribieron.
+ */
+const ORDEN_DEL_LIBRO = [
+  // Oraciones de la mañana
+  'comienzo-habitual', 'oracion-publicano', 'al-despertar', 'levantandome-trinidad',
+  'macario-primera', 'canto-de-medianoche', 'macario-tercera', 'macario-cuarta',
+  'basilio-manana-primera', 'basilio-manana-segunda', 'theotokos-canto-tu-gracia',
+  'jesucristo-manana', 'angel-guarda-manana', 'theotokos-manana', 'santo-del-nombre',
+  'tropario-de-la-cruz',
+  // Oraciones antes del sueño
+  'macario-noche', 'antioco-noche', 'espiritu-santo-noche', 'macario-que-te-ofrecere',
+  'noche-quinta', 'noche-sexta', 'crisostomo-24', 'noche-octava', 'estudita-theotokos',
+  'buena-madre', 'angel-noche', 'suplicas-a-la-theotokos', 'damasceno-noche',
+  'ilumina-mis-ojos', 'levantese-dios', 'perdon-nocturno', 'oracion-final-noche',
+  // La comunión: la víspera, la mañana y la acción de gracias
+  'preparacion-para-comulgar', 'canon-comunion', 'troparios-antes-comulgar',
+  'basilio-antes-comulgar', 'basilio-se-senor', 'crisostomo-antes-comulgar',
+  'crisostomo-no-soy-digno', 'crisostomo-remite', 'damasceno-antes-comulgar',
+  'simeon-de-labios-manchados', 'metafrastes-antes-comulgar', 'damasceno-ante-las-puertas',
+  'creo-senor-y-confieso', 'al-acercarse-al-caliz', 'despues-de-comulgar',
+  'basilio-despues-comulgar', 'metafrastes-despues-comulgar', 'tu-santo-cuerpo',
+  'theotokos-despues-comulgar',
+];
+const PUESTO_EN_EL_LIBRO = new Map(ORDEN_DEL_LIBRO.map((id, i) => [id, i]));
+
+const allSeeds: Seed[] = [...seeds, ...MORE_PRAYERS, ...THIRD_PRAYERS, ...FOURTH_PRAYERS, ...MOLITVOSLOV_PRAYERS]
+  .map((seed, escrita) => ({ seed, puesto: PUESTO_EN_EL_LIBRO.get(seed.id) ?? 1000 + escrita }))
+  .sort(
+    (a, b) =>
+      (CATEGORY_ORDER.get(a.seed.category) ?? 99) - (CATEGORY_ORDER.get(b.seed.category) ?? 99) ||
+      a.puesto - b.puesto,
+  )
+  .map(({ seed }) => seed);
 
 export const PRAYERS: Prayer[] = allSeeds.map((s, i) => ({
   id: s.id,

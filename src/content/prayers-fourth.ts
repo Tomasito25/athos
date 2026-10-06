@@ -72,7 +72,7 @@ export const FOURTH_PRAYERS: ThirdPrayerSeed[] = [
   {
     id: 'canto-de-medianoche',
     title: 'El canto de medianoche',
-    subtitle: 'Para no dormirse en el pecado',
+    subtitle: 'Segunda oración de la mañana, de san Macario el Grande',
     category: 'manana',
     blocks: [
       t('Levantándome del sueño, te ofrezco, oh Salvador, el canto de medianoche, y postrándome te clamo: no me dejes dormir en la muerte del pecado; ten compasión de mí, Tú que fuiste crucificado voluntariamente, y levántame pronto, a mí, que yazgo en la pereza. Sálvame cuando estoy ante Ti y en la oración, y después del sueño de la noche haz amanecer para mí un día sin pecado, Cristo Dios, y sálvame.'),
@@ -82,7 +82,7 @@ export const FOURTH_PRAYERS: ThirdPrayerSeed[] = [
   {
     id: 'theotokos-manana',
     title: 'Santísima Señora mía',
-    subtitle: 'A la Theotokos, por la mañana',
+    subtitle: 'Décima oración de la mañana, a la Theotokos',
     category: 'manana',
     blocks: [
       t('Santísima Señora mía, Theotokos: con tus santas y poderosas súplicas aleja de mí, tu siervo humilde y miserable, el desaliento, el olvido, la insensatez, la negligencia y todos los pensamientos impuros, malvados y blasfemos de mi corazón desdichado y de mi mente entenebrecida; y apaga la llama de mis pasiones, porque soy pobre y miserable.'),
@@ -106,7 +106,7 @@ export const FOURTH_PRAYERS: ThirdPrayerSeed[] = [
   {
     id: 'macario-noche',
     title: 'Dios eterno y Rey de toda la creación',
-    subtitle: 'A Dios Padre, antes del sueño',
+    subtitle: 'Primera oración antes del sueño, de san Macario el Grande, a Dios Padre',
     category: 'noche',
     blocks: [
       t('Dios eterno y Rey de toda la creación, que me has concedido llegar hasta esta hora: perdóname los pecados que hoy he cometido de obra, de palabra y de pensamiento, y purifica, Señor, mi humilde alma de toda mancha de la carne y del espíritu.'),
@@ -117,7 +117,7 @@ export const FOURTH_PRAYERS: ThirdPrayerSeed[] = [
   {
     id: 'espiritu-santo-noche',
     title: 'Señor, Rey celestial, ten compasión de mí',
-    subtitle: 'Al Espíritu Santo, examinando el día',
+    subtitle: 'Tercera oración antes del sueño, al Espíritu Santo',
     category: 'noche',
     blocks: [
       t('Señor, Rey celestial, Consolador, Espíritu de verdad: ten compasión y misericordia de mí, tu siervo pecador; absuélveme a mí, indigno, y perdóname todo lo que hoy he pecado contra Ti como hombre, y aun no como hombre, sino peor que una bestia: mis pecados voluntarios e involuntarios, conocidos y desconocidos, los que vienen de la juventud y de la mala enseñanza, y los que vienen de la insolencia y del desaliento.'),
@@ -130,7 +130,7 @@ export const FOURTH_PRAYERS: ThirdPrayerSeed[] = [
   {
     id: 'crisostomo-24',
     title: 'Las veinticuatro oraciones de san Juan Crisóstomo',
-    subtitle: 'Una por cada hora del día y de la noche',
+    subtitle: 'Séptima oración antes del sueño: una por cada hora del día y de la noche',
     category: 'noche',
     blocks: [
       rub('Son peticiones de una línea, y la tradición las pone una por cada hora. Se pueden rezar todas seguidas antes de dormir o repartirlas a lo largo del día.'),
@@ -166,7 +166,7 @@ export const FOURTH_PRAYERS: ThirdPrayerSeed[] = [
   {
     id: 'buena-madre',
     title: 'Buena Madre del buen Rey',
-    subtitle: 'A la Theotokos, antes del sueño',
+    subtitle: 'Décima oración antes del sueño, a la Theotokos',
     category: 'noche',
     blocks: [
       t('Buena Madre del buen Rey, purísima y bendita Theotokos María: derrama la misericordia de tu Hijo y Dios nuestro sobre mi alma apasionada, y con tus súplicas guíame a las buenas obras, para que pase el resto de mi vida sin mancha y por ti alcance el paraíso, oh Virgen Theotokos, la única pura y bendita.'),
@@ -176,7 +176,7 @@ export const FOURTH_PRAYERS: ThirdPrayerSeed[] = [
   {
     id: 'angel-noche',
     title: 'Ángel de Cristo',
-    subtitle: 'Al Ángel de la Guarda, antes del sueño',
+    subtitle: 'Undécima oración antes del sueño, al Ángel de la Guarda',
     category: 'noche',
     blocks: [
       t('Ángel de Cristo, mi santo custodio y protector de mi alma y de mi cuerpo: perdóname todo lo que he pecado en el día de hoy, y líbrame de toda maldad del enemigo que me combate, para que no irrite a mi Dios con ningún pecado. Ruega por mí, siervo pecador e indigno, para que me muestres digno de la bondad y de la misericordia de la Santísima Trinidad, de la Madre de mi Señor Jesucristo y de todos los santos. Amén.'),
@@ -193,6 +193,8 @@ export const FOURTH_PRAYERS: ThirdPrayerSeed[] = [
       t('Levántese Dios y sean dispersados sus enemigos, y huyan de su presencia los que lo odian. Como se disipa el humo, que se disipen; como se derrite la cera ante el fuego, así perezcan los demonios ante la faz de los que aman a Dios y se signan con la señal de la cruz, y dicen con alegría:'),
       t('Alégrate, preciosa y vivificante Cruz del Señor, que ahuyentas a los demonios con la fuerza de nuestro Señor Jesucristo, crucificado en ti, que descendió a los infiernos, pisoteó el poder del diablo y nos dio a ti, su preciosa Cruz, para ahuyentar a todo adversario.'),
       t('Oh preciosa y vivificante Cruz del Señor: ayúdame, con la santa Señora, la Virgen Theotokos, y con todos los santos, por los siglos. Amén.'),
+      rub('O, brevemente:'),
+      t('Guárdame, Señor, con el poder de tu preciosa y vivificante Cruz, y líbrame de todo mal.'),
     ],
     meta: traduccion(MOLITVOSLOV_NOCHE, 'eslavo'),
   },
@@ -201,7 +203,7 @@ export const FOURTH_PRAYERS: ThirdPrayerSeed[] = [
   {
     id: 'crisostomo-antes-comulgar',
     title: 'Señor Dios mío, sé que no soy digno',
-    subtitle: 'Antes de comulgar',
+    subtitle: 'Tercera oración antes de comulgar, de san Juan Crisóstomo',
     category: 'comunion',
     blocks: [
       t('Señor Dios mío, sé que no soy digno ni capaz de que entres bajo el techo de la casa de mi alma, porque está toda desierta y en ruinas, y no tienes en mí lugar digno donde reclinar la cabeza. Pero así como desde lo alto te humillaste por nosotros, abájate también ahora a mi humildad; y así como aceptaste reclinarte en una cueva, en un pesebre de animales, acepta también entrar en el pesebre de mi alma sin razón y en mi cuerpo manchado.'),
@@ -214,7 +216,7 @@ export const FOURTH_PRAYERS: ThirdPrayerSeed[] = [
   {
     id: 'damasceno-antes-comulgar',
     title: 'El único que tiene poder para perdonar',
-    subtitle: 'Antes de comulgar',
+    subtitle: 'Sexta oración antes de comulgar, de san Juan Damasceno',
     category: 'comunion',
     blocks: [
       t('Soberano Señor Jesucristo, Dios nuestro, el único que tiene poder para perdonar los pecados de los hombres: como bueno y amante de los hombres, pasa por alto mis faltas, las que cometí sabiéndolo y las que cometí sin saberlo, y hazme digno de recibir sin condenación tus divinos, gloriosos, purísimos y vivificantes Misterios; no para castigo ni para aumento de mis pecados, sino para purificación y santificación, como prenda de la vida y del Reino venideros, como muralla y auxilio, para derribar a los que me combaten y para borrar mis muchas faltas.'),
@@ -225,7 +227,7 @@ export const FOURTH_PRAYERS: ThirdPrayerSeed[] = [
   {
     id: 'basilio-despues-comulgar',
     title: 'Soberano Cristo Dios, Rey de los siglos',
-    subtitle: 'Acción de gracias después de comulgar',
+    subtitle: 'Segunda oración de acción de gracias, de san Basilio el Grande',
     category: 'comunion',
     blocks: [
       t('Soberano Cristo Dios, Rey de los siglos y Creador de todas las cosas: te doy gracias por todos los bienes que me has concedido y por la comunión de tus purísimos y vivificantes Misterios.'),
@@ -236,7 +238,7 @@ export const FOURTH_PRAYERS: ThirdPrayerSeed[] = [
   {
     id: 'theotokos-despues-comulgar',
     title: 'Luz de mi alma entenebrecida',
-    subtitle: 'A la Theotokos, después de comulgar',
+    subtitle: 'Quinta oración de acción de gracias, a la Theotokos',
     category: 'comunion',
     blocks: [
       t('Santísima Señora mía, Theotokos, luz de mi alma entenebrecida, mi esperanza, mi amparo, mi refugio, mi consuelo y mi alegría: te doy gracias porque me has hecho digno a mí, indigno, de participar del purísimo Cuerpo y de la preciosa Sangre de tu Hijo.'),

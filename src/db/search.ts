@@ -11,6 +11,7 @@ import { db } from './db';
 import { formatReference } from './bible';
 import { BOOKS_BY_ID } from '@/content/bible';
 import { STUDY_COURSES, STUDY_WORKS } from '@/content/study';
+import { PRAYER_ORDERS } from '@/content/prayer-orders';
 
 export const KIND_LABELS: Record<SearchKind, string> = {
   prayer: 'Oraciones',
@@ -73,6 +74,24 @@ export async function searchAll(query: string, options: SearchOptions = {}): Pro
 
   /* ---- Oraciones ---- */
   if (wanted.has('prayer')) {
+    // Los órdenes del libro, por su nombre y su descripción: quien busca
+    // «oraciones de la mañana» quiere el orden entero, no una pieza suelta.
+    for (const o of PRAYER_ORDERS) {
+      const texto = `${o.title} ${o.subtitle} ${o.about}`;
+      const s = score(tokens, texto, o.title);
+      if (s > 0) {
+        push('prayer', {
+          id: `orden-${o.id}`,
+          kind: 'prayer',
+          title: o.title,
+          subtitle: o.subtitle,
+          snippet: o.about,
+          path: `/orar/oraciones/orden/${o.id}`,
+          // Un poco por delante de las oraciones sueltas que digan lo mismo.
+          score: s + 1,
+        });
+      }
+    }
     for (const p of await db.prayers.toArray()) {
       const s = score(tokens, p.searchText, p.title);
       if (s > 0) {

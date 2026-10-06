@@ -610,7 +610,9 @@ export interface RuleItem {
     | 'canon'
     | 'office'
     | 'jesus-prayer'
-    | 'komboskini';
+    | 'komboskini'
+    /** Uno de los órdenes del libro de oración, entero: las de la mañana, las de la noche… */
+    | 'prayer-order';
   linkId?: string;
   /** Repeticiones objetivo, p. ej. 33 oraciones de Jesús o nudos del komboskini. */
   target?: number;

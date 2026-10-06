@@ -7,6 +7,7 @@ import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
 import { getPsalm } from '@/db/psalter';
 import { ruleItems } from '@/db/user';
+import { orderById } from '@/content/prayer-orders';
 import type { RuleItem, SourceMeta, TextBlock } from '@/types';
 
 export interface ResolvedStep {
@@ -49,6 +50,18 @@ export function useOfficeSteps(ruleId: string) {
           }
         }
 
+        if (item.linkKind === 'prayer-order' && item.linkId) {
+          const orden = orderById(item.linkId);
+          if (orden) {
+            // El orden entero dentro del oficio, cada oración con su título.
+            const blocks = orden.sections.flatMap((s): TextBlock[] => [
+              { kind: 'heading', content: s.title },
+              ...s.blocks,
+            ]);
+            return { item, blocks, origin: orden.subtitle, meta: orden.meta, path: `/orar/oraciones/orden/${orden.id}` };
+          }
+        }
+
         if (item.linkKind === 'user-prayer' && item.linkId) {
           const propia = await db.user_prayers.get(item.linkId);
           if (propia) {
@@ -60,7 +73,9 @@ export function useOfficeSteps(ruleId: string) {
                 content: parrafo.trim(),
                 greek: indice === 0 ? propia.greek : undefined,
               }));
-            return { item, blocks, origin: 'Oración tuya', path: `/orar/mis-oraciones/${propia.id}` };
+            // No hay una pantalla por oración propia: se abre la lista con ésa ya
+            // abierta para editar. Antes apuntaba a una ruta que no existía.
+            return { item, blocks, origin: 'Oración tuya', path: `/orar/mis-oraciones?editar=${propia.id}` };
           }
         }
 

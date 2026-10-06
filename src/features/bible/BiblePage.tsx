@@ -8,6 +8,7 @@ import { parsePassage } from '@/lib/pericope';
 import { normalize } from '@/lib/text';
 import { useUi } from '@/stores/ui';
 import type { BibleSection, Testament } from '@/types';
+import { useHashScroll } from '@/hooks/useHashScroll';
 import es from '@/locales/es';
 
 /** Índice de la Escritura, agrupado por testamento y sección. */
@@ -16,6 +17,7 @@ export function BiblePage() {
   const [indexing, setIndexing] = useState<{ done: number; total: number } | null>(null);
   const status = useAsync(() => bibleIndexStatus(), [indexing?.done]);
   const toast = useUi((s) => s.toast);
+  useHashScroll();
 
   const filtered = useMemo(() => {
     const needle = normalize(query);
@@ -119,11 +121,25 @@ export function BiblePage() {
           </div>
         </Section>
       ) : (
-        groups.map(([testament, sections]) => (
+        <>
+        {/* Sesenta y tantos libros son mucho dedo: arriba, el salto al otro Testamento. */}
+        <nav className="shortcut-row" style={{ marginTop: 'var(--sp-4)' }} aria-label={es.bible.jump}>
+          {groups.map(([testament]) => (
+            <a key={testament} className="shortcut" href={`#testamento-${testament}`}>
+              {TESTAMENT_LABELS[testament]}
+            </a>
+          ))}
+        </nav>
+        {groups.map(([testament, sections]) => (
           <div key={testament}>
             <h2
+              id={`testamento-${testament}`}
               className="display"
-              style={{ fontSize: 'var(--text-xl)', margin: 'var(--sp-6) 0 var(--sp-2)' }}
+              style={{
+                fontSize: 'var(--text-xl)',
+                margin: 'var(--sp-6) 0 var(--sp-2)',
+                scrollMarginTop: 'calc(var(--topbar-h) + var(--sp-3))',
+              }}
             >
               {TESTAMENT_LABELS[testament]}
             </h2>
@@ -134,7 +150,7 @@ export function BiblePage() {
               if (!books.length) return null;
               return (
                 <Section key={section} title={SECTION_LABELS[section]}>
-                  <div className="grid">
+                  <div className="grid grid--mini">
                     {books.map((book) => (
                       <Link
                         key={book.id}
@@ -158,7 +174,8 @@ export function BiblePage() {
               );
             })}
           </div>
-        ))
+        ))}
+        </>
       )}
 
       <p className="source-note">{DEUTEROCANON_NOTE}</p>

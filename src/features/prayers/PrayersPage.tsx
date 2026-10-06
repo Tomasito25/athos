@@ -11,7 +11,8 @@ import { Link } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
 import { listFavorites } from '@/db/user';
-import { ButtonLink, ListRow, PageHead, Panel, Section, Tag } from '@/components/ui';
+import { ButtonLink, ListRow, Panel, Section, Tag } from '@/components/ui';
+import { HubHero } from '@/components/hub';
 import { IconPray } from '@/components/icons';
 import { PRAYER_CATEGORIES, PRAYER_LICENSE_NOTE } from '@/content/prayers';
 import { ANY_HOUR, MOMENT_GROUPS, momentById, momentNow } from '@/content/moments';
@@ -42,7 +43,7 @@ export function PrayersPage() {
 
   return (
     <div className="page">
-      <PageHead title={es.prayers.title} subtitle={es.prayers.chooseMoment} />
+      <HubHero icon={IconPray} title={es.prayers.title} subtitle={es.prayers.heroSubtitle} />
 
       {/* ---- Lo que toca ahora ---- */}
       {momento && ahora ? (

@@ -29,16 +29,28 @@ import type {
   ThemeChoice,
 } from '@/stores/settings';
 import { GREEK_NOTE } from '@/content/greek';
+import { useHashScroll } from '@/hooks/useHashScroll';
 import es from '@/locales/es';
 
 export function SettingsPage() {
   const settings = useSettings();
+  useHashScroll();
 
   return (
     <div className="page page--reading">
       <PageHead title={es.settings.title} />
 
-      <Section title={es.settings.appearance}>
+      {/* Es una pantalla larga: arriba, a dónde saltar. */}
+      <nav className="shortcut-row" aria-label={es.settings.jump}>
+        <a className="shortcut" href="#ajustes-aspecto">{es.settings.appearance}</a>
+        <a className="shortcut" href="#ajustes-inicio">{es.settings.start}</a>
+        <a className="shortcut" href="#ajustes-oficio">{es.office.title}</a>
+        <a className="shortcut" href="#ajustes-calendario">{es.settings.calendar}</a>
+        <a className="shortcut" href="#ajustes-idioma">{es.settings.language}</a>
+        <a className="shortcut" href="#ajustes-mas">{es.nav.more}</a>
+      </nav>
+
+      <Section title={es.settings.appearance} id="ajustes-aspecto">
         <Panel>
           <div className="stack">
             <Field label={es.settings.theme}>
@@ -175,7 +187,7 @@ export function SettingsPage() {
         </Panel>
       </Section>
 
-      <Section title={es.settings.start}>
+      <Section title={es.settings.start} id="ajustes-inicio">
         <Panel>
           <Field label={es.settings.startAt} hint={es.settings.startAtNote}>
             {() => (
@@ -195,7 +207,7 @@ export function SettingsPage() {
         </Panel>
       </Section>
 
-      <Section title={es.office.title}>
+      <Section title={es.office.title} id="ajustes-oficio">
         <Panel>
           <p className="muted text-sm">{es.office.threeTimes}</p>
           <div className="stack" style={{ marginTop: 'var(--sp-4)' }}>
@@ -233,7 +245,7 @@ export function SettingsPage() {
         </Panel>
       </Section>
 
-      <Section title={es.settings.calendar}>
+      <Section title={es.settings.calendar} id="ajustes-calendario">
         <Panel>
           <Field label={es.settings.calendarStyle}>
             {() => (
@@ -254,7 +266,7 @@ export function SettingsPage() {
         </Panel>
       </Section>
 
-      <Section title={es.settings.language}>
+      <Section title={es.settings.language} id="ajustes-idioma">
         <Panel>
           <Field label={es.settings.language} hint={es.settings.languageNote}>
             {(id) => (
@@ -276,7 +288,7 @@ export function SettingsPage() {
         </Panel>
       </Section>
 
-      <Section title={es.nav.more}>
+      <Section title={es.nav.more} id="ajustes-mas">
         <div className="list">
           <ListRow to="/configuracion/instalar" leading={<IconInstall size={20} />} title={es.settings.install} />
           <ListRow to="/configuracion/notificaciones" leading={<IconBell size={20} />} title={es.settings.notifications} />

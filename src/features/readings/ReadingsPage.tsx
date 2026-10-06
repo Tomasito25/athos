@@ -16,27 +16,13 @@ import { formatLongDate } from '@/lib/format';
 import { Button, Notice, PageHead, Panel, Section, SourceNote } from '@/components/ui';
 import { PericopeText } from '@/components/PericopeText';
 import { IconChevronLeft, IconChevronRight } from '@/components/icons';
-import type { ReadingKind, ReadingRef } from '@/types';
+import type { ReadingRef } from '@/types';
+import { LITURGY_KINDS, isComposite, readingLabel, readingNote, readingTitle } from '@/lib/readings';
 import es from '@/locales/es';
 
-/** Cómo se llama cada tipo de lectura en la pantalla. */
-const ETIQUETAS: Record<ReadingKind, string> = {
-  evangelio: 'Evangelio',
-  epistola: 'Epístola',
-  'evangelio-maitines': 'Evangelio de Maitines',
-  'evangelio-pasion': 'Evangelio de la Pasión',
-  visperas: 'Vísperas',
-  horas: 'Horas',
-  maitines: 'Maitines',
-  'bendicion-aguas': 'Bendición de las aguas',
-  'procesion-cruz': 'Procesión de la Cruz',
-  at: 'Antiguo Testamento',
-  salmo: 'Salmo',
-  otra: 'Lectura',
-};
-
-/** En la Liturgia se leen la Epístola y el Evangelio; lo demás es de otros oficios. */
-const DE_LA_LITURGIA: ReadingKind[] = ['evangelio', 'epistola'];
+// Las etiquetas y la limpieza de las referencias compuestas se comparten con
+// la ficha del día: viven en `lib/readings`.
+const DE_LA_LITURGIA = LITURGY_KINDS;
 
 function ReadingBlock({ reading, abierta = false }: { reading: ReadingRef; abierta?: boolean }) {
   const [expanded, setExpanded] = useState(abierta);
@@ -46,17 +32,22 @@ function ReadingBlock({ reading, abierta = false }: { reading: ReadingRef; abier
     ? { bookId: reading.passageId.split('.')[0], chapter: Number(reading.passageId.split('.')[1]) }
     : parseReference(reading.reference);
 
-  const label = ETIQUETAS[reading.kind] ?? 'Lectura';
+  const label = readingLabel(reading.kind);
 
   return (
     <Panel>
       <p className="eyebrow">
         {label}
-        {reading.note ? ` · ${reading.note}` : ''}
+        {reading.note ? ` · ${readingNote(reading.note)}` : ''}
       </p>
       <p className="display" style={{ fontSize: 'var(--text-lg)', margin: 'var(--sp-1) 0 var(--sp-3)' }}>
-        {reading.reference}
+        {readingTitle(reading.reference)}
       </p>
+      {isComposite(reading.reference) ? (
+        <p className="rubric" style={{ marginTop: 'calc(-1 * var(--sp-2))' }}>
+          Lectura compuesta de varios pasajes.
+        </p>
+      ) : null}
 
       <div className="btn-row">
         <Button size="sm" onClick={() => setExpanded((value) => !value)}>

@@ -14,10 +14,13 @@ import { allPlanProgress, nextDay } from '@/db/plans';
 import { suggestedKathisma } from '@/db/psalter';
 import { READING_PLANS, daysOf } from '@/content/plans';
 import { useLiturgicalDay, useToday } from '@/hooks/useLiturgicalDay';
-import { ListRow, PageHead, Panel, Progress, Section } from '@/components/ui';
-import { IconBook, IconBookmark, IconScroll, OrthodoxCross } from '@/components/icons';
+import { ListRow, Panel, Progress, Section } from '@/components/ui';
+import { HubHero, Tile, TileGrid } from '@/components/hub';
+import { Link } from 'react-router-dom';
+import { IconBook, IconBookmark, IconCalendar, IconLibrary, IconScroll, OrthodoxCross } from '@/components/icons';
 import { isoToDate } from '@/lib/calendar/jdn';
 import { formatLongDate } from '@/lib/format';
+import { readingTitle } from '@/lib/readings';
 import es from '@/locales/es';
 
 export function ReadHub() {
@@ -46,25 +49,44 @@ export function ReadHub() {
 
   return (
     <div className="page">
-      <PageHead title={es.nav.read} subtitle={es.read.subtitle} />
+      <HubHero icon={IconBook} title={es.nav.read} subtitle={es.read.subtitle} />
 
       {/* Lo que la Iglesia lee hoy, con la cita a la vista y no detrás de un
           nombre de sección. */}
-      <Section title={es.home.readings}>
-        <Panel>
-          <p className="eyebrow">{formatLongDate(today)}</p>
-          <div className="stack stack--tight" style={{ marginTop: 'var(--sp-3)' }}>
+      <Section title={es.home.readings} action={{ label: es.home.allReadings, to: '/leer/lecturas' }}>
+        <p className="muted text-sm" style={{ margin: 'calc(-1 * var(--sp-2)) 0 var(--sp-3)' }}>
+          {formatLongDate(today)}
+        </p>
+        {lecturas.length === 0 ? (
+          <Panel variant="quiet">
+            <p className="muted text-sm">{es.app.pending}</p>
+          </Panel>
+        ) : (
+          <div className="reading-pair">
             {epistola ? (
-              <ListRow to="/leer/lecturas" title={es.home.epistle} meta={epistola.reference} />
+              <Link to="/leer/lecturas" className="reading-card">
+                <span className="reading-card__icon" aria-hidden="true">
+                  <IconScroll size={18} />
+                </span>
+                <span className="reading-card__body">
+                  <span className="eyebrow">{es.home.epistle}</span>
+                  <span className="reading-card__ref">{readingTitle(epistola.reference)}</span>
+                </span>
+              </Link>
             ) : null}
             {evangelio ? (
-              <ListRow to="/leer/lecturas" title={es.home.gospel} meta={evangelio.reference} />
-            ) : null}
-            {lecturas.length === 0 ? (
-              <ListRow to="/leer/lecturas" title={es.home.readings} meta={es.app.pending} />
+              <Link to="/leer/lecturas" className="reading-card">
+                <span className="reading-card__icon" aria-hidden="true">
+                  <OrthodoxCross size={18} />
+                </span>
+                <span className="reading-card__body">
+                  <span className="eyebrow">{es.home.gospel}</span>
+                  <span className="reading-card__ref">{readingTitle(evangelio.reference)}</span>
+                </span>
+              </Link>
             ) : null}
           </div>
-        </Panel>
+        )}
       </Section>
 
       {enCurso ? (
@@ -91,38 +113,19 @@ export function ReadHub() {
       ) : null}
 
       <Section title={es.read.books}>
-        <div className="list">
-          <ListRow
-            to="/leer/biblia"
-            leading={<IconBook size={20} style={{ color: 'var(--gold)' }} />}
-            title={es.bible.title}
-            meta="Antiguo y Nuevo Testamento · Reina-Valera 1909"
-          />
-          <ListRow
+        <TileGrid>
+          <Tile to="/leer/biblia" icon={IconBook} title={es.bible.title} hint="Antiguo y Nuevo Testamento · Reina-Valera 1909" />
+          <Tile
             to="/leer/salterio"
-            leading={<IconScroll size={20} style={{ color: 'var(--gold)' }} />}
+            icon={IconScroll}
             title={es.psalter.title}
-            meta={`${es.psalter.todaySuggestion}: ${es.psalter.kathisma.replace('{{n}}', String(kathisma))}`}
+            hint={`${es.psalter.todaySuggestion}: ${es.psalter.kathisma.replace('{{n}}', String(kathisma))}`}
           />
-          <ListRow
-            to="/leer/planes"
-            leading={<OrthodoxCross size={20} style={{ color: 'var(--gold)' }} />}
-            title={es.plans.title}
-            meta={es.plans.subtitle}
-          />
-          <ListRow
-            to="/biblioteca/padres"
-            leading={<IconBook size={20} style={{ color: 'var(--gold)' }} />}
-            title={es.library.fathers}
-            meta="Qué enseñó cada uno y por dónde empezar a leerlo"
-          />
-          <ListRow
-            to="/biblioteca/estudio"
-            leading={<IconBook size={20} style={{ color: 'var(--gold)' }} />}
-            title={es.study.title}
-            meta="Itinerarios de estudio y catálogo de obras"
-          />
-        </div>
+          <Tile to="/leer/lecturas" icon={IconCalendar} title={es.calendar.readings} hint="Las de hoy y las de cualquier día" />
+          <Tile to="/leer/planes" icon={OrthodoxCross} title={es.plans.title} hint={es.plans.subtitle} />
+          <Tile to="/biblioteca/padres" icon={IconLibrary} title={es.library.fathers} hint="Qué enseñó cada uno y por dónde empezar" />
+          <Tile to="/biblioteca/estudio" icon={IconBook} title={es.study.title} hint="Itinerarios y catálogo de obras" />
+        </TileGrid>
       </Section>
 
       {bookmarks.data && bookmarks.data.length > 0 ? (

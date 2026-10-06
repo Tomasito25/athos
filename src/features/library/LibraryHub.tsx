@@ -5,53 +5,19 @@
  * dijeron— y cada tarjeta lleva su cuenta, sacada del contenido y no escrita
  * a mano.
  *
- * Las tarjetas son bajas a propósito. Antes cada una ocupaba media pantalla
- * de móvil: el icono en una línea, el título en otra, cuatro renglones de
- * descripción y la cuenta debajo. Con nueve secciones, ver el índice entero
- * costaba seis pantallas de dedo, y un índice que no se abarca de un vistazo
- * no es un índice. Ahora el icono, el título y la cuenta van en el mismo
- * renglón y la descripción se recorta a dos líneas: lo que hace falta para
- * elegir, no para saberlo todo antes de entrar.
+ * Cada sección es una tesela, dos por fila en el móvil: el icono, el título,
+ * la cuenta en la esquina y dos renglones de descripción, lo que hace falta
+ * para elegir. Así el índice entero cabe en poco más de una pantalla, y un
+ * índice que no se abarca de un vistazo no es un índice.
  */
-import { Link } from 'react-router-dom';
-import { ListRow, PageHead, Section } from '@/components/ui';
+import { ListRow, Section } from '@/components/ui';
+import { HubHero, Tile, TileGrid } from '@/components/hub';
 import { useAsync } from '@/hooks/useAsync';
 import { listHistory } from '@/db/user';
-import {
-  IconBook,
-  IconCandle,
-  IconChalice,
-  IconMonastery,
-  IconScroll,
-  OrthodoxCross,
-} from '@/components/icons';
-import { LIBRARY_GROUPS, type LibrarySection } from '@/content/library';
+import { IconLibrary } from '@/components/icons';
+import { LIBRARY_GROUPS } from '@/content/library';
+import { LIBRARY_ICONS } from './sectionIcons';
 import es from '@/locales/es';
-
-const ICONOS = {
-  cross: OrthodoxCross,
-  scroll: IconScroll,
-  book: IconBook,
-  monastery: IconMonastery,
-  candle: IconCandle,
-  chalice: IconChalice,
-} as const;
-
-function Tarjeta({ section }: { section: LibrarySection }) {
-  const Icono = ICONOS[section.icon];
-  return (
-    <Link className="card card--index" to={section.to}>
-      <span className="card__head">
-        <Icono size={20} style={{ color: 'var(--gold)', flex: 'none' }} />
-        <span className="card__title">{section.title}</span>
-        <span className="card__count">
-          <b>{section.count}</b> <span className="card__unit">{section.unit}</span>
-        </span>
-      </span>
-      <span className="card__text card__text--clamp">{section.text}</span>
-    </Link>
-  );
-}
 
 /**
  * Por dónde ibas.
@@ -85,7 +51,7 @@ function SeguirLeyendo() {
 export function LibraryHub() {
   return (
     <div className="page">
-      <PageHead title={es.library.title} subtitle={es.library.subtitle} />
+      <HubHero icon={IconLibrary} title={es.library.title} subtitle={es.library.subtitle} />
 
       <SeguirLeyendo />
 
@@ -94,11 +60,18 @@ export function LibraryHub() {
           <p className="muted text-sm" style={{ marginBottom: 'var(--sp-3)' }}>
             {grupo.note}
           </p>
-          <div className="grid grid--index">
+          <TileGrid>
             {grupo.sections.map((section) => (
-              <Tarjeta key={section.id} section={section} />
+              <Tile
+                key={section.id}
+                to={section.to}
+                icon={LIBRARY_ICONS[section.icon]}
+                title={section.title}
+                hint={section.text}
+                badge={section.count}
+              />
             ))}
-          </div>
+          </TileGrid>
         </Section>
       ))}
     </div>

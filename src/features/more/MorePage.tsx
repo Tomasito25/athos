@@ -1,76 +1,79 @@
 /**
  * El mapa de ATHOS.
  *
- * Antes esta pantalla sólo llevaba a los ajustes, que es lo que menos falta
- * hace encontrar. La barra inferior lleva a cinco portadas y desde cada una
- * hay que adivinar qué contiene; aquí no hay nada que adivinar: si existe en
- * la aplicación, está en esta lista.
+ * La barra inferior lleva a cinco portadas y desde cada una hay que adivinar
+ * qué contiene; aquí no hay nada que adivinar: si existe en la aplicación,
+ * está en esta pantalla.
+ *
+ * Eran treinta y tantas filas seguidas, casi tres pantallas de dedo. Ahora
+ * cada grupo es una rejilla de teselas bajas, con su icono: se encuentra el
+ * nombre de un vistazo, que es a lo que se viene a un mapa.
  *
  * La biblioteca no se escribe dos veces —se lee de donde ya vive—, así que
  * una sección nueva aparece aquí sola.
  */
-import { ListRow, PageHead, Section } from '@/components/ui';
+import { Section } from '@/components/ui';
+import { HubHero, Tile, TileGrid } from '@/components/hub';
 import {
   IconBell,
   IconInfo,
   IconInstall,
+  IconMore,
+  IconScroll,
   IconSearch,
   IconSettings,
   IconStar,
-  IconScroll,
 } from '@/components/icons';
 import { APP_MAP } from '@/components/layout/navigation';
 import { LIBRARY_GROUPS } from '@/content/library';
+import { LIBRARY_ICONS } from '@/features/library/sectionIcons';
 import es from '@/locales/es';
 
 export function MorePage() {
   return (
     <div className="page">
-      <PageHead title={es.nav.more} subtitle={es.nav.moreSubtitle} />
+      <HubHero icon={IconMore} title={es.nav.more} subtitle={es.nav.moreSubtitle} />
 
       {APP_MAP.map((grupo) => (
         <Section key={grupo.title} title={grupo.title}>
-          <div className="list">
+          <TileGrid compact>
             {grupo.entries.map((entrada) => (
-              <ListRow key={entrada.to} to={entrada.to} title={entrada.label} meta={entrada.hint} />
+              <Tile key={entrada.to} to={entrada.to} icon={entrada.icon} title={entrada.label} hint={entrada.hint} />
             ))}
-          </div>
+          </TileGrid>
         </Section>
       ))}
 
       <Section title={es.nav.library}>
-        <div className="list">
+        <TileGrid compact>
           {LIBRARY_GROUPS.flatMap((g) => g.sections).map((seccion) => (
-            <ListRow
+            <Tile
               key={seccion.id}
               to={seccion.to}
+              icon={LIBRARY_ICONS[seccion.icon]}
               title={seccion.title}
-              trailing={
-                <span className="pill-count">
-                  {seccion.count} {seccion.unit}
-                </span>
-              }
+              badge={seccion.count}
             />
           ))}
-        </div>
+        </TileGrid>
       </Section>
 
-      <Section title={es.favorites.title}>
-        <div className="list">
-          <ListRow to="/favoritos" leading={<IconStar size={20} />} title={es.favorites.title} meta={es.favorites.subtitle} />
-          <ListRow to="/buscar" leading={<IconSearch size={20} />} title={es.search.title} meta={es.search.shortcut} />
-        </div>
+      <Section title={es.more.yours}>
+        <TileGrid compact>
+          <Tile to="/favoritos" icon={IconStar} title={es.favorites.title} hint={es.favorites.subtitle} />
+          <Tile to="/buscar" icon={IconSearch} title={es.search.title} hint={es.search.shortcut} />
+        </TileGrid>
       </Section>
 
       <Section title={es.nav.settings}>
-        <div className="list">
-          <ListRow to="/configuracion" leading={<IconSettings size={20} />} title={es.settings.title} />
-          <ListRow to="/configuracion/instalar" leading={<IconInstall size={20} />} title={es.settings.install} />
-          <ListRow to="/configuracion/notificaciones" leading={<IconBell size={20} />} title={es.settings.notifications} />
-          <ListRow to="/configuracion/datos" leading={<IconScroll size={20} />} title={es.settings.data} />
-          <ListRow to="/configuracion/fuentes" leading={<IconInfo size={20} />} title={es.settings.sources} />
-          <ListRow to="/configuracion/acerca-de" leading={<IconInfo size={20} />} title={es.settings.about} />
-        </div>
+        <TileGrid compact>
+          <Tile to="/configuracion" icon={IconSettings} title={es.settings.title} />
+          <Tile to="/configuracion/instalar" icon={IconInstall} title={es.settings.install} />
+          <Tile to="/configuracion/notificaciones" icon={IconBell} title={es.settings.notifications} />
+          <Tile to="/configuracion/datos" icon={IconScroll} title={es.settings.data} />
+          <Tile to="/configuracion/fuentes" icon={IconInfo} title={es.settings.sources} />
+          <Tile to="/configuracion/acerca-de" icon={IconInfo} title={es.settings.about} />
+        </TileGrid>
       </Section>
     </div>
   );

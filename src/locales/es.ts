@@ -94,6 +94,38 @@ const es = {
     favorites: 'Favoritos',
   },
 
+  welcome: {
+    eyebrow: 'Primera vez en ATHOS',
+    title: 'Lo que hay en cada sitio',
+    pray: 'los tres oficios del día, el libro de oración y la oración de Jesús',
+    read: 'la Biblia, el Salterio y las lecturas de cada día',
+    calendar: 'los santos, las fiestas y el ayuno de cada día',
+    library: 'la Liturgia, el catecismo, los Padres y el Monte Athos',
+    ok: 'Entendido',
+    settings: 'Ajustar el aspecto',
+    close: 'Cerrar la bienvenida',
+  },
+
+  more: {
+    yours: 'Lo tuyo',
+  },
+
+  pray: {
+    yours: 'Tu oración',
+    withChurch: 'Con la Iglesia',
+    jesusHint: 'Señor Jesucristo, Hijo de Dios, ten misericordia de mí, pecador',
+    chotkiHint: 'La cuerda de oración, nudo a nudo',
+    chotkiToday: 'Hoy llevas {{count}}',
+    ruleHint: 'Para domingos, fiestas o tiempos de ayuno',
+    myPrayersHint: 'Las tuyas, para añadirlas a un oficio',
+    psalterHint: 'Los salmos, en sus veinte kathismas',
+    akathistsHint: 'Himnos de alabanza que se rezan de pie',
+    canonsHint: 'El de la comunión, la Paráclesis, el Gran Canon…',
+    offices: 'Los oficios',
+    officesHint: 'Las Horas, las Completas, el Moleben y las Liturgias',
+    howOffices: 'Cómo están hechos los oficios del día',
+  },
+
   home: {
     greetingMorning: 'Buenos días',
     greetingAfternoon: 'Buenas tardes',
@@ -117,6 +149,24 @@ const es = {
     quickActions: 'Accesos rápidos',
     jesusPrayer: 'Oración de Jesús',
     psalter: 'Salterio del día',
+    today: 'Hoy en la Iglesia',
+    seeDay: 'El día entero',
+    allReadings: 'Todas las lecturas',
+    readWhole: 'Leer entero',
+    editRule: 'Tu regla',
+    officeDone: 'Hecho',
+    officePending: 'Pendiente',
+    oneMoreSaint: 'y otra conmemoración',
+    moreSaints: 'y {{count}} conmemoraciones más',
+    nextFeast: 'Próxima gran fiesta',
+    tomorrow: 'Mañana',
+    inDays: 'Dentro de {{count}} días',
+    quickPrayers: 'Por momentos y de corrido',
+    quickJesus: 'Con su contador',
+    quickPsalter: 'Por kathismas',
+    quickBible: 'Reina-Valera 1909',
+    quickSaints: 'Vidas y troparios',
+    quickFavorites: 'Lo que has guardado',
   },
 
   prayers: {
@@ -124,6 +174,7 @@ const es = {
     subtitle: 'Libro de oración ortodoxo',
     categories: 'Categorías',
     chooseMoment: 'Elige el momento',
+    heroSubtitle: 'Elige el momento: la hora del día o lo que te pasa. O reza de corrido las del libro.',
     rightNow: 'A esta hora',
     now: 'Ahora',
     openJesusPrayer: 'Abrir la oración de Jesús',
@@ -256,6 +307,7 @@ const es = {
   },
 
   bible: {
+    jump: 'Ir a un Testamento',
     title: 'Biblia',
     oldTestament: 'Antiguo Testamento',
     newTestament: 'Nuevo Testamento',
@@ -318,6 +370,9 @@ const es = {
   },
 
   calendar: {
+    shortcuts: 'Atajos del calendario',
+    fullDay: 'Ver el día completo',
+    styleFold: 'Calendario',
     title: 'Calendario',
     subtitle: 'El año litúrgico',
     month: 'Mes',
@@ -504,6 +559,7 @@ const es = {
   },
 
   settings: {
+    jump: 'Ir a una parte de la configuración',
     density: 'Densidad',
     densityRoomy: 'Cómoda',
     densityNormal: 'Normal',

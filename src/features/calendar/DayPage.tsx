@@ -6,6 +6,7 @@ import { addDaysIso } from '@/lib/calendar/jdn';
 import { formatChurchDate, formatLongDate, fastTone, relativeDayLabel, toneLabel } from '@/lib/format';
 import { ListRow, PageHead, Panel, Section, Tag } from '@/components/ui';
 import { IconChevronLeft, IconChevronRight } from '@/components/icons';
+import { readingLabel, readingNote, readingTitle, splitReadings } from '@/lib/readings';
 import es from '@/locales/es';
 
 /** Ficha completa de un día del año litúrgico. */
@@ -78,15 +79,19 @@ export function DayPage() {
 
       <Section title={es.calendar.readings} action={{ label: 'Abrir', to: '/leer/lecturas' }}>
         {day.readings ? (
+          // Las de la Liturgia primero; las de Vísperas, Maitines y las Horas
+          // después, cada una con su nombre y no todas como «Epístola».
           <div className="list">
-            {day.readings.readings.map((reading) => (
-              <ListRow
-                key={`${reading.kind}-${reading.reference}`}
-                to="/leer/lecturas"
-                title={reading.reference}
-                meta={reading.kind === 'evangelio' ? es.home.gospel : es.home.epistle}
-              />
-            ))}
+            {[...splitReadings(day.readings.readings).liturgia, ...splitReadings(day.readings.readings).otras].map(
+              (reading) => (
+                <ListRow
+                  key={`${reading.kind}-${reading.reference}`}
+                  to="/leer/lecturas"
+                  title={readingTitle(reading.reference)}
+                  meta={reading.note ? `${readingLabel(reading.kind)} · ${readingNote(reading.note)}` : readingLabel(reading.kind)}
+                />
+              ),
+            )}
           </div>
         ) : (
           <p className="muted text-sm">{es.app.pending}</p>

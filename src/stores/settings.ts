@@ -53,6 +53,8 @@ export interface SettingsState {
 
   notifications: Record<string, boolean>;
   installPromptDismissed: boolean;
+  /** La bienvenida de Inicio, que se enseña hasta que se cierra. */
+  welcomeDismissed: boolean;
   autoIndexBible: boolean;
 
   set<K extends keyof SettingsState>(key: K, value: SettingsState[K]): void;
@@ -86,6 +88,7 @@ export const DEFAULT_SETTINGS = {
   prayerModeDark: true,
   notifications: {} as Record<string, boolean>,
   installPromptDismissed: false,
+  welcomeDismissed: false,
   autoIndexBible: true,
 };
 
@@ -115,7 +118,9 @@ export const useSettings = create<SettingsState>()(
       set: (key, value) => set({ [key]: value } as Partial<SettingsState>),
       toggleNotification: (id, enabled) =>
         set((state) => ({ notifications: { ...state.notifications, [id]: enabled } })),
-      reset: () => set({ ...DEFAULT_SETTINGS }),
+      // Restablecer el aspecto no vuelve a enseñar la bienvenida: quien ya la
+      // cerró sabe dónde está cada cosa.
+      reset: () => set((state) => ({ ...DEFAULT_SETTINGS, welcomeDismissed: state.welcomeDismissed })),
     }),
     {
       name: 'athos.appearance',

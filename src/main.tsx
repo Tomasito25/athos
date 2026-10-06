@@ -12,6 +12,7 @@ import '@/styles/typography.css';
 import '@/styles/shell.css';
 import '@/styles/components.css';
 import '@/styles/byzantine.css';
+import '@/styles/hubs.css';
 
 const container = document.getElementById('root');
 if (!container) throw new Error('Falta el elemento raíz');

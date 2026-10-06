@@ -28,7 +28,12 @@ export interface LibrarySection {
     | 'book'
     | 'monastery'
     | 'candle'
-    | 'chalice';
+    | 'chalice'
+    | 'lamp'
+    | 'note'
+    | 'journal'
+    | 'people'
+    | 'church';
   title: string;
   /** Qué hay dentro, en una línea. */
   text: string;
@@ -57,7 +62,7 @@ export const LIBRARY_GROUPS: LibraryGroup[] = [
       {
         id: 'catecismo',
         to: '/biblioteca/catecismo',
-        icon: 'scroll',
+        icon: 'lamp',
         title: es.catechism.title,
         text: 'Qué cree la Iglesia ortodoxa y por qué, en preguntas con su respuesta. Se filtra según llegues de fuera, seas catecúmeno o lleves años dentro, y se busca por palabra.',
         count: CATECHISM_INDEX.length,
@@ -84,7 +89,7 @@ export const LIBRARY_GROUPS: LibraryGroup[] = [
       {
         id: 'glosario',
         to: '/biblioteca/glosario',
-        icon: 'scroll',
+        icon: 'note',
         title: es.study.glossary,
         text: 'Theotokos, autocéfala, hesicasmo, anáfora. Las palabras que ATHOS usa y que no se aprenden en la calle, explicadas para poder seguir leyendo. Se busca también por lo que significan.',
         count: GLOSSARY.length,
@@ -100,7 +105,7 @@ export const LIBRARY_GROUPS: LibraryGroup[] = [
       {
         id: 'liturgia',
         to: '/biblioteca/liturgia',
-        icon: 'cross',
+        icon: 'chalice',
         title: es.library.liturgy,
         text: 'La Liturgia de san Juan Crisóstomo, la de san Basilio, los Presantificados, Vísperas, Maitines y las Horas, cada uno con qué es y cómo está construido.',
         count: OFFICES.length,
@@ -109,7 +114,7 @@ export const LIBRARY_GROUPS: LibraryGroup[] = [
       {
         id: 'akathistos',
         to: '/biblioteca/akathistos',
-        icon: 'scroll',
+        icon: 'candle',
         title: es.library.akathists,
         text: 'Himnos que se cantan de pie, empezando por el Akáthistos a la Theotokos, el más antiguo y el modelo de todos los demás.',
         count: AKATHISTS.length,
@@ -118,7 +123,7 @@ export const LIBRARY_GROUPS: LibraryGroup[] = [
       {
         id: 'canones',
         to: '/biblioteca/canones',
-        icon: 'scroll',
+        icon: 'journal',
         title: es.library.canons,
         text: 'El Gran Canon de san Andrés de Creta, el de arrepentimiento, el de preparación para la Comunión y los cánones a los santos.',
         count: CANONS.length,
@@ -134,7 +139,7 @@ export const LIBRARY_GROUPS: LibraryGroup[] = [
       {
         id: 'padres',
         to: '/biblioteca/padres',
-        icon: 'book',
+        icon: 'people',
         title: es.library.fathers,
         text: 'De san Ignacio de Antioquía a san Sofronio de Essex, por épocas. De cada uno: qué enseñó, de qué trata cada obra suya, por dónde empezar y qué conviene saber antes.',
         count: CHURCH_FATHERS.length,
@@ -161,7 +166,7 @@ export const LIBRARY_GROUPS: LibraryGroup[] = [
       {
         id: 'iconos',
         to: '/biblioteca/iconos',
-        icon: 'candle',
+        icon: 'church',
         title: es.library.icons,
         text: 'Los iconos que la Iglesia venera, qué significa cada elemento y por qué se pintan así y no de otra manera.',
         count: ICONS.length,

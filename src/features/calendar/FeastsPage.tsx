@@ -31,7 +31,7 @@ export function FeastsPage() {
       />
 
       <Section title="Las Doce Grandes Fiestas">
-        <div className="grid">
+        <div className="grid grid--mini">
           {[...MOVABLE_FEASTS, ...FIXED_FEASTS]
             .filter((feast) => GREAT_FEAST_IDS.includes(feast.id))
             .map((feast) => (

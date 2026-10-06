@@ -42,7 +42,7 @@ export function PsalterPage() {
       </Section>
 
       <Section title={es.psalter.kathismata}>
-        <div className="grid">
+        <div className="grid grid--mini">
           {KATHISMATA.map((kathisma) => (
             <Link key={kathisma.number} className="card" to={`/leer/salterio/kathisma/${kathisma.number}`}>
               <span className="card__title">{es.psalter.kathisma.replace('{{n}}', String(kathisma.number))}</span>

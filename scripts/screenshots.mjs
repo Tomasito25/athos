@@ -28,7 +28,11 @@ await send('Emulation.setDeviceMetricsOverride',{width:540,height:1170,deviceSca
 await send('Page.navigate',{url:'http://127.0.0.1:8788/'});
 await new Promise(r=>setTimeout(r,3000));
 await ev(`(async()=>{for(const r of await navigator.serviceWorker.getRegistrations())await r.unregister();for(const k of await caches.keys())await caches.delete(k);
- localStorage.clear(); await new Promise(res=>{const q=indexedDB.deleteDatabase('athos');q.onsuccess=res;q.onerror=res;q.onblocked=res;});return 1})()`);
+ localStorage.clear(); await new Promise(res=>{const q=indexedDB.deleteDatabase('athos');q.onsuccess=res;q.onerror=res;q.onblocked=res;});
+ // Ni la bienvenida de la primera vez ni el ofrecimiento de instalar deben
+ // salir en la ficha de instalación: tapan justo lo que se quiere enseñar.
+ localStorage.setItem('athos.appearance', JSON.stringify({ state: { welcomeDismissed: true, installPromptDismissed: true }, version: 2 }));
+ return 1})()`);
 
 const capturas = [
   { archivo: 'screenshot-mobile.png',   w: 540,  h: 1170, movil: true,  ruta: '/',                 tema: 'dark'  },

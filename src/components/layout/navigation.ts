@@ -3,12 +3,20 @@ import type { ComponentType, SVGProps } from 'react';
 import {
   IconBook,
   IconCalendar,
+  IconCandle,
+  IconChotki,
+  IconCross,
+  IconEdit,
+  IconFast,
   IconHome,
   IconLibrary,
   IconMore,
+  IconPath,
   IconPray,
+  IconScroll,
   IconSettings,
   IconStar,
+  OrthodoxCross,
 } from '@/components/icons';
 import es from '@/locales/es';
 
@@ -56,6 +64,8 @@ export interface MapEntry {
   to: string;
   label: string;
   hint?: string;
+  /** El signo con que se enseña en el mapa. */
+  icon: NavItem['icon'];
 }
 
 export interface MapGroup {
@@ -78,30 +88,30 @@ export const APP_MAP: MapGroup[] = [
   {
     title: es.nav.pray,
     entries: [
-      { to: '/orar', label: es.nav.pray, hint: 'Los tres momentos del día' },
-      { to: '/orar/oraciones', label: es.prayers.title, hint: 'Por momento del día y por necesidad' },
-      { to: '/orar/regla', label: es.rule.title, hint: 'La tuya, editable paso a paso' },
-      { to: '/orar/oracion-de-jesus', label: es.jesusPrayer.title },
-      { to: '/orar/komboskini', label: 'Komboskini', hint: 'El cordón de nudos, con contador' },
-      { to: '/orar/mis-oraciones', label: 'Mis oraciones' },
+      { to: '/orar', label: es.nav.pray, hint: 'Los tres momentos del día', icon: IconPray },
+      { to: '/orar/oraciones', label: es.prayers.title, hint: 'Por momento del día y por necesidad', icon: IconPray },
+      { to: '/orar/regla', label: es.rule.title, hint: 'La tuya, editable paso a paso', icon: IconScroll },
+      { to: '/orar/oracion-de-jesus', label: es.jesusPrayer.title, icon: IconCross },
+      { to: '/orar/komboskini', label: 'Komboskini', hint: 'El cordón de nudos, con contador', icon: IconChotki },
+      { to: '/orar/mis-oraciones', label: 'Mis oraciones', icon: IconEdit },
     ],
   },
   {
     title: es.nav.read,
     entries: [
-      { to: '/leer/biblia', label: es.bible.title },
-      { to: '/leer/salterio', label: es.psalter.title, hint: 'Los 150 salmos y las veinte kathismata' },
-      { to: '/leer/lecturas', label: es.calendar.readings, hint: 'Las del día, según el leccionario' },
-      { to: '/leer/planes', label: es.plans.title },
+      { to: '/leer/biblia', label: es.bible.title, icon: IconBook },
+      { to: '/leer/salterio', label: es.psalter.title, hint: 'Los salmos y las veinte kathismata', icon: IconScroll },
+      { to: '/leer/lecturas', label: es.calendar.readings, hint: 'Las del día, según el leccionario', icon: OrthodoxCross },
+      { to: '/leer/planes', label: es.plans.title, icon: IconPath },
     ],
   },
   {
     title: es.nav.calendar,
     entries: [
-      { to: '/calendario', label: es.calendar.title },
-      { to: '/calendario/santos', label: es.saints.title },
-      { to: '/calendario/fiestas', label: es.calendar.feasts },
-      { to: '/calendario/ayuno', label: es.fasting.title },
+      { to: '/calendario', label: es.calendar.title, icon: IconCalendar },
+      { to: '/calendario/santos', label: es.saints.title, icon: IconCandle },
+      { to: '/calendario/fiestas', label: es.calendar.feasts, icon: OrthodoxCross },
+      { to: '/calendario/ayuno', label: es.fasting.title, icon: IconFast },
     ],
   },
 ];

@@ -2,6 +2,61 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.28.0]
+
+### Cambiado
+
+- **Inicio, reordenado por las preguntas de quien lo abre.** Arriba, el día:
+  la oración de Jesús como lema, la fecha, el tiempo litúrgico, el tono, el
+  ayuno y la fiesta. Al lado (en escritorio) o debajo (en el móvil), el
+  oficio de la hora. Después, «Hoy en la Iglesia» —el santo, el ayuno y la
+  **próxima gran fiesta con los días que faltan**—, el Evangelio y la
+  Epístola. La regla ya no dice «0 de 44»: enseña los tres oficios, cada uno
+  con su avance y su estado. Los atajos son teselas, y desaparecen los dos
+  botones que repetían la barra de abajo. En escritorio, dos columnas.
+- **Cada sección abre con su cabecera**: el signo en un medallón de oro, el
+  título y una línea que dice qué hay dentro, sobre un mosaico tenue con la
+  cinta de colores al pie. En Orar, Leer, Calendario, Biblioteca, Más y
+  Oraciones.
+- **Los destinos, en teselas y no en listas largas**: icono, nombre y pista,
+  dos por fila en el móvil y más en cuanto hay sitio. La Biblioteca pasa de
+  2.160 a 1.570 píxeles de alto en el móvil, y Más, de 2.750 a 1.860. Cada
+  sección de la Biblioteca tiene ahora su propio icono: cinco compartían el
+  mismo pergamino.
+- **Calendario**: los atajos —hoy, santos, fiestas, ayuno, lecturas— suben
+  arriba; antes eran cuatro botones al pie. La rejilla se redibuja con el
+  día de hoy en un nimbo de oro y una leyenda legible, y en escritorio el
+  día elegido va al lado del mes. La elección de calendario y sus notas
+  quedan plegadas.
+- **Orar**: los tres oficios en fila en escritorio, y la nota sobre cómo
+  están hechos, plegada.
+- **Índices largos en rejilla menuda**: los libros de la Biblia, las veinte
+  kathismas y las doce grandes fiestas, dos por fila en el móvil. La Biblia
+  tiene arriba el salto a cada Testamento.
+- **Configuración**: arriba, a qué parte saltar.
+
+### Añadido
+
+- **Una bienvenida** en Inicio para quien abre ATHOS por primera vez: qué hay
+  en cada sección, en cuatro renglones, con enlace a cada una. Se cierra y no
+  vuelve; restablecer el aspecto no la hace reaparecer.
+- Las capturas de la ficha de instalación, rehechas con el aspecto nuevo y
+  sin la bienvenida ni el aviso de instalar.
+
+### Corregido
+
+- **La ficha de un día llamaba «Epístola» a todo lo que no era Evangelio**:
+  el Evangelio de Maitines o las lecturas de Vísperas del libro de los
+  Proverbios salían como epístolas. Ahora cada una lleva su nombre, y las de
+  la Liturgia van primero.
+- **Referencias a medio traducir del leccionario de origen**: «Composite 2 -
+  Proverbios…», «3 [1] Kings 17.8-24», «Matt 27:39-54». Se enseñan como las
+  demás: «1 Reyes 17, 8-24».
+- **Notas de las lecturas en inglés**: «san John Chrysostom», «domingo
+  anterior a Elevation», «Boris and Gleb», y así hasta un centenar. Se
+  traducen al enseñarlas; una prueba recorre el leccionario entero y falla si
+  queda una palabra en inglés.
+
 ## [1.27.0]
 
 ### Añadido

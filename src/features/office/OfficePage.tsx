@@ -10,13 +10,26 @@
  * trece pasos es perder el sitio a cada rato. **Seguido** deja el oficio
  * entero de arriba abajo, como un libro, para quien lo prefiera o lo lea en
  * una pantalla grande.
+ *
+ * Y se puede rezar en tres medidas: la breve, para coger el hábito o para los
+ * días con prisa; la habitual, que es la de cada uno y se edita; y la
+ * extensa, para quien ya tiene costumbre. Se rece en la que se rece, el
+ * oficio de ese momento del día queda rezado.
  */
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { useOfficeSteps, type ResolvedStep } from './useOfficeSteps';
 import { OFFICE_BY_TIME, OFFICES_STRUCTURE_NOTE } from '@/content/hours';
-import { completeRule, completionsOn, ruleForTime, uncompleteRule } from '@/db/user';
+import { LENGTH_INFO, OFFICE_LENGTHS, OFFICE_VARIANTS, minutesFor } from '@/content/office-lengths';
+import {
+  completeRule,
+  completionsOn,
+  isRulePrayed,
+  ruleForTime,
+  ruleItems,
+  uncompleteRule,
+} from '@/db/user';
 import { useToday } from '@/hooks/useLiturgicalDay';
 import {
   Blocks,
@@ -37,7 +50,7 @@ import { IconChevronLeft, IconChevronRight, IconEdit } from '@/components/icons'
 import { useSettings } from '@/stores/settings';
 import { useUi } from '@/stores/ui';
 import { restoreOffice } from '@/db/seed';
-import type { RuleTime } from '@/types';
+import type { OfficeLength, RuleTime } from '@/types';
 import es from '@/locales/es';
 
 export function OfficePage() {
@@ -45,24 +58,31 @@ export function OfficePage() {
   const today = useToday();
   const definicion = OFFICE_BY_TIME.get(time as RuleTime);
 
-  const regla = useAsync(() => ruleForTime(time as RuleTime), [time]);
-  const pasos = useOfficeSteps(regla.data?.id ?? '');
-  const hechos = useAsync(() => completionsOn(today), [today, regla.data?.id]);
+  const medidas = useSettings((s) => s.officeLength);
+  const medida: OfficeLength = medidas?.[time as RuleTime] ?? 'habitual';
 
-  const completados = useMemo(
-    () => new Set((hechos.data ?? []).map((c) => c.itemId)),
-    [hechos.data],
+  const regla = useAsync(() => ruleForTime(time as RuleTime), [time]);
+  const pasos = useOfficeSteps(regla.data?.id ?? '', time as RuleTime, medida);
+  const pasosRegla = useAsync(
+    async () => (regla.data ? ruleItems(regla.data.id) : []),
+    [regla.data?.id],
   );
+  const hechos = useAsync(() => completionsOn(today), [today, regla.data?.id]);
 
   const toast = useUi((s) => s.toast);
   const modo = useSettings((s) => s.officeFlow);
-  const ponerModo = useSettings((s) => s.set);
+  const ponerAjuste = useSettings((s) => s.set);
 
-  // El paso en curso lleva dentro de qué oficio es. Así, al cambiar de oficio
-  // se empieza por el principio sin necesidad de un efecto que lo reinicie.
-  const [posicion, setPosicion] = useState({ time, indice: 0 });
-  const actual = posicion.time === time ? posicion.indice : 0;
-  const setActual = (indice: number) => setPosicion({ time, indice });
+  const ponerMedida = (nueva: OfficeLength) =>
+    ponerAjuste('officeLength', { ...medidas, [time]: nueva } as Record<RuleTime, OfficeLength>);
+
+  // El paso en curso lleva dentro de qué oficio y en qué medida es. Así, al
+  // cambiar de oficio o de medida se empieza por el principio sin necesidad
+  // de un efecto que lo reinicie.
+  const clave = `${time}|${medida}`;
+  const [posicion, setPosicion] = useState({ clave, indice: 0 });
+  const actual = posicion.clave === clave ? posicion.indice : 0;
+  const setActual = (indice: number) => setPosicion({ clave, indice });
 
   if (regla.loading) return <Loading />;
 
@@ -79,15 +99,26 @@ export function OfficePage() {
   }
 
   const lista = pasos.data ?? [];
-  // El oficio se da por rezado entero, no oración a oración. Basta con mirar
-  // si el último paso está marcado.
-  const rezado = lista.length > 0 && completados.has(lista[lista.length - 1].item.id);
+  // El oficio se da por rezado entero, no oración a oración, y en cualquiera
+  // de sus medidas: lo que cuenta es que el de este momento del día se rezó.
+  const rezado = isRulePrayed(hechos.data ?? [], regla.data.id, pasosRegla.data ?? []);
+  const variante = medida === 'habitual' ? null : OFFICE_VARIANTS[time as RuleTime]?.[medida];
+  const minutos = minutesFor(time as RuleTime, medida);
 
   const darPorRezado = async () => {
     if (!regla.data) return;
     if (rezado) await uncompleteRule(today, regla.data.id);
-    else await completeRule(today, regla.data.id);
+    else await completeRule(today, regla.data.id, medida);
     hechos.reload();
+  };
+
+  const hacerMia = async () => {
+    if (!window.confirm(es.office.makeMineConfirm)) return;
+    await restoreOffice(time as RuleTime, medida);
+    ponerMedida('habitual');
+    pasosRegla.reload();
+    hechos.reload();
+    toast(es.office.madeMine);
   };
 
   return (
@@ -103,6 +134,27 @@ export function OfficePage() {
         </h1>
         {definicion ? <p className="muted">{definicion.subtitle}</p> : null}
 
+        <div className="office-length">
+          <Segmented
+            value={medida}
+            onChange={ponerMedida}
+            options={OFFICE_LENGTHS.map((l) => ({ value: l.id, label: l.label }))}
+            label={es.office.length}
+          />
+          <p className="office-length__hint">
+            {LENGTH_INFO.get(medida)?.forWhom}
+            {minutos ? <span className="office-length__minutes"> · {es.office.minutes.replace('{{n}}', String(minutos))}</span> : null}
+          </p>
+          {variante ? (
+            <div className="office-length__about">
+              <p>{variante.summary}</p>
+              <p className="muted text-sm">
+                {es.office.source} {variante.source}
+              </p>
+            </div>
+          ) : null}
+        </div>
+
         <div style={{ margin: 'var(--sp-4) 0' }}>
           <ProgressBlocks value={rezado ? 1 : 0} />
         </div>
@@ -110,7 +162,7 @@ export function OfficePage() {
         <Segmented
           value={modo}
           onChange={(v) => {
-            ponerModo('officeFlow', v);
+            ponerAjuste('officeFlow', v);
             setActual(0);
           }}
           options={[
@@ -129,14 +181,16 @@ export function OfficePage() {
               path: `/orar/oficio/${time}`,
             }}
             extraActions={
-              <Link
-                className="icon-btn"
-                to={`/orar/regla/editar/${regla.data.id}`}
-                aria-label={es.office.edit}
-                title={es.office.edit}
-              >
-                <IconEdit size={20} />
-              </Link>
+              medida === 'habitual' ? (
+                <Link
+                  className="icon-btn"
+                  to={`/orar/regla/editar/${regla.data.id}`}
+                  aria-label={es.office.edit}
+                  title={es.office.edit}
+                >
+                  <IconEdit size={20} />
+                </Link>
+              ) : undefined
             }
           />
         </div>
@@ -167,26 +221,34 @@ export function OfficePage() {
 
       <Rule />
 
+      {/* La nota invita a cambiar los pasos: sólo vale para el habitual. */}
       <Panel variant="quiet">
-        <p className="text-sm muted">{OFFICES_STRUCTURE_NOTE}</p>
+        <p className="text-sm muted">{variante ? es.office.fixedForm : OFFICES_STRUCTURE_NOTE}</p>
       </Panel>
 
       <div className="btn-row" style={{ marginTop: 'var(--sp-5)' }}>
-        <ButtonLink to={`/orar/regla/editar/${regla.data.id}`}>{es.office.edit}</ButtonLink>
-        <Button
-          variant="ghost"
-          onClick={async () => {
-            // Se avisa antes: esto borra lo que el usuario haya cambiado en
-            // ESTE oficio, aunque no toca los otros dos.
-            if (!window.confirm(es.office.restoreConfirm)) return;
-            await restoreOffice(time as RuleTime);
-            pasos.reload();
-            hechos.reload();
-            toast(es.office.restored);
-          }}
-        >
-          {es.office.restore}
-        </Button>
+        {variante ? (
+          <Button onClick={hacerMia}>{es.office.makeMine}</Button>
+        ) : (
+          <>
+            <ButtonLink to={`/orar/regla/editar/${regla.data.id}`}>{es.office.edit}</ButtonLink>
+            <Button
+              variant="ghost"
+              onClick={async () => {
+                // Se avisa antes: esto borra lo que el usuario haya cambiado en
+                // ESTE oficio, aunque no toca los otros dos.
+                if (!window.confirm(es.office.restoreConfirm)) return;
+                await restoreOffice(time as RuleTime);
+                pasos.reload();
+                pasosRegla.reload();
+                hechos.reload();
+                toast(es.office.restored);
+              }}
+            >
+              {es.office.restore}
+            </Button>
+          </>
+        )}
         <ButtonLink to="/orar" variant="ghost">
           {es.app.back}
         </ButtonLink>

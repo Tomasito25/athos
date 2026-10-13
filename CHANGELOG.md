@@ -2,6 +2,59 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.29.0]
+
+### Añadido
+
+- **Cada oficio del día, en tres medidas.** La de siempre sigue siendo la
+  habitual, la que cada uno edita; a su lado hay ahora una **breve**, para
+  coger el hábito o para los días con prisa, y una **extensa**, para quien ya
+  tiene costumbre. Ninguna trae texto nuevo:
+  - La breve (unos 5 o 6 minutos) es la regla de san Serafín de Sarov, tal
+    como la recoge su vida escrita por el santo mártir Serafín (Chichágov):
+    el Padre Nuestro y el «Theotokos Virgen, alégrate» tres veces y el
+    Símbolo de la Fe una, al levantarse, antes de comer y al acostarse. Por
+    la mañana sigue la oración de Jesús; a mediodía, el tropario de la Hora
+    Sexta y «Santísima Theotokos, sálvame»; por la noche, el examen del día y
+    «En tus manos, Señor».
+  - La extensa junta lo que ya estaba entero en ATHOS. Por la mañana (unos
+    45 minutos), las oraciones de la mañana del libro de oración, la Hora
+    Primera, el Apóstol y el Evangelio del día y cien veces la oración de
+    Jesús. A mediodía (unos 25), la Hora Tercera y la Sexta seguidas. Por la
+    noche (unos 60), las Completas Pequeñas y las oraciones antes del sueño,
+    enteras.
+  - Los minutos se calculan contando las palabras de cada forma, y una
+    prueba comprueba que lo anunciado no se aleja de lo que de verdad se
+    tarda.
+- **La medida se elige** dentro de cada oficio, para los tres de una vez en
+  Orar, o en Configuración. Se rece en la que se rece, el oficio queda
+  rezado y se apunta con qué medida. Las formas breve y extensa no se
+  editan, pero se pueden **hacer propias**: se copian al oficio habitual y
+  allí se cambian.
+- **Tu semana**, en Orar: los tres oficios de los últimos siete días, un
+  punto por oficio rezado —más pequeño el breve, con anillo el extenso—. Sin
+  números ni rachas.
+- **Para empezar a rezar**: seis consejos de ATHOS, plegados bajo la medida,
+  para quien empieza (y avisados como consejos de ATHOS, no como citas de los
+  Padres).
+- **Las lecturas del día dentro de un oficio**: un paso puede traer el
+  Apóstol y el Evangelio del día en que se reza, y el editor lo ofrece.
+- Inicio y la invitación de la hora dicen en qué medida va cada oficio.
+
+### Corregido
+
+- En el editor de un oficio se podía enlazar un paso con «Oficios»,
+  «Akathistos» o «Cánones», pero no elegir cuál, y el paso salía sin texto.
+  Ahora se elige de una lista y el texto entra entero en el oficio.
+- Las Horas no traían escritos el comienzo habitual ni el Trisagio con el
+  Padre Nuestro: remitían a otra pantalla, y quien las rezaba seguidas tenía
+  que salir a buscarlos. Ahora están dentro, con las fórmulas de siempre.
+- Las Horas decían «Venid, adoremos» con «tres veces» al lado, cuando la
+  fórmula ya trae las tres invocaciones: salían nueve.
+- Una prueba de accesibilidad buscaba el enlace «Santos» del calendario con
+  una expresión regular y fallaba los días en que otro enlace del día llevaba
+  esa palabra.
+
 ## [1.28.0]
 
 ### Cambiado

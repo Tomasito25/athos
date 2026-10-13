@@ -124,6 +124,28 @@ const es = {
     offices: 'Los oficios',
     officesHint: 'Las Horas, las Completas, el Moleben y las Liturgias',
     howOffices: 'Cómo están hechos los oficios del día',
+    measure: 'Tu medida',
+    measureHint:
+      'Cada oficio se puede rezar en tres medidas. Empieza por la breve y alárgala cuando se te quede corta: mejor poco cada día que mucho de vez en cuando.',
+    measureAll: 'Medida de los tres oficios',
+    measureMixed: 'Ahora cada oficio tiene la suya. Elige una aquí para los tres, o cámbiala dentro de cada oficio.',
+    measureSet: 'Los tres oficios, en la medida {{name}}',
+    week: 'Tu semana',
+    weekHint: 'Los oficios que has rezado estos siete días. No es una puntuación: es para ver cómo va la costumbre.',
+    weekLegend: 'Rezado',
+    weekNone: 'Sin rezar',
+    weekPrayed: '{{office}}: rezado ({{length}})',
+    weekMissing: '{{office}}: sin rezar',
+    beginners: 'Para empezar a rezar',
+    beginnersNote: 'Consejos de ATHOS, no citas de los Padres.',
+    beginnersTips: [
+      'Empieza por la forma breve: de los tres oficios, o sólo de la mañana y la noche. Al principio no importa cuánto se reza, sino rezar cada día.',
+      'Reza a la misma hora y en el mismo sitio, delante de un icono y con una lamparilla si la tienes. La costumbre se apoya en esas cosas pequeñas.',
+      'Lee despacio. Si te distraes, vuelve a la última frase que dijiste con atención, sin agobiarte y sin empezar de nuevo.',
+      'Cuando la breve se te quede corta, pasa a la habitual; cuando la habitual salga sola, prueba la extensa. Una regla pequeña que se cumple vale más que una grande que se abandona.',
+      'Si tienes padre espiritual, cuéntale qué regla rezas antes de alargarla: es lo que la Iglesia aconseja siempre.',
+      'Si un día no puedes, no lo dejes del todo: di al menos el Padre Nuestro o unas cuantas veces la oración de Jesús. Al día siguiente se vuelve a empezar.',
+    ],
   },
 
   home: {
@@ -235,6 +257,9 @@ const es = {
     emptyText: 'Una regla de oración es una lista breve y estable. Vale más poca y constante que mucha y esporádica.',
     deleteConfirm: '¿Eliminar esta regla y su historial?',
     doneCount: '{{done}} de {{total}}',
+    linkDayReadings: 'Lecturas del día',
+    linkDayReadingsHint: 'El paso mostrará el Apóstol y el Evangelio del día en que se rece, tomados del leccionario.',
+    linkSomeSections: 'De este oficio entran sólo {{n}} partes. Si eliges otro, entrará entero.',
   },
 
   office: {
@@ -274,6 +299,15 @@ const es = {
     threeTimes: 'ATHOS propone tres momentos al día. Puedes cambiar las horas y los pasos de cada uno.',
     windowLabel: 'Se propone entre las {{from}} y las {{to}}',
     deletePrayerConfirm: '¿Eliminar esta oración? Los pasos que la usaban conservarán su título.',
+    length: 'Medida del oficio',
+    source: 'Fuente:',
+    minutes: 'unos {{n}} min',
+    makeMine: 'Hacerla mía para cambiarla',
+    makeMineConfirm:
+      '¿Copiar esta forma a tu oficio habitual? Sus pasos sustituirán a los que tenga ahora tu oficio habitual de este momento del día, y a partir de ahí podrás cambiarlos. Los otros dos oficios no se tocan.',
+    madeMine: 'Copiada a tu oficio habitual',
+    fixedForm:
+      'Esta forma es la de ATHOS y no se edita. Si quieres quitarle o añadirle algo, cópiala a tu oficio habitual y cámbiala allí.',
   },
 
   jesusPrayer: {

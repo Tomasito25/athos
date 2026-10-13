@@ -73,11 +73,35 @@ const section = (id: string, title: string, blocks: TextBlock[]): OfficeSection 
    Piezas que las cuatro Horas comparten
    ============================================================ */
 
-/** «Venid, adoremos», tres veces, con que empieza toda Hora. */
+/**
+ * Trisagio, «Santísima Trinidad» y Padre Nuestro.
+ *
+ * Antes la Hora decía «está en Orar → Oraciones → Comienzo habitual», y quien
+ * la rezaba seguida tenía que salir a buscarlo. Ahora está aquí, con las
+ * mismas fórmulas que el comienzo de los oficios del día.
+ */
+const TRISAGIO: TextBlock[] = [
+  gr('trisagion', 3),
+  gr('doxa'),
+  gr('panagiaTrias'),
+  gr('kyrie', 3),
+  gr('doxa'),
+  gr('paterImon'),
+  rub('Sacerdote: «Porque tuyo es el reino, y el poder, y la gloria, del Padre, y del Hijo, y del Espíritu Santo, ahora y siempre, y por los siglos de los siglos». Sin sacerdote se dice: «Por las oraciones de nuestros santos padres, Señor Jesucristo, Dios nuestro, ten piedad de nosotros y sálvanos». Amén.'),
+];
+
+/** El comienzo habitual y «Venid, adoremos», con que empieza toda Hora. */
 const COMIENZO: TextBlock[] = [
-  rub('Bendito sea nuestro Dios, ahora y siempre, y por los siglos de los siglos. Amén.'),
-  rub('Y el comienzo habitual: Rey celestial, Trisagio, Padre Nuestro. Está entero en Orar → Oraciones → Comienzo habitual.'),
-  gr('deute', 3),
+  rub('Sacerdote: «Bendito sea nuestro Dios, ahora y siempre, y por los siglos de los siglos». Sin sacerdote se empieza: «Por las oraciones de nuestros santos padres, Señor Jesucristo, Dios nuestro, ten piedad de nosotros y sálvanos». Amén.'),
+  rub('Si la Hora sigue a otro oficio, se omite el comienzo habitual y se empieza por «Venid, adoremos».'),
+  gr('doxaSi'),
+  gr('basileuOuranie'),
+  rub('Desde Pascua hasta la Ascensión, en su lugar se dice tres veces «Cristo ha resucitado». Entre la Ascensión y Pentecostés se omite.'),
+  ...TRISAGIO,
+  gr('kyrie', 12),
+  gr('doxa'),
+  // La fórmula ya trae las tres invocaciones: con «tres veces» salían nueve.
+  gr('deute'),
 ];
 
 /** Gloria y Aleluya, que cierran los tres salmos de cada Hora. */
@@ -344,7 +368,8 @@ const secciones = (hora: HoraSeed): OfficeSection[] => [
   ]),
 
   section('trisagio', 'Trisagio y Padre Nuestro', [
-    rub('El comienzo habitual otra vez, ahora hacia el final: Trisagio, «Santísima Trinidad» y Padre Nuestro. Está en Orar → Oraciones → Comienzo habitual.'),
+    rub('El Trisagio otra vez, ahora hacia el final:'),
+    ...TRISAGIO,
   ]),
 
   section('kontakion', 'Kontakion del día', [

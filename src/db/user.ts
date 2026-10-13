@@ -11,6 +11,7 @@ import type {
   HistoryEntry,
   JesusPrayerSession,
   Note,
+  OfficeLength,
   PrayerRule,
   RuleCompletion,
   RuleItem,
@@ -19,7 +20,7 @@ import type {
   UserPrayer,
 } from '@/types';
 import { db } from './db';
-import { toIsoDate } from '@/lib/calendar/jdn';
+import { addDaysIso, toIsoDate } from '@/lib/calendar/jdn';
 
 const now = () => new Date().toISOString();
 export const newId = () =>
@@ -193,8 +194,11 @@ const completionId = (date: string, itemId: string) => `${date}|${itemId}`;
  *
  * Por dentro se siguen guardando las marcas de cada paso: así el progreso, las
  * estadísticas y todo lo que ya leía esos datos siguen funcionando igual.
+ *
+ * Se rece en la medida que se rece —breve, habitual o extensa—, el oficio
+ * queda rezado: se marcan los pasos del habitual y se apunta la medida.
  */
-export async function completeRule(date: string, ruleId: string): Promise<void> {
+export async function completeRule(date: string, ruleId: string, length?: OfficeLength): Promise<void> {
   const items = await ruleItems(ruleId);
   const stamp = now();
   const registros: RuleCompletion[] = items.map((item) => ({
@@ -204,8 +208,60 @@ export async function completeRule(date: string, ruleId: string): Promise<void> 
     itemId: item.id,
     completedAt: stamp,
     count: item.target,
+    ...(length ? { length } : {}),
   }));
   await db.rule_completions.bulkPut(registros);
+}
+
+/**
+ * Si un oficio está rezado entero ese día, a la vista de sus marcas.
+ *
+ * Basta con que estén todos los pasos que tiene ahora, o con una marca que
+ * diga la medida: ésa sólo la pone `completeRule`, y así un día rezado no
+ * deja de estarlo porque luego se cambien los pasos del oficio.
+ */
+export function isRulePrayed(marcas: RuleCompletion[], ruleId: string, items: RuleItem[]): boolean {
+  const propias = marcas.filter((m) => m.ruleId === ruleId);
+  if (propias.some((m) => m.length)) return true;
+  if (!items.length) return false;
+  const hechas = new Set(propias.map((m) => m.itemId));
+  return items.every((i) => hechas.has(i.id));
+}
+
+/** La medida con que se rezó, si consta. */
+export const prayedLength = (marcas: RuleCompletion[], ruleId: string): OfficeLength | undefined =>
+  marcas.find((m) => m.ruleId === ruleId && m.length)?.length;
+
+export interface OfficeDay {
+  date: string;
+  /** Los oficios rezados enteros ese día, con la medida si consta. */
+  prayed: Map<RuleTime, OfficeLength | undefined>;
+}
+
+/**
+ * Los tres oficios de los últimos días, para ver cómo va la costumbre.
+ *
+ * No hay puntuación ni racha que perder: sólo qué se rezó cada día.
+ */
+export async function officeWeek(today: string, days = 7): Promise<OfficeDay[]> {
+  const desde = addDaysIso(today, -(days - 1));
+  const marcas = await db.rule_completions.where('date').between(desde, today, true, true).toArray();
+
+  const reglas: Array<{ time: RuleTime; ruleId: string; items: RuleItem[] }> = [];
+  for (const time of ['manana', 'mediodia', 'noche'] as RuleTime[]) {
+    const regla = await ruleForTime(time);
+    if (regla) reglas.push({ time, ruleId: regla.id, items: await ruleItems(regla.id) });
+  }
+
+  return Array.from({ length: days }, (_, i) => {
+    const date = addDaysIso(desde, i);
+    const delDia = marcas.filter((m) => m.date === date);
+    const prayed = new Map<RuleTime, OfficeLength | undefined>();
+    for (const r of reglas) {
+      if (isRulePrayed(delDia, r.ruleId, r.items)) prayed.set(r.time, prayedLength(delDia, r.ruleId));
+    }
+    return { date, prayed };
+  });
 }
 
 /** Deshace lo anterior: el oficio vuelve a estar sin rezar. */

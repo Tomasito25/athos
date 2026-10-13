@@ -21,8 +21,9 @@ import {
   RV1909,
   SAINTS,
 } from '@/content';
-import { DAILY_OFFICES } from '@/content/hours';
-import type { PrayerRule, RuleItem, RuleTime } from '@/types';
+import { DAILY_OFFICES, stepsToItems } from '@/content/hours';
+import { stepsFor } from '@/content/office-lengths';
+import type { OfficeLength, PrayerRule, RuleItem, RuleTime } from '@/types';
 import { db, getSetting, setSetting } from './db';
 
 const CONTENT_VERSION_KEY = 'content.version';
@@ -134,11 +135,7 @@ export async function seedContent(force = false): Promise<boolean> {
 
 const now = () => new Date().toISOString();
 
-/**
- * Construye los tres oficios a partir de su definición.
- * Cada paso guarda su propio texto cuando no procede de la biblioteca, de modo
- * que el oficio se lee entero aunque el usuario reordene o quite piezas.
- */
+/** Construye los tres oficios a partir de su definición. */
 function defaultOffices(): { rules: PrayerRule[]; items: RuleItem[] } {
   const stamp = now();
   const rules: PrayerRule[] = [];
@@ -155,34 +152,7 @@ function defaultOffices(): { rules: PrayerRule[]; items: RuleItem[] } {
       createdAt: stamp,
       updatedAt: stamp,
     });
-
-    office.steps.forEach((step, posicion) => {
-      items.push({
-        id: `${ruleId}-${step.id}`,
-        ruleId,
-        order: posicion + 1,
-        title: step.title,
-        note: step.note,
-        blocks: step.blocks,
-        target: step.target,
-        linkKind:
-          step.kind === 'prayer'
-            ? 'prayer'
-            : step.kind === 'psalm'
-              ? 'psalm'
-              : step.kind === 'jesus-prayer'
-                ? 'jesus-prayer'
-                : step.kind === 'komboskini'
-                  ? 'komboskini'
-                  : undefined,
-        linkId:
-          step.kind === 'prayer'
-            ? step.prayerId
-            : step.kind === 'psalm'
-              ? String(step.psalm)
-              : undefined,
-      });
-    });
+    items.push(...stepsToItems(ruleId, office.steps));
   });
 
   return { rules, items };
@@ -215,15 +185,18 @@ export async function seedUserDefaults(): Promise<boolean> {
  *
  * Lo que sí se pierde es lo que el usuario hubiera cambiado en ESE oficio.
  * Por eso quien lo llama tiene que avisar antes.
+ *
+ * Con `length` se copia al oficio habitual la forma breve o la extensa: es
+ * la manera de cambiar una de ésas, que no se editan, sin escribirla de cero.
  */
-export async function restoreOffice(time: RuleTime): Promise<boolean> {
+export async function restoreOffice(time: RuleTime, length: OfficeLength = 'habitual'): Promise<boolean> {
   const office = DAILY_OFFICES.find((o) => o.time === time);
   if (!office) return false;
 
-  const { rules, items } = defaultOffices();
+  const { rules } = defaultOffices();
   const ruleId = `oficio-${time}`;
   const regla = rules.find((r) => r.id === ruleId);
-  const pasos = items.filter((i) => i.ruleId === ruleId);
+  const pasos = stepsToItems(ruleId, stepsFor(time, length));
   if (!regla || !pasos.length) return false;
 
   await db.transaction('rw', [db.daily_rules, db.rule_items], async () => {

@@ -64,7 +64,9 @@ export interface TextBlock {
     | 'psalm'
     | 'day-troparion'
     | 'day-kontakion'
-    | 'reading';
+    | 'reading'
+    /** Las lecturas de la Liturgia del día en que se abre, tomadas del leccionario. */
+    | 'day-readings';
   content: string;
   /** Número de versículo, estrofa u oda, cuando aplica. */
   ref?: string;
@@ -585,6 +587,12 @@ export type RuleScope = 'diario' | 'domingo' | 'fiesta' | 'ayuno';
 /** Los tres momentos del oficio diario. */
 export type RuleTime = 'manana' | 'mediodia' | 'noche';
 
+/**
+ * La medida de cada oficio: la breve para coger el hábito, la habitual —la que
+ * cada uno puede editar— y la extensa para quien ya tiene costumbre.
+ */
+export type OfficeLength = 'breve' | 'habitual' | 'extenso';
+
 export interface PrayerRule {
   id: string;
   name: string;
@@ -612,8 +620,16 @@ export interface RuleItem {
     | 'jesus-prayer'
     | 'komboskini'
     /** Uno de los órdenes del libro de oración, entero: las de la mañana, las de la noche… */
-    | 'prayer-order';
+    | 'prayer-order'
+    /** El Apóstol y el Evangelio del día en que se reza. */
+    | 'day-readings';
   linkId?: string;
+  /**
+   * Con `office`, las secciones del oficio que entran en el paso, por su
+   * identificador: de las Completas, sólo las Pequeñas; de una Hora, sin la
+   * explicación del principio. Sin esto entra el oficio entero.
+   */
+  sections?: string[];
   /** Repeticiones objetivo, p. ej. 33 oraciones de Jesús o nudos del komboskini. */
   target?: number;
   note?: string;
@@ -633,6 +649,8 @@ export interface RuleCompletion {
   itemId: string;
   completedAt: string;
   count?: number;
+  /** La medida con que se rezó el oficio ese día, si se dio por rezado entero. */
+  length?: OfficeLength;
 }
 
 /** Una oración escrita o pegada por el propio usuario. */

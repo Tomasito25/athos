@@ -247,6 +247,8 @@ function itemLink(item: RuleItem): string | null {
       return `/orar/oraciones/orden/${item.linkId}`;
     case 'komboskini':
       return '/orar/komboskini';
+    case 'day-readings':
+      return '/leer/lecturas';
     default:
       return null;
   }

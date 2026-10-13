@@ -4,16 +4,22 @@
  * Inicio decía «0 de 44», que suma los pasos de los tres oficios y no dice
  * nada útil: no se sabe cuál falta. Esto devuelve el avance de cada oficio por
  * separado, que es lo que se enseña ahora en Inicio y en Orar.
+ *
+ * Un oficio rezado en su forma breve o extensa cuenta entero, igual que el
+ * habitual: lo que importa es que el de ese momento del día se rezó.
  */
 import { useAsync } from '@/hooks/useAsync';
-import { ruleForTime, ruleProgress } from '@/db/user';
+import { db } from '@/db/db';
+import { isRulePrayed, prayedLength, ruleForTime, ruleProgress } from '@/db/user';
 import { DAILY_OFFICES } from '@/content/hours';
-import type { RuleTime } from '@/types';
+import type { OfficeLength, RuleTime } from '@/types';
 
 export interface OfficeProgress {
   ruleId: string;
   ratio: number;
   total: number;
+  /** La medida con que se rezó hoy, si se dio por rezado. */
+  length?: OfficeLength;
 }
 
 export function useOfficeProgress(today: string) {
@@ -23,7 +29,14 @@ export function useOfficeProgress(today: string) {
       const regla = await ruleForTime(oficio.time);
       if (!regla) continue;
       const p = await ruleProgress(today, regla);
-      salida.set(oficio.time, { ruleId: regla.id, ratio: p.ratio, total: p.items.length });
+      const marcas = await db.rule_completions.where('[date+ruleId]').equals([today, regla.id]).toArray();
+      const rezado = isRulePrayed(marcas, regla.id, p.items);
+      salida.set(oficio.time, {
+        ruleId: regla.id,
+        ratio: rezado ? 1 : p.ratio,
+        total: p.items.length,
+        length: prayedLength(marcas, regla.id),
+      });
     }
     return salida;
   }, [today]);

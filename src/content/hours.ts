@@ -12,7 +12,7 @@
  * cambiar, quitar y añadir pasos: esto es un punto de partida, no una regla
  * impuesta.
  */
-import type { RuleTime, SourceMeta, TextBlock } from '@/types';
+import type { RuleItem, RuleTime, SourceMeta, TextBlock } from '@/types';
 import { GREEK_FORMULAS as G } from './greek';
 
 const meta: SourceMeta = {
@@ -67,6 +67,11 @@ export const INVITATORIO: TextBlock[] = [head('Invitatorio'), gr('deute')];
 
 export const DESPEDIDA: TextBlock[] = [head('Despedida'), gr('apolysis')];
 
+/** El tropario de la Hora Sexta, que dice por qué se reza a las doce. */
+export const TROPARIO_SEXTA: TextBlock[] = [
+  t('Tú que en el día sexto y a la hora sexta clavaste en la cruz el pecado que Adán cometió temerariamente en el paraíso, rasga también el documento de nuestras culpas, Cristo Dios, y sálvanos.'),
+];
+
 /* ============================================================
    Definición de los tres oficios
    ============================================================ */
@@ -77,7 +82,13 @@ export type StepKind =
   | 'psalm'
   | 'jesus-prayer'
   | 'komboskini'
-  | 'rubrica';
+  | 'rubrica'
+  /** Un orden entero del libro de oración. */
+  | 'order'
+  /** Un oficio de la biblioteca —una Hora, las Completas—, entero o en parte. */
+  | 'office'
+  /** El Apóstol y el Evangelio del día. */
+  | 'day-readings';
 
 export interface OfficeStepSeed {
   id: string;
@@ -89,6 +100,11 @@ export interface OfficeStepSeed {
   prayerId?: string;
   /** Salmo, en numeración de los Setenta. */
   psalm?: number;
+  /** Orden del libro de oración. */
+  orderId?: string;
+  /** Oficio de la biblioteca y, si no entra entero, las secciones que entran. */
+  officeId?: string;
+  sections?: string[];
   /** Repeticiones sugeridas de la oración de Jesús o nudos del komboskini. */
   target?: number;
   note?: string;
@@ -102,6 +118,8 @@ export interface DailyOfficeSeed {
   /** Franja horaria en que ATHOS lo propone, en horas locales. */
   window: [number, number];
   description: string;
+  /** Lo que se tarda en rezarlo sin prisa, en minutos; lo comprueban las pruebas. */
+  minutes: number;
   steps: OfficeStepSeed[];
 }
 
@@ -113,6 +131,7 @@ export const DAILY_OFFICES: DailyOfficeSeed[] = [
     greekName: 'Ἑωθιναὶ Προσευχαί',
     subtitle: 'Al levantarse, antes de cualquier otra cosa',
     window: [4, 12],
+    minutes: 14,
     description:
       'Las oraciones matutinas del libro de oración: el comienzo habitual, el salmo del arrepentimiento, el Símbolo de la Fe y las súplicas de los Padres para empezar el día.',
     steps: [
@@ -155,6 +174,7 @@ export const DAILY_OFFICES: DailyOfficeSeed[] = [
     greekName: 'Ὥρα Ἕκτη',
     subtitle: 'La Hora Sexta, cuando el Señor fue crucificado',
     window: [12, 17],
+    minutes: 8,
     description:
       'A las doce del día se reza la Hora Sexta, en memoria de la Crucifixión. Sus tres salmos —53, 54 y 90— son los que fija el Horologion. Es un oficio breve, pensado para hacerse un hueco en mitad de la jornada.',
     steps: [
@@ -169,7 +189,7 @@ export const DAILY_OFFICES: DailyOfficeSeed[] = [
         kind: 'texto',
         blocks: [
           rub('El tropario propio de la hora, que recuerda por qué se reza a las doce.'),
-          t('Tú que en el día sexto y a la hora sexta clavaste en la cruz el pecado que Adán cometió temerariamente en el paraíso, rasga también el documento de nuestras culpas, Cristo Dios, y sálvanos.'),
+          ...TROPARIO_SEXTA,
           t('Gloria al Padre, y al Hijo, y al Espíritu Santo, ahora y siempre, y por los siglos de los siglos. Amén.'),
           head('Theotokion'),
           t('Como no tenemos audacia por causa de nuestros muchos pecados, ruega tú, Virgen Theotokos, a Aquel que de ti nació; porque mucho puede la súplica de una Madre para alcanzar el favor del Soberano. No desprecies las plegarias de los pecadores, oh Purísima, porque es misericordioso y poderoso para salvar Aquel que quiso padecer por nosotros.'),
@@ -200,6 +220,7 @@ export const DAILY_OFFICES: DailyOfficeSeed[] = [
     greekName: 'Μικρὸν Ἀπόδειπνον',
     subtitle: 'Las Pequeñas Completas, antes del descanso',
     window: [17, 4],
+    minutes: 11,
     description:
       'Las Pequeñas Completas se rezan después de la cena, al cerrar la jornada. Sus salmos —50, 69 y 142— son los del Horologion. Se añaden el examen del día y las oraciones nocturnas del libro de oración.',
     steps: [
@@ -224,6 +245,48 @@ export const DAILY_OFFICES: DailyOfficeSeed[] = [
 ];
 
 export const OFFICE_BY_TIME = new Map(DAILY_OFFICES.map((o) => [o.time, o]));
+
+const LINK_KIND: Partial<Record<StepKind, RuleItem['linkKind']>> = {
+  prayer: 'prayer',
+  psalm: 'psalm',
+  'jesus-prayer': 'jesus-prayer',
+  komboskini: 'komboskini',
+  order: 'prayer-order',
+  office: 'office',
+  'day-readings': 'day-readings',
+};
+
+/**
+ * Los pasos de un oficio, como pasos de una regla.
+ *
+ * Así se guardan los tres oficios la primera vez, y así se leen las formas
+ * breve y extensa, que no se guardan: se rezan tal como vienen. Cada paso
+ * lleva su propio texto cuando no procede de la biblioteca, de modo que el
+ * oficio se lee entero aunque el usuario reordene o quite piezas.
+ */
+export function stepsToItems(ruleId: string, steps: OfficeStepSeed[]): RuleItem[] {
+  return steps.map((step, posicion) => ({
+    id: `${ruleId}-${step.id}`,
+    ruleId,
+    order: posicion + 1,
+    title: step.title,
+    note: step.note,
+    blocks: step.blocks,
+    target: step.target,
+    linkKind: LINK_KIND[step.kind],
+    linkId:
+      step.kind === 'prayer'
+        ? step.prayerId
+        : step.kind === 'psalm'
+          ? String(step.psalm)
+          : step.kind === 'order'
+            ? step.orderId
+            : step.kind === 'office'
+              ? step.officeId
+              : undefined,
+    sections: step.sections,
+  }));
+}
 
 export const DAILY_OFFICE_META = meta;
 

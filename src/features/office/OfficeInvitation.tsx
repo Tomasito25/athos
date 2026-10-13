@@ -5,9 +5,9 @@
  * para empezar. Si ya se ha rezado, lo dice y ofrece volver a él.
  */
 import { Link } from 'react-router-dom';
-import { useAsync } from '@/hooks/useAsync';
 import { OFFICE_BY_TIME } from '@/content/hours';
-import { ruleForTime, ruleProgress } from '@/db/user';
+import { LENGTH_INFO, minutesFor } from '@/content/office-lengths';
+import { useOfficeProgress } from './useOfficeProgress';
 import { useToday } from '@/hooks/useLiturgicalDay';
 import { useSettings } from '@/stores/settings';
 import { ProgressBlocks } from '@/components/ui';
@@ -20,16 +20,13 @@ export function OfficeInvitation() {
   const horas = useSettings((s) => s.officeHours);
   const ahora = officeNow(new Date().getHours(), horas);
   const definicion = OFFICE_BY_TIME.get(ahora);
+  const medida = useSettings((s) => s.officeLength?.[ahora] ?? 'habitual');
 
-  const estado = useAsync(async () => {
-    const regla = await ruleForTime(ahora);
-    if (!regla) return null;
-    return ruleProgress(today, regla);
-  }, [ahora, today]);
+  const progreso = useOfficeProgress(today);
+  // Sin regla para este momento —el usuario la borró— no hay nada que invitar a rezar.
+  if (progreso.data && !progreso.data.has(ahora)) return null;
 
-  if (estado.data === null) return null;
-
-  const ratio = estado.data?.ratio ?? 0;
+  const ratio = progreso.data?.get(ahora)?.ratio ?? 0;
   const empezado = ratio > 0;
   const completo = ratio >= 1;
 
@@ -48,6 +45,9 @@ export function OfficeInvitation() {
           {definicion.greekName}
         </p>
       ) : null}
+      <p className="office-invite__length">
+        {LENGTH_INFO.get(medida)?.label} · {es.office.minutes.replace('{{n}}', String(minutesFor(ahora, medida)))}
+      </p>
 
       {empezado && !completo ? (
         <div className="office-invite__progress">

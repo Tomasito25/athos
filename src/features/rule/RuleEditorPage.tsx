@@ -51,7 +51,34 @@ const LINK_KINDS: Array<{ value: RuleItem['linkKind'] | ''; label: string }> = [
   { value: 'akathist', label: es.library.akathists },
   { value: 'canon', label: es.library.canons },
   { value: 'office', label: es.library.liturgy },
+  { value: 'day-readings', label: es.rule.linkDayReadings },
 ];
+
+/**
+ * Lo que se puede enlazar de la biblioteca, con su lista.
+ *
+ * Antes se podía elegir «Oficios», «Akathistos» o «Cánones», pero no cuál: el
+ * paso se quedaba sin texto. Ahora se elige, y el texto entra entero en el
+ * oficio. La lista se lee sólo cuando se elige esa clase de enlace, porque
+ * los oficios son largos.
+ */
+const DE_LA_BIBLIOTECA: Partial<
+  Record<NonNullable<RuleItem['linkKind']>, { label: string; list: () => Promise<Array<{ id: string; title: string }>> }>
+> = {
+  office: {
+    label: es.library.liturgy,
+    list: async () =>
+      (await db.liturgies.toArray()).sort((a, b) => a.order - b.order).map((o) => ({ id: o.id, title: o.title })),
+  },
+  akathist: {
+    label: es.library.akathists,
+    list: async () => (await db.akathists.toArray()).map((a) => ({ id: a.id, title: a.title })),
+  },
+  canon: {
+    label: es.library.canons,
+    list: async () => (await db.canons.toArray()).map((c) => ({ id: c.id, title: c.title })),
+  },
+};
 
 export function RuleEditorPage() {
   const { ruleId = '' } = useParams();
@@ -270,6 +297,8 @@ function ItemDialogForm({
   const [draft, setDraft] = useState<RuleItem>(item);
   const prayers = useAsync(() => db.prayers.orderBy('order').toArray(), []);
   const propias = useAsync(() => listUserPrayers(), []);
+  const fuente = draft.linkKind ? DE_LA_BIBLIOTECA[draft.linkKind] : undefined;
+  const deLaBiblioteca = useAsync(async () => (fuente ? fuente.list() : []), [draft.linkKind]);
 
   const update = (patch: Partial<RuleItem>) => setDraft({ ...draft, ...patch });
 
@@ -312,6 +341,7 @@ function ItemDialogForm({
                 update({
                   linkKind: (event.target.value || undefined) as RuleItem['linkKind'],
                   linkId: undefined,
+                  sections: undefined,
                 })
               }
             >
@@ -363,6 +393,34 @@ function ItemDialogForm({
             )}
           </Field>
         ) : null}
+
+        {fuente ? (
+          <Field
+            label={fuente.label}
+            hint={draft.sections?.length ? es.rule.linkSomeSections.replace('{{n}}', String(draft.sections.length)) : undefined}
+          >
+            {(id) => (
+              <select
+                id={id}
+                className="select"
+                value={draft.linkId ?? ''}
+                onChange={(event) => {
+                  const elegido = deLaBiblioteca.data?.find((o) => o.id === event.target.value);
+                  update({ linkId: event.target.value, sections: undefined, title: draft.title || elegido?.title || '' });
+                }}
+              >
+                <option value="">—</option>
+                {(deLaBiblioteca.data ?? []).map((o) => (
+                  <option key={o.id} value={o.id}>
+                    {o.title}
+                  </option>
+                ))}
+              </select>
+            )}
+          </Field>
+        ) : null}
+
+        {draft.linkKind === 'day-readings' ? <p className="field__hint">{es.rule.linkDayReadingsHint}</p> : null}
 
         {draft.linkKind === 'user-prayer' ? (
           <Field label={es.office.myPrayers} hint="Se escriben en Orar → Mis oraciones.">

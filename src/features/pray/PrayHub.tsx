@@ -1,8 +1,10 @@
 /**
  * Portada de Orar.
  *
- * Los tres oficios del día en primer lugar —con el de ahora destacado—; debajo,
- * el libro de oración con sus cuatro órdenes de corrido; después, la oración
+ * Los tres oficios del día en primer lugar —con el de ahora destacado y la
+ * medida en que se reza cada uno—; debajo, la medida para los tres de una vez
+ * y la semana, que es lo que necesita quien está cogiendo el hábito; luego el
+ * libro de oración con sus cuatro órdenes de corrido; después, la oración
  * personal —las oraciones por momentos, la de Jesús, el komboskini, la regla—,
  * y al final lo que se reza con la Iglesia y está en la biblioteca.
  *
@@ -30,6 +32,9 @@ import {
   IconScroll,
 } from '@/components/icons';
 import { PRAYER_CATEGORIES } from '@/content/prayers';
+import { LENGTH_INFO, minutesFor } from '@/content/office-lengths';
+import { OfficeMeasure } from './OfficeMeasure';
+import { OfficeWeek } from './OfficeWeek';
 import { PRAYER_ORDERS } from '@/content/prayer-orders';
 import { MomentIcon } from '@/features/prayers/MomentIcon';
 import { useOfficeProgress } from '@/features/office/useOfficeProgress';
@@ -41,6 +46,7 @@ export function PrayHub() {
   const ahora = officeNow(new Date().getHours(), horas);
   const stats = useAsync(() => prayerStats(today), [today]);
   const progreso = useOfficeProgress(today);
+  const medidas = useSettings((s) => s.officeLength);
 
   return (
     <div className="page">
@@ -51,6 +57,7 @@ export function PrayHub() {
           {DAILY_OFFICES.map((oficio) => {
             const estado = progreso.data?.get(oficio.time);
             const esAhora = oficio.time === ahora;
+            const medida = medidas?.[oficio.time] ?? 'habitual';
             return (
               <Link
                 key={oficio.time}
@@ -65,6 +72,10 @@ export function PrayHub() {
                 </div>
                 <p className="office-card__name">{oficio.name}</p>
                 <p className="muted text-sm">{oficio.subtitle}</p>
+                <p className="office-card__length" data-length={medida}>
+                  <span>{LENGTH_INFO.get(medida)?.label}</span> ·{' '}
+                  {es.office.minutes.replace('{{n}}', String(minutesFor(oficio.time, medida)))}
+                </p>
                 {estado && estado.total > 0 ? (
                   <div className="office-card__progress">
                     <ProgressBlocks value={estado.ratio} />
@@ -76,10 +87,27 @@ export function PrayHub() {
         </div>
       </Section>
 
+      <Section title={es.pray.measure}>
+        <p className="muted text-sm section-lead">{es.pray.measureHint}</p>
+        <OfficeMeasure />
+        <details className="fold">
+          <summary>{es.pray.beginners}</summary>
+          <ul className="tips">
+            {es.pray.beginnersTips.map((consejo) => (
+              <li key={consejo}>{consejo}</li>
+            ))}
+          </ul>
+          <p className="muted text-sm">{es.pray.beginnersNote}</p>
+        </details>
+      </Section>
+
+      <Section title={es.pray.week}>
+        <p className="muted text-sm section-lead">{es.pray.weekHint}</p>
+        <OfficeWeek today={today} />
+      </Section>
+
       <Section title={es.prayers.orders}>
-        <p className="muted text-sm" style={{ margin: 'calc(-1 * var(--sp-2)) 0 var(--sp-3)' }}>
-          {es.prayers.ordersHint}
-        </p>
+        <p className="muted text-sm section-lead">{es.prayers.ordersHint}</p>
         <div className="order-grid">
           {PRAYER_ORDERS.map((orden) => {
             const esAhora = orden.category === ahora;

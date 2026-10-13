@@ -1071,3 +1071,292 @@ button.cal-cell:hover {
 .grid--mini .card__text {
   font-size: var(--text-xs);
 }
+
+/* ---------------- Las tres medidas de los oficios ----------------
+   Breve, habitual, extensa. Cada una lleva tres barritas de altura creciente
+   que se encienden según la medida: se ve de un vistazo cuál es la larga sin
+   tener que leer los minutos. */
+.section-lead {
+  margin: calc(-1 * var(--sp-2)) 0 var(--sp-3);
+}
+
+.measure-options {
+  display: grid;
+  gap: var(--sp-2);
+}
+
+@media (min-width: 40rem) {
+  .measure-options {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.measure-option {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas:
+    'bars name minutes'
+    'bars hint hint';
+  align-items: baseline;
+  column-gap: var(--sp-3);
+  row-gap: 2px;
+  padding: var(--sp-3) var(--sp-4);
+  text-align: start;
+  color: inherit;
+  font: inherit;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface-glow), var(--surface-raised);
+  cursor: pointer;
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    box-shadow var(--dur-fast) var(--ease);
+}
+
+.measure-option:hover {
+  border-color: var(--gold-soft);
+}
+
+.measure-option:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.measure-option[aria-checked='true'] {
+  border-color: var(--gold);
+  box-shadow: var(--shadow-gold), inset 0 0 0 1px var(--gold);
+}
+
+.measure-option__bars {
+  grid-area: bars;
+  align-self: center;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 1.4rem;
+}
+
+.measure-option__bars > span {
+  width: 5px;
+  border-radius: 2px;
+  background: var(--line-strong);
+}
+
+.measure-option__bars > span:nth-child(1) {
+  height: 40%;
+}
+.measure-option__bars > span:nth-child(2) {
+  height: 70%;
+}
+.measure-option__bars > span:nth-child(3) {
+  height: 100%;
+}
+
+.measure-option[data-length='breve'] .measure-option__bars > span:nth-child(-n + 1),
+.measure-option[data-length='habitual'] .measure-option__bars > span:nth-child(-n + 2),
+.measure-option[data-length='extenso'] .measure-option__bars > span {
+  background: var(--gold);
+}
+
+.measure-option__name {
+  grid-area: name;
+  font-family: var(--font-serif);
+  font-size: var(--text-lg);
+  color: var(--ink-strong);
+}
+
+.measure-option__minutes {
+  grid-area: minutes;
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--gold);
+  white-space: nowrap;
+}
+
+.measure-option__hint {
+  grid-area: hint;
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  line-height: 1.35;
+}
+
+.measure__mixed {
+  margin-top: var(--sp-2);
+}
+
+.tips {
+  margin: 0;
+  padding-inline-start: 1.2em;
+  list-style: disc;
+  display: grid;
+  gap: var(--sp-2);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+
+.tips li::marker {
+  color: var(--gold);
+}
+
+/* La medida, en la tarjeta de cada oficio. */
+.office-card__length {
+  margin-top: var(--sp-2);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.office-card__length > span {
+  font-weight: 600;
+  color: var(--gold);
+}
+
+/* La medida, dentro del oficio. */
+.office-length {
+  margin-top: var(--sp-4);
+}
+
+.office-length__hint {
+  margin-top: var(--sp-2);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.office-length__minutes {
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+}
+
+.office-length__about {
+  margin-top: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border-inline-start: 2px solid var(--gold-soft);
+  background: var(--gold-wash);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+
+.office-length__about > p + p {
+  margin-top: var(--sp-1);
+}
+
+/* ---------------- La semana ----------------
+   Siete columnas, tres filas, un punto por oficio. El de hoy, con su halo. */
+.office-week-wrap {
+  padding: var(--sp-3) var(--sp-3) var(--sp-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface-glow), var(--surface-raised);
+}
+
+.office-week {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 var(--sp-1);
+  table-layout: fixed;
+}
+
+.office-week th,
+.office-week td {
+  padding: 0;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.office-week thead th:first-child,
+.office-week__office {
+  width: 5.5rem;
+  text-align: start;
+}
+
+.office-week__office {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.office-week__day {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--ink-muted);
+  letter-spacing: var(--tracking-wide);
+}
+
+.office-week__num {
+  display: block;
+  font-weight: 400;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.office-week__day--today {
+  color: var(--gold);
+}
+
+.office-week__dot {
+  display: inline-block;
+  width: 0.95rem;
+  height: 0.95rem;
+  vertical-align: middle;
+  border-radius: 50%;
+  border: 1.5px solid var(--line-strong);
+}
+
+.office-week__dot--done {
+  border-color: var(--gold);
+  background: var(--gold);
+}
+
+/* La extensa lleva un anillo más; la breve, el punto más pequeño. */
+.office-week__dot--done[data-length='extenso'] {
+  box-shadow: 0 0 0 2px var(--surface), 0 0 0 3.5px var(--gold-soft);
+}
+
+.office-week__dot--done[data-length='breve'] {
+  transform: scale(0.72);
+}
+
+.office-week__cell--today .office-week__dot:not(.office-week__dot--done) {
+  border-color: var(--gold-soft);
+  border-style: dashed;
+}
+
+.office-week__legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+}
+
+.office-week__legend .office-week__dot {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.office-week__legend .office-week__dot:not(:first-child) {
+  margin-inline-start: var(--sp-3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .measure-option {
+    transition: none;
+  }
+}
+
+:root[data-contrast='high'] .measure-option[aria-checked='true'] {
+  outline: 2px solid var(--ink-strong);
+}
+
+.office-row__length {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.office-invite__length {
+  margin-top: var(--sp-1);
+  font-size: var(--text-sm);
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+}

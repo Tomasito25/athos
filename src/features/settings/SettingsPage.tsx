@@ -30,6 +30,7 @@ import type {
 } from '@/stores/settings';
 import { GREEK_NOTE } from '@/content/greek';
 import { useHashScroll } from '@/hooks/useHashScroll';
+import { OFFICE_LENGTHS, minutesFor } from '@/content/office-lengths';
 import es from '@/locales/es';
 
 export function SettingsPage() {
@@ -241,6 +242,36 @@ export function SettingsPage() {
           <p className="field__hint" style={{ marginTop: 'var(--sp-3)' }}>
             Al abrir ATHOS se propone el oficio que corresponda a la hora. El de la noche se
             extiende hasta el de la mañana.
+          </p>
+
+          <h3 className="panel__title" style={{ marginTop: 'var(--sp-5)' }}>
+            {es.office.length}
+          </h3>
+          <div className="stack" style={{ marginTop: 'var(--sp-3)' }}>
+            {(
+              [
+                ['manana', es.office.morning],
+                ['mediodia', es.office.midday],
+                ['noche', es.office.night],
+              ] as const
+            ).map(([clave, etiqueta]) => (
+              <Field key={clave} label={etiqueta}>
+                {() => (
+                  <Segmented
+                    value={settings.officeLength?.[clave] ?? 'habitual'}
+                    label={`${es.office.length}: ${etiqueta}`}
+                    options={OFFICE_LENGTHS.map((l) => ({
+                      value: l.id,
+                      label: `${l.label} · ${minutesFor(clave, l.id)} min`,
+                    }))}
+                    onChange={(value) => settings.set('officeLength', { ...settings.officeLength, [clave]: value })}
+                  />
+                )}
+              </Field>
+            ))}
+          </div>
+          <p className="field__hint" style={{ marginTop: 'var(--sp-3)' }}>
+            {es.pray.measureHint}
           </p>
         </Panel>
       </Section>

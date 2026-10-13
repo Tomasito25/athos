@@ -641,6 +641,7 @@ const InlinePsalm = lazy(() => import('@/components/office/InlinePsalm'));
 const DayTroparion = lazy(() => import('@/components/office/DayTroparion'));
 const DayKontakion = lazy(() => import('@/components/office/DayKontakion'));
 const InlineReading = lazy(() => import('@/components/office/InlineReading'));
+const DayReadings = lazy(() => import('@/components/office/DayReadings'));
 
 /** El griego y su transliteración, debajo del español. */
 function GreekLines({ block }: { block: TextBlock }) {
@@ -740,6 +741,12 @@ export function Blocks({
             return (
               <Suspense key={key} fallback={<p className="muted">{block.content}</p>}>
                 <InlineReading reference={block.ref ?? block.content} />
+              </Suspense>
+            );
+          case 'day-readings':
+            return (
+              <Suspense key={key} fallback={<p className="muted">{block.content}</p>}>
+                <DayReadings />
               </Suspense>
             );
           default:

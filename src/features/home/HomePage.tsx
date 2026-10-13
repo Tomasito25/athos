@@ -48,6 +48,7 @@ import {
   OrthodoxCross,
 } from '@/components/icons';
 import { DAILY_OFFICES } from '@/content/hours';
+import { LENGTH_INFO } from '@/content/office-lengths';
 import { useSettings } from '@/stores/settings';
 import type { RuleTime } from '@/types';
 import es from '@/locales/es';
@@ -239,6 +240,7 @@ export function HomePage() {
 function TodayOffices({ today }: { today: string }) {
   const progreso = useOfficeProgress(today);
   const horas = useSettings((s) => s.officeHours);
+  const medidas = useSettings((s) => s.officeLength);
   const ahora = officeNow(new Date().getHours(), horas);
 
   return (
@@ -250,6 +252,8 @@ function TodayOffices({ today }: { today: string }) {
           const hecho = ratio >= 1;
           const esAhora = oficio.time === ahora;
           const Icono = ICONO_DEL_OFICIO[oficio.time];
+          // La medida en que se rezó, si ya está; si no, la que tiene elegida.
+          const medida = (hecho ? p?.length : undefined) ?? medidas?.[oficio.time] ?? 'habitual';
           const estado = hecho
             ? es.home.officeDone
             : ratio > 0
@@ -264,7 +268,12 @@ function TodayOffices({ today }: { today: string }) {
               className={`office-row${esAhora ? ' office-row--now' : ''}${hecho ? ' office-row--done' : ''}`}
             >
               <Icono size={20} className="office-row__icon" aria-hidden="true" />
-              <span className="office-row__name">{oficio.name}</span>
+              <span className="office-row__name">
+                {oficio.name}
+                {medida !== 'habitual' ? (
+                  <span className="office-row__length"> · {LENGTH_INFO.get(medida)?.label.toLowerCase()}</span>
+                ) : null}
+              </span>
               <span className="office-row__state">{estado}</span>
               <span className="office-row__bar" aria-hidden="true">
                 <span style={{ width: `${Math.round(ratio * 100)}%` }} />

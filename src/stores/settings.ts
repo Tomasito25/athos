@@ -7,7 +7,7 @@
  */
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { CalendarStyle } from '@/types';
+import type { CalendarStyle, OfficeLength, RuleTime } from '@/types';
 
 export type ThemeChoice = 'light' | 'dark' | 'system';
 export type MeasureChoice = 'narrow' | 'normal' | 'wide';
@@ -39,6 +39,8 @@ export interface SettingsState {
   startAt: StartChoice;
   /** Cómo se reza un oficio: de corrido o un paso cada vez. */
   officeFlow: 'seguido' | 'paso';
+  /** La medida de cada oficio: breve, habitual o extensa. */
+  officeLength: Record<RuleTime, OfficeLength>;
 
   calendarStyle: CalendarStyle;
   language: string;
@@ -79,6 +81,7 @@ export const DEFAULT_SETTINGS = {
   startAt: 'inicio' as StartChoice,
   // Un paso cada vez: es como se reza un oficio con el teléfono en la mano.
   officeFlow: 'paso' as 'seguido' | 'paso',
+  officeLength: { manana: 'habitual', mediodia: 'habitual', noche: 'habitual' } as Record<RuleTime, OfficeLength>,
   calendarStyle: 'nuevo' as CalendarStyle,
   language: 'es',
   officeHours: { manana: 5, mediodia: 12, noche: 19 },
@@ -118,9 +121,15 @@ export const useSettings = create<SettingsState>()(
       set: (key, value) => set({ [key]: value } as Partial<SettingsState>),
       toggleNotification: (id, enabled) =>
         set((state) => ({ notifications: { ...state.notifications, [id]: enabled } })),
-      // Restablecer el aspecto no vuelve a enseñar la bienvenida: quien ya la
-      // cerró sabe dónde está cada cosa.
-      reset: () => set((state) => ({ ...DEFAULT_SETTINGS, welcomeDismissed: state.welcomeDismissed })),
+      // Restablecer el aspecto no vuelve a enseñar la bienvenida —quien ya la
+      // cerró sabe dónde está cada cosa— ni cambia la medida de los oficios,
+      // que no es aspecto sino costumbre de oración.
+      reset: () =>
+        set((state) => ({
+          ...DEFAULT_SETTINGS,
+          welcomeDismissed: state.welcomeDismissed,
+          officeLength: state.officeLength,
+        })),
     }),
     {
       name: 'athos.appearance',

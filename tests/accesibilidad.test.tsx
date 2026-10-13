@@ -76,7 +76,10 @@ describe('el cambio de página se nota', () => {
     // Al abrir la aplicación el foco no se toca: nadie ha navegado aún.
     expect(document.activeElement).not.toBe(main);
 
-    const enlace = await screen.findByRole('link', { name: new RegExp(es.saints.title, 'i') });
+    // El nombre exacto: con una expresión regular, los días en que algún
+    // enlace del día lleva «santos» en el nombre había dos que casaban, y la
+    // prueba fallaba según la fecha (le pasó el 13 de octubre de 2026).
+    const enlace = await screen.findByRole('link', { name: es.saints.title });
     await usuario.click(enlace);
 
     // El margen es holgado a propósito: entre el clic y el foco hay que

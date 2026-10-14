@@ -175,10 +175,11 @@ export default defineConfig({
           '**/*.{js,css,html,ico,svg,png}',
           'fonts/*-latin.woff2',
           // El español entero cabe en el subconjunto latino. El extendido sólo
-          // hace falta para nombres como Popović o Brâncoveanu: se precachea el
-          // grosor normal, y la negrita y la cursiva se guardan la primera vez
-          // que se usan, como el griego. Son casi 500 KB menos que esperar.
-          'fonts/*-400-latin-ext.woff2',
+          // hace falta para nombres como Popović o Brâncoveanu, y desde la 1.30
+          // no se precachea ningún grosor: se guarda la primera vez que se usa,
+          // como el griego. Sin conexión y antes de eso, esas pocas letras salen
+          // con la letra del sistema. Eran casi 200 KB que había que esperar
+          // antes de poder instalar, y con ellos el precaché pasaba de 5 MB.
           'content/lectionary/lectionary.json',
           'content/icons/origen.json',
           // De los iconos se precachea la miniatura; la imagen grande se

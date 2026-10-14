@@ -9,7 +9,9 @@ import { describe, expect, it } from 'vitest';
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-const dist = resolve(process.cwd(), 'dist');
+// ATHOS_DIST permite comprobar una compilación hecha en otra carpeta sin
+// tocar `dist/`, que puede ser la que se está sirviendo.
+const dist = resolve(process.cwd(), process.env.ATHOS_DIST ?? 'dist');
 const built = existsSync(resolve(dist, 'manifest.webmanifest'));
 
 const read = (file: string) => readFileSync(resolve(dist, file), 'utf-8');

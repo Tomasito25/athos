@@ -100,7 +100,11 @@ export function ReadHub() {
               />
             </div>
             <ListRow
-              to={`/leer/planes/${enCurso.plan.id}`}
+              to={
+                enCurso.siguiente
+                  ? `/leer/planes/${enCurso.plan.id}/dia/${enCurso.siguiente}`
+                  : `/leer/planes/${enCurso.plan.id}`
+              }
               title={
                 enCurso.siguiente
                   ? `${es.plans.day} ${enCurso.siguiente} · ${enCurso.dias[enCurso.siguiente - 1]?.label}`

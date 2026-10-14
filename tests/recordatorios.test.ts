@@ -1,0 +1,100 @@
+/**
+ * Los recordatorios.
+ *
+ * Dicen lo que toca ese día, sólo suenan cuando hay algo que decir, respetan
+ * la hora elegida y se dejan preparados en la cola para el Service Worker.
+ */
+import { beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { db, getSetting } from '@/db/db';
+import { seedContent, seedUserDefaults } from '@/db/seed';
+import { completeRule, ruleForTime } from '@/db/user';
+import { toggleDay } from '@/db/plans';
+import { daysOf } from '@/content/plans';
+import { QUEUE_KEY, REMINDERS, buildQueue, refreshReminders, reminderContent, timeFor } from '@/lib/reminders';
+import { useSettings } from '@/stores/settings';
+import { toIsoDate } from '@/lib/calendar/jdn';
+
+const ajustes = { calendarStyle: 'nuevo' as const, officeLength: { manana: 'breve', mediodia: 'habitual', noche: 'extenso' } as const };
+
+beforeAll(async () => {
+  await db.delete();
+  await db.open();
+  await seedContent();
+  await seedUserDefaults();
+});
+
+beforeEach(() => {
+  useSettings.getState().set('notifications', {});
+  useSettings.getState().set('notificationTimes', {});
+});
+
+describe('lo que dice cada uno', () => {
+  it('el oficio dice la medida en que se reza y cuánto se tarda', async () => {
+    const c = await reminderContent('oracion-manana', '2026-10-20', ajustes);
+    expect(c?.title).toBe('Oficio de la mañana');
+    expect(c?.body).toMatch(/^Breve · unos 6 min/);
+    expect(c?.path).toBe('/orar/oficio/manana');
+    expect((await reminderContent('oracion-noche', '2026-10-20', ajustes))?.body).toMatch(/^Extenso/);
+  });
+
+  it('la fiesta sólo suena en las grandes fiestas', async () => {
+    expect((await reminderContent('fiesta', '2026-12-25', ajustes))?.body).toMatch(/Natividad/);
+    expect(await reminderContent('fiesta', '2026-10-20', ajustes)).toBeNull();
+  });
+
+  it('el ayuno, sólo el primer día del periodo', async () => {
+    // El ayuno de la Natividad empieza el 15 de noviembre en el calendario nuevo.
+    expect(await reminderContent('ayuno', '2026-11-15', ajustes)).not.toBeNull();
+    expect(await reminderContent('ayuno', '2026-11-16', ajustes)).toBeNull();
+  });
+
+  it('el santo nombra al santo del día y lleva a su ficha', async () => {
+    const c = await reminderContent('santo', '2026-12-06', ajustes);
+    expect(c?.body).toMatch(/Nicolás/);
+    expect(c?.path).toMatch(/^\/calendario\/santos\//);
+  });
+
+  it('el oficio ya rezado no avisa en el momento', async () => {
+    const hoy = toIsoDate(new Date());
+    const regla = await ruleForTime('mediodia');
+    await completeRule(hoy, regla!.id, 'breve');
+    expect(await reminderContent('oracion-mediodia', hoy, ajustes, true)).toBeNull();
+    // Pero «lo que queda por rezar» sigue nombrando los otros dos.
+    const queda = await reminderContent('regla', hoy, ajustes, true);
+    expect(queda?.body).toMatch(/mañana/);
+    expect(queda?.body).not.toMatch(/mediodía/);
+  });
+
+  it('el plan de lectura dice qué día toca y lleva a leerlo', async () => {
+    await toggleDay('evangelios', 1, daysOf('evangelios').length);
+    const c = await reminderContent('lectura', toIsoDate(new Date()), ajustes);
+    expect(c?.body).toMatch(/^Día 2: /);
+    expect(c?.path).toBe('/leer/planes/evangelios/dia/2');
+  });
+});
+
+describe('la cola', () => {
+  it('respeta la hora elegida y sólo lleva los activados', async () => {
+    useSettings.getState().set('notifications', { santo: true });
+    useSettings.getState().set('notificationTimes', { santo: '06:45' });
+    const cola = await buildQueue(new Date(2026, 9, 20, 12, 0));
+    expect(cola.length).toBeGreaterThan(0);
+    expect(new Set(cola.map((c) => c.id))).toEqual(new Set(['santo']));
+    const primero = new Date(cola[0]!.at);
+    expect([primero.getHours(), primero.getMinutes()]).toEqual([6, 45]);
+    // A las doce ya han pasado las 6:45: el primero es el del día siguiente.
+    expect(cola[0]!.date).toBe('2026-10-21');
+  });
+
+  it('se guarda para el Service Worker al programar', async () => {
+    useSettings.getState().set('notifications', { fiesta: true, regla: true });
+    await refreshReminders();
+    const cola = await getSetting<Array<{ id: string; needsApp?: boolean }>>(QUEUE_KEY, []);
+    // «Lo que queda por rezar» va marcado: sólo la aplicación abierta sabe decidirlo.
+    expect(cola.filter((c) => c.id === 'regla').every((c) => c.needsApp)).toBe(true);
+  });
+
+  it('cada recordatorio tiene una hora por defecto válida', () => {
+    for (const r of REMINDERS) expect(timeFor(r.id, {})).toMatch(/^\d{2}:\d{2}$/);
+  });
+});

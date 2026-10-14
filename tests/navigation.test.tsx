@@ -28,7 +28,7 @@ function renderAt(path: string) {
 }
 
 const findHeading = (text: RegExp) =>
-  waitFor(() => expect(screen.getAllByText(text).length).toBeGreaterThan(0), { timeout: 5000 });
+  waitFor(() => expect(screen.getAllByText(text).length).toBeGreaterThan(0), { timeout: 10000 });
 
 describe('secciones principales', () => {
   it('el inicio muestra la oración de Jesús y el día', async () => {

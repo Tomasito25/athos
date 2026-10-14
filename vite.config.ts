@@ -224,6 +224,8 @@ export default defineConfig({
          */
         clientsClaim: true,
         skipWaiting: false,
+        // Los recordatorios con la aplicación cerrada y el toque en los avisos.
+        importScripts: ['sw-recordatorios.js'],
         runtimeCaching: [
           {
             urlPattern: ({ url }) => url.pathname.startsWith(`${base}fonts/`),

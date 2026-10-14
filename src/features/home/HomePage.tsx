@@ -49,6 +49,7 @@ import {
 } from '@/components/icons';
 import { DAILY_OFFICES } from '@/content/hours';
 import { LENGTH_INFO } from '@/content/office-lengths';
+import { PlanToday } from '@/features/read/PlanToday';
 import { useSettings } from '@/stores/settings';
 import type { RuleTime } from '@/types';
 import es from '@/locales/es';
@@ -207,6 +208,7 @@ export function HomePage() {
         {/* ---------- Lo tuyo ---------- */}
         <div className="home-col">
           <TodayOffices today={today} />
+          <PlanToday />
 
           <Section title={es.home.quickActions} id="accesos">
             <TileGrid>

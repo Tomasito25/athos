@@ -54,6 +54,8 @@ export interface SettingsState {
   prayerModeDark: boolean;
 
   notifications: Record<string, boolean>;
+  /** La hora de cada recordatorio, `HH:MM`; si falta, la de por defecto. */
+  notificationTimes: Record<string, string>;
   installPromptDismissed: boolean;
   /** La bienvenida de Inicio, que se enseña hasta que se cierra. */
   welcomeDismissed: boolean;
@@ -90,6 +92,7 @@ export const DEFAULT_SETTINGS = {
   jesusPrayerKeepAwake: true,
   prayerModeDark: true,
   notifications: {} as Record<string, boolean>,
+  notificationTimes: {} as Record<string, string>,
   installPromptDismissed: false,
   welcomeDismissed: false,
   autoIndexBible: true,
@@ -129,6 +132,9 @@ export const useSettings = create<SettingsState>()(
           ...DEFAULT_SETTINGS,
           welcomeDismissed: state.welcomeDismissed,
           officeLength: state.officeLength,
+          // Los recordatorios tampoco son aspecto: restablecerlo no los apaga.
+          notifications: state.notifications,
+          notificationTimes: state.notificationTimes,
         })),
     }),
     {

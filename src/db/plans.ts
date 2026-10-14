@@ -9,6 +9,7 @@
  * `kind: 'plan'` que hasta ahora nadie usaba.
  */
 import { db } from './db';
+import { READING_PLANS, daysOf } from '@/content/plans';
 import type { ReadingProgress } from '@/types';
 
 const idDe = (planId: string) => `plan:${planId}`;
@@ -43,6 +44,7 @@ export async function toggleDay(
     completed: [...hechos].sort((a, b) => Number(a) - Number(b)),
     total,
     updatedAt: new Date().toISOString(),
+    startedAt: previo?.startedAt ?? new Date().toISOString(),
   };
   await db.reading_progress.put(registro);
   return registro;
@@ -64,6 +66,22 @@ export function nextDay(progreso: ReadingProgress | undefined, total: number): n
   const hechos = new Set(progreso?.completed ?? []);
   for (let d = 1; d <= total; d += 1) {
     if (!hechos.has(String(d))) return d;
+  }
+  return null;
+}
+
+/**
+ * El plan que se está leyendo: el último que se tocó y que no está terminado,
+ * con lo que toca hoy. Lo usan Inicio, Leer y el recordatorio de lectura.
+ */
+export async function currentPlan() {
+  const progresos = (await allPlanProgress()).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+  for (const p of progresos) {
+    const plan = READING_PLANS.find((x) => x.id === p.refId);
+    if (!plan) continue;
+    const dias = daysOf(plan.id);
+    const n = nextDay(p, dias.length);
+    if (n) return { plan, day: dias[n - 1]!, done: p.completed.length, total: dias.length };
   }
   return null;
 }

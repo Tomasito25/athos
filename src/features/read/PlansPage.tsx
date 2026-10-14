@@ -8,7 +8,7 @@
 import { useMemo } from 'react';
 import { useAsync } from '@/hooks/useAsync';
 import { allPlanProgress, nextDay } from '@/db/plans';
-import { PLANS_NOTE, READING_PLANS, daysOf } from '@/content/plans';
+import { PLANS_NOTE, PLAN_GROUPS, READING_PLANS, daysOf, type PlanGroup } from '@/content/plans';
 import { ListRow, PageHead, Panel, Progress, Section } from '@/components/ui';
 import es from '@/locales/es';
 
@@ -48,7 +48,7 @@ export function PlansPage() {
                   />
                 </div>
                 <ListRow
-                  to={`/leer/planes/${plan.id}`}
+                  to={siguiente ? `/leer/planes/${plan.id}/dia/${siguiente}` : `/leer/planes/${plan.id}`}
                   title={
                     siguiente
                       ? `${es.plans.day} ${siguiente} · ${dias[siguiente - 1]?.label}`
@@ -62,19 +62,27 @@ export function PlansPage() {
         </Section>
       ) : null}
 
-      <Section title={empezados.length > 0 ? es.plans.others : es.plans.choose}>
-        <div className="list">
-          {nuevos.map(({ plan, dias }) => (
-            <ListRow
-              key={plan.id}
-              to={`/leer/planes/${plan.id}`}
-              title={plan.title}
-              meta={plan.subtitle}
-              trailing={<span className="pill-count">{dias.length} d</span>}
-            />
-          ))}
-        </div>
-      </Section>
+      {/* Los que no se han empezado, por lo que piden: para empezar, el Nuevo
+          Testamento, el Antiguo, toda la Escritura, el Salterio. */}
+      {(Object.keys(PLAN_GROUPS) as PlanGroup[]).map((grupo) => {
+        const delGrupo = nuevos.filter(({ plan }) => plan.group === grupo);
+        if (!delGrupo.length) return null;
+        return (
+          <Section key={grupo} title={PLAN_GROUPS[grupo]}>
+            <div className="list">
+              {delGrupo.map(({ plan, dias }) => (
+                <ListRow
+                  key={plan.id}
+                  to={`/leer/planes/${plan.id}`}
+                  title={plan.title}
+                  meta={plan.subtitle}
+                  trailing={<span className="pill-count">{dias.length} d</span>}
+                />
+              ))}
+            </div>
+          </Section>
+        );
+      })}
 
       <p className="source-note">{PLANS_NOTE}</p>
     </div>

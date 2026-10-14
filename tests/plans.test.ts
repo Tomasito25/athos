@@ -60,18 +60,49 @@ describe('el reparto de los días', () => {
           return n + (m ? Number(m[2]) - Number(m[1]) + 1 : 1);
         }, 0);
       });
-      expect(Math.max(...tamanos) - Math.min(...tamanos), plan.title).toBeLessThanOrEqual(1);
+      // Con varias lecturas en paralelo, cada una difiere como mucho en uno.
+      expect(Math.max(...tamanos) - Math.min(...tamanos), plan.title).toBeLessThanOrEqual(plan.tracks);
     }
   });
 
-  it('cada día lleva a un sitio que se puede abrir', () => {
+  it('cada día lleva a leerlo entero, y cada pieza existe', () => {
     for (const plan of READING_PLANS) {
       for (const dia of daysOf(plan.id)) {
-        expect(dia.path, `${plan.title} día ${dia.number}`).toMatch(
-          /^\/leer\/(biblia\/[A-Z0-9]+\/\d+|salterio\/kathisma\/\d+)$/,
-        );
+        expect(dia.path, `${plan.title} día ${dia.number}`).toBe(`/leer/planes/${plan.id}/dia/${dia.number}`);
+        expect(dia.pieces.length).toBeGreaterThan(0);
+        for (const pieza of dia.pieces) {
+          if (pieza.kind === 'chapter') {
+            const libro = BIBLE_BOOKS.find((b) => b.id === pieza.bookId);
+            expect(libro, pieza.bookId).toBeTruthy();
+            expect(pieza.chapter).toBeLessThanOrEqual(libro!.chapters);
+          }
+        }
       }
     }
+  });
+
+  it('las lecturas en paralelo cubren cada libro entero, sin repetir ni saltarse capítulos', () => {
+    for (const plan of READING_PLANS.filter((p) => p.tracks > 1)) {
+      const vistos = daysOf(plan.id).flatMap((d) =>
+        d.pieces.flatMap((p) => (p.kind === 'chapter' ? [`${p.bookId}.${p.chapter}`] : [])),
+      );
+      expect(new Set(vistos).size, plan.title).toBe(vistos.length);
+    }
+    const cuaresma = daysOf('libros-de-la-cuaresma');
+    expect(cuaresma).toHaveLength(40);
+    const capitulos = cuaresma.flatMap((d) => d.pieces);
+    expect(capitulos).toHaveLength(50 + 66 + 31);
+    // Cada día lleva un tramo del Génesis y otro de Isaías; los Proverbios,
+    // que son treinta y uno, casi todos.
+    for (const d of cuaresma) expect(d.label).toMatch(/^Génesis .* · Isaías /);
+    expect(cuaresma.filter((d) => d.label.includes('Proverbios'))).toHaveLength(31);
+  });
+
+  it('los planes de antes salen igual que antes: el avance se guarda por día', () => {
+    expect(daysOf('evangelios')).toHaveLength(89);
+    expect(daysOf('nuevo-testamento')).toHaveLength(260);
+    expect(daysOf('biblia-entera')[0]!.label).toBe('Génesis 1–3');
+    expect(daysOf('biblia-entera')).toHaveLength(365);
   });
 
   it('el Salterio va por kathismata, que son veinte', () => {

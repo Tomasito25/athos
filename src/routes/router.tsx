@@ -49,6 +49,7 @@ export const routes: RouteObject[] = [
       { path: 'leer/lecturas', lazy: page(() => import('@/features/readings/ReadingsPage'), 'ReadingsPage') },
       { path: 'leer/planes', lazy: page(() => import('@/features/read/PlansPage'), 'PlansPage') },
       { path: 'leer/planes/:planId', lazy: page(() => import('@/features/read/PlanPage'), 'PlanPage') },
+      { path: 'leer/planes/:planId/dia/:day', lazy: page(() => import('@/features/read/PlanDayPage'), 'PlanDayPage') },
 
       /* ---------------- Calendario ---------------- */
       { path: 'calendario', lazy: page(() => import('@/features/calendar/CalendarPage'), 'CalendarPage') },

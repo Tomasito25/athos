@@ -399,6 +399,19 @@ const es = {
     restart: 'Empezar de nuevo',
     resetConfirm: '¿Borrar el avance de este plan y empezar de cero?',
     reset: 'Plan reiniciado',
+    dayMissing: 'Ese día no está en el plan',
+    progressOf: '{{done}} de {{total}} días leídos',
+    markDayDone: 'Marcar el día {{n}} como leído',
+    dayDone: 'Día {{n}} leído',
+    dayNav: 'Moverse entre los días del plan',
+    backToPlan: 'Volver al plan',
+    chapterOffline:
+      'No se ha podido cargar este capítulo. Si es la primera vez que lo abres, hace falta conexión; después queda guardado.',
+    readToday: 'Leer el día entero',
+    startedOn: 'Empezado el {{date}}.',
+    finishBy: 'Leyendo un día cada día, lo terminarías el {{date}}.',
+    planToday: 'Tu plan de hoy',
+    tracks: '{{n}} lecturas en paralelo',
   },
 
   psalter: {
@@ -482,6 +495,24 @@ const es = {
     century: 'Siglo',
     place: 'Lugar',
     allSaints: 'Todos los santos',
+  },
+
+  notifications: {
+    subtitle: 'Avisos a la hora que elijas para rezar y para leer.',
+    permissionText:
+      'Para recibir recordatorios hay que dar permiso al navegador. Puedes retirarlo cuando quieras desde los ajustes del sitio.',
+    howTheyArrive: 'Cómo llegan en este dispositivo',
+    whenOpen: 'Con ATHOS abierta o en segundo plano: a la hora en punto.',
+    bgActive: 'Con ATHOS cerrada: también, cuando el sistema despierta la aplicación; puede llegar con algo de retraso.',
+    bgNeedsInstall: 'Con ATHOS cerrada: no. Este navegador lo permite sólo con ATHOS instalada como aplicación.',
+    bgUnsupported: 'Con ATHOS cerrada: no. Este navegador no permite que una aplicación web avise estando cerrada.',
+    bgOff: 'Con ATHOS cerrada: activa algún recordatorio para comprobarlo.',
+    bgChecking: 'Comprobando qué permite este navegador…',
+    timeFor: 'Hora de «{{name}}»',
+    nothingSoon: 'Estos días no hay nada que avisar.',
+    test: 'Probar una notificación',
+    testBody: 'Así se verán los recordatorios. Al tocarlos, se abre la pantalla que toca.',
+    testFailed: 'El navegador no ha mostrado la notificación',
   },
 
   study: {

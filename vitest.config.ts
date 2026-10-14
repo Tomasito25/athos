@@ -37,6 +37,10 @@ export default defineConfig({
     globals: true,
     setupFiles: ['./tests/setup.ts'],
     include: ['tests/**/*.test.{ts,tsx}'],
+    // Muchas pruebas siembran el corpus entero y montan la aplicación: con
+    // todos los archivos en paralelo, cinco segundos se quedaban cortos y
+    // fallaban unas veces sí y otras no.
+    testTimeout: 15000,
     css: false,
   },
 });

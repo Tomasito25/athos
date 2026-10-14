@@ -13,6 +13,7 @@ import { requestPersistentStorage } from '@/db/db';
 import { ensurePsalterBuilt } from '@/db/psalter';
 import { bibleIndexStatus, indexWholeBible } from '@/db/bible';
 import { loadLectionary } from '@/db/lectionary';
+import { startReminders } from '@/lib/reminders';
 
 const idle = (task: () => void, timeout = 4000) => {
   if ('requestIdleCallback' in window) {
@@ -45,6 +46,10 @@ export async function bootstrap(): Promise<void> {
   // Las lecturas del día son lo primero que se ve en Inicio: se piden ya, sin
   // bloquear el render, y la pantalla se actualiza en cuanto llegan.
   void loadLectionary(settings.calendarStyle);
+
+  // Los recordatorios se programan en cada arranque: antes sólo al tocar el
+  // interruptor, y al recargar la aplicación no quedaba ninguno programado.
+  idle(() => startReminders(), 2000);
 
   // Sin bloquear el arranque.
   idle(() => {

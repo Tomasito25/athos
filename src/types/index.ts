@@ -739,6 +739,8 @@ export interface ReadingProgress {
   completed: string[];
   total: number;
   updatedAt: string;
+  /** Cuándo se marcó el primer día; los avances anteriores a la 1.30 no lo tienen. */
+  startedAt?: string;
 }
 
 export interface SettingRecord<T = unknown> {

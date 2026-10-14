@@ -18,8 +18,10 @@ import {
   PageHead,
   Panel,
   Progress,
-  Section, NotFound } from '@/components/ui';
+  Section, Tag, NotFound } from '@/components/ui';
 import { useUi } from '@/stores/ui';
+import { formatLongDate } from '@/lib/format';
+import { addDaysIso, toIsoDate } from '@/lib/calendar/jdn';
 import es from '@/locales/es';
 
 /** Cuántos días se enseñan de golpe al abrir. */
@@ -69,6 +71,24 @@ export function PlanPage() {
         <p className="muted text-sm" style={{ marginTop: 'var(--sp-3) ' }}>
           {plan.about}
         </p>
+        {plan.tracks > 1 ? (
+          <p className="text-sm" style={{ marginTop: 'var(--sp-2)' }}>
+            <Tag tone="gold">{es.plans.tracks.replace('{{n}}', String(plan.tracks))}</Tag>
+          </p>
+        ) : null}
+        {progreso.data?.startedAt || (siguiente && hechos.size > 0) ? (
+          <p className="muted text-sm" style={{ marginTop: 'var(--sp-2)' }}>
+            {progreso.data?.startedAt
+              ? `${es.plans.startedOn.replace('{{date}}', formatLongDate(progreso.data.startedAt.slice(0, 10)).toLowerCase())} `
+              : ''}
+            {siguiente
+              ? es.plans.finishBy.replace(
+                  '{{date}}',
+                  formatLongDate(addDaysIso(toIsoDate(new Date()), dias.length - hechos.size - 1)).toLowerCase(),
+                )
+              : ''}
+          </p>
+        ) : null}
       </Panel>
 
       {hoy ? (
@@ -82,7 +102,7 @@ export function PlanPage() {
             </p>
             <div className="btn-row" style={{ marginTop: 'var(--sp-3)' }}>
               <ButtonLink to={hoy.path} variant="primary">
-                {es.plans.read}
+                {es.plans.readToday}
               </ButtonLink>
               <Button onClick={() => marcar(hoy.number)}>{es.plans.markDone}</Button>
             </div>

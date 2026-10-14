@@ -113,6 +113,7 @@ export function computeLiturgicalDay(iso: string, style: CalendarStyle = 'nuevo'
     weekday,
     paschaDate: jdnToIso(governing.jdn),
     paschaOffset,
+    nextPaschaOffset,
     tone: toneForOffset(paschaOffset),
     season: seasonFor(paschaOffset, nextPaschaOffset, md),
     feasts,

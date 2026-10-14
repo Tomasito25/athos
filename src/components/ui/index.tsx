@@ -642,6 +642,9 @@ const DayTroparion = lazy(() => import('@/components/office/DayTroparion'));
 const DayKontakion = lazy(() => import('@/components/office/DayKontakion'));
 const InlineReading = lazy(() => import('@/components/office/InlineReading'));
 const DayReadings = lazy(() => import('@/components/office/DayReadings'));
+const DayKathismata = lazy(() => import('@/components/office/DayKathismata'));
+const DayDevotion = lazy(() => import('@/components/office/DayDevotion'));
+const EmbeddedText = lazy(() => import('@/components/office/EmbeddedText'));
 
 /** El griego y su transliteración, debajo del español. */
 function GreekLines({ block }: { block: TextBlock }) {
@@ -747,6 +750,25 @@ export function Blocks({
             return (
               <Suspense key={key} fallback={<p className="muted">{block.content}</p>}>
                 <DayReadings />
+              </Suspense>
+            );
+          case 'day-kathismata':
+            return (
+              <Suspense key={key} fallback={<p className="muted">{block.content}</p>}>
+                <DayKathismata />
+              </Suspense>
+            );
+          case 'embed':
+            return (
+              <Suspense key={key} fallback={<p className="muted">{block.content}</p>}>
+                <EmbeddedText reference={block.ref ?? ''} label={block.content} />
+              </Suspense>
+            );
+          case 'day-akathist':
+          case 'day-canon':
+            return (
+              <Suspense key={key} fallback={<p className="muted">{block.content}</p>}>
+                <DayDevotion kind={block.kind === 'day-akathist' ? 'akathist' : 'canon'} open={block.ref === 'abierto'} />
               </Suspense>
             );
           default:

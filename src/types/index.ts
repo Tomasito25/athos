@@ -66,7 +66,19 @@ export interface TextBlock {
     | 'day-kontakion'
     | 'reading'
     /** Las lecturas de la Liturgia del día en que se abre, tomadas del leccionario. */
-    | 'day-readings';
+    | 'day-readings'
+    /** Los kathismata que el Típikon reparte para los Maitines de ese día de la semana. */
+    | 'day-kathismata'
+    /** El akathistos o el canon que ATHOS propone para el día, entero y plegado. */
+    | 'day-akathist'
+    | 'day-canon'
+    /**
+     * Un texto entero de la biblioteca, plegado en su sitio: `ref` es
+     * `canon:<id>`, `akathist:<id>`, `prayer:<id>` u `office:<id>`, y en el
+     * oficio se pueden pedir secciones con `office:<id>#a,b`. Sustituye a las
+     * rúbricas que decían «está en Biblioteca → …» y obligaban a salir.
+     */
+    | 'embed';
   content: string;
   /** Número de versículo, estrofa u oda, cuando aplica. */
   ref?: string;
@@ -771,6 +783,8 @@ export interface LiturgicalDay {
   weekday: number;
   paschaDate: string;
   paschaOffset: number;
+  /** Días hasta la Pascua siguiente, en negativo: el Triodio y la Cuaresma se cuentan desde aquí. */
+  nextPaschaOffset: number;
   tone: number | null;
   season: LiturgicalSeason;
   feasts: Feast[];

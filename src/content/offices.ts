@@ -21,6 +21,7 @@ import { MEDIANOCHE } from './medianoche';
 import { PRESANTIFICADOS } from './presantificados';
 import { COMPLETAS } from './completas';
 import { MOLEBEN } from './moleben';
+import { MAITINES_EN_CASA } from './maitines-casa';
 
 const meta: SourceMeta = {
   source: 'Ieratikón y Horologion bizantinos; textos de uso tradicional',
@@ -128,6 +129,14 @@ const seeds: OfficeSeed[] = [
     kind: 'maitines',
     status: 'complete',
     sections: MAITINES,
+  },
+  {
+    id: 'maitines-en-casa',
+    title: 'Maitines en casa',
+    subtitle: 'Sin sacerdote, con lo propio del día ya en su sitio',
+    kind: 'maitines',
+    status: 'complete',
+    sections: MAITINES_EN_CASA,
   },
   {
     id: 'completas',

@@ -9,10 +9,12 @@ import { useHashScroll } from '@/hooks/useHashScroll';
 import es from '@/locales/es';
 
 /** Un oficio completo, sección a sección, pensado para seguirlo en la iglesia. */
-export function OfficePage() {
-  const { officeId = '' } = useParams();
+export function OfficePage({ id }: { id?: string } = {}) {
+  const params = useParams();
+  const officeId = id ?? params.officeId ?? '';
   const office = useAsync(() => db.liturgies.get(officeId), [officeId]);
-  const path = `/biblioteca/liturgia/${officeId}`;
+  // Los Maitines en casa se rezan desde Orar y viven allí: su ruta es la de Orar.
+  const path = id === 'maitines-en-casa' ? '/orar/maitines' : `/biblioteca/liturgia/${officeId}`;
   // El índice enlaza con cada sección; sin esto el salto no llegaba a ocurrir.
   useHashScroll([officeId, office.data?.id]);
 

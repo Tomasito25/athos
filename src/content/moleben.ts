@@ -14,6 +14,7 @@
  * de ATHOS y no procede de ningún libro litúrgico español publicado.
  */
 import type { OfficeSection, TextBlock } from '@/types';
+import { COMIENZO_HABITUAL } from './comun';
 
 const t = (content: string): TextBlock => ({ kind: 'text', content });
 const rub = (content: string): TextBlock => ({ kind: 'rubric', content });
@@ -90,7 +91,9 @@ export const MOLEBEN: OfficeSection[] = [
     rub('Sacerdote:'),
     t(`Bendito sea nuestro Dios, siempre, ${POR_LOS_SIGLOS}`),
     AMEN,
-    rub('El comienzo habitual: «Gloria a Ti, Dios nuestro», «Rey celestial», el Trisagio, «Santísima Trinidad», el Padre Nuestro (Orar → Oraciones → Comienzo habitual), y «Venid, adoremos» tres veces. Después se lee un salmo, que en el moleben de los enfermos es el 70 y en los demás el 142.'),
+    rub('El comienzo habitual:'),
+    ...COMIENZO_HABITUAL,
+    rub('Y «Venid, adoremos» tres veces. Después se lee un salmo, que en el moleben de los enfermos es el 70 y en los demás el 142.'),
     rub('Siguen la gran letanía con las peticiones propias, «Dios es el Señor» con los troparios propios, el salmo 50 y el canon. El canon es el del santo al que se dirige el moleben o, en el moleben a la Theotokos, el de la Paráclesis (Biblioteca → Paráclesis a la Theotokos). En las parroquias, en los molebens por una necesidad, el canon se omite a menudo o se reduce a los irmos.'),
     rub('Después: «Santo es el Señor nuestro Dios», el prokímenon, el Apóstol y el Evangelio propios; la letanía ferviente con las peticiones propias y los nombres; la oración propia, y la despedida. Abajo está cada moleben con todo lo suyo.'),
     psalm(142),

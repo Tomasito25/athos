@@ -17,6 +17,7 @@ import type { PrayerCategoryId, SourceMeta, TextBlock } from '@/types';
 import { PRAYERS } from './prayers';
 import { SAINT_PROPER_TROPARIA } from './troparia-santos';
 import { SAINT_KONTAKIA } from './kontakia';
+import { embed } from './comun';
 
 export type PrayerOrderId = 'manana' | 'noche' | 'antes-de-comulgar' | 'despues-de-comulgar';
 
@@ -154,7 +155,8 @@ export const PRAYER_ORDERS: PrayerOrder[] = [
       seccion('alegrate', 'Theotokos Virgen, alégrate', primerTexto('theotokos-noche')),
       oracion('tropario-de-la-cruz', 'Tropario de la Cruz'),
       oracion('por-los-vivos', 'Por los vivos', [
-        rub('O, si hay tiempo, la conmemoración larga, que está en Orar → Oraciones → Por la familia.'),
+        rub('O, si hay tiempo, la conmemoración larga, plegada aquí:'),
+        embed('prayer:conmemoracion-larga', 'La conmemoración larga'),
       ]),
       oracion('por-los-padres-difuntos', 'Por los difuntos'),
       seccion('final', 'Al terminar', CONCLUSION),
@@ -211,7 +213,8 @@ export const PRAYER_ORDERS: PrayerOrder[] = [
     category: 'comunion',
     sections: [
       seccion('vispera', 'La víspera', [
-        rub('La noche anterior, después de las Completas, se lee el canon de preparación, que está entero en Orar → Oraciones → Antes de comulgar. Lo que sigue es para la mañana.'),
+        rub('La noche anterior, después de las Completas, se lee el canon de preparación, que va aquí plegado. Lo que sigue es para la mañana.'),
+        embed('canon:canon-comunion', 'Canon de preparación para la Comunión'),
       ]),
       seccion('comienzo', 'El comienzo', [
         rub('Después de las oraciones de la mañana:'),

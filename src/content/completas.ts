@@ -21,6 +21,7 @@
  */
 import type { OfficeSection, TextBlock } from '@/types';
 import { TODA_HORA } from './horas';
+import { embed } from './comun';
 
 const t = (content: string): TextBlock => ({ kind: 'text', content });
 const rub = (content: string): TextBlock => ({ kind: 'rubric', content });
@@ -171,14 +172,18 @@ export const COMPLETAS: OfficeSection[] = [
 
   section('canon', 'El canon', [
     rub('En el uso eslavo se lee aquí un canon, que cambia según el día: el de la Theotokos del Octoecos en el tono de la semana, a veces con el del santo del Menaion. El Horologion griego no lo pone en las Completas Pequeñas, y en la tradición griega se suele pasar directamente al Trisagio.'),
-    rub('Quien reza las Completas en casa puede leer aquí cualquiera de los cánones que están enteros en Biblioteca → Cánones: la Paráclesis a la Theotokos, el canon al Ángel de la Guarda o, la víspera de comulgar, el de la Comunión.'),
+    rub('Quien reza las Completas en casa tiene aquí, plegado, el canon que ATHOS propone para hoy; y la víspera de comulgar, el de la Comunión:'),
+    { kind: 'day-canon', content: 'El canon de hoy' },
+    embed('canon:canon-comunion', 'Canon de preparación para la Comunión'),
     rub('Terminado el canon, en el uso eslavo:'),
     t('Digno es en verdad bendecirte a ti, Theotokos, siempre bienaventurada y purísima, y Madre de nuestro Dios. Más honorable que los querubines e incomparablemente más gloriosa que los serafines, tú que sin mancha diste a luz al Verbo de Dios, verdadera Theotokos, te engrandecemos.'),
   ]),
 
   section('trisagio-troparios', 'Trisagio y troparios', [
     ...TRISAGIO,
-    rub('Se dice el tropario del santo del día o de la iglesia. Si es fiesta, sólo el kontakion de la fiesta. Si no, en el Horologion griego, éstos, en el tono cuarto:'),
+    rub('Se dice el tropario del santo del día o de la iglesia; el de hoy, según el calendario, es éste:'),
+    { kind: 'day-troparion', content: 'Tropario del día' },
+    rub('Si es fiesta, sólo el kontakion de la fiesta. Si no, en el Horologion griego, éstos, en el tono cuarto:'),
     t('Dios de nuestros padres, que obras siempre con nosotros según tu clemencia: no apartes de nosotros tu misericordia, sino que, por sus súplicas, guía en paz nuestra vida.'),
     t('Adornada con la sangre de tus mártires de todo el mundo como con púrpura y lino fino, tu Iglesia te clama por ellos, Cristo Dios: envía tus compasiones a tu pueblo, da la paz a tu ciudad, y a nuestras almas la gran misericordia.'),
     rub('Gloria al Padre, y al Hijo, y al Espíritu Santo. En el tono octavo:'),
@@ -250,7 +255,8 @@ export const COMPLETAS: OfficeSection[] = [
 
   section('grandes', 'Completas Grandes', [
     t('Se rezan en la Gran Cuaresma, de lunes a jueves, y en las vigilias de Navidad, Teofanía y Anunciación. Duran más de una hora y están divididas en tres partes, cada una con su propio comienzo y su propio final, de modo que pueden separarse.'),
-    rub('En la primera semana de la Cuaresma, de lunes a jueves, se lee en la tercera parte el Gran Canon de san Andrés de Creta repartido en cuatro noches (Biblioteca → Cánones → Gran Canon).'),
+    rub('En la primera semana de la Cuaresma, de lunes a jueves, se lee en la tercera parte el Gran Canon de san Andrés de Creta repartido en cuatro noches:'),
+    embed('canon:gran-canon-andres', 'Gran Canon de san Andrés de Creta'),
     head('Primera parte'),
     rub('Se empieza como las Completas Pequeñas: «Bendito sea nuestro Dios», «Rey celestial», el Trisagio, el Padre Nuestro, doce veces «Señor, ten piedad» y «Venid, adoremos». Siguen tres salmos:'),
     psalm(4),

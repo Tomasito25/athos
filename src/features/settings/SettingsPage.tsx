@@ -273,6 +273,22 @@ export function SettingsPage() {
           <p className="field__hint" style={{ marginTop: 'var(--sp-3)' }}>
             {es.pray.measureHint}
           </p>
+
+          <h3 className="panel__title" style={{ marginTop: 'var(--sp-5)' }}>
+            {es.office.extras}
+          </h3>
+          <Switch
+            checked={settings.officeExtras?.troparion ?? true}
+            onChange={(value) => settings.set('officeExtras', { ...settings.officeExtras, troparion: value })}
+            title={es.office.extrasTroparion}
+            description={es.office.extrasTroparionHint}
+          />
+          <Switch
+            checked={settings.officeExtras?.akathist ?? true}
+            onChange={(value) => settings.set('officeExtras', { ...settings.officeExtras, akathist: value })}
+            title={es.office.extrasAkathist}
+            description={es.office.extrasAkathistHint}
+          />
         </Panel>
       </Section>
 

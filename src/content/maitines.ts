@@ -20,6 +20,8 @@
  * litúrgico español publicado.
  */
 import type { OfficeSection, TextBlock } from '@/types';
+import { COMIENZO_HABITUAL } from './comun';
+import { GRAN_LETANIA } from './visperas';
 
 const t = (content: string): TextBlock => ({ kind: 'text', content });
 const rub = (content: string): TextBlock => ({ kind: 'rubric', content });
@@ -86,7 +88,9 @@ export const MAITINES: OfficeSection[] = [
     rub('Sacerdote:'),
     t(`Bendito sea nuestro Dios, siempre, ${POR_LOS_SIGLOS}`),
     AMEN,
-    rub('Comienzo habitual: «Gloria a Ti, oh Dios, gloria a Ti», «Rey celestial», Trisagio y Padre Nuestro (Orar → Oraciones → Comienzo habitual). Señor, ten piedad (doce veces). Gloria, ahora y siempre. Venid, adoremos (tres veces).'),
+    rub('El comienzo habitual:'),
+    ...COMIENZO_HABITUAL,
+    rub('Señor, ten piedad (doce veces). Gloria, ahora y siempre. Venid, adoremos (tres veces).'),
     rub('Se leen los salmos 19 y 20, que piden por el rey, y que en los días ordinarios abren los Maitines:'),
     psalm(19),
     psalm(20),
@@ -127,9 +131,8 @@ export const MAITINES: OfficeSection[] = [
   ], 'sacerdote'),
 
   section('gran-letania', 'La gran letanía', [
-    rub('La misma de las Vísperas y la Liturgia: «En paz, oremos al Señor», con todas sus peticiones (Biblioteca → Oficios → Vísperas). La exclamación:'),
-    t(`Porque a Ti corresponde toda gloria, honor y adoración, al Padre, y al Hijo, y al Espíritu Santo, ${POR_LOS_SIGLOS}`),
-    AMEN,
+    rub('La misma de las Vísperas y la Liturgia:'),
+    ...GRAN_LETANIA,
   ]),
 
   section('dios-es-el-senor', 'Dios es el Señor', [
@@ -146,7 +149,8 @@ export const MAITINES: OfficeSection[] = [
   ]),
 
   section('kathismata', 'Los kathismata del Salterio', [
-    rub('Se leen dos o tres kathismata del Salterio, según el día y el tiempo (Leer → Salterio → Kathismata), y después de cada uno se dicen la pequeña letanía y los kathismata —troparios para sentarse— del Octoecos o del Menaion.'),
+    rub('Se leen dos o tres kathismata del Salterio, según el día y el tiempo, y después de cada uno se dicen la pequeña letanía y los kathismata —troparios para sentarse— del Octoecos o del Menaion. Los de hoy:'),
+    { kind: 'day-kathismata', content: 'Los kathismata de hoy' },
     ...PEQUENA_LETANIA,
     rub('Exclamación después del primer kathisma:'),
     t(`Porque tuyo es el poder, y tuyos son el Reino, la fuerza y la gloria, del Padre, y del Hijo, y del Espíritu Santo, ${POR_LOS_SIGLOS}`),

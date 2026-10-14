@@ -13,6 +13,7 @@ import { THIRD_PRAYERS } from './prayers-third';
 import { FOURTH_PRAYERS } from './prayers-fourth';
 import { CANON_COMUNION_BLOCKS } from './canon-comunion';
 import { MOLITVOSLOV_PRAYERS } from './prayers-molitvoslov';
+import { embed } from './comun';
 import {
   ENFERMOS_KONTAKION,
   ENFERMOS_ORACION,
@@ -442,12 +443,13 @@ const seeds: Seed[] = [
     subtitle: 'Lo que se reza de él fuera del templo',
     category: 'arrepentimiento',
     blocks: [
-      rub('El canon se canta en la iglesia las cuatro primeras noches de Cuaresma y el jueves de la quinta semana. Está entero en Biblioteca → Cánones.'),
+      rub('El canon se canta en la iglesia las cuatro primeras noches de Cuaresma y el jueves de la quinta semana. Va entero al final, plegado.'),
       rub('Lo que se reza a solas, y basta, es su estribillo, con una postración:'),
       t('Ten piedad de mí, oh Dios, ten piedad de mí.'),
       head('Y su estrofa más conocida'),
       t('Alma mía, alma mía, levántate: ¿por qué duermes? El fin se acerca y vas a turbarte. Despierta, pues, para que se compadezca de ti Cristo Dios, que está en todo lugar y todo lo llena.'),
       rub('Es el kontakion del canon, que se canta después de la sexta oda.'),
+      embed('canon:gran-canon-andres', 'Gran Canon de san Andrés de Creta, entero'),
     ],
     status: 'complete',
     meta: meta({
@@ -749,9 +751,10 @@ const seeds: Seed[] = [
     subtitle: 'El proimion, que se reza suelto',
     category: 'otras',
     blocks: [
-      rub('El himno entero —veinticuatro estrofas— está en Biblioteca → Akathistos. Lo que se reza suelto, y se canta también fuera de Cuaresma, es su proimion:'),
+      rub('El himno entero —veinticuatro estrofas— va al final, plegado. Lo que se reza suelto, y se canta también fuera de Cuaresma, es su proimion:'),
       t('A ti, caudilla defensora, los cantos de victoria; a ti, que me libraste de lo terrible, las acciones de gracias te dedico yo, tu ciudad, oh Theotokos. Y tú, que tienes un poder invencible, líbrame de toda clase de peligros, para que te aclame: Alégrate, Esposa no desposada.'),
       rub('Se compuso en el año 626, cuando Constantinopla se vio libre del asedio, y desde entonces abre el himno.'),
+      embed('akathist:akathistos-theotokos', 'El Akáthistos entero'),
     ],
     status: 'complete',
     meta: meta({

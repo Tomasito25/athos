@@ -14,6 +14,7 @@
  * litúrgico español publicado.
  */
 import type { OfficeSection, TextBlock } from '@/types';
+import { COMIENZO_HABITUAL, ORACION_DE_EFREN, TRISAGIO_PADRE_NUESTRO, embed } from './comun';
 import { TODA_HORA } from './horas';
 
 const t = (content: string): TextBlock => ({ kind: 'text', content });
@@ -24,7 +25,7 @@ const psalm = (n: number): TextBlock => ({ kind: 'psalm', content: `Salmo ${n}`,
 const s = (id: string, title: string, blocks: TextBlock[]): OfficeSection => ({ id, title, blocks });
 
 const POR_LOS_SIGLOS = 'ahora y siempre, y por los siglos de los siglos.';
-const TRISAGIO = rub('Trisagio, «Santísima Trinidad» y Padre Nuestro, como en el comienzo habitual (Orar → Oraciones → Comienzo habitual).');
+const TRISAGIO: TextBlock[] = [rub('Trisagio, «Santísima Trinidad» y Padre Nuestro:'), ...TRISAGIO_PADRE_NUESTRO];
 
 const MARDARIO = t(
   'Soberano Dios, Padre todopoderoso, Señor Hijo unigénito, Jesucristo, y Espíritu Santo, una sola divinidad, un solo poder: ten piedad de mí, pecador, y por los caminos que Tú conoces sálvame a mí, tu siervo indigno, porque eres bendito por los siglos de los siglos. Amén.',
@@ -36,7 +37,7 @@ const DIFUNTOS: OfficeSection[] = [
     rub('De lunes a sábado, el lector dice «Venid, adoremos» tres veces, con tres postraciones, y los salmos:'),
     psalm(120),
     psalm(133),
-    TRISAGIO,
+    ...TRISAGIO,
   ]),
   s('difuntos', 'Por los difuntos', [
     rub('El oficio de Medianoche termina cada día rezando por los difuntos: en la tradición monástica es el momento fijo del día en que se hace. Troparios, en el tono octavo:'),
@@ -66,14 +67,18 @@ export const MEDIANOCHE: OfficeSection[] = [
     rub('Se reza al levantarse de noche, esperando al Esposo que llega a medianoche (Mateo 25). En los monasterios abre el ciclo diario: es el primer oficio, antes de los Maitines. Tiene tres formas: la de los días de diario, la del sábado y la del domingo.'),
   ]),
   s('comienzo', 'El comienzo', [
-    rub('Sacerdote: «Bendito sea nuestro Dios…». O, si reza un laico: «Por las oraciones de nuestros santos padres…». Sigue el comienzo habitual, «Venid, adoremos» tres veces, y el salmo 50:'),
+    rub('Sacerdote: «Bendito sea nuestro Dios…». O, si reza un laico: «Por las oraciones de nuestros santos padres…». Sigue el comienzo habitual:'),
+    ...COMIENZO_HABITUAL,
+    rub('«Venid, adoremos» tres veces, y el salmo 50:'),
     psalm(50),
   ]),
 
   s('diario', 'Los días de diario: el salmo 118', [
     rub('De lunes a viernes se lee el salmo 118 entero, la kathisma decimoséptima, que habla de la ley de Dios y de la noche: «A medianoche me levantaba para alabarte por tus justos juicios».'),
     psalm(118),
-    rub('Se dice el Símbolo de la Fe (Orar → Oraciones → Símbolo de la Fe) y el Trisagio.'),
+    rub('Se dice el Símbolo de la Fe y el Trisagio.'),
+    embed('prayer:simbolo-de-la-fe', 'Símbolo de la Fe'),
+    ...TRISAGIO_PADRE_NUESTRO,
     rub('Troparios, en el tono octavo:'),
     t('He aquí que el Esposo viene a medianoche, y bienaventurado el siervo a quien encuentre velando; pero indigno aquel a quien halle negligente. Mira, pues, alma mía, no te dejes vencer por el sueño, no sea que seas entregada a la muerte y quedes fuera del Reino; antes bien, despierta clamando: Santo, Santo, Santo eres, oh Dios; por la intercesión de la Theotokos, ten piedad de nosotros.'),
     rub('Gloria al Padre, y al Hijo, y al Espíritu Santo.'),
@@ -86,7 +91,9 @@ export const MEDIANOCHE: OfficeSection[] = [
     ...TODA_HORA,
     rub('«Más venerable que los querubines…». «En el nombre del Señor, bendice, padre». Sacerdote: «Que Dios se compadezca de nosotros y nos bendiga, haga brillar su rostro sobre nosotros y tenga piedad de nosotros». Amén.'),
     head('En los días de ayuno'),
-    rub('Desde el 22 de septiembre hasta el Domingo de Ramos, cuando hay ayuno, se hacen tres grandes postraciones y se dice la oración de san Efrén, que está en Orar → Oraciones, y después:'),
+    rub('Desde el 22 de septiembre hasta el Domingo de Ramos, cuando hay ayuno, se dice la oración de san Efrén con tres grandes postraciones:'),
+    ...ORACION_DE_EFREN,
+    rub('Y después:'),
     MARDARIO,
     rub('Oración de san Basilio el Grande:'),
     t('Señor todopoderoso, Dios de los ejércitos y de toda carne, que habitas en las alturas y miras lo humilde, que escrutas los corazones y las entrañas y conoces claramente los secretos de los hombres; luz sin principio y eterna, en quien no hay cambio ni sombra de variación: Tú mismo, Rey inmortal, recibe las súplicas que en este tiempo de la noche, confiados en la multitud de tus compasiones, te dirigimos con labios impuros; perdónanos las faltas que hemos cometido de obra, de palabra y de pensamiento, a sabiendas o sin saberlo, y purifícanos de toda mancha de la carne y del espíritu, haciéndonos templos del Espíritu Santo.'),

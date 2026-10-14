@@ -41,6 +41,8 @@ export interface SettingsState {
   officeFlow: 'seguido' | 'paso';
   /** La medida de cada oficio: breve, habitual o extensa. */
   officeLength: Record<RuleTime, OfficeLength>;
+  /** Lo propio del día que se añade solo a los oficios. */
+  officeExtras: { troparion: boolean; akathist: boolean };
 
   calendarStyle: CalendarStyle;
   language: string;
@@ -84,6 +86,7 @@ export const DEFAULT_SETTINGS = {
   // Un paso cada vez: es como se reza un oficio con el teléfono en la mano.
   officeFlow: 'paso' as 'seguido' | 'paso',
   officeLength: { manana: 'habitual', mediodia: 'habitual', noche: 'habitual' } as Record<RuleTime, OfficeLength>,
+  officeExtras: { troparion: true, akathist: true },
   calendarStyle: 'nuevo' as CalendarStyle,
   language: 'es',
   officeHours: { manana: 5, mediodia: 12, noche: 19 },
@@ -132,6 +135,7 @@ export const useSettings = create<SettingsState>()(
           ...DEFAULT_SETTINGS,
           welcomeDismissed: state.welcomeDismissed,
           officeLength: state.officeLength,
+          officeExtras: state.officeExtras,
           // Los recordatorios tampoco son aspecto: restablecerlo no los apaga.
           notifications: state.notifications,
           notificationTimes: state.notificationTimes,

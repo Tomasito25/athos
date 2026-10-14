@@ -20,6 +20,7 @@ import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { useOfficeSteps, type ResolvedStep } from './useOfficeSteps';
+import { withDayExtras } from './dayExtras';
 import { OFFICE_BY_TIME, OFFICES_STRUCTURE_NOTE } from '@/content/hours';
 import { LENGTH_INFO, OFFICE_LENGTHS, OFFICE_VARIANTS, minutesFor } from '@/content/office-lengths';
 import {
@@ -59,6 +60,7 @@ export function OfficePage() {
   const definicion = OFFICE_BY_TIME.get(time as RuleTime);
 
   const medidas = useSettings((s) => s.officeLength);
+  const extras = useSettings((s) => s.officeExtras);
   const medida: OfficeLength = medidas?.[time as RuleTime] ?? 'habitual';
 
   const regla = useAsync(() => ruleForTime(time as RuleTime), [time]);
@@ -98,7 +100,9 @@ export function OfficePage() {
     );
   }
 
-  const lista = pasos.data ?? [];
+  // Lo propio de hoy —tropario, kontakion, akathistos— se añade al enseñar el
+  // oficio, no a la regla guardada.
+  const lista = withDayExtras(pasos.data ?? [], time as RuleTime, medida, extras);
   // El oficio se da por rezado entero, no oración a oración, y en cualquiera
   // de sus medidas: lo que cuenta es que el de este momento del día se rezó.
   const rezado = isRulePrayed(hechos.data ?? [], regla.data.id, pasosRegla.data ?? []);

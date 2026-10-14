@@ -18,6 +18,7 @@
  * ATHOS y no procede de ningún libro litúrgico español publicado.
  */
 import type { OfficeSection, TextBlock } from '@/types';
+import { COMIENZO_HABITUAL } from './comun';
 
 const t = (content: string): TextBlock => ({ kind: 'text', content });
 const rub = (content: string): TextBlock => ({ kind: 'rubric', content });
@@ -35,6 +36,28 @@ const AMEN = ref('Amén.');
 const SENOR = ref('Señor, ten piedad.');
 const POR_LOS_SIGLOS = 'ahora y siempre, y por los siglos de los siglos.';
 
+/** La gran letanía, «En paz, oremos al Señor»: la misma en Vísperas, Maitines y la Liturgia. */
+export const GRAN_LETANIA: TextBlock[] = [
+  rub('Diácono, o el sacerdote si no hay diácono; a cada petición se responde «Señor, ten piedad»:'),
+  t('En paz, oremos al Señor.'),
+  t('Por la paz de lo alto y por la salvación de nuestras almas, oremos al Señor.'),
+  t('Por la paz del mundo entero, por la estabilidad de las santas Iglesias de Dios y por la unión de todos, oremos al Señor.'),
+  t('Por esta santa casa y por los que entran en ella con fe, piedad y temor de Dios, oremos al Señor.'),
+  t('Por los cristianos piadosos y ortodoxos, oremos al Señor.'),
+  t('Por nuestro arzobispo N., por el venerable presbiterio, por el diaconado en Cristo, por todo el clero y el pueblo, oremos al Señor.'),
+  t('Por nuestro país, por sus autoridades y por todos los que lo protegen, oremos al Señor.'),
+  t('Por esta ciudad, por toda ciudad y región, y por los que viven en ellas con fe, oremos al Señor.'),
+  t('Por un clima benigno, por la abundancia de los frutos de la tierra y por tiempos de paz, oremos al Señor.'),
+  t('Por los que navegan, los que viajan, los enfermos, los que sufren, los cautivos, y por su salvación, oremos al Señor.'),
+  t('Por que seamos librados de toda aflicción, ira, peligro y necesidad, oremos al Señor.'),
+  t('Socórrenos, sálvanos, ten piedad de nosotros y guárdanos, oh Dios, por tu gracia.'),
+  t('Conmemorando a nuestra santísima, purísima, bendita sobre todas y gloriosa Señora, la Theotokos y siempre Virgen María, junto con todos los santos, encomendémonos a nosotros mismos, unos a otros, y toda nuestra vida a Cristo Dios.'),
+  ref('A Ti, Señor.'),
+  rub('Sacerdote:'),
+  t(`Porque a Ti corresponde toda gloria, honor y adoración, al Padre, y al Hijo, y al Espíritu Santo, ${POR_LOS_SIGLOS}`),
+  AMEN,
+];
+
 export const VISPERAS: OfficeSection[] = [
   section('inicio', 'Comienzo', [
     rub('Sacerdote:'),
@@ -44,7 +67,8 @@ export const VISPERAS: OfficeSection[] = [
     t('Venid, adoremos y postrémonos ante nuestro Rey y Dios.'),
     t('Venid, adoremos y postrémonos ante Cristo, nuestro Rey y Dios.'),
     t('Venid, adoremos y postrémonos ante el mismo Cristo, nuestro Rey y nuestro Dios.'),
-    rub('En las iglesias eslavas, y en todas cuando no hay sacerdote, se empieza con el comienzo habitual: «Rey celestial», Trisagio y Padre Nuestro (Orar → Oraciones → Comienzo habitual).'),
+    rub('En las iglesias eslavas, y en todas cuando no hay sacerdote, se empieza con el comienzo habitual:'),
+    ...COMIENZO_HABITUAL,
   ]),
 
   section('salmo-103', 'El salmo de la creación', [
@@ -73,24 +97,7 @@ export const VISPERAS: OfficeSection[] = [
   ], 'sacerdote'),
 
   section('letania-paz', 'La gran letanía', [
-    rub('Diácono, o el sacerdote si no hay diácono; a cada petición se responde «Señor, ten piedad»:'),
-    t('En paz, oremos al Señor.'),
-    t('Por la paz de lo alto y por la salvación de nuestras almas, oremos al Señor.'),
-    t('Por la paz del mundo entero, por la estabilidad de las santas Iglesias de Dios y por la unión de todos, oremos al Señor.'),
-    t('Por esta santa casa y por los que entran en ella con fe, piedad y temor de Dios, oremos al Señor.'),
-    t('Por los cristianos piadosos y ortodoxos, oremos al Señor.'),
-    t('Por nuestro arzobispo N., por el venerable presbiterio, por el diaconado en Cristo, por todo el clero y el pueblo, oremos al Señor.'),
-    t('Por nuestro país, por sus autoridades y por todos los que lo protegen, oremos al Señor.'),
-    t('Por esta ciudad, por toda ciudad y región, y por los que viven en ellas con fe, oremos al Señor.'),
-    t('Por un clima benigno, por la abundancia de los frutos de la tierra y por tiempos de paz, oremos al Señor.'),
-    t('Por los que navegan, los que viajan, los enfermos, los que sufren, los cautivos, y por su salvación, oremos al Señor.'),
-    t('Por que seamos librados de toda aflicción, ira, peligro y necesidad, oremos al Señor.'),
-    t('Socórrenos, sálvanos, ten piedad de nosotros y guárdanos, oh Dios, por tu gracia.'),
-    t('Conmemorando a nuestra santísima, purísima, bendita sobre todas y gloriosa Señora, la Theotokos y siempre Virgen María, junto con todos los santos, encomendémonos a nosotros mismos, unos a otros, y toda nuestra vida a Cristo Dios.'),
-    ref('A Ti, Señor.'),
-    rub('Sacerdote:'),
-    t(`Porque a Ti corresponde toda gloria, honor y adoración, al Padre, y al Hijo, y al Espíritu Santo, ${POR_LOS_SIGLOS}`),
-    AMEN,
+    ...GRAN_LETANIA,
     rub('Los sábados por la tarde y en las vísperas de fiesta se canta aquí el primer kathisma del Salterio, «Bienaventurado el varón»; los demás días, el kathisma que toque.'),
   ]),
 

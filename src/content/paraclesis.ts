@@ -19,6 +19,7 @@
  * procede de ningún libro litúrgico español publicado.
  */
 import type { OfficeSection, TextBlock } from '@/types';
+import { TRISAGIO_PADRE_NUESTRO } from './comun';
 
 const t = (content: string): TextBlock => ({ kind: 'text', content });
 const rub = (content: string): TextBlock => ({ kind: 'rubric', content });
@@ -312,7 +313,9 @@ export const PARACLISIS_OFICIO: OfficeSection[] = [
     t('Todos los ejércitos de los ángeles, Precursor del Señor, los doce apóstoles, todos los santos, con la Theotokos: interceded para que seamos salvados.'),
   ]),
   s('trisagio', 'Trisagio y troparios', [
-    rub('Trisagio, «Santísima Trinidad» y Padre Nuestro, como en el comienzo habitual (Orar → Oraciones). Después, en el tono sexto:'),
+    rub('Trisagio, «Santísima Trinidad» y Padre Nuestro:'),
+    ...TRISAGIO_PADRE_NUESTRO,
+    rub('Después, en el tono sexto:'),
     t('Ten piedad de nosotros, Señor, ten piedad de nosotros: porque, faltos de toda defensa, nosotros, los pecadores, te ofrecemos como a Soberano esta súplica: ten piedad de nosotros.'),
     rub(GLORIA),
     t('Señor, ten piedad de nosotros, porque en Ti hemos confiado; no te enojes en exceso con nosotros ni te acuerdes de nuestras iniquidades; míranos también ahora, compasivo, y líbranos de nuestros enemigos: porque Tú eres nuestro Dios y nosotros tu pueblo; todos somos obra de tus manos e invocamos tu nombre.'),

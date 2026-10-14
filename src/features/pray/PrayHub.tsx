@@ -30,10 +30,12 @@ import {
   IconEdit,
   IconPray,
   IconScroll,
+  IconSun,
 } from '@/components/icons';
 import { LENGTH_INFO, minutesFor } from '@/content/office-lengths';
 import { OfficeMeasure } from './OfficeMeasure';
 import { OfficeWeek } from './OfficeWeek';
+import { TodayDevotions } from './TodayDevotions';
 import { PRAYER_ORDERS } from '@/content/prayer-orders';
 import { MomentIcon } from '@/features/prayers/MomentIcon';
 import { MomentsMenu } from '@/features/prayers/MomentsMenu';
@@ -85,6 +87,10 @@ export function PrayHub() {
             );
           })}
         </div>
+      </Section>
+
+      <Section title={es.pray.today}>
+        <TodayDevotions />
       </Section>
 
       <Section title={es.pray.measure}>
@@ -155,6 +161,7 @@ export function PrayHub() {
 
       <Section title={es.pray.withChurch}>
         <TileGrid>
+          <Tile to="/orar/maitines" icon={IconSun} title={es.pray.matins} hint={es.pray.matinsHint} />
           <Tile to="/leer/salterio" icon={IconBook} title={es.psalter.title} hint={es.pray.psalterHint} />
           <Tile to="/biblioteca/akathistos" icon={IconCandle} title={es.library.akathists} hint={es.pray.akathistsHint} />
           <Tile to="/biblioteca/canones" icon={IconScroll} title={es.library.canons} hint={es.pray.canonsHint} />

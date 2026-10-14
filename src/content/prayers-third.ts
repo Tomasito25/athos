@@ -16,6 +16,7 @@
  */
 import type { PrayerCategoryId, SourceMeta, TextBlock, ContentStatus } from '@/types';
 import { CANON_SEPARACION_BLOCKS } from './canones-difuntos';
+import { COMIENZO_HABITUAL } from './comun';
 
 const TRAD: SourceMeta = {
   source: 'Libro de oraciones ortodoxo (Horologion y Molitvoslov), uso tradicional',
@@ -194,7 +195,8 @@ export const THIRD_PRAYERS: ThirdPrayerSeed[] = [
     category: 'duelo',
     blocks: [
       rub('El oficio breve por los difuntos, llamado también litía. Donde dice N. se dice el nombre del difunto; para una mujer se cambian las formas.'),
-      rub('Se empieza como toda oración: Bendito sea nuestro Dios, y el comienzo habitual —Rey celestial, Trisagio, Padre Nuestro—, que está entero en Orar → Oraciones → Comienzo habitual.'),
+      rub('Se empieza como toda oración: Bendito sea nuestro Dios, y el comienzo habitual:'),
+      ...COMIENZO_HABITUAL,
       head('Troparios'),
       t('Con los espíritus de los justos que han muerto, da descanso, Salvador, al alma de tu siervo N., guardándola en la vida bienaventurada que está junto a Ti, oh amante de los hombres.'),
       t('En tu lugar de descanso, Señor, donde reposan todos tus santos, da descanso también al alma de tu siervo N., porque sólo Tú amas a los hombres.'),

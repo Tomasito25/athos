@@ -13,6 +13,7 @@
  * recomiendan leer en su lugar.
  */
 import type { OfficeSection, TextBlock } from '@/types';
+import { TRISAGIO_PADRE_NUESTRO } from './comun';
 
 const t = (content: string): TextBlock => ({ kind: 'text', content });
 const rub = (content: string): TextBlock => ({ kind: 'rubric', content });
@@ -46,7 +47,9 @@ const oda = (estribillo: TextBlock) => ({ n, irmos, troparios, gloria, ahora }: 
 
 const COMIENZO: TextBlock[] = [
   rub('Si lee un sacerdote, empieza: «Bendito sea nuestro Dios, siempre, ahora y siempre, y por los siglos de los siglos». Si lee un laico: «Por las oraciones de nuestros santos padres, Señor Jesucristo, Dios nuestro, ten piedad de nosotros. Amén».'),
-  rub('Sigue el comienzo habitual: Trisagio, «Santísima Trinidad», Padre Nuestro (Orar → Oraciones → Comienzo habitual), «Señor, ten piedad» doce veces, y tres veces «Venid, adoremos», con una inclinación cada vez.'),
+  rub('Sigue el comienzo habitual:'),
+  ...TRISAGIO_PADRE_NUESTRO,
+  rub('«Señor, ten piedad» doce veces, y tres veces «Venid, adoremos», con una inclinación cada vez.'),
 ];
 
 /** La estrofa más conocida del Gran Canon, que este canon toma como kontakion. */

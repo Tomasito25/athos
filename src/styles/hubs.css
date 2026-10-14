@@ -2161,3 +2161,36 @@ body:has(.update-banner) .toast-region {
   font-size: var(--text-sm);
   color: var(--ink-muted);
 }
+
+/* ---------------- La Biblia en griego y en paralelo ---------------- */
+.bible-greek p,
+.bible-parallel__greek {
+  font-family: var(--font-serif);
+}
+
+.bible-parallel__verse + .bible-parallel__verse {
+  margin-top: var(--sp-3);
+}
+
+.bible-parallel__greek {
+  margin-top: var(--sp-1);
+  padding-inline-start: 0.9em;
+  border-inline-start: 2px solid var(--gold-wash);
+  color: var(--ink-soft);
+  font-size: 0.95em;
+}
+
+.bible-columns {
+  display: grid;
+  gap: var(--sp-4);
+}
+
+@media (min-width: 56rem) {
+  .bible-columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bible-columns .prose {
+    max-width: none;
+  }
+}

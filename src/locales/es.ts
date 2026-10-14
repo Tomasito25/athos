@@ -363,6 +363,11 @@ const es = {
   },
 
   bible: {
+    version: 'Versión',
+    versionsTitle: 'Qué versiones hay, y por qué no otras',
+    versionsHow: 'Dentro de cada capítulo puedes elegir leerlo en español, en griego o en los dos a la vez, versículo a versículo.',
+    greekOffline:
+      'No se ha podido cargar el texto griego. Si es la primera vez que lo abres, hace falta conexión; después queda guardado.',
     jump: 'Ir a un Testamento',
     title: 'Biblia',
     oldTestament: 'Antiguo Testamento',

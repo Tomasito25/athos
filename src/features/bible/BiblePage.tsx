@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { bibleIndexStatus, indexWholeBible } from '@/db/bible';
-import { AT_ORDER, BIBLE_BOOKS, BLM, DEUTEROCANON_NOTE, NT_ORDER, RV1909, SECTION_LABELS, TESTAMENT_LABELS } from '@/content/bible';
+import { AT_ORDER, BIBLE_BOOKS, BIBLE_VERSIONS_NOTE, BLM, DEUTEROCANON_NOTE, GRC_NT, LXX, NT_ORDER, RV1909, SECTION_LABELS, TESTAMENT_LABELS } from '@/content/bible';
 import { Button, ListRow, Notice, PageHead, Progress, Section, StatusTag, Tag } from '@/components/ui';
 import { parsePassage } from '@/lib/pericope';
 import { normalize } from '@/lib/text';
@@ -65,8 +65,13 @@ export function BiblePage() {
     <div className="page">
       <PageHead
         title={es.bible.title}
-        subtitle={`${RV1909.name} y ${BLM.name} · ${es.licenses['public-domain']}`}
+        subtitle={`${RV1909.name} y ${BLM.name}, y en griego ${LXX.name.toLowerCase()} y el ${GRC_NT.name.charAt(0).toLowerCase()}${GRC_NT.name.slice(1)} · ${es.licenses['public-domain']}`}
       />
+      <details className="fold" style={{ marginTop: 0, marginBottom: 'var(--sp-4)' }}>
+        <summary>{es.bible.versionsTitle}</summary>
+        <p className="text-sm">{es.bible.versionsHow}</p>
+        <p className="text-sm muted">{BIBLE_VERSIONS_NOTE}</p>
+      </details>
 
       <input
         type="search"

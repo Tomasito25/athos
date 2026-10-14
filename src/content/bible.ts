@@ -48,8 +48,66 @@ export const BLM: BibleTranslation = {
   },
 };
 
+/** El Antiguo Testamento griego de los Setenta, el que lee la Iglesia. */
+export const LXX: BibleTranslation = {
+  id: 'lxx',
+  name: 'Los Setenta (Septuaginta)',
+  abbr: 'LXX',
+  meta: {
+    title: 'Ἡ Παλαιὰ Διαθήκη κατὰ τοὺς Ἑβδομήκοντα',
+    translator: 'Edición de Lancelot C. L. Brenton, 1851',
+    source: 'eBible.org, edición de octubre de 2026 en formato USFX (grcbrent)',
+    language: 'el',
+    license: 'public-domain',
+    copyright: 'Dominio público.',
+    dateAdded: '2026-10-14',
+    notes:
+      'Es el Antiguo Testamento en griego que usaban los Apóstoles y que la Iglesia ortodoxa sigue leyendo. Su numeración no siempre coincide con la de la Reina-Valera: ATHOS pone el capítulo que corresponde y avisa donde el orden es distinto.',
+  },
+};
+
+/** El Nuevo Testamento griego en la edición del Patriarcado Ecuménico. */
+export const GRC_NT: BibleTranslation = {
+  id: 'grc-nt',
+  name: 'Nuevo Testamento griego, edición patriarcal de 1904',
+  abbr: 'NT 1904',
+  meta: {
+    title: 'Ἡ Καινὴ Διαθήκη, ἔκδοσις τοῦ Οἰκουμενικοῦ Πατριαρχείου (1904)',
+    translator: 'Texto del Patriarcado Ecuménico de Constantinopla, 1904, con veinte correcciones de ediciones posteriores',
+    source: 'eBible.org, edición de octubre de 2026 en formato USFX (grcbyz)',
+    language: 'el',
+    license: 'public-domain',
+    copyright: 'Dominio público.',
+    dateAdded: '2026-10-14',
+    notes: 'Es el texto que se lee en la Liturgia de las iglesias de lengua griega.',
+  },
+};
+
 /** Las traducciones de las que ATHOS toma el texto bíblico, por identificador. */
-export const TRANSLATIONS: Record<string, BibleTranslation> = { rv1909: RV1909, blm: BLM };
+export const TRANSLATIONS: Record<string, BibleTranslation> = { rv1909: RV1909, blm: BLM, lxx: LXX, 'grc-nt': GRC_NT };
+
+/**
+ * Las versiones que se pueden elegir al leer: la española de ATHOS —que es la
+ * Reina-Valera de 1909 con la Biblia libre para el mundo en los libros que
+ * aquélla no trae— y la griega de la Iglesia.
+ *
+ * La Biblia de Jerusalén, la de Nácar-Colunga, la del Peregrino y las demás
+ * españolas modernas tienen derechos vigentes, y ATHOS no las incluye.
+ */
+export const BIBLE_VERSIONS = [
+  { id: 'es', label: 'Español', note: 'Reina-Valera 1909, y la Biblia libre para el mundo en los libros que aquélla no trae' },
+  { id: 'grc', label: 'Griego', note: 'Los Setenta y el Nuevo Testamento patriarcal de 1904, los de la Iglesia' },
+  { id: 'ambas', label: 'Las dos', note: 'El español y el griego, versículo a versículo' },
+] as const;
+
+export type BibleView = (typeof BIBLE_VERSIONS)[number]['id'];
+
+export const BIBLE_VERSIONS_NOTE =
+  'ATHOS sólo trae traducciones que se pueden distribuir libremente. La Biblia de Jerusalén, la de ' +
+  'Nácar-Colunga, la del Peregrino, la Reina-Valera de 1960 y las demás versiones españolas modernas ' +
+  'tienen derechos de autor vigentes, y sus editoriales no permiten copiarlas en una aplicación. Por eso ' +
+  'el español es el de la Reina-Valera de 1909 —con la Biblia libre para el mundo en los libros que ' +
+  'aquélla no trae—, y al lado se puede leer el texto griego que lee la Iglesia, que es de dominio público.';
 
 export const SECTION_LABELS: Record<BibleSection, string> = {
   pentateuco: 'Pentateuco',

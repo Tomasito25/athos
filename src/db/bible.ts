@@ -64,6 +64,17 @@ export async function loadBookFile(
   return request;
 }
 
+/**
+ * Las traducciones españolas guardan sus versículos con la clave de siempre,
+ * `LIBRO.capítulo.versículo`, y no se pisan entre sí porque no comparten
+ * libros. Las griegas sí comparten libros con ellas, así que llevan delante el
+ * nombre de la traducción: si no, Juan 1, 1 en griego borraba Juan 1, 1 en
+ * español.
+ */
+const SIN_PREFIJO = new Set(['rv1909', 'blm']);
+const clave = (translationId: string, resto: string) =>
+  SIN_PREFIJO.has(translationId) ? resto : `${translationId}:${resto}`;
+
 export function chapterVerses(
   file: BibleBookFile,
   chapter: number,
@@ -72,7 +83,7 @@ export function chapterVerses(
   const raw = file.chapters[String(chapter)] ?? {};
   return Object.entries(raw)
     .map(([verse, text]) => ({
-      id: `${file.id}.${chapter}.${verse}`,
+      id: clave(translationId, `${file.id}.${chapter}.${verse}`),
       bookId: file.id,
       chapter,
       verse: Number(verse),
@@ -100,7 +111,7 @@ export async function getChapter(
   if (verses.length) {
     await db.bible_verses.bulkPut(verses);
     await db.bible_chapters.put({
-      id: `${bookId}.${chapter}`,
+      id: clave(translationId, `${bookId}.${chapter}`),
       bookId,
       chapter,
       verseCount: verses.length,

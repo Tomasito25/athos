@@ -5,9 +5,12 @@
 import { Link, useParams } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { formatReference, getChapter } from '@/db/bible';
-import { BOOKS_BY_ID, translationOf } from '@/content/bible';
+import { BIBLE_VERSIONS, BOOKS_BY_ID, TRANSLATIONS, translationOf } from '@/content/bible';
+import { greekNote, greekPlaces } from '@/lib/greek-bible';
+import { useSettings, type BibleViewChoice } from '@/stores/settings';
+import type { BibleVerse } from '@/types';
 import { saveBookmark } from '@/db/user';
-import { Button, Notice, SourceNote, Skeleton, NotFound } from '@/components/ui';
+import { Button, Notice, Segmented, SourceNote, Skeleton, NotFound } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { Headpiece } from '@/components/Ornament';
 import { IconBookmark, IconChevronLeft, IconChevronRight } from '@/components/icons';
@@ -24,6 +27,20 @@ export function ChapterPage() {
   const verses = useAsync(
     () => (book && book.status !== 'pending' ? getChapter(bookId, chapterNumber) : Promise.resolve([])),
     [bookId, chapterNumber, book?.status],
+  );
+
+  // La versión que se lee: el español de ATHOS, el griego de la Iglesia o las dos.
+  const vista = useSettings((s) => s.bibleView);
+  const ponerAjuste = useSettings((s) => s.set);
+  const lugares = greekPlaces(bookId, chapterNumber);
+  const griego = useAsync(
+    async () =>
+      vista === 'es' || !lugares.length
+        ? []
+        : Promise.all(
+            lugares.map(async (l) => ({ lugar: l, versos: await getChapter(l.bookId, l.chapter, l.translationId) })),
+          ),
+    [bookId, chapterNumber, vista],
   );
 
   const path = `/leer/biblia/${bookId}/${chapterNumber}`;
@@ -90,9 +107,27 @@ export function ChapterPage() {
             </button>
           }
         />
+        <div style={{ marginTop: 'var(--sp-3)' }}>
+          <Segmented
+            value={vista}
+            label={es.bible.version}
+            options={BIBLE_VERSIONS.map((v) => ({ value: v.id as BibleViewChoice, label: v.label }))}
+            onChange={(v) => ponerAjuste('bibleView', v)}
+          />
+          {vista !== 'es' && greekNote(bookId) ? <p className="rubric" style={{ marginTop: 'var(--sp-2)' }}>{greekNote(bookId)}</p> : null}
+        </div>
       </header>
 
-      {book.status === 'pending' ? (
+      {vista !== 'es' && book.status !== 'pending' ? (
+        <GreekText
+          vista={vista}
+          bookId={bookId}
+          espanol={verses.data ?? []}
+          griego={griego.data ?? []}
+          loading={griego.loading || verses.loading}
+          error={Boolean(griego.error)}
+        />
+      ) : book.status === 'pending' ? (
         <Notice variant="pending">{es.app.pending}</Notice>
       ) : verses.loading ? (
         <Skeleton title lines={8} />
@@ -133,7 +168,95 @@ export function ChapterPage() {
         )}
       </nav>
 
-      <SourceNote meta={translationOf(bookId).meta} status={book.status} />
+      {vista !== 'grc' ? <SourceNote meta={translationOf(bookId).meta} status={book.status} /> : null}
+      {vista !== 'es' && lugares[0] ? <SourceNote meta={TRANSLATIONS[lugares[0].translationId]!.meta} /> : null}
     </article>
+  );
+}
+
+/** Libros en los que el griego no se puede alinear versículo a versículo con el español. */
+const SIN_ALINEAR = new Set(['PSA', 'PS2', 'JER', 'PRO', 'JOL', 'MAL', 'DAN', 'DAG', 'EST', 'ESG', 'NEH', 'EZR']);
+
+/**
+ * El texto griego, solo o junto al español.
+ *
+ * Con «las dos», donde la numeración coincide —todo el Nuevo Testamento y casi
+ * todo el Antiguo— cada versículo español lleva debajo el suyo griego. Donde
+ * no coincide se ponen los dos textos uno al lado del otro, sin forzar.
+ */
+function GreekText({
+  vista,
+  bookId,
+  espanol,
+  griego,
+  loading,
+  error,
+}: {
+  vista: BibleViewChoice;
+  bookId: string;
+  espanol: BibleVerse[];
+  griego: Array<{ lugar: { label?: string }; versos: BibleVerse[] }>;
+  loading: boolean;
+  error: boolean;
+}) {
+  if (loading) return <Skeleton title lines={8} />;
+  if (error || !griego.some((g) => g.versos.length)) {
+    return <Notice variant="warn">{es.bible.greekOffline}</Notice>;
+  }
+
+  const bloquesGriegos = griego.map((g, i) => (
+    <div key={i} lang="el" className="bible-greek">
+      {g.lugar.label ? <p className="eyebrow">{g.lugar.label}</p> : null}
+      {g.versos.map((v) => (
+        <p key={v.id}>
+          <span className="verse-num">{v.verse}</span>
+          {v.text}
+        </p>
+      ))}
+    </div>
+  ));
+
+  if (vista === 'grc') return <div className="prose book-surface">{bloquesGriegos}</div>;
+
+  if (griego.length === 1 && !SIN_ALINEAR.has(bookId)) {
+    const porNumero = new Map(griego[0]!.versos.map((v) => [v.verse, v]));
+    const sobran = griego[0]!.versos.filter((v) => !espanol.some((e) => e.verse === v.verse));
+    return (
+      <div className="prose book-surface bible-parallel">
+        {espanol.map((v) => (
+          <div key={v.id} id={`v${v.verse}`} className="bible-parallel__verse">
+            <p>
+              <span className="verse-num">{v.verse}</span>
+              {v.text}
+            </p>
+            {porNumero.get(v.verse) ? (
+              <p lang="el" className="bible-parallel__greek">
+                {porNumero.get(v.verse)!.text}
+              </p>
+            ) : null}
+          </div>
+        ))}
+        {sobran.map((v) => (
+          <p key={v.id} lang="el" className="bible-parallel__greek">
+            <span className="verse-num">{v.verse}</span>
+            {v.text}
+          </p>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="bible-columns">
+      <div className="prose book-surface">
+        {espanol.map((v) => (
+          <p key={v.id} id={`v${v.verse}`}>
+            <span className="verse-num">{v.verse}</span>
+            {v.text}
+          </p>
+        ))}
+      </div>
+      <div className="prose book-surface">{bloquesGriegos}</div>
+    </div>
   );
 }

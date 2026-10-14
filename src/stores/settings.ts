@@ -9,6 +9,9 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { CalendarStyle, OfficeLength, RuleTime } from '@/types';
 
+/** Cómo se lee la Biblia: en español, en griego o las dos a la vez. */
+export type BibleViewChoice = 'es' | 'grc' | 'ambas';
+
 export type ThemeChoice = 'light' | 'dark' | 'system';
 export type MeasureChoice = 'narrow' | 'normal' | 'wide';
 
@@ -46,6 +49,7 @@ export interface SettingsState {
 
   calendarStyle: CalendarStyle;
   language: string;
+  bibleView: BibleViewChoice;
 
   /** Hora a la que empieza cada oficio. La noche se extiende hasta la mañana. */
   officeHours: { manana: number; mediodia: number; noche: number };
@@ -89,6 +93,7 @@ export const DEFAULT_SETTINGS = {
   officeExtras: { troparion: true, akathist: true },
   calendarStyle: 'nuevo' as CalendarStyle,
   language: 'es',
+  bibleView: 'es' as BibleViewChoice,
   officeHours: { manana: 5, mediodia: 12, noche: 19 },
   jesusPrayerVibration: true,
   jesusPrayerSound: false,

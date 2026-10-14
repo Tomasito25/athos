@@ -328,6 +328,9 @@ export async function searchAll(query: string, options: SearchOptions = {}): Pro
       const found: SearchResult[] = [];
       await db.bible_verses.each((verse) => {
         if (found.length >= BIBLE_SCAN_LIMIT) return;
+        // El texto griego no entra en la búsqueda: sus capítulos no siempre
+        // coinciden con los de la Biblia española a la que lleva el resultado.
+        if (verse.translationId === 'lxx' || verse.translationId === 'grc-nt') return;
         const body = normalize(verse.text);
         if (needles.every((token) => body.includes(token))) {
           const book = BOOKS_BY_ID.get(verse.bookId);

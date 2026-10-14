@@ -2,9 +2,10 @@
  * Portada de Orar.
  *
  * Los tres oficios del día en primer lugar —con el de ahora destacado y la
- * medida en que se reza cada uno—; debajo, la medida para los tres de una vez
- * y la semana, que es lo que necesita quien está cogiendo el hábito; luego el
- * libro de oración con sus cuatro órdenes de corrido; después, la oración
+ * medida en que se reza cada uno—; luego lo propio de hoy y las oraciones para
+ * cada momento, que es lo que más se busca; debajo, la medida para los tres de
+ * una vez y la semana, que es lo que necesita quien está cogiendo el hábito;
+ * luego el libro de oración con sus cuatro órdenes de corrido; después, la oración
  * personal —las oraciones por momentos, la de Jesús, el komboskini, la regla—,
  * y al final lo que se reza con la Iglesia y está en la biblioteca.
  *
@@ -93,6 +94,35 @@ export function PrayHub() {
         <TodayDevotions />
       </Section>
 
+      {/* Antes iba aquí «Tu oración»: cinco teselas sin relación entre sí. Ahora,
+          las oraciones para cada momento, que es lo que se busca al venir a
+          rezar algo concreto; lo demás queda en la fila de debajo. */}
+      <Section title={es.pray.moments} action={{ label: es.pray.allPrayers, to: '/orar/oraciones' }}>
+        <MomentsMenu headingLevel="sub" />
+      </Section>
+
+      <nav className="shortcut-row" aria-label={es.pray.tools}>
+        <Link className="shortcut" to="/orar/oracion-de-jesus">
+          <IconCross size={16} /> {es.jesusPrayer.title}
+        </Link>
+        <Link className="shortcut" to="/orar/komboskini">
+          <IconChotki size={16} /> {es.jesusPrayer.chotkiAlt}
+          {stats.data?.today ? <span className="shortcut__badge">{stats.data.today}</span> : null}
+        </Link>
+        <Link className="shortcut" to="/orar/regla">
+          <IconScroll size={16} /> {es.rule.title}
+        </Link>
+        <Link className="shortcut" to="/orar/metanoias">
+          <IconCross size={16} /> {es.metanoia.title}
+        </Link>
+        <Link className="shortcut" to="/orar/formas">
+          <IconPray size={16} /> {es.pray.ways}
+        </Link>
+        <Link className="shortcut" to="/orar/mis-oraciones">
+          <IconEdit size={16} /> {es.office.myPrayers}
+        </Link>
+      </nav>
+
       <Section title={es.pray.measure}>
         <p className="muted text-sm section-lead">{es.pray.measureHint}</p>
         <OfficeMeasure />
@@ -135,35 +165,6 @@ export function PrayHub() {
           })}
         </div>
       </Section>
-
-      {/* Antes iba aquí «Tu oración»: cinco teselas sin relación entre sí. Ahora,
-          las oraciones para cada momento, que es lo que se busca al venir a
-          rezar algo concreto; lo demás queda en la fila de debajo. */}
-      <Section title={es.pray.moments} action={{ label: es.pray.allPrayers, to: '/orar/oraciones' }}>
-        <MomentsMenu headingLevel="sub" />
-      </Section>
-
-      <nav className="shortcut-row" aria-label={es.pray.tools}>
-        <Link className="shortcut" to="/orar/oracion-de-jesus">
-          <IconCross size={16} /> {es.jesusPrayer.title}
-        </Link>
-        <Link className="shortcut" to="/orar/komboskini">
-          <IconChotki size={16} /> {es.jesusPrayer.chotkiAlt}
-          {stats.data?.today ? <span className="shortcut__badge">{stats.data.today}</span> : null}
-        </Link>
-        <Link className="shortcut" to="/orar/regla">
-          <IconScroll size={16} /> {es.rule.title}
-        </Link>
-        <Link className="shortcut" to="/orar/metanoias">
-          <IconCross size={16} /> {es.metanoia.title}
-        </Link>
-        <Link className="shortcut" to="/orar/formas">
-          <IconPray size={16} /> {es.pray.ways}
-        </Link>
-        <Link className="shortcut" to="/orar/mis-oraciones">
-          <IconEdit size={16} /> {es.office.myPrayers}
-        </Link>
-      </nav>
 
       <Section title={es.pray.withChurch}>
         <TileGrid>

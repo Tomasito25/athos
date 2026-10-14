@@ -125,6 +125,7 @@ export type PrayerCategoryId =
   | 'escritura'
   | 'confesion'
   | 'comunion'
+  | 'santos'
   | 'otras';
 
 export interface PrayerCategory {

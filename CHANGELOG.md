@@ -2,6 +2,73 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.30.0]
+
+### Añadido
+
+- **Actualizaciones a la vista.** ATHOS busca versión nueva cada hora, al
+  volver a la aplicación y al recuperar la conexión. El aviso es una franja
+  fija con «Actualizar ahora» y «Más tarde», que no sale mientras se reza.
+  Después de actualizar se ofrecen las **novedades** de la versión, y en
+  «Acerca de» se puede buscar a mano y ver cuándo se miró por última vez.
+- **Recordatorios a la hora que elijas**, para rezar y para leer, con lo que
+  toca ese día: la medida del oficio, el santo, la referencia del Evangelio,
+  el día del plan de lectura. Los del ayuno, las fiestas y lo que queda por
+  rezar sólo suenan cuando hay algo que decir. Tocar un aviso abre su
+  pantalla. Con ATHOS cerrada llegan sólo donde el navegador lo permite
+  (Chrome y Edge con la aplicación instalada), y la pantalla de ajustes lo
+  dice.
+- **Planes de lectura que se leen dentro**: cada día entero en una página,
+  marcándolo al pie se pasa al siguiente, y el plan que llevas sale en
+  Inicio. Seis planes nuevos: el Evangelio de Juan, Proverbios en un mes,
+  los Hechos y las cartas, los libros de la sabiduría, los tres libros de
+  la Cuaresma en paralelo y la Biblia en un año en dos lecturas.
+- **La Biblia en griego**: cada capítulo se lee en español, en griego —los
+  Setenta y el Nuevo Testamento patriarcal de 1904, de dominio público— o en
+  los dos a la vez, versículo a versículo. La Biblia de Jerusalén no se ha
+  podido añadir: tiene derechos vigentes, como las demás versiones
+  españolas modernas, y la aplicación explica por qué.
+- **Lo propio de hoy**: ATHOS elige el akathistos y el canon de cada día
+  según el reparto de la semana y la fiesta, entre los que tiene enteros, y
+  dice por qué. El tropario y el kontakion del día se añaden solos al oficio
+  habitual, y el akathistos de hoy, plegado, al de la noche.
+- **Maitines en casa**, sin sacerdote, desde Orar, con el tropario, los
+  kathismata de ese día de la semana y el canon del día en su sitio.
+- **El templo**: las partes de una iglesia ortodoxa con dos dibujos que se
+  pueden tocar, la planta y el iconostasio.
+- **Formas de rezar** y **Metanoias**: con el cuerpo, la voz y el corazón;
+  cómo se hacen las inclinaciones y las postraciones, en dibujo; si hoy se
+  hacen grandes postraciones y por qué; y un contador.
+- **Estudio completo**: seis itinerarios nuevos —el templo, las formas de
+  rezar, los Misterios, el año de la Iglesia, la Theotokos y los santos, la
+  muerte y la esperanza— y el catálogo de obras enlazado con lo que ATHOS
+  tiene de cada una.
+- **Más oraciones**, traducidas para ATHOS de los originales: *Ἁγνὴ
+  Παρθένε* de san Nectario con su griego, «Reina mía buenísima», a san
+  Nicolás, a san Panteleimón por la curación y en acción de gracias, la del
+  obispo Jeremías por las enfermedades del alma, a san Sergio antes de
+  estudiar, la de la mañana de san Juan de Kronstadt, a la Theotokos
+  Hodigitria antes de un viaje, «No tenemos otra ayuda» y la de los ancianos
+  de Óptina por los que murieron sin arrepentimiento. La Theotokos y los
+  santos tienen su propio momento en el menú.
+
+### Cambiado
+
+- **Inicio**: el versículo del día sube a justo debajo del día, a todo lo
+  ancho, enmarcado.
+- **Orar**: «Tu oración» deja sitio a las oraciones para cada momento; la
+  oración de Jesús, el komboskini, la regla, las metanoias, las formas de
+  rezar y las oraciones propias pasan a una fila de atajos.
+- Donde un oficio decía «está en Orar → Oraciones…» o «en Biblioteca →
+  Cánones», ahora el texto está dentro, o plegado para rezarlo ahí mismo.
+
+### Corregido
+
+- Los recordatorios no se volvían a programar al abrir la aplicación: sólo
+  al tocar su interruptor.
+- Una segunda traducción de la Biblia habría pisado a la española en la
+  base de datos: cada traducción guarda ahora sus versículos aparte.
+
 ## [1.29.0]
 
 ### Añadido

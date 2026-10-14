@@ -13,6 +13,7 @@ import { THIRD_PRAYERS } from './prayers-third';
 import { FOURTH_PRAYERS } from './prayers-fourth';
 import { CANON_COMUNION_BLOCKS } from './canon-comunion';
 import { MOLITVOSLOV_PRAYERS } from './prayers-molitvoslov';
+import { FIFTH_PRAYERS } from './prayers-fifth';
 import { embed } from './comun';
 import {
   ENFERMOS_KONTAKION,
@@ -63,7 +64,8 @@ export const PRAYER_CATEGORIES: PrayerCategory[] = [
   { id: 'comunion', name: 'Antes de comulgar', description: 'Antes y después de los Santos Misterios.', order: 28 },
   { id: 'dudas', name: 'Cuando falla la fe', description: 'Cuando no sale, no se siente nada o se ha dejado de creer.', order: 29 },
   { id: 'paz', name: 'En tiempo de guerra', description: 'Por la paz, por las víctimas y por los que combaten.', order: 30 },
-  { id: 'otras', name: 'Otras oraciones', description: 'Oraciones para diversas circunstancias.', order: 31 },
+  { id: 'santos', name: 'A la Theotokos y a los santos', description: 'Para pedir su intercesión: la Madre de Dios, san Nicolás, los que nos acompañan.', order: 31 },
+  { id: 'otras', name: 'Otras oraciones', description: 'Oraciones para diversas circunstancias.', order: 32 },
 ];
 
 const TRAD: SourceMeta = {
@@ -813,7 +815,7 @@ const ORDEN_DEL_LIBRO = [
 ];
 const PUESTO_EN_EL_LIBRO = new Map(ORDEN_DEL_LIBRO.map((id, i) => [id, i]));
 
-const allSeeds: Seed[] = [...seeds, ...MORE_PRAYERS, ...THIRD_PRAYERS, ...FOURTH_PRAYERS, ...MOLITVOSLOV_PRAYERS]
+const allSeeds: Seed[] = [...seeds, ...MORE_PRAYERS, ...THIRD_PRAYERS, ...FOURTH_PRAYERS, ...MOLITVOSLOV_PRAYERS, ...FIFTH_PRAYERS]
   .map((seed, escrita) => ({ seed, puesto: PUESTO_EN_EL_LIBRO.get(seed.id) ?? 1000 + escrita }))
   .sort(
     (a, b) =>

@@ -65,7 +65,7 @@ export const MOMENT_GROUPS: MomentGroup[] = [
     id: 'ante-dios',
     name: 'Ante Dios',
     description: 'El templo, la Escritura y los sacramentos.',
-    moments: ['templo', 'escritura', 'confesion', 'comunion', 'dudas', 'paz', 'otras'],
+    moments: ['templo', 'escritura', 'confesion', 'comunion', 'santos', 'dudas', 'paz', 'otras'],
   },
 ];
 
@@ -109,6 +109,7 @@ export const MOMENT_ICONS: Record<PrayerCategoryId, string> = {
   escritura: 'scroll',
   confesion: 'cross',
   comunion: 'chalice',
+  santos: 'candle',
   otras: 'pray',
 };
 

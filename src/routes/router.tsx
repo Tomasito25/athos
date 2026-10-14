@@ -95,6 +95,7 @@ export const routes: RouteObject[] = [
       { path: 'configuracion/notificaciones', lazy: page(() => import('@/features/settings/NotificationsPage'), 'NotificationsPage') },
       { path: 'configuracion/fuentes', lazy: page(() => import('@/features/settings/SourcesPage'), 'SourcesPage') },
       { path: 'configuracion/acerca-de', lazy: page(() => import('@/features/settings/AboutPage'), 'AboutPage') },
+      { path: 'configuracion/novedades', lazy: page(() => import('@/features/settings/NewsPage'), 'NewsPage') },
 
       { path: '*', lazy: page(() => import('@/features/error/NotFoundPage'), 'NotFoundPage') },
     ],

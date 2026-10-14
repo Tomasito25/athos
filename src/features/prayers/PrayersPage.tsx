@@ -6,7 +6,6 @@
  * momento que corresponde a esta hora; debajo, los demás en rejilla, cada uno
  * con su signo, para poder abarcarlos de un vistazo.
  */
-import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
@@ -14,11 +13,11 @@ import { listFavorites } from '@/db/user';
 import { ButtonLink, ListRow, Panel, Section, Tag } from '@/components/ui';
 import { HubHero } from '@/components/hub';
 import { IconPray } from '@/components/icons';
-import { PRAYER_CATEGORIES, PRAYER_LICENSE_NOTE } from '@/content/prayers';
-import { ANY_HOUR, MOMENT_GROUPS, momentById, momentNow } from '@/content/moments';
+import { PRAYER_LICENSE_NOTE } from '@/content/prayers';
+import { ANY_HOUR, momentById, momentNow } from '@/content/moments';
 import { PRAYER_ORDERS } from '@/content/prayer-orders';
 import { MomentIcon } from './MomentIcon';
-import type { PrayerCategoryId } from '@/types';
+import { MomentsMenu } from './MomentsMenu';
 import es from '@/locales/es';
 
 export function PrayersPage() {
@@ -27,19 +26,6 @@ export function PrayersPage() {
 
   const ahora = momentNow(new Date().getHours());
   const momento = ahora ? momentById(ahora) : undefined;
-
-  const porCategoria = useMemo(() => {
-    const map = new Map<string, number>();
-    for (const prayer of prayers.data ?? []) {
-      map.set(prayer.category, (map.get(prayer.category) ?? 0) + 1);
-    }
-    return map;
-  }, [prayers.data]);
-
-  const cuenta = (id: PrayerCategoryId) => {
-    const n = porCategoria.get(id) ?? 0;
-    return n === 1 ? '1 oración' : `${n} oraciones`;
-  };
 
   return (
     <div className="page">
@@ -107,28 +93,7 @@ export function PrayersPage() {
       ) : null}
 
       {/* ---- Todos los momentos, en rejilla ---- */}
-      {MOMENT_GROUPS.map((grupo) => (
-        <Section key={grupo.id} title={grupo.name}>
-          <p className="muted text-sm" style={{ margin: 'calc(-1 * var(--sp-2)) 0 var(--sp-3)' }}>
-            {grupo.description}
-          </p>
-          <div className="moment-grid">
-            {grupo.moments.map((id) => {
-              const categoria = PRAYER_CATEGORIES.find((c) => c.id === id);
-              if (!categoria) return null;
-              return (
-                <Link key={id} to={`/orar/oraciones/categoria/${id}`} className="moment">
-                  <span className="moment__icon">
-                    <MomentIcon id={id} />
-                  </span>
-                  <span className="moment__name">{categoria.name}</span>
-                  <span className="moment__count">{cuenta(id)}</span>
-                </Link>
-              );
-            })}
-          </div>
-        </Section>
-      ))}
+      <MomentsMenu />
 
       <Section title={es.prayers.everything}>
         <div className="list">

@@ -115,6 +115,11 @@ export function HomePage() {
         <OfficeInvitation />
       </div>
 
+      {/* La frase que uno se lleva puesta el resto del día. Iba al pie de la
+          segunda columna, debajo de todo, y casi nadie llegaba a verla: ahora
+          va justo debajo del día, a todo lo ancho. */}
+      <VerseOfDay prominent />
+
       <WelcomeCard />
 
       <div className="home-grid">
@@ -223,9 +228,6 @@ export function HomePage() {
               </div>
             </Section>
           ) : null}
-
-          {/* La frase que uno se lleva puesta el resto del día. */}
-          <VerseOfDay />
         </div>
       </div>
 

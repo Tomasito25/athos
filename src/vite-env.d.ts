@@ -3,6 +3,8 @@
 
 declare const __APP_VERSION__: string;
 declare const __BUILD_DATE__: string;
+/** Las últimas versiones de CHANGELOG.md, leídas al compilar. */
+declare const __CHANGELOG__: Array<{ version: string; sections: Array<{ title: string; items: string[] }> }>;
 
 interface Navigator {
   /** API experimental de vibración, no disponible en todos los navegadores. */

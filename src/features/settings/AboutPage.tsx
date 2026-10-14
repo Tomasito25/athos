@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Panel, Section } from '@/components/ui';
 import { OrthodoxCross } from '@/components/icons';
+import { UpdateStatusPanel } from './UpdateStatusPanel';
 import es from '@/locales/es';
 
 const PRINCIPLES = [
@@ -24,6 +25,13 @@ export function AboutPage() {
           {es.settings.version.replace('{{version}}', __APP_VERSION__)} · {__BUILD_DATE__}
         </p>
       </div>
+
+      <Section title={es.settings.updates}>
+        <UpdateStatusPanel />
+        <p className="text-sm" style={{ marginTop: 'var(--sp-3)' }}>
+          <Link to="/configuracion/novedades">{es.settings.news}</Link>: {es.settings.newsSubtitle.toLowerCase()}
+        </p>
+      </Section>
 
       <Section title="Qué es">
         <div className="prose book-surface">

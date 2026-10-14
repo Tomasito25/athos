@@ -21,7 +21,7 @@ import { verseReferenceFor } from '@/content/verse-of-day';
 import { Skeleton } from '@/components/ui';
 import es from '@/locales/es';
 
-export function VerseOfDay() {
+export function VerseOfDay({ prominent = false }: { prominent?: boolean }) {
   // La fecha se calcula una vez: si no, cada render daría un objeto nuevo y
   // la carga se repetiría sin motivo.
   const referencia = useMemo(() => verseReferenceFor(new Date()), []);
@@ -44,7 +44,7 @@ export function VerseOfDay() {
 
   if (versiculos.loading) {
     return (
-      <div className="verse-day" aria-hidden="true">
+      <div className={prominent ? 'verse-day verse-day--hero' : 'verse-day'} aria-hidden="true">
         <Skeleton lines={2} />
       </div>
     );
@@ -65,10 +65,15 @@ export function VerseOfDay() {
       : `${pericopa.bookName} ${primero.chapter}, ${primero.verse}-${ultimo.verse}`;
 
   return (
-    <section className="verse-day" aria-labelledby="versiculo-del-dia">
+    <section className={prominent ? 'verse-day verse-day--hero' : 'verse-day'} aria-labelledby="versiculo-del-dia">
       <h2 id="versiculo-del-dia" className="eyebrow verse-day__label">
         {es.home.verseOfDay}
       </h2>
+      {prominent ? (
+        <span className="verse-day__mark" aria-hidden="true">
+          ✣
+        </span>
+      ) : null}
 
       <Link
         to={`/leer/biblia/${pericopa.bookId}/${primero.chapter}#v${primero.verse}`}
@@ -78,6 +83,7 @@ export function VerseOfDay() {
           {lista.map((v) => v.text).join(' ')}
         </p>
         <p className="verse-day__ref">{cita}</p>
+        {prominent ? <p className="verse-day__more">{es.home.verseRead}</p> : null}
       </Link>
     </section>
   );

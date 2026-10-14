@@ -1360,3 +1360,241 @@ button.cal-cell:hover {
   color: var(--gold);
   font-variant-numeric: tabular-nums;
 }
+
+/* ---------------- El versículo del día, a la vista ----------------
+   Iba al pie de la portada. Ahora va debajo del día, a todo lo ancho, como
+   una inscripción enmarcada: un filo de oro arriba y abajo, la letra de los
+   libros más grande y la referencia en oro. */
+.verse-day--hero {
+  position: relative;
+  margin: var(--sp-5) 0 var(--sp-2);
+  padding: var(--sp-5) var(--sp-5) var(--sp-4);
+  border: 1px solid var(--gold-soft);
+  border-radius: var(--radius-lg);
+  background: var(--surface-glow), var(--surface-raised);
+  box-shadow: var(--shadow-gold);
+  overflow: hidden;
+}
+
+.verse-day--hero::before,
+.verse-day--hero::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  height: 2px;
+  background: var(--gold-edge);
+}
+
+.verse-day--hero::before {
+  top: 0;
+}
+
+.verse-day--hero::after {
+  bottom: 0;
+}
+
+.verse-day--hero .verse-day__label {
+  color: var(--gold);
+}
+
+.verse-day__mark {
+  display: block;
+  margin: calc(-1 * var(--sp-2)) 0 var(--sp-2);
+  color: var(--gold-soft);
+  font-size: var(--text-md);
+}
+
+.verse-day--hero .verse-day__text {
+  max-width: 44rem;
+  margin-inline: auto;
+  font-size: var(--text-xl);
+  line-height: 1.5;
+}
+
+.verse-day--hero .verse-day__ref {
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+
+.verse-day__more {
+  margin-top: var(--sp-2);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+@media (max-width: 30rem) {
+  .verse-day--hero {
+    padding: var(--sp-4) var(--sp-4) var(--sp-3);
+  }
+
+  .verse-day--hero .verse-day__text {
+    font-size: var(--text-lg);
+  }
+}
+
+/* ---------------- Las oraciones para cada momento, en Orar ---------------- */
+.moments-menu {
+  display: grid;
+  gap: var(--sp-5);
+}
+
+.moments-menu__title {
+  font-family: var(--font-serif);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  color: var(--ink-strong);
+}
+
+.moments-menu__lead {
+  margin: 2px 0 var(--sp-3);
+}
+
+.moment--now {
+  border-color: var(--gold-soft);
+  box-shadow: var(--shadow-gold);
+}
+
+.shortcut__badge {
+  min-width: 1.4rem;
+  padding: 0 0.35rem;
+  border-radius: var(--radius-pill);
+  background: var(--gold-wash);
+  color: var(--gold);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+/* ---------------- El aviso de versión nueva ----------------
+   Una franja fija sobre la barra de abajo (o una tarjeta en la esquina, en
+   escritorio), con dos botones. No es un mensaje que se va solo: la versión
+   nueva espera hasta que se decide. */
+.update-banner {
+  position: fixed;
+  z-index: 70;
+  inset-inline: 0;
+  bottom: calc(var(--bottom-nav-h) + var(--safe-bottom) + var(--sp-2));
+  margin-inline: auto;
+  width: min(calc(100% - 2 * var(--sp-3)), 30rem);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: var(--sp-2) var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--gold-soft);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-lg), var(--shadow-gold);
+  animation: install-sheet-in var(--dur-slow) var(--ease);
+}
+
+@media (min-width: 62rem) {
+  .update-banner {
+    inset-inline: auto var(--sp-5);
+    bottom: var(--sp-5);
+  }
+}
+
+.update-banner__icon {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  color: var(--gold);
+  background: var(--halo);
+}
+
+.update-banner__title {
+  font-weight: 600;
+  color: var(--ink-strong);
+}
+
+.update-banner__hint {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.update-banner__actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--sp-2);
+}
+
+body:has(.update-banner) .toast-region {
+  bottom: calc(var(--bottom-nav-h) + var(--safe-bottom) + 9rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .update-banner {
+    animation: none;
+  }
+}
+
+/* ---------------- Novedades ---------------- */
+.news-entry + .news-entry {
+  margin-top: var(--sp-6);
+}
+
+.news-entry__version {
+  font-family: var(--font-serif);
+  font-size: var(--text-xl);
+  color: var(--ink-strong);
+}
+
+.news-entry__section {
+  margin-top: var(--sp-4);
+}
+
+.news-entry__section h3 {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.news-entry__section ul {
+  margin: var(--sp-2) 0 0;
+  padding-inline-start: 1.2em;
+  list-style: disc;
+  display: grid;
+  gap: var(--sp-2);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+}
+
+.news-entry__section li::marker {
+  color: var(--gold-soft);
+}
+
+.update-status {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--text-sm);
+}
+
+.update-status__dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: var(--line-strong);
+}
+
+.update-status[data-status='current'] .update-status__dot {
+  background: #3f8f5a;
+}
+
+.update-status[data-status='available'] .update-status__dot,
+.update-status[data-status='downloading'] .update-status__dot {
+  background: var(--gold);
+}
+
+.update-status[data-status='error'] .update-status__dot,
+.update-status[data-status='offline'] .update-status__dot {
+  background: var(--red);
+}

@@ -16,6 +16,7 @@ import { Section } from '@/components/ui';
 import { HubHero, Tile, TileGrid } from '@/components/hub';
 import {
   IconBell,
+  IconDownload,
   IconInfo,
   IconInstall,
   IconMore,
@@ -72,6 +73,7 @@ export function MorePage() {
           <Tile to="/configuracion/notificaciones" icon={IconBell} title={es.settings.notifications} />
           <Tile to="/configuracion/datos" icon={IconScroll} title={es.settings.data} />
           <Tile to="/configuracion/fuentes" icon={IconInfo} title={es.settings.sources} />
+          <Tile to="/configuracion/novedades" icon={IconDownload} title={es.settings.news} hint={__APP_VERSION__} />
           <Tile to="/configuracion/acerca-de" icon={IconInfo} title={es.settings.about} />
         </TileGrid>
       </Section>

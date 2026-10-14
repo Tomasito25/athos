@@ -31,12 +31,12 @@ import {
   IconPray,
   IconScroll,
 } from '@/components/icons';
-import { PRAYER_CATEGORIES } from '@/content/prayers';
 import { LENGTH_INFO, minutesFor } from '@/content/office-lengths';
 import { OfficeMeasure } from './OfficeMeasure';
 import { OfficeWeek } from './OfficeWeek';
 import { PRAYER_ORDERS } from '@/content/prayer-orders';
 import { MomentIcon } from '@/features/prayers/MomentIcon';
+import { MomentsMenu } from '@/features/prayers/MomentsMenu';
 import { useOfficeProgress } from '@/features/office/useOfficeProgress';
 import es from '@/locales/es';
 
@@ -130,25 +130,28 @@ export function PrayHub() {
         </div>
       </Section>
 
-      <Section title={es.pray.yours}>
-        <TileGrid>
-          <Tile
-            to="/orar/oraciones"
-            icon={IconPray}
-            title={es.prayers.title}
-            hint={`${PRAYER_CATEGORIES.length} momentos, del despertar al duelo`}
-          />
-          <Tile to="/orar/oracion-de-jesus" icon={IconCross} title={es.jesusPrayer.title} hint={es.pray.jesusHint} />
-          <Tile
-            to="/orar/komboskini"
-            icon={IconChotki}
-            title={es.jesusPrayer.chotkiAlt}
-            hint={stats.data?.today ? es.pray.chotkiToday.replace('{{count}}', String(stats.data.today)) : es.pray.chotkiHint}
-          />
-          <Tile to="/orar/regla" icon={IconScroll} title={es.rule.title} hint={es.pray.ruleHint} />
-          <Tile to="/orar/mis-oraciones" icon={IconEdit} title={es.office.myPrayers} hint={es.pray.myPrayersHint} />
-        </TileGrid>
+      {/* Antes iba aquí «Tu oración»: cinco teselas sin relación entre sí. Ahora,
+          las oraciones para cada momento, que es lo que se busca al venir a
+          rezar algo concreto; lo demás queda en la fila de debajo. */}
+      <Section title={es.pray.moments} action={{ label: es.pray.allPrayers, to: '/orar/oraciones' }}>
+        <MomentsMenu headingLevel="sub" />
       </Section>
+
+      <nav className="shortcut-row" aria-label={es.pray.tools}>
+        <Link className="shortcut" to="/orar/oracion-de-jesus">
+          <IconCross size={16} /> {es.jesusPrayer.title}
+        </Link>
+        <Link className="shortcut" to="/orar/komboskini">
+          <IconChotki size={16} /> {es.jesusPrayer.chotkiAlt}
+          {stats.data?.today ? <span className="shortcut__badge">{stats.data.today}</span> : null}
+        </Link>
+        <Link className="shortcut" to="/orar/regla">
+          <IconScroll size={16} /> {es.rule.title}
+        </Link>
+        <Link className="shortcut" to="/orar/mis-oraciones">
+          <IconEdit size={16} /> {es.office.myPrayers}
+        </Link>
+      </nav>
 
       <Section title={es.pray.withChurch}>
         <TileGrid>

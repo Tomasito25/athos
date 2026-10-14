@@ -4,6 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import { fileURLToPath, URL } from 'node:url';
 import { copyFileSync, existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { recentChangelog } from './scripts/changelog.ts';
 
 const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf-8')) as {
   version: string;
@@ -34,6 +35,8 @@ export default defineConfig({
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version),
     __BUILD_DATE__: JSON.stringify(new Date().toISOString().slice(0, 10)),
+    // Las últimas versiones del registro de cambios, para «Novedades».
+    __CHANGELOG__: JSON.stringify(recentChangelog(new URL('./CHANGELOG.md', import.meta.url))),
   },
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },

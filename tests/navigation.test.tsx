@@ -158,7 +158,9 @@ describe('armazón', () => {
   it('se puede navegar de Orar a la regla', async () => {
     const user = userEvent.setup();
     renderAt('/orar');
-    await findHeading(/Regla de oración/i);
+    // La regla ya no es una tesela con su título, sino un atajo en la fila de
+    // herramientas de Orar: se busca el enlace.
+    await screen.findByRole('link', { name: /Regla de oración/i }, { timeout: 8000 });
     const enlace = screen
       .getAllByRole('link')
       .find((el) => el.getAttribute('href') === '/orar/regla');

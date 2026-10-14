@@ -25,6 +25,8 @@ export const routes: RouteObject[] = [
 
       /* ---------------- Orar ---------------- */
       { path: 'orar', lazy: page(() => import('@/features/pray/PrayHub'), 'PrayHub') },
+      { path: 'orar/formas', lazy: page(() => import('@/features/pray/PrayerWaysPage'), 'PrayerWaysPage') },
+      { path: 'orar/metanoias', lazy: page(() => import('@/features/pray/MetanoiasPage'), 'MetanoiasPage') },
       { path: 'orar/maitines', lazy: page(() => import('@/features/pray/MatinsPage'), 'MatinsPage') },
       { path: 'orar/oraciones', lazy: page(() => import('@/features/prayers/PrayersPage'), 'PrayersPage') },
       { path: 'orar/oraciones/todas', lazy: page(() => import('@/features/prayers/AllPrayersPage'), 'AllPrayersPage') },
@@ -62,6 +64,7 @@ export const routes: RouteObject[] = [
 
       /* ---------------- Biblioteca ---------------- */
       { path: 'biblioteca', lazy: page(() => import('@/features/library/LibraryHub'), 'LibraryHub') },
+      { path: 'biblioteca/templo', lazy: page(() => import('@/features/library/temple/TemplePage'), 'TemplePage') },
       { path: 'biblioteca/liturgia', lazy: page(() => import('@/features/library/OfficesPage'), 'OfficesPage') },
       { path: 'biblioteca/liturgia/:officeId', lazy: page(() => import('@/features/library/OfficePage'), 'OfficePage') },
       { path: 'biblioteca/akathistos', lazy: page(() => import('@/features/library/AkathistsPage'), 'AkathistsPage') },

@@ -154,6 +154,12 @@ export function PrayHub() {
         <Link className="shortcut" to="/orar/regla">
           <IconScroll size={16} /> {es.rule.title}
         </Link>
+        <Link className="shortcut" to="/orar/metanoias">
+          <IconCross size={16} /> {es.metanoia.title}
+        </Link>
+        <Link className="shortcut" to="/orar/formas">
+          <IconPray size={16} /> {es.pray.ways}
+        </Link>
         <Link className="shortcut" to="/orar/mis-oraciones">
           <IconEdit size={16} /> {es.office.myPrayers}
         </Link>

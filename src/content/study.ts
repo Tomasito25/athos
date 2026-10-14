@@ -13,6 +13,7 @@
  * dónde sale, y cuando algo se discute entre tradiciones, se dice también.
  */
 import type { SourceMeta } from '@/types';
+import { MORE_COURSES } from './study-more';
 
 export const STUDY_META: SourceMeta = {
   source: 'Exposición redactada para ATHOS a partir de la historia y la doctrina comúnmente recibidas',
@@ -58,7 +59,7 @@ export const STUDY_LEVELS: Record<StudyCourse['level'], string> = {
   hondo: 'De fondo',
 };
 
-export const STUDY_COURSES: StudyCourse[] = [
+const BASE_COURSES: StudyCourse[] = [
   /* ---------------------------------------------------------------- */
   {
     id: 'primeros-pasos',
@@ -456,6 +457,9 @@ export const STUDY_COURSES: StudyCourse[] = [
   },
 ];
 
+/** Los itinerarios, los primeros y los añadidos en la 1.30. */
+export const STUDY_COURSES: StudyCourse[] = [...BASE_COURSES, ...MORE_COURSES];
+
 /* ============================================================
    Obras
    ============================================================ */
@@ -524,7 +528,8 @@ export const STUDY_WORKS: StudyWork[] = [
     kind: 'liturgia',
     what: 'Los propios de la Cuaresma y de la Semana Santa el primero; los de Pascua a Pentecostés el segundo.',
     why: 'Contienen la poesía litúrgica más alta de la tradición: el Gran Canon, los oficios de la Pasión, el canon pascual.',
-    availability: 'ficha',
+    path: '/biblioteca/canones',
+    availability: 'parcial',
   },
   {
     id: 'menaion',
@@ -534,7 +539,8 @@ export const STUDY_WORKS: StudyWork[] = [
     kind: 'liturgia',
     what: 'Doce volúmenes, uno por mes, con los oficios propios de cada santo y cada fiesta del calendario fijo.',
     why: 'Es la memoria cantada de la Iglesia: casi todo lo que se sabe de muchos santos está ahí antes que en ningún libro de historia.',
-    availability: 'ficha',
+    path: '/calendario/santos',
+    availability: 'parcial',
   },
   {
     id: 'vida-antonio',
@@ -544,8 +550,8 @@ export const STUDY_WORKS: StudyWork[] = [
     kind: 'patristica',
     what: 'Biografía del padre de los monjes, escrita pocos años después de su muerte por quien lo conoció.',
     why: 'El libro que llevó el monacato a todo el Imperio. San Agustín cuenta en sus Confesiones que leerlo cambió su vida.',
-    path: '/biblioteca/padres/atanasio',
-    availability: 'ficha',
+    path: '/biblioteca/padres/atanasio/atanasio-vida-antonio',
+    availability: 'parcial',
   },
   {
     id: 'encarnacion-obra',
@@ -587,7 +593,8 @@ export const STUDY_WORKS: StudyWork[] = [
     kind: 'espiritualidad',
     what: 'Treinta peldaños de ascenso espiritual, uno por cada año oculto de Cristo.',
     why: 'Se lee entera en los monasterios cada Cuaresma. Su análisis de las pasiones es de una precisión que sorprende quince siglos después.',
-    availability: 'ficha',
+    path: '/biblioteca/padres/juan-climaco/climaco-escala',
+    availability: 'parcial',
   },
   {
     id: 'fe-ortodoxa',
@@ -597,8 +604,8 @@ export const STUDY_WORKS: StudyWork[] = [
     kind: 'patristica',
     what: 'La primera síntesis sistemática de la doctrina cristiana oriental.',
     why: 'Cierra la época patrística recogiéndola entera. Fue el manual de teología de Oriente durante siglos y también influyó en Occidente.',
-    path: '/biblioteca/padres/juan-damasceno',
-    availability: 'ficha',
+    path: '/biblioteca/padres/juan-damasceno/damasceno-fe-ortodoxa',
+    availability: 'parcial',
   },
   {
     id: 'triadas',
@@ -608,8 +615,8 @@ export const STUDY_WORKS: StudyWork[] = [
     kind: 'patristica',
     what: 'Defensa de los monjes athonitas frente a Barlaam, con la distinción entre esencia y energías divinas.',
     why: 'Es la última gran síntesis de la teología bizantina y el fundamento doctrinal de toda la espiritualidad hesicasta.',
-    path: '/biblioteca/padres/gregorio-palamas',
-    availability: 'ficha',
+    path: '/biblioteca/padres/gregorio-palamas/palamas-triadas',
+    availability: 'parcial',
   },
   {
     id: 'filocalia',
@@ -619,7 +626,8 @@ export const STUDY_WORKS: StudyWork[] = [
     kind: 'espiritualidad',
     what: 'Antología de treinta y seis autores sobre la oración y la guarda del corazón.',
     why: 'Reabrió la tradición hesicasta al mundo entero. Conviene leerla despacio y, a ser posible, acompañado.',
-    availability: 'ficha',
+    path: '/biblioteca/padres/nicodemo-hagiorita/nicodemo-filocalia',
+    availability: 'parcial',
   },
   {
     id: 'peregrino-ruso',
@@ -639,8 +647,8 @@ export const STUDY_WORKS: StudyWork[] = [
     kind: 'espiritualidad',
     what: 'Diario espiritual de un sacerdote de parroquia que celebraba la Liturgia a diario.',
     why: 'Muestra que la hondura no es cosa de monjes: está escrito desde el trabajo pastoral, entre pobres y enfermos.',
-    path: '/biblioteca/padres/juan-kronstadt',
-    availability: 'ficha',
+    path: '/biblioteca/padres/juan-kronstadt/kronstadt-mi-vida',
+    availability: 'parcial',
   },
   {
     id: 'silvano',

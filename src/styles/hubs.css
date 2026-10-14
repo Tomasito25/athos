@@ -1798,3 +1798,366 @@ body:has(.update-banner) .toast-region {
 .today-devotions .day-troparion {
   margin: 0;
 }
+
+/* ---------------- El templo ----------------
+   Dos dibujos de trazo fino, en los colores de la aplicación: se ven igual en
+   claro y en oscuro. La parte elegida se ilumina en oro. */
+.temple-layout {
+  display: grid;
+  gap: var(--sp-4);
+  margin-top: var(--sp-4);
+}
+
+@media (min-width: 52rem) {
+  .temple-layout {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: start;
+  }
+
+  .temple-detail {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 72rem) {
+  .temple-layout {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .temple-detail {
+    grid-column: auto;
+    position: sticky;
+    top: calc(var(--topbar-h) + var(--sp-4));
+  }
+}
+
+.temple-figure {
+  margin: 0;
+  padding: var(--sp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface-glow), var(--surface-raised);
+}
+
+.temple-figure figcaption {
+  margin-top: var(--sp-2);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+  text-align: center;
+}
+
+.temple-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 34rem;
+  font-family: var(--font-ui);
+}
+
+.temple-svg text {
+  font-size: 10px;
+  fill: var(--ink-soft);
+  pointer-events: none;
+}
+
+.temple-svg .temple-note {
+  font-size: 8.5px;
+  font-style: italic;
+  fill: var(--ink-muted);
+}
+
+.temple-svg .temple-label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  fill: var(--ink-muted);
+}
+
+.temple-svg .temple-vertical {
+  font-size: 8.5px;
+}
+
+.temple-shape {
+  fill: var(--surface-2);
+  stroke: var(--line-strong);
+  stroke-width: 1.2;
+  transition: fill var(--dur-fast) var(--ease), stroke var(--dur-fast) var(--ease);
+}
+
+.temple-shape--wall {
+  fill: var(--surface-sunken);
+}
+
+.temple-shape--icon {
+  fill: var(--surface);
+}
+
+.temple-shape--door {
+  fill: var(--surface);
+  stroke: var(--gold-soft);
+}
+
+.temple-shape--gold {
+  fill: var(--gold-wash);
+  stroke: var(--gold-soft);
+}
+
+.temple-shape--line {
+  fill: none;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke: var(--line-strong);
+}
+
+.temple-shape--dashed {
+  fill: none;
+  stroke-dasharray: 4 4;
+}
+
+.temple-zone {
+  cursor: pointer;
+  outline: none;
+}
+
+.temple-zone:hover .temple-shape {
+  stroke: var(--gold);
+}
+
+.temple-zone:focus-visible .temple-shape {
+  stroke: var(--gold);
+  stroke-width: 2.4;
+}
+
+.temple-zone--on .temple-shape {
+  fill: color-mix(in srgb, var(--gold) 28%, var(--surface));
+  stroke: var(--gold);
+  stroke-width: 2;
+}
+
+.temple-zone--on .temple-shape--line,
+.temple-zone--on .temple-shape--dashed {
+  fill: none;
+}
+
+.temple-zone--on text {
+  fill: var(--ink-strong);
+  font-weight: 600;
+}
+
+.temple-compass path {
+  fill: var(--gold);
+}
+
+.temple-compass text {
+  fill: var(--gold);
+  font-weight: 600;
+}
+
+.temple-detail {
+  padding: var(--sp-4);
+  border: 1px solid var(--gold-soft);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-gold);
+  line-height: 1.6;
+}
+
+.temple-detail__name {
+  font-family: var(--font-serif);
+  font-size: var(--text-xl);
+  font-weight: 500;
+  color: var(--ink-strong);
+}
+
+.temple-detail__other {
+  margin-bottom: var(--sp-2);
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--ink-muted);
+}
+
+.temple-detail p + p {
+  margin-top: var(--sp-2);
+}
+
+.temple-part + .temple-part {
+  margin-top: var(--sp-4);
+}
+
+.temple-part__other {
+  font-weight: 400;
+  font-style: italic;
+  color: var(--ink-muted);
+  font-size: 0.85em;
+}
+
+.temple-part,
+.temple-part h3 {
+  scroll-margin-top: calc(var(--topbar-h) + var(--sp-4));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .temple-shape {
+    transition: none;
+  }
+}
+
+.temple-svg .temple-label-bg {
+  fill: var(--surface);
+  stroke: var(--gold-soft);
+  stroke-width: 0.8;
+}
+
+/* ---------------- Metanoias ---------------- */
+.metanoia-today {
+  border-color: var(--gold-soft);
+}
+
+.metanoia-today--no {
+  border-color: var(--line);
+}
+
+.metanoia-diagram {
+  display: grid;
+  gap: var(--sp-4);
+  margin-top: var(--sp-4);
+}
+
+.metanoia {
+  margin: 0;
+  padding: var(--sp-3) var(--sp-4) var(--sp-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface-glow), var(--surface-raised);
+}
+
+.metanoia__title {
+  font-family: var(--font-serif);
+  font-size: var(--text-md);
+  color: var(--ink-strong);
+  margin-bottom: var(--sp-2);
+}
+
+.metanoia__row {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: var(--sp-2);
+}
+
+.metanoia__step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+  text-align: center;
+}
+
+.metanoia__svg {
+  width: 100%;
+  max-width: 7rem;
+  height: auto;
+  fill: none;
+  stroke: var(--ink-soft);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.metanoia__svg circle {
+  fill: var(--surface);
+}
+
+.metanoia__ground {
+  stroke: var(--line-strong);
+  stroke-width: 2;
+}
+
+.metanoia__accent {
+  stroke: var(--gold);
+  stroke-width: 2.5;
+}
+
+.metanoia__label {
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+  line-height: 1.3;
+}
+
+.metanoia-counter {
+  display: grid;
+  place-items: center;
+  gap: var(--sp-1);
+  width: 100%;
+  margin-top: var(--sp-4);
+  padding: var(--sp-6) var(--sp-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface-sunken);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.metanoia-counter--done {
+  border-color: var(--gold);
+  background: var(--gold-wash);
+}
+
+.metanoia-counter__formula {
+  font-family: var(--font-serif);
+  font-size: var(--text-md);
+  text-align: center;
+  color: var(--ink-strong);
+}
+
+.metanoia-counter__count {
+  font-family: var(--font-serif);
+  font-size: 3rem;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-strong);
+}
+
+/* ---------------- Formas de rezar ---------------- */
+.ways-index {
+  display: grid;
+  gap: var(--sp-2);
+  margin: var(--sp-4) 0;
+}
+
+@media (min-width: 40rem) {
+  .ways-index {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.ways-index__item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: inherit;
+  text-decoration: none;
+}
+
+.ways-index__item:hover {
+  border-color: var(--gold-soft);
+}
+
+.ways-index__title {
+  font-family: var(--font-serif);
+  font-size: var(--text-md);
+  color: var(--ink-strong);
+}
+
+.ways-index__lead {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}

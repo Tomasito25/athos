@@ -20,6 +20,8 @@ import { HISTORY_PERIODS } from '@/content/history-all';
 import { CATECHISM_PARTS } from '@/content/catechism-parts';
 import { STUDY_COURSES, STUDY_WORKS } from '@/content/study';
 import { LINK_ALIASES, LINK_TARGETS, linkify, otraFicha } from '@/content/links';
+import { PRAYER_ORDERS } from '@/content/prayer-orders';
+import { TEMPLE_PARTS } from '@/content/temple';
 
 /** Todas las rutas que el contenido declara, sacadas del código fuente. */
 function rutasDeclaradas(): Array<{ archivo: string; ruta: string }> {
@@ -51,6 +53,7 @@ const EXISTE: Record<string, Set<string>> = {
   '/biblioteca/catecismo/': new Set(CATECHISM_PARTS.map((p) => p.id)),
   '/biblioteca/estudio/obra/': new Set(STUDY_WORKS.map((w) => w.id)),
   '/biblioteca/estudio/': new Set(STUDY_COURSES.map((c) => c.id)),
+  '/orar/oraciones/orden/': new Set(PRAYER_ORDERS.map((o) => o.id)),
 };
 
 /** Rutas sin parámetro: existen por sí mismas. */
@@ -79,6 +82,11 @@ const FIJAS = new Set([
   '/biblioteca/historia',
   '/biblioteca/catecismo',
   '/biblioteca/estudio',
+  '/biblioteca/templo',
+  '/orar/metanoias',
+  '/orar/formas',
+  '/orar/maitines',
+  '/leer/planes',
   '/favoritos',
 ]);
 
@@ -96,6 +104,9 @@ function esOficio(ruta: string): boolean {
 
 function existe(ruta: string): boolean {
   const limpia = ruta.split('#')[0].split('?')[0];
+  // En el templo, el ancla es una de sus partes.
+  const ancla = ruta.split('#')[1];
+  if (limpia === '/biblioteca/templo' && ancla) return TEMPLE_PARTS.some((p) => p.id === ancla);
   if (FIJAS.has(limpia)) return true;
   if (esObraDeUnPadre(limpia) || esOficio(limpia)) return true;
   // El prefijo más largo que case manda: /biblioteca/athos/monasterio/ antes

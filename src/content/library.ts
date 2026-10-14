@@ -16,6 +16,7 @@ import { ICONS } from './icons';
 import { OFFICES } from './offices';
 import { STUDY_COURSES, STUDY_WORKS } from './study';
 import { GLOSSARY } from './glossary';
+import { TEMPLE_PARTS } from './temple';
 import es from '@/locales/es';
 
 export interface LibrarySection {
@@ -85,6 +86,15 @@ export const LIBRARY_GROUPS: LibraryGroup[] = [
         text: 'Itinerarios con lecciones breves para leer despacio, y el catálogo de las obras que forman la tradición con lo que ATHOS tiene de cada una.',
         count: STUDY_COURSES.length + STUDY_WORKS.length,
         unit: 'lecciones y obras',
+      },
+      {
+        id: 'templo',
+        to: '/biblioteca/templo',
+        icon: 'church',
+        title: es.temple.title,
+        text: 'Las partes de una iglesia ortodoxa, de la puerta al altar, con dos dibujos que se pueden tocar: la planta y el iconostasio. Qué es cada cosa, para qué sirve y qué significa.',
+        count: TEMPLE_PARTS.length,
+        unit: 'partes',
       },
       {
         id: 'glosario',

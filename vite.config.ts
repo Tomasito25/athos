@@ -24,10 +24,18 @@ const base = process.env.ATHOS_BASE || '/';
  *
  * Las etiquetas Open Graph necesitan una dirección absoluta: una relativa como
  * `icons/og-image.png` no la resuelve ningún servicio que enseñe el enlace. Con
- * ATHOS_URL=https://usuario.github.io se reescriben a absolutas; sin ella se
+ * ATHOS_URL=https://usuario.github.io (el origen; la subcarpeta la pone
+ * ATHOS_BASE) se reescriben a absolutas; sin ella se
  * quedan como están, que es lo correcto mientras no se sepa el dominio.
  */
-const siteUrl = (process.env.ATHOS_URL || '').replace(/\/+$/, '');
+const siteUrl = (() => {
+  const url = (process.env.ATHOS_URL || '').replace(/\/+$/, '');
+  // Es el origen, sin la subcarpeta. Si alguien la pone
+  // (https://usuario.github.io/athos), se quita: si no, la imagen de vista
+  // previa saldría en /athos/athos/.
+  const carpeta = base.replace(/\/+$/, '');
+  return carpeta && url.endsWith(carpeta) ? url.slice(0, -carpeta.length) : url;
+})();
 
 /**
  * Patrón para las reglas de caché en tiempo de ejecución: lo que cuelga de
@@ -243,7 +251,7 @@ export default defineConfig({
         // Capturas reales de la aplicación, tomadas con scripts/screenshots.
         // Chrome las usa para la ficha de instalación enriquecida.
         screenshots: [
-          { src: 'icons/screenshot-mobile.png', sizes: '540x1170', type: 'image/png', form_factor: 'narrow', label: 'El oficio que toca a esta hora, el santo del día y el ayuno' },
+          { src: 'icons/screenshot-mobile.png', sizes: '540x1170', type: 'image/png', form_factor: 'narrow', label: 'El día litúrgico, el oficio que toca a esta hora y el versículo del día' },
           { src: 'icons/screenshot-mobile-2.png', sizes: '540x1170', type: 'image/png', form_factor: 'narrow', label: 'El oficio de la mañana, con las fórmulas en griego' },
           { src: 'icons/screenshot-desktop.png', sizes: '1280x800', type: 'image/png', form_factor: 'wide', label: 'ATHOS en escritorio' },
           { src: 'icons/screenshot-desktop-2.png', sizes: '1280x800', type: 'image/png', form_factor: 'wide', label: 'El calendario litúrgico' },

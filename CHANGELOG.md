@@ -2,6 +2,78 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.31.0]
+
+### Añadido
+
+- **Las Iglesias ortodoxas hoy**: una ficha por Iglesia —las catorce
+  autocéfalas que todas reconocen y la OCA, Ucrania y Ohrid— con quién la
+  preside y cuándo se comprobó, la sede, la autocefalia, los fieles, el
+  calendario, las lenguas, las Iglesias autónomas y las diócesis en España y
+  América Latina; y las disputas abiertas, contadas como disputas. Con un
+  mapa: tocando una sede se baja a su ficha.
+- **Mapas sobre la costa de verdad**, sin conexión: Tierra Santa con veinte
+  lugares del Evangelio y de los Hechos enlazados a sus pasajes, los cuatro
+  viajes de san Pablo, y las siete Iglesias del Apocalipsis con las ciudades
+  de los Concilios Ecuménicos. Los mapas de los patriarcados también tienen
+  ya la costa real.
+- **Las Horas de Pascua**, que sustituyen a las Horas y a las Completas en
+  la Semana Luminosa (esos días el oficio lo avisa), y **las Típicas**, lo
+  que se reza cuando no hay Liturgia.
+- **Nombres para la oración**: los vivos y los difuntos que encomiendas, en
+  su sitio en la conmemoración y en la panihida, con aviso el día del santo
+  de cada nombre.
+- **Al calendario del teléfono**: los recordatorios de oración, las fiestas
+  y los ayunos del año en un archivo `.ics`, que avisa aunque ATHOS esté
+  cerrada.
+- **Compartir y leer en voz alta** lo que se está leyendo, con la voz del
+  propio dispositivo.
+- **La pantalla no se apaga** mientras se reza un oficio, la Liturgia, un
+  akathistos o un canon (se puede quitar).
+- **Tres preguntas al empezar**: el calendario de tu parroquia, la
+  tradición griega o eslava y cuánto tiempo hay para los oficios.
+- **Recordatorio de copia de seguridad** una vez al mes, si hay algo que
+  perder.
+- **Política de privacidad** dentro de la aplicación y en una página fija,
+  y en «Acerca de» enlaces al código, a los errores y para informar de uno.
+- «Perdona, Señor, a los que nos odian», del final de las Completas
+  eslavas, en el momento «Por los enemigos».
+
+### Cambiado
+
+- **Arranque más ligero**: lo que se descarga y analiza al abrir pasa de
+  2,6 MB a 0,7 MB, y el precaché de 5 MB a 3 MB; el resto del corpus llega
+  después, en segundo plano, y se abre igual sin conexión.
+- **El buscador** reconoce citas («Juan 3, 16»), pone primero la frase
+  exacta y enseña el trozo donde coincide. Las citas bajan hasta el
+  versículo y lo señalan.
+- **Un solo contador** para la oración de Jesús y el komboskini, con dos
+  vistas.
+- La pestaña de un capítulo dice el libro («Génesis 3»).
+- Notificaciones dice sin rodeos cuándo no llegan con ATHOS cerrada.
+- La guía de lo que falta antes de publicar está en
+  `docs/ANTES-DE-PUBLICAR.md`, y la procedencia de cada texto español, en
+  `docs/PROCEDENCIA.md`.
+
+### Corregido
+
+- El favicon, el icono de iPhone y las pantallas de arranque daban 404 en
+  las páginas interiores.
+- La vista previa de los enlaces salía sin imagen en WhatsApp y Telegram.
+- Las correcciones de la Biblia no llegaban a quien ya la tenía guardada.
+- Las fuentes, los libros y los iconos grandes no se guardaban nunca para
+  usarlos sin conexión: el icono grande salía roto.
+- Si otra ventana actualizaba ATHOS, ésta fallaba con «Algo ha salido mal».
+  Ahora se recarga sola.
+- «Acerca de», el README y el NOTICE decían cosas que ya no eran verdad, y
+  el selector de idiomas ofrecía siete que no funcionaban: se ha quitado.
+- En el mapa de hoy faltaban Albania, Polonia, Chequia y Eslovaquia y la
+  OCA, y la línea del tiempo se quedaba en 2025.
+- A las santas sin tropario propio se les cantaba el general masculino, y a
+  los mártires en grupo, el de uno solo.
+- La acción de gracias después de la cena tenía sólo la bendición final.
+- La copia de seguridad no guardaba el avance de los planes de lectura.
+
 ## [1.30.0]
 
 ### Añadido

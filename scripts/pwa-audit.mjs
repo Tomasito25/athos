@@ -121,7 +121,8 @@ await send('Network.emulateNetworkConditions',{offline:true,latency:0,downloadTh
 for (const ruta of ['/', '/orar/oraciones', '/leer/salterio/50', '/calendario',
   // Pantallas cuyo texto no va en el precaché, sino en el corpus diferido.
   '/biblioteca/catecismo', '/biblioteca/liturgia/liturgia-crisostomo',
-  '/biblioteca/akathistos/akathistos-theotokos', '/biblioteca/historia', '/calendario/santos/basilio-magno']) {
+  '/biblioteca/akathistos/akathistos-theotokos', '/biblioteca/historia', '/calendario/santos/basilio-magno',
+  '/biblioteca/mapas', '/biblioteca/liturgia/horas-de-pascua']) {
   await send('Page.navigate',{url:BASE+ruta});
   await new Promise(r=>setTimeout(r,3200));
   const txt = await ev(`(document.querySelector('main')?.innerText||'')`);

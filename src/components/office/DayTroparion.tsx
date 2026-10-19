@@ -42,7 +42,7 @@ export default function DayTroparion() {
             Pascua—.
           </p>
           <p>
-            <Link to="/orar/oraciones/cristo-ha-resucitado">Cristo ha resucitado</Link>
+            <Link to="/biblioteca/liturgia/horas-de-pascua">Rezar las Horas de Pascua</Link>
           </p>
         </div>
       ) : result.kind === 'cuaresma' ? (

@@ -6,4 +6,4 @@
  * el corpus entero: en un arranque normal no hay que sembrar nada, y antes se
  * descargaban y analizaban dos megas de texto sólo para saberlo.
  */
-export const CONTENT_VERSION = 24;
+export const CONTENT_VERSION = 25;

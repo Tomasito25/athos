@@ -345,6 +345,8 @@ const es = {
     extrasAkathist: 'El akathistos de hoy',
     extrasAkathistHint: 'Plegado, en el oficio de la noche habitual y extenso: el que toca según el día de la semana o la fiesta.',
     screen: 'Pantalla',
+    brightWeek: 'Es la Semana Luminosa. Estos siete días, en lugar de las Horas y de las Completas se cantan las Horas de Pascua, y en el uso eslavo también en lugar de las oraciones de la mañana y de la noche.',
+    brightWeekLink: 'Rezar las Horas de Pascua',
     keepAwake: 'Mantener la pantalla encendida',
     keepAwakeHint: 'Mientras se reza un oficio, la Liturgia, un akathisto o un canon, la pantalla no se apaga sola.',
     source: 'Fuente:',

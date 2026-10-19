@@ -31,7 +31,7 @@ import {
   ruleItems,
   uncompleteRule,
 } from '@/db/user';
-import { useToday } from '@/hooks/useLiturgicalDay';
+import { useLiturgicalDay, useToday } from '@/hooks/useLiturgicalDay';
 import { useKeepAwake } from '@/hooks/useKeepAwake';
 import {
   Blocks,
@@ -39,6 +39,7 @@ import {
   ButtonLink,
   Empty,
   Loading,
+  Notice,
   Panel,
   ProgressBlocks,
   Segmented,
@@ -58,6 +59,9 @@ export function OfficePage() {
   const { time = 'manana' } = useParams<{ time: RuleTime }>();
   const today = useToday();
   const definicion = OFFICE_BY_TIME.get(time as RuleTime);
+  const dia = useLiturgicalDay(today);
+  // En la Semana Luminosa no se rezan las Horas ni las Completas, sino las de Pascua.
+  const luminosa = dia.paschaOffset >= 0 && dia.paschaOffset <= 6;
 
   const medidas = useSettings((s) => s.officeLength);
   const extras = useSettings((s) => s.officeExtras);
@@ -138,6 +142,13 @@ export function OfficePage() {
           {regla.data.name}
         </h1>
         {definicion ? <p className="muted">{definicion.subtitle}</p> : null}
+
+        {luminosa ? (
+          <Notice>
+            {es.office.brightWeek}{' '}
+            <Link to="/biblioteca/liturgia/horas-de-pascua">{es.office.brightWeekLink}</Link>
+          </Notice>
+        ) : null}
 
         <div className="office-length">
           <Segmented

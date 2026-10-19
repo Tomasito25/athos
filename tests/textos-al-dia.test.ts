@@ -76,6 +76,19 @@ describe('NOTICE', () => {
   });
 });
 
+describe('antes de publicar', () => {
+  it('las cifras de la procedencia son las de la tabla generada', () => {
+    const tabla = leer('docs/PROCEDENCIA.md');
+    const guia = leer('docs/ANTES-DE-PUBLICAR.md');
+    const cuenta = (clase: string) => tabla.match(new RegExp(`\\| ${clase} \\| (\\d+) \\|`))?.[1];
+    expect(guia).toContain(`lista los ${tabla.match(/\*\*Total\*\* \| \*\*(\d+)\*\*/)?.[1]} textos`);
+    expect(guia).toContain(`Traducción de ATHOS (${cuenta('Traducción de ATHOS')})`);
+    expect(guia).toContain(`Tradicional sin verificar** (${cuenta('\\*\\*Tradicional sin verificar\\*\\*')})`);
+    expect(guia).toContain(`Redactada para ATHOS (${cuenta('Redactada para ATHOS')})`);
+    expect(guia).toContain(`Dominio público (${cuenta('Dominio público')})`);
+  });
+});
+
 describe('idiomas', () => {
   it('no se ofrece un selector de idiomas que no funcionan', () => {
     expect(leer('src/features/settings/SettingsPage.tsx')).not.toMatch(/pendiente de traducir|SUPPORTED_LANGUAGES/);

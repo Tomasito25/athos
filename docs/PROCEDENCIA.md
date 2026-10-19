@@ -14,13 +14,13 @@ del original.
 
 | Versión española | Textos |
 | --- | --- |
-| Traducción de ATHOS | 100 |
+| Traducción de ATHOS | 102 |
 | **Tradicional sin verificar** | 37 |
 | Redactada para ATHOS | 36 |
 | Dominio público | 21 |
-| **Total** | **194** |
+| **Total** | **196** |
 
-Revisados: 0 de 194.
+Revisados: 0 de 196.
 
 Las vidas de santos, el catecismo, los cursos, la historia y los artículos del
 Monte Athos son textos **redactados para ATHOS** (CC BY-SA 4.0) y no están en
@@ -200,7 +200,7 @@ esta tabla; su revisión es teológica, no de derechos.
 | `kronstadt-tu-nombre` | Señor, tu nombre es Amor | Traducción de ATHOS | Oración de cada día atribuida a san Juan de Kronstadt († 1908), según los libros de oraciones rusos. Traducción al español hecha para ATHOS a partir del original ruso, que es de dominio público | pendiente |
 | `ioasaf-cada-hora` | Bendito sea el día y la hora | Traducción de ATHOS | Oración de san Joasaf de Bélgorod, según los libros de oraciones rusos. Traducción al español hecha para ATHOS a partir del original eslavo, que es de dominio público | pendiente |
 
-## Oficios y Divina Liturgia (15)
+## Oficios y Divina Liturgia (17)
 
 | Id | Título | Versión española | Fuente declarada | Revisado |
 | --- | --- | --- | --- | --- |
@@ -213,6 +213,8 @@ esta tabla; su revisión es teológica, no de derechos.
 | `completas` | Completas | Traducción de ATHOS | Ieratikón y Horologion bizantinos; textos de uso tradicional | pendiente |
 | `medianoche` | Oficio de Medianoche | Traducción de ATHOS | Ieratikón y Horologion bizantinos; textos de uso tradicional | pendiente |
 | `horas` | Las Horas | Traducción de ATHOS | Ieratikón y Horologion bizantinos; textos de uso tradicional | pendiente |
+| `horas-de-pascua` | Las Horas de Pascua | Traducción de ATHOS | Ieratikón y Horologion bizantinos; textos de uso tradicional | pendiente |
+| `tipica` | Las Típicas | Traducción de ATHOS | Ieratikón y Horologion bizantinos; textos de uso tradicional | pendiente |
 | `moleben` | Moleben | Traducción de ATHOS | Ieratikón y Horologion bizantinos; textos de uso tradicional | pendiente |
 | `paraclesis` | Paráclesis a la Theotokos | Traducción de ATHOS | Ieratikón y Horologion bizantinos; textos de uso tradicional | pendiente |
 | `hora-primera` | Hora Primera | Dominio público | Horologion bizantino. El reparto de los salmos y el orden de las partes son datos documentados; los troparios, theotokia y oraciones finales van traducidos al español para ATHOS a partir del original griego, que es de dominio público | pendiente |

@@ -183,3 +183,40 @@ describe('la procedencia de los textos', () => {
     }
   });
 });
+
+describe('las Horas de Pascua y las Típicas', () => {
+  const oficio = (id: string) => OFFICES.find((o) => o.id === id)!;
+  const textos = (id: string) => oficio(id).sections.flatMap((s) => s.blocks);
+
+  it('las Horas de Pascua empiezan y siguen como dice el Pentecostarion', () => {
+    const o = oficio('horas-de-pascua');
+    expect(o.status).toBe('complete');
+    expect(o.about).toBeTruthy();
+    const bloques = textos('horas-de-pascua');
+    const tropario = bloques.find((b) => b.content.startsWith('Cristo ha resucitado'));
+    expect(tropario?.times).toBe(3);
+    expect(tropario?.greek).toMatch(/^Χριστὸς ἀνέστη/);
+    expect(bloques.find((b) => b.content.startsWith('Habiendo contemplado'))?.times).toBe(3);
+    expect(bloques.some((b) => b.content.startsWith('Adelantándose a la aurora'))).toBe(true);
+    expect(bloques.find((b) => b.content === 'Señor, ten piedad.')?.times).toBe(40);
+    // Sin salmos ni Trisagio: la semana de Pascua se canta.
+    expect(bloques.some((b) => b.kind === 'psalm')).toBe(false);
+    expect(bloques.some((b) => b.content.startsWith('Santo Dios'))).toBe(false);
+  });
+
+  it('las Típicas llevan los salmos típicos, las Bienaventuranzas y el salmo 33', () => {
+    const o = oficio('tipica');
+    expect(o.status).toBe('complete');
+    const bloques = textos('tipica');
+    expect(bloques.filter((b) => b.kind === 'psalm').map((b) => b.ref)).toEqual(['102', '145', '33']);
+    expect(bloques.filter((b) => b.content.startsWith('Bienaventurados'))).toHaveLength(9);
+    expect(bloques.filter((b) => b.content.startsWith('Acuérdate de nosotros'))).toHaveLength(3);
+    expect(bloques.some((b) => b.kind === 'day-kontakion')).toBe(true);
+  });
+
+  it('la Hora del día, en la Semana Luminosa, lleva a las Horas de Pascua', async () => {
+    const { readFileSync } = await import('node:fs');
+    const aviso = readFileSync('src/components/office/DayTroparion.tsx', 'utf-8');
+    expect(aviso).toContain('/biblioteca/liturgia/horas-de-pascua');
+  });
+});

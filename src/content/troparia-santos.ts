@@ -68,6 +68,8 @@ const ESPIRIDON = tropario(
 
 const CIRILO_METODIO = tropario('Tropario de los santos Cirilo y Metodio', 'Tono 4', 'Como iguales en costumbres a los apóstoles y maestros de los pueblos eslavos, Cirilo y Metodio, sabios en Dios, interceded ante el Soberano de todos para que confirme a todas las naciones eslavas en la ortodoxia y la concordia, pacifique al mundo y salve nuestras almas.');
 
+const NICOLAS = tropario('Tropario de san Nicolás', 'Tono 4', 'Regla de fe, imagen de mansedumbre y maestro de templanza te mostró a tu rebaño la verdad de las cosas. Por eso alcanzaste por la humildad lo alto y por la pobreza lo rico. Padre y jerarca Nicolás, intercede ante Cristo Dios para que salve nuestras almas.');
+
 /** Los del Menaion, santo a santo (véase `himnos-menaion.ts`). */
 const DEL_MENAION: Record<string, ProperTroparion> = Object.fromEntries(
   Object.entries(MENAION_HYMNS)
@@ -86,7 +88,9 @@ export const SAINT_PROPER_TROPARIA: Record<string, ProperTroparion> = {
   'gregorio-teologo': tropario('Tropario de san Gregorio el Teólogo', 'Tono 1', 'El caramillo pastoral de tu teología venció las trompetas de los retóricos; pues, como quien escudriñó las profundidades del Espíritu, también te fue añadida la belleza de la palabra. Intercede ante Cristo Dios, padre Gregorio, para que salve nuestras almas.'),
   'tres-jerarcas': tropario('Tropario de los Tres Jerarcas', 'Tono 1', 'Honremos, reunidos, a los tres grandes luminares de la Divinidad trisolar, que iluminaron el orbe con los rayos de las enseñanzas divinas; ríos de sabiduría que manan miel y que regaron toda la creación con las corrientes del conocimiento de Dios: Basilio el Grande, Gregorio el Teólogo y el ilustre Juan de palabra de oro. Todos los que amamos sus palabras, honrémoslos con himnos, porque ellos interceden sin cesar ante la Trinidad por nosotros.'),
   'juan-crisostomo': tropario('Tropario de san Juan Crisóstomo', 'Tono 8', 'La gracia de tu boca, que resplandeció como una antorcha, iluminó el orbe; depositó en el mundo tesoros de desprendimiento y nos mostró la altura de la humildad. Tú que nos educas con tus palabras, padre Juan Crisóstomo, intercede ante el Verbo, Cristo Dios, para que salve nuestras almas.'),
-  'nicolas-mira-dic': tropario('Tropario de san Nicolás', 'Tono 4', 'Regla de fe, imagen de mansedumbre y maestro de templanza te mostró a tu rebaño la verdad de las cosas. Por eso alcanzaste por la humildad lo alto y por la pobreza lo rico. Padre y jerarca Nicolás, intercede ante Cristo Dios para que salve nuestras almas.'),
+  'nicolas-mira-dic': NICOLAS,
+  // En el Menaion griego, el traslado de sus reliquias canta el mismo.
+  'nicolas-traslacion': NICOLAS,
   'jorge-trofeoforo': tropario('Tropario de san Jorge', 'Tono 4', 'Como libertador de los cautivos y defensor de los pobres, médico de los enfermos y campeón de los reyes, gran mártir Jorge portador de trofeos, intercede ante Cristo Dios para que salve nuestras almas.'),
   'demetrio-s': tropario('Tropario de san Demetrio', 'Tono 3', 'Gran defensor en los peligros te encontró el orbe, oh vencedor de las naciones. Así como abatiste la arrogancia de Lieo y diste valor a Néstor en el estadio, así, santo Demetrio, intercede ante Cristo Dios para que nos conceda la gran misericordia.'),
   'gregorio-palamas': PALAMAS,

@@ -10,6 +10,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { SAINTS } from '@/content/santoral';
+import type { SaintCategory } from '@/types';
 import {
   GENERAL_TROPARIA,
   GENERAL_TROPARION_META,
@@ -121,6 +122,36 @@ describe('honradez', () => {
       const texto = g.blocks.map((b) => b.content).join(' ');
       const nombraOEsSalmo = /\(nombre\)/.test(texto) || g.category === 'justo';
       expect(nombraOEsSalmo, `${g.name}: sin hueco para el nombre`).toBe(true);
+    }
+  });
+});
+
+describe('el general de una santa y el de varios', () => {
+  const texto = (cats: SaintCategory[], nombre: string) =>
+    generalTroparionFor(cats, 'sin-propio', nombre)!.blocks.map((b) => b.content).join(' ');
+
+  it('a una mártir no se le canta en masculino', () => {
+    expect(texto(['martir'], 'Santa Marina de Antioquía')).toMatch(/^Tu cordera/);
+    expect(texto(['granmartir'], 'Santa Bárbara')).toMatch(/^Tu cordera/);
+    expect(texto(['martir'], 'San Basilio de Ancira')).toMatch(/^Tu mártir/);
+  });
+
+  it('a una monja, el suyo', () => {
+    expect(texto(['monje'], 'Santa María Egipcíaca')).toMatch(/^En ti, madre/);
+    expect(texto(['monje'], 'San Serafín de Sarov')).toMatch(/^Con el torrente/);
+  });
+
+  it('a varios mártires, en plural; y una monja mártir se canta como mártir', () => {
+    expect(texto(['martir'], 'Santas Agapia, Irene y Quionia')).toMatch(/^Tus mártires/);
+    expect(texto(['monje', 'martir'], 'Los Padres muertos en el monasterio de San Sabas')).toMatch(/^Tus mártires/);
+    expect(texto(['monje', 'martir'], 'Santa Teodosia de Constantinopla')).toMatch(/^Tu cordera/);
+  });
+
+  it('ninguna santa del santoral recibe el general masculino', () => {
+    for (const s of SAINTS.filter((x) => /^Santa /.test(x.name))) {
+      const tr = generalTroparionFor(s.category, s.id, s.name);
+      if (!tr || tr.own) continue;
+      expect(tr.blocks[0]!.content, s.name).not.toMatch(/^Tu mártir|^Con el torrente/);
     }
   });
 });

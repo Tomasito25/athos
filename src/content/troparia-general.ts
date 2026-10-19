@@ -84,7 +84,6 @@ const GENERALES: Partial<Record<SaintCategory, General>> = {
     tone: 'Tono 4',
     blocks: [
       t('Tu mártir <em>(nombre)</em>, oh Señor, ha recibido de Ti, nuestro Dios, la corona incorruptible por el combate que sostuvo. Porque, teniendo tu fuerza, derribó a los tiranos y quebró el débil atrevimiento de los demonios. Por sus súplicas, oh Cristo Dios, salva nuestras almas.'),
-      rub('Para una mártir se dice: «Tu cordera <em>(nombre)</em>, oh Jesús, clama con voz grande: A Ti, mi Esposo, te amo, y buscándote combato».'),
     ],
   },
   neomartir: {
@@ -242,6 +241,54 @@ const FIESTAS: Record<string, General> = {
   },
 };
 
+/**
+ * Los generales de una santa.
+ *
+ * El Horologion no le canta a una mártir «tu mártir, que sostuvo el
+ * combate», sino el suyo: «Tu cordera, oh Jesús, clama con gran voz». Y a
+ * una monja, «En ti, madre, se guardó la imagen». Hasta la versión 1.31,
+ * ATHOS les ponía el masculino.
+ */
+const MARTIR_MUJER: General = {
+  name: 'Tropario general de una mártir',
+  tone: 'Tono 4',
+  blocks: [
+    t('Tu cordera <em>(nombre)</em>, oh Jesús, clama con gran voz: «A Ti, Esposo mío, te deseo, y buscándote combato; contigo soy crucificada y sepultada en tu bautismo; padezco por Ti para reinar contigo, y muero por Ti para vivir en Ti. Recíbeme como sacrificio sin mancha, inmolada a Ti con amor». Por sus súplicas, Tú que eres misericordioso, salva nuestras almas.'),
+  ],
+};
+
+const GENERALES_MUJER: Partial<Record<SaintCategory, General>> = {
+  martir: MARTIR_MUJER,
+  granmartir: MARTIR_MUJER,
+  neomartir: MARTIR_MUJER,
+  monje: {
+    name: 'Tropario general de una monja',
+    tone: 'Tono 8',
+    blocks: [
+      t('En ti, madre, se guardó fielmente la imagen de Dios: porque tomaste la cruz y seguiste a Cristo, y con tus obras enseñaste a despreciar la carne, que pasa, y a cuidar del alma, que es inmortal. Por eso tu espíritu, venerable <em>(nombre)</em>, se alegra con los ángeles.'),
+    ],
+  },
+};
+
+/** Y el de varios mártires juntos, que es el mismo en plural. */
+const MARTIRES: General = {
+  name: 'Tropario general de varios mártires',
+  tone: 'Tono 4',
+  blocks: [
+    t('Tus mártires, oh Señor, han recibido de Ti, nuestro Dios, en su combate, las coronas incorruptibles. Porque, teniendo tu fuerza, derribaron a los tiranos y quebraron el débil atrevimiento de los demonios. Por sus súplicas, oh Cristo Dios, salva nuestras almas.'),
+  ],
+};
+
+const GENERALES_VARIOS: Partial<Record<SaintCategory, General>> = {
+  martir: MARTIRES,
+  granmartir: MARTIRES,
+  neomartir: MARTIRES,
+};
+
+/** «Santa Bárbara», «Santas Agapia, Irene y Quionia», «Los Padres de San Sabas». */
+const esDeMujer = (nombre: string) => /^Santas? /.test(nombre);
+const sonVarios = (nombre: string) => /^(Santos|Santas|Los|Las) /.test(nombre);
+
 export interface GeneralTroparion extends General {
   /** Qué rango se ha usado, para poder decirlo en la ficha. */
   category: SaintCategory;
@@ -262,6 +309,8 @@ export interface GeneralTroparion extends General {
 export function generalTroparionFor(
   categories: SaintCategory[],
   saintId?: string,
+  /** El nombre, para elegir el general de una santa o el de varios. */
+  saintName = '',
 ): GeneralTroparion | null {
   // Una gran fiesta no tiene general: tiene el suyo, y es el que se canta.
   // Primero la fiesta; después, el propio del santo si ATHOS lo tiene. Sólo
@@ -273,8 +322,12 @@ export function generalTroparionFor(
     return { ...propio, category: categories[0] ?? 'justo', own: true };
   }
   for (const rango of ORDEN) {
-    if (categories.includes(rango) && GENERALES[rango]) {
-      return { ...GENERALES[rango]!, category: rango };
+    const general =
+      (sonVarios(saintName) ? GENERALES_VARIOS[rango] : undefined) ??
+      (esDeMujer(saintName) ? GENERALES_MUJER[rango] : undefined) ??
+      GENERALES[rango];
+    if (categories.includes(rango) && general) {
+      return { ...general, category: rango };
     }
   }
   return null;
@@ -303,7 +356,8 @@ export const GENERAL_TROPARIA = ORDEN.filter((c) => GENERALES[c]).map((c) => ({
 
 export const GENERAL_TROPARION_NOTE =
   'Cuando un santo no tiene su tropario propio incorporado, ATHOS muestra el tropario general de ' +
-  'su rango, que es lo que la Iglesia canta en ese caso: hay uno para los mártires, otro para los ' +
-  'jerarcas, otro para los monjes. No es un sustituto inventado, es lo prescrito en el Horologion. ' +
+  'su rango, que es lo que la Iglesia canta en ese caso: hay uno para un mártir y otro para una ' +
+  'mártir, uno para varios mártires, otro para los jerarcas, otro para un monje y otro para una ' +
+  'monja. No es un sustituto inventado, es lo prescrito en el Horologion. ' +
   'El nombre del santo se dice en el lugar marcado. La versión española es una traducción hecha ' +
   'para ATHOS a partir del original griego, que es de dominio público.';

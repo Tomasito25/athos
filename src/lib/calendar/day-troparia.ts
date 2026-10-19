@@ -61,7 +61,7 @@ function deLosSantos(day: LiturgicalDay): DayTroparionItem[] {
       Number(ES_FIESTA_DEL_SENOR_O_THEOTOKOS(a.category)),
   );
   for (const saint of ordenados) {
-    const tr = generalTroparionFor(saint.category, saint.id);
+    const tr = generalTroparionFor(saint.category, saint.id, saint.name);
     if (!tr) continue;
     const fiesta = tr.own && ES_FIESTA_DEL_SENOR_O_THEOTOKOS(saint.category);
     items.push({
@@ -93,7 +93,7 @@ function deLasFiestasMoviles(day: LiturgicalDay): DayTroparionItem[] {
     }
     const santoId = MOVABLE_SAINT_OF[feast.id];
     const santo = santoId ? SAINT_INDEX.find((s) => s.id === santoId) : undefined;
-    const tr = santo ? generalTroparionFor(santo.category, santo.id) : null;
+    const tr = santo ? generalTroparionFor(santo.category, santo.id, santo.name) : null;
     if (santo && tr) {
       items.push({
         occasion: feast.name,

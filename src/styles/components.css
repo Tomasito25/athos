@@ -2557,3 +2557,57 @@ input[type='range']:focus-visible::-webkit-slider-thumb {
   margin: 0;
   color: var(--ink-muted);
 }
+
+/* ---------- Mapas con la costa de verdad ---------- */
+
+.mapa-real {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-sunken);
+}
+
+.mapa-real__mar {
+  fill: color-mix(in srgb, var(--surface-sunken) 55%, #8fb3cc 45%);
+}
+
+.mapa-real__tierra {
+  fill: var(--surface);
+  stroke: var(--line-strong);
+  stroke-width: 1.5;
+}
+
+.mapa-real__rio {
+  fill: none;
+  stroke: color-mix(in srgb, var(--surface-sunken) 40%, #8fb3cc 60%);
+  stroke-width: 3;
+}
+
+.mapa-real__ruta {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 4;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+
+.mapa-real__rotulo {
+  font-size: 30px;
+  fill: var(--ink);
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 6px;
+  stroke-linejoin: round;
+}
+
+.mapa-real__punto--elegido .mapa-real__rotulo {
+  font-weight: 600;
+}
+
+.mapa-real g[role='button']:focus-visible circle {
+  stroke: var(--ink-strong);
+  stroke-width: 5;
+}

@@ -1,37 +1,57 @@
 /**
- * Los patriarcados, época por época.
+ * Los patriarcados, época por época, sobre la costa de verdad.
  *
- * Un esquema, no un mapa a escala: las sedes ocupan su posición relativa
- * sobre una retícula. Se dice en la propia pantalla, porque dibujar de
- * memoria las costas del Mediterráneo sería inventarse una geografía.
- *
- * El SVG va en línea: se adapta al tema claro y oscuro con las mismas
- * variables que el resto, escala sin pixelarse y no añade ni una descarga a
- * una aplicación que tiene que funcionar sin conexión.
+ * La costa sale de Natural Earth (dominio público), generada una vez y
+ * guardada en el código: el mapa no descarga nada y se ve sin conexión. Cada
+ * sede va en su longitud y su latitud. No se dibujan fronteras.
  *
  * Debajo del dibujo va la misma información en forma de lista. No es una
- * concesión: un esquema con quince puntos y sus rótulos no se lee con un
+ * concesión: un mapa con dieciocho puntos y sus rótulos no se lee con un
  * lector de pantalla, y en un móvil estrecho tampoco se lee con los ojos.
  */
 import { useState } from 'react';
 import { MAP_EPOCHS, SEE_STATUS_LABELS, type SeeStatus } from '@/content/history-maps';
+import { MAPAS_BASE } from '@/content/generated/mapas';
+import { RealMap, type MapPoint } from '@/components/RealMap';
 import { Segmented } from '@/components/ui';
 
-/** Cada rango tiene su color y su forma, para no depender sólo del color. */
-const ESTILO: Record<SeeStatus, { fill: string; stroke: string; r: number; dash?: string }> = {
-  pentarquia: { fill: 'var(--gold)', stroke: 'var(--gold)', r: 3.4 },
-  patriarcado: { fill: 'var(--gold-soft)', stroke: 'var(--gold-soft)', r: 3 },
-  autocefala: { fill: 'transparent', stroke: 'var(--ink-muted)', r: 2.6 },
-  separada: { fill: 'transparent', stroke: 'var(--danger, #b4472f)', r: 3 },
-  // Discontinuo: unas Iglesias la reconocen y otras no.
-  disputada: { fill: 'transparent', stroke: 'var(--ink-muted)', r: 2.6, dash: '1.2 0.9' },
+/** Cada rango tiene su forma, además de su color: no se depende sólo del color. */
+const ASPECTO: Record<SeeStatus, NonNullable<MapPoint['look']>> = {
+  pentarquia: 'lleno',
+  patriarcado: 'lleno',
+  autocefala: 'hueco',
+  separada: 'tachado',
+  disputada: 'discontinuo',
 };
+
+/** La clave de la leyenda, con la misma forma que en el mapa. */
+function Clave({ rango }: { rango: SeeStatus }) {
+  const aspecto = ASPECTO[rango];
+  const relleno = aspecto === 'lleno' ? 'var(--gold)' : 'var(--surface)';
+  const trazo = aspecto === 'lleno' ? 'var(--gold)' : aspecto === 'tachado' ? 'var(--red)' : 'var(--ink-muted)';
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+      <circle cx="7" cy="7" r="5" fill={relleno} stroke={trazo} strokeWidth="1.6" strokeDasharray={aspecto === 'discontinuo' ? '2 1.5' : undefined} />
+      {aspecto === 'tachado' ? <line x1="3" y1="11" x2="11" y2="3" stroke={trazo} strokeWidth="1.6" /> : null}
+    </svg>
+  );
+}
 
 export function PatriarchateMap() {
   const [epocaId, setEpocaId] = useState(MAP_EPOCHS[0]!.id);
   const epoca = MAP_EPOCHS.find((e) => e.id === epocaId) ?? MAP_EPOCHS[0]!;
-
   const rangos = [...new Set(epoca.sees.map((s) => s.status))];
+
+  const puntos: MapPoint[] = epoca.sees.map((sede) => ({
+    id: sede.id,
+    lon: sede.lon,
+    lat: sede.lat,
+    label: sede.offMap ? `${sede.label ?? sede.name} ↖` : (sede.label ?? sede.name),
+    side: sede.labelSide ?? 'derecha',
+    dy: sede.labelDy,
+    look: ASPECTO[sede.status],
+    fuera: sede.offMap,
+  }));
 
   return (
     <div className="mapa">
@@ -46,98 +66,16 @@ export function PatriarchateMap() {
       <p className="muted text-sm">{epoca.summary}</p>
 
       <figure className="mapa__figura">
-        <svg
-          viewBox="0 0 100 88"
-          className="mapa__svg"
-          role="img"
-          aria-labelledby={`mapa-t-${epoca.id} mapa-d-${epoca.id}`}
-        >
-          <title id={`mapa-t-${epoca.id}`}>{`Sedes de la Iglesia · ${epoca.title}`}</title>
-          <desc id={`mapa-d-${epoca.id}`}>
-            {`Esquema con ${epoca.sees.length} sedes en su posición relativa. La lista completa está debajo.`}
-          </desc>
-
-          {/* Retícula: da sentido de espacio sin fingir que es un mapa. */}
-          <g stroke="var(--line-soft)" strokeWidth="0.2">
-            {[0, 20, 40, 60, 80].map((y) => (
-              <line key={`h${y}`} x1="2" y1={y + 4} x2="98" y2={y + 4} />
-            ))}
-            {[0, 20, 40, 60, 80, 100].map((x) => (
-              <line key={`v${x}`} x1={x} y1="4" x2={x} y2="84" />
-            ))}
-          </g>
-
-          {/* Las cuatro orientaciones, que es lo único que el esquema promete. */}
-          <g fill="var(--ink-faint)" fontSize="3" textAnchor="middle">
-            <text x="50" y="3.2">norte</text>
-            <text x="50" y="87">sur</text>
-          </g>
-          <g fill="var(--ink-faint)" fontSize="3">
-            <text x="0.5" y="45">O</text>
-            <text x="97" y="45">E</text>
-          </g>
-
-          {epoca.sees.map((sede) => {
-            const estilo = ESTILO[sede.status];
-            // El rótulo se va a la izquierda en el margen derecho, para que no
-            // se salga del dibujo, y donde la sede lo pide para no pisar otro.
-            const aLaIzquierda = sede.labelSide ? sede.labelSide === 'izquierda' : sede.x > 68;
-            const lineas = (sede.label ?? sede.name).split('\n');
-            return (
-              <g key={sede.id}>
-                <circle
-                  cx={sede.x}
-                  cy={sede.y}
-                  r={estilo.r}
-                  fill={estilo.fill}
-                  stroke={estilo.stroke}
-                  strokeWidth="0.7"
-                  strokeDasharray={estilo.dash}
-                />
-                {/* Las sedes fuera de comunión llevan además una barra: se
-                    distinguen aunque no se distingan los colores. */}
-                {sede.status === 'separada' ? (
-                  <line
-                    x1={sede.x - 2.2}
-                    y1={sede.y + 2.2}
-                    x2={sede.x + 2.2}
-                    y2={sede.y - 2.2}
-                    stroke={estilo.stroke}
-                    strokeWidth="0.7"
-                  />
-                ) : null}
-                <text
-                  x={aLaIzquierda ? sede.x - 4.6 : sede.x + 4.6}
-                  y={sede.y + 1.3}
-                  fontSize="3.4"
-                  fill="var(--ink)"
-                  textAnchor={aLaIzquierda ? 'end' : 'start'}
-                >
-                  {lineas.map((linea, i) => (
-                    <tspan key={linea} x={aLaIzquierda ? sede.x - 4.6 : sede.x + 4.6} dy={i === 0 ? 0 : 3.9}>
-                      {linea}
-                    </tspan>
-                  ))}
-                </text>
-              </g>
-            );
-          })}
-        </svg>
-
+        <RealMap
+          mapa={MAPAS_BASE.mediterraneo}
+          points={puntos}
+          title={`Sedes de la Iglesia · ${epoca.title}`}
+          description={`Mapa del Mediterráneo oriental y de Europa del Este con ${epoca.sees.length} sedes en su sitio. La lista completa está debajo.`}
+        />
         <figcaption className="mapa__pie">
           {rangos.map((rango) => (
             <span key={rango} className="mapa__clave">
-              <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
-                <circle
-                  cx="6"
-                  cy="6"
-                  r={ESTILO[rango].r}
-                  fill={ESTILO[rango].fill}
-                  stroke={ESTILO[rango].stroke}
-                  strokeWidth="1.4"
-                  strokeDasharray={ESTILO[rango].dash ? '2 1.5' : undefined}
-                />
-              </svg>
+              <Clave rango={rango} />
               {SEE_STATUS_LABELS[rango]}
             </span>
           ))}

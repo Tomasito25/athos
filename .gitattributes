@@ -9,3 +9,6 @@ server.py text eol=lf
 *.webp binary
 *.ico binary
 *.woff2 binary
+
+# Las costas de los mapas: se generan con scripts/build-mapas.mjs.
+src/content/generated/mapas.ts -diff linguist-generated

@@ -6,15 +6,12 @@
  *
  * ## Sobre el mapa
  *
- * Es un **esquema, no un mapa a escala**. Las sedes están en su posición
- * relativa correcta —Roma al oeste, Alejandría al sur, Moscú al norte— sobre
- * una retícula, y ni el dibujo ni este archivo pretenden otra cosa. Un mapa
- * de verdad exige una proyección y unos contornos que ATHOS no tiene, y
- * dibujar de memoria una costa del Mediterráneo sería inventarse una
- * geografía: justo lo que no se hace aquí con nada.
- *
- * Lo que sí es exacto es lo que el esquema afirma: qué sedes existían en cada
- * época, con qué rango y en comunión con quién.
+ * Era un esquema sobre una retícula, para no dibujar de memoria una costa del
+ * Mediterráneo. Ahora la costa es la de verdad: sale de Natural Earth, de
+ * dominio público, generada una vez y guardada en el código
+ * (`scripts/build-mapas.mjs`). Cada sede va en su longitud y su latitud. Lo
+ * que el mapa no dibuja son fronteras: cambiaron demasiado de una época a
+ * otra, y una frontera mal puesta afirma algo que no es.
  */
 
 /** Qué era una sede en una época concreta. */
@@ -41,16 +38,20 @@ export const SEE_STATUS_LABELS: Record<SeeStatus, string> = {
 export interface See {
   id: string;
   name: string;
-  /** Posición en la retícula del esquema, de 0 a 100. */
-  x: number;
-  y: number;
+  /** Dónde está, en grados. */
+  lon: number;
+  lat: number;
   status: SeeStatus;
   /** Una línea: qué es y desde cuándo. */
   note: string;
   /** El rótulo del dibujo, si el nombre no cabe. Puede llevar un salto de línea. */
   label?: string;
   /** A qué lado del punto va el rótulo; por defecto, a la derecha. */
-  labelSide?: 'izquierda' | 'derecha';
+  labelSide?: 'izquierda' | 'derecha' | 'arriba' | 'abajo';
+  /** Desplazamiento vertical del rótulo, para que no pise a otro. */
+  labelDy?: number;
+  /** Fuera del mapa: dónde se pinta, en unidades del dibujo, con una nota. */
+  offMap?: { x: number; y: number };
 }
 
 export interface MapEpoch {
@@ -64,32 +65,30 @@ export interface MapEpoch {
   periodId?: string;
 }
 
-/* Posiciones, compartidas por todas las épocas para que las sedes no bailen
-   de un mapa a otro. */
+/* Las sedes, en grados de longitud y latitud: las mismas en todas las épocas,
+   para que no bailen de un mapa a otro. */
 const P = {
-  roma: { x: 30, y: 42 },
-  constantinopla: { x: 52, y: 34 },
-  alejandria: { x: 55, y: 74 },
-  antioquia: { x: 70, y: 47 },
-  jerusalen: { x: 66, y: 60 },
-  cartago: { x: 32, y: 62 },
-  moscu: { x: 74, y: 8 },
-  kiev: { x: 63, y: 16 },
-  // Las sedes de los Balcanes estaban tan juntas que Sofía tapaba a
-  // Constantinopla y el rótulo de Georgia pisaba el suyo. Se separaron al
-  // añadir Albania, Polonia y Praga, conservando la orientación de cada una.
-  atenas: { x: 44, y: 51 },
-  belgrado: { x: 38, y: 27 },
-  bucarest: { x: 57, y: 22 },
-  sofia: { x: 47, y: 27 },
-  tiflis: { x: 84, y: 40 },
-  nicosia: { x: 62, y: 53 },
-  ohrid: { x: 45, y: 36 },
-  tirana: { x: 38, y: 43 },
-  varsovia: { x: 50, y: 12 },
-  praga: { x: 34, y: 18 },
-  // América no cabe en el esquema: se pone arriba a la izquierda, y se dice.
-  america: { x: 4, y: 6 },
+  roma: { lon: 12.5, lat: 41.9 },
+  constantinopla: { lon: 28.98, lat: 41.01 },
+  // Con el rótulo a la izquierda: a la derecha pisaría a Jerusalén.
+  alejandria: { lon: 29.92, lat: 31.2, labelSide: 'izquierda' },
+  antioquia: { lon: 36.16, lat: 36.2 },
+  jerusalen: { lon: 35.23, lat: 31.78 },
+  cartago: { lon: 10.32, lat: 36.85 },
+  moscu: { lon: 37.62, lat: 55.75 },
+  kiev: { lon: 30.52, lat: 50.45 },
+  atenas: { lon: 23.73, lat: 37.98 },
+  belgrado: { lon: 20.46, lat: 44.82 },
+  bucarest: { lon: 26.1, lat: 44.43 },
+  sofia: { lon: 23.32, lat: 42.7 },
+  tiflis: { lon: 44.79, lat: 41.72, labelSide: 'izquierda' },
+  nicosia: { lon: 33.36, lat: 35.17 },
+  ohrid: { lon: 20.8, lat: 41.12 },
+  tirana: { lon: 19.82, lat: 41.33, labelSide: 'izquierda' },
+  varsovia: { lon: 21.01, lat: 52.23 },
+  praga: { lon: 14.44, lat: 50.08 },
+  // América no cabe: se pinta arriba a la izquierda, y se dice.
+  america: { lon: -77.04, lat: 38.9, offMap: { x: 40, y: 45 } },
 } as const;
 
 export const MAP_EPOCHS: MapEpoch[] = [
@@ -189,10 +188,10 @@ export const MAP_EPOCHS: MapEpoch[] = [
       { id: 'atenas', name: 'Grecia', ...P.atenas, status: 'autocefala', labelSide: 'izquierda', note: 'Iglesia de Grecia, autocéfala desde 1850.' },
       { id: 'varsovia', name: 'Polonia', ...P.varsovia, status: 'autocefala', labelSide: 'izquierda', note: 'Iglesia ortodoxa de Polonia, con sede en Varsovia. Autocéfala desde 1924.' },
       { id: 'tirana', name: 'Albania', ...P.tirana, status: 'autocefala', labelSide: 'izquierda', note: 'Iglesia ortodoxa de Albania, autocéfala desde 1937. Prohibida con toda religión en 1967, renació desde 1991.' },
-      { id: 'praga', name: 'Tierras Checas y Eslovaquia', label: 'Chequia y\nEslovaquia', ...P.praga, status: 'autocefala', labelSide: 'izquierda', note: 'Con sedes en Praga y Prešov. Autocéfala por Moscú en 1951; Constantinopla la reconoció en 1998.' },
+      { id: 'praga', name: 'Tierras Checas y Eslovaquia', label: 'Chequia y\nEslovaquia', ...P.praga, status: 'autocefala', note: 'Con sedes en Praga y Prešov. Autocéfala por Moscú en 1951; Constantinopla la reconoció en 1998.' },
       { id: 'kiev', name: 'Ucrania', ...P.kiev, status: 'disputada', note: 'La Iglesia ortodoxa de Ucrania recibió la autocefalia de Constantinopla en 2019; la reconocen además Alejandría, Grecia y Chipre. Moscú no, y en Ucrania sigue también la Iglesia que dependía de Moscú.' },
       { id: 'america', name: 'América (OCA)', ...P.america, status: 'disputada', note: 'La Iglesia ortodoxa en América, fuera del esquema. Moscú le concedió la autocefalia en 1970; Constantinopla y la mayoría la tratan todavía como Iglesia autónoma.' },
-      { id: 'ohrid', name: 'Ohrid', ...P.ohrid, status: 'disputada', labelSide: 'izquierda', note: 'La Iglesia de Macedonia del Norte. Proclamó su autocefalia en 1967; en 2022 Constantinopla la recibió en comunión y Serbia se la concedió, pero no todas la reconocen.' },
+      { id: 'ohrid', name: 'Ohrid', ...P.ohrid, status: 'disputada', note: 'La Iglesia de Macedonia del Norte. Proclamó su autocefalia en 1967; en 2022 Constantinopla la recibió en comunión y Serbia se la concedió, pero no todas la reconocen.' },
     ],
   },
 ];
@@ -284,6 +283,6 @@ export const TIMELINE_START = 33;
 export const TIMELINE_END = new Date().getFullYear();
 
 export const MAPS_NOTE =
-  'Los mapas son esquemas: las sedes ocupan su posición relativa —Roma al oeste, Alejandría al ' +
-  'sur, Moscú al norte— sobre una retícula, no sobre un mapa a escala. Lo que el esquema afirma ' +
-  'es qué sedes existían en cada época, con qué rango y en comunión con quién.';
+  'La costa, los lagos y los ríos son los de Natural Earth, de dominio público, y cada sede está en su ' +
+  'longitud y su latitud. No se dibujan fronteras: cambiaron demasiado de una época a otra. Lo que el ' +
+  'mapa afirma es qué sedes existían en cada época, con qué rango y en comunión con quién.';

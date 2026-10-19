@@ -86,6 +86,34 @@ describe('los mapas de los patriarcados', () => {
     }
   });
 
+  it('el mapa de hoy tiene las catorce Iglesias autocéfalas y las tres en disputa', () => {
+    // Faltaban Albania, Polonia, Chequia y Eslovaquia y la OCA, aunque la
+    // propia Historia habla de catorce Iglesias autocéfalas.
+    const hoy = MAP_EPOCHS.find((e) => e.id === 'hoy')!;
+    const reconocidas = hoy.sees.filter((s) => s.status === 'patriarcado' || s.status === 'autocefala');
+    expect(reconocidas.map((s) => s.id).sort()).toEqual(
+      [
+        'constantinopla', 'alejandria', 'antioquia', 'jerusalen', 'moscu', 'belgrado', 'bucarest',
+        'sofia', 'tiflis', 'nicosia', 'atenas', 'varsovia', 'tirana', 'praga',
+      ].sort(),
+    );
+    const enDisputa = hoy.sees.filter((s) => s.status === 'disputada').map((s) => s.id);
+    expect(enDisputa.sort()).toEqual(['america', 'kiev', 'ohrid']);
+    expect(hoy.summary).toMatch(/[Cc]atorce/);
+  });
+
+  it('en el mapa de hoy ningún punto pisa a otro', () => {
+    for (const epoca of MAP_EPOCHS) {
+      for (const [i, a] of epoca.sees.entries()) {
+        for (const b of epoca.sees.slice(i + 1)) {
+          const distancia = Math.hypot(a.x - b.x, a.y - b.y);
+          // Los radios van de 2,6 a 3,4: con seis de separación no se tocan.
+          expect(distancia, `${epoca.id}: ${a.id} y ${b.id}`).toBeGreaterThanOrEqual(6);
+        }
+      }
+    }
+  });
+
   it('dice que es un esquema y no un mapa a escala', () => {
     expect(MAPS_NOTE).toMatch(/esquemas?/i);
     expect(MAPS_NOTE).toMatch(/no sobre un mapa a escala|no a escala/i);
@@ -113,6 +141,11 @@ describe('la cronología de las divisiones', () => {
     // Es el punto que el dibujo existe para dejar claro.
     const protestantes = CHURCH_BRANCHES.find((b) => b.id === 'protestantes')!;
     expect(protestantes.from).toBe('roma');
+  });
+
+  it('la línea llega hasta el año en curso', () => {
+    // Acababa en 2025 y ahí se quedaba.
+    expect(TIMELINE_END).toBe(new Date().getFullYear());
   });
 
   it('todos los años caben en el eje', () => {

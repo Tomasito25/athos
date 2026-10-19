@@ -18,11 +18,13 @@ import { MAP_EPOCHS, SEE_STATUS_LABELS, type SeeStatus } from '@/content/history
 import { Segmented } from '@/components/ui';
 
 /** Cada rango tiene su color y su forma, para no depender sólo del color. */
-const ESTILO: Record<SeeStatus, { fill: string; stroke: string; r: number }> = {
+const ESTILO: Record<SeeStatus, { fill: string; stroke: string; r: number; dash?: string }> = {
   pentarquia: { fill: 'var(--gold)', stroke: 'var(--gold)', r: 3.4 },
   patriarcado: { fill: 'var(--gold-soft)', stroke: 'var(--gold-soft)', r: 3 },
   autocefala: { fill: 'transparent', stroke: 'var(--ink-muted)', r: 2.6 },
   separada: { fill: 'transparent', stroke: 'var(--danger, #b4472f)', r: 3 },
+  // Discontinuo: unas Iglesias la reconocen y otras no.
+  disputada: { fill: 'transparent', stroke: 'var(--ink-muted)', r: 2.6, dash: '1.2 0.9' },
 };
 
 export function PatriarchateMap() {
@@ -78,8 +80,9 @@ export function PatriarchateMap() {
           {epoca.sees.map((sede) => {
             const estilo = ESTILO[sede.status];
             // El rótulo se va a la izquierda en el margen derecho, para que no
-            // se salga del dibujo.
-            const aLaIzquierda = sede.x > 68;
+            // se salga del dibujo, y donde la sede lo pide para no pisar otro.
+            const aLaIzquierda = sede.labelSide ? sede.labelSide === 'izquierda' : sede.x > 68;
+            const lineas = (sede.label ?? sede.name).split('\n');
             return (
               <g key={sede.id}>
                 <circle
@@ -89,6 +92,7 @@ export function PatriarchateMap() {
                   fill={estilo.fill}
                   stroke={estilo.stroke}
                   strokeWidth="0.7"
+                  strokeDasharray={estilo.dash}
                 />
                 {/* Las sedes fuera de comunión llevan además una barra: se
                     distinguen aunque no se distingan los colores. */}
@@ -109,7 +113,11 @@ export function PatriarchateMap() {
                   fill="var(--ink)"
                   textAnchor={aLaIzquierda ? 'end' : 'start'}
                 >
-                  {sede.name}
+                  {lineas.map((linea, i) => (
+                    <tspan key={linea} x={aLaIzquierda ? sede.x - 4.6 : sede.x + 4.6} dy={i === 0 ? 0 : 3.9}>
+                      {linea}
+                    </tspan>
+                  ))}
                 </text>
               </g>
             );
@@ -127,6 +135,7 @@ export function PatriarchateMap() {
                   fill={ESTILO[rango].fill}
                   stroke={ESTILO[rango].stroke}
                   strokeWidth="1.4"
+                  strokeDasharray={ESTILO[rango].dash ? '2 1.5' : undefined}
                 />
               </svg>
               {SEE_STATUS_LABELS[rango]}

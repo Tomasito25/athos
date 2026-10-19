@@ -26,13 +26,16 @@ export type SeeStatus =
   /** Iglesia autocéfala que no lleva el título de patriarcado. */
   | 'autocefala'
   /** Sede que en esa época ya no está en comunión con las demás. */
-  | 'separada';
+  | 'separada'
+  /** Autocefalia que unas Iglesias reconocen y otras no. */
+  | 'disputada';
 
 export const SEE_STATUS_LABELS: Record<SeeStatus, string> = {
   pentarquia: 'Pentarquía',
   patriarcado: 'Patriarcado',
   autocefala: 'Iglesia autocéfala',
   separada: 'Fuera de comunión',
+  disputada: 'Autocefalia en disputa',
 };
 
 export interface See {
@@ -44,6 +47,10 @@ export interface See {
   status: SeeStatus;
   /** Una línea: qué es y desde cuándo. */
   note: string;
+  /** El rótulo del dibujo, si el nombre no cabe. Puede llevar un salto de línea. */
+  label?: string;
+  /** A qué lado del punto va el rótulo; por defecto, a la derecha. */
+  labelSide?: 'izquierda' | 'derecha';
 }
 
 export interface MapEpoch {
@@ -68,13 +75,21 @@ const P = {
   cartago: { x: 32, y: 62 },
   moscu: { x: 74, y: 8 },
   kiev: { x: 63, y: 16 },
-  atenas: { x: 48, y: 52 },
-  belgrado: { x: 41, y: 28 },
-  bucarest: { x: 53, y: 25 },
-  sofia: { x: 50, y: 33 },
-  tiflis: { x: 84, y: 32 },
+  // Las sedes de los Balcanes estaban tan juntas que Sofía tapaba a
+  // Constantinopla y el rótulo de Georgia pisaba el suyo. Se separaron al
+  // añadir Albania, Polonia y Praga, conservando la orientación de cada una.
+  atenas: { x: 44, y: 51 },
+  belgrado: { x: 38, y: 27 },
+  bucarest: { x: 57, y: 22 },
+  sofia: { x: 47, y: 27 },
+  tiflis: { x: 84, y: 40 },
   nicosia: { x: 62, y: 53 },
   ohrid: { x: 45, y: 36 },
+  tirana: { x: 38, y: 43 },
+  varsovia: { x: 50, y: 12 },
+  praga: { x: 34, y: 18 },
+  // América no cabe en el esquema: se pone arriba a la izquierda, y se dice.
+  america: { x: 4, y: 6 },
 } as const;
 
 export const MAP_EPOCHS: MapEpoch[] = [
@@ -154,20 +169,30 @@ export const MAP_EPOCHS: MapEpoch[] = [
     year: 'desde 1991',
     periodId: 'hoy',
     summary:
-      'Los cuatro patriarcados antiguos siguen, y con ellos las Iglesias nacionales que se hicieron autocéfalas en los siglos XIX y XX. La comunión está tensada: desde 2018, Moscú ha roto la comunión con Constantinopla por la concesión de la autocefalia a Ucrania, y el conflicto sigue abierto.',
+      'Catorce Iglesias autocéfalas que todas reconocen: los cuatro patriarcados antiguos, Moscú, ' +
+      'Serbia, Rumanía, Bulgaria, Georgia, Chipre, Grecia, Polonia, Albania y la de las Tierras ' +
+      'Checas y Eslovaquia. Y tres cuya autocefalia unas reconocen y otras no: la Iglesia ortodoxa ' +
+      'en América (1970, concedida por Moscú), la de Ucrania (2019, por Constantinopla) y la de ' +
+      'Ohrid (2022, por Serbia). La comunión está tensada: desde 2018 Moscú no está en comunión con ' +
+      'Constantinopla, y ha dejado de conmemorar a los primados que reconocieron a Ucrania.',
     sees: [
       { id: 'constantinopla', name: 'Constantinopla', ...P.constantinopla, status: 'patriarcado', note: 'Patriarcado Ecuménico. Primacía de honor entre los ortodoxos.' },
-      { id: 'alejandria', name: 'Alejandría', ...P.alejandria, status: 'patriarcado', note: 'Patriarcado de Alejandría y toda África.' },
+      { id: 'alejandria', name: 'Alejandría', ...P.alejandria, status: 'patriarcado', note: 'Patriarcado de Alejandría y toda África. Reconoció a Ucrania en 2019, y desde 2021 Moscú tiene en África un exarcado propio.' },
       { id: 'antioquia', name: 'Antioquía', ...P.antioquia, status: 'patriarcado', note: 'Patriarcado de Antioquía y todo Oriente, con sede en Damasco desde el siglo XIV. Su grey se ha dispersado por la guerra en Siria.' },
-      { id: 'jerusalen', name: 'Jerusalén', ...P.jerusalen, status: 'patriarcado', note: 'Patriarcado de Jerusalén.' },
+      { id: 'jerusalen', name: 'Jerusalén', ...P.jerusalen, status: 'patriarcado', note: 'Patriarcado de Jerusalén, custodio de los Santos Lugares.' },
       { id: 'moscu', name: 'Moscú', ...P.moscu, status: 'patriarcado', note: 'La Iglesia ortodoxa más numerosa. Desde 2018, sin comunión con Constantinopla.' },
-      { id: 'belgrado', name: 'Serbia', ...P.belgrado, status: 'patriarcado', note: 'Patriarcado de Serbia, con sede en Belgrado.' },
-      { id: 'bucarest', name: 'Rumanía', ...P.bucarest, status: 'patriarcado', note: 'Patriarcado de Rumanía.' },
-      { id: 'sofia', name: 'Bulgaria', ...P.sofia, status: 'patriarcado', note: 'Patriarcado de Bulgaria.' },
-      { id: 'tiflis', name: 'Georgia', ...P.tiflis, status: 'patriarcado', note: 'Iglesia ortodoxa de Georgia, de raíz muy antigua.' },
-      { id: 'atenas', name: 'Grecia', ...P.atenas, status: 'autocefala', note: 'Iglesia de Grecia, autocéfala desde 1850.' },
-      { id: 'nicosia', name: 'Chipre', ...P.nicosia, status: 'autocefala', note: 'Autocéfala desde 431.' },
-      { id: 'kiev', name: 'Ucrania', ...P.kiev, status: 'autocefala', note: 'Autocefalia concedida por Constantinopla en 2019; Moscú no la reconoce.' },
+      { id: 'belgrado', name: 'Serbia', ...P.belgrado, status: 'patriarcado', labelSide: 'izquierda', note: 'Patriarcado de Serbia, con sede en Belgrado. Autocéfala desde san Sava, en 1219.' },
+      { id: 'bucarest', name: 'Rumanía', ...P.bucarest, status: 'patriarcado', note: 'Patriarcado de Rumanía: autocéfala desde 1885, patriarcado desde 1925.' },
+      { id: 'sofia', name: 'Bulgaria', ...P.sofia, status: 'patriarcado', note: 'Patriarcado de Bulgaria, con sede en Sofía. Patriarcado reconocido desde 1961.' },
+      { id: 'tiflis', name: 'Georgia', ...P.tiflis, status: 'patriarcado', labelSide: 'izquierda', note: 'Iglesia ortodoxa de Georgia, de raíz muy antigua; su autocefalia restaurada se reconoció en 1990.' },
+      { id: 'nicosia', name: 'Chipre', ...P.nicosia, status: 'autocefala', note: 'Autocéfala desde el Concilio de Éfeso (431).' },
+      { id: 'atenas', name: 'Grecia', ...P.atenas, status: 'autocefala', labelSide: 'izquierda', note: 'Iglesia de Grecia, autocéfala desde 1850.' },
+      { id: 'varsovia', name: 'Polonia', ...P.varsovia, status: 'autocefala', labelSide: 'izquierda', note: 'Iglesia ortodoxa de Polonia, con sede en Varsovia. Autocéfala desde 1924.' },
+      { id: 'tirana', name: 'Albania', ...P.tirana, status: 'autocefala', labelSide: 'izquierda', note: 'Iglesia ortodoxa de Albania, autocéfala desde 1937. Prohibida con toda religión en 1967, renació desde 1991.' },
+      { id: 'praga', name: 'Tierras Checas y Eslovaquia', label: 'Chequia y\nEslovaquia', ...P.praga, status: 'autocefala', labelSide: 'izquierda', note: 'Con sedes en Praga y Prešov. Autocéfala por Moscú en 1951; Constantinopla la reconoció en 1998.' },
+      { id: 'kiev', name: 'Ucrania', ...P.kiev, status: 'disputada', note: 'La Iglesia ortodoxa de Ucrania recibió la autocefalia de Constantinopla en 2019; la reconocen además Alejandría, Grecia y Chipre. Moscú no, y en Ucrania sigue también la Iglesia que dependía de Moscú.' },
+      { id: 'america', name: 'América (OCA)', ...P.america, status: 'disputada', note: 'La Iglesia ortodoxa en América, fuera del esquema. Moscú le concedió la autocefalia en 1970; Constantinopla y la mayoría la tratan todavía como Iglesia autónoma.' },
+      { id: 'ohrid', name: 'Ohrid', ...P.ohrid, status: 'disputada', labelSide: 'izquierda', note: 'La Iglesia de Macedonia del Norte. Proclamó su autocefalia en 1967; en 2022 Constantinopla la recibió en comunión y Serbia se la concedió, pero no todas la reconocen.' },
     ],
   },
 ];
@@ -255,7 +280,8 @@ export const CHURCH_BRANCHES: Branch[] = [
 ];
 
 export const TIMELINE_START = 33;
-export const TIMELINE_END = 2025;
+/** El final es el año en curso: con un año fijo, la línea se quedaba en 2025. */
+export const TIMELINE_END = new Date().getFullYear();
 
 export const MAPS_NOTE =
   'Los mapas son esquemas: las sedes ocupan su posición relativa —Roma al oeste, Alejandría al ' +

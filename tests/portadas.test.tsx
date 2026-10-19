@@ -119,3 +119,25 @@ describe('los signos', () => {
     for (const grupo of APP_MAP) for (const e of grupo.entries) expect(e.icon, e.to).toBeTruthy();
   });
 });
+
+describe('el primer arranque', () => {
+  it('pregunta el calendario, la tradición y la medida, y lo aplica al momento', async () => {
+    const { useSettings, DEFAULT_SETTINGS } = await import('@/stores/settings');
+    const { WelcomeCard } = await import('@/features/home/WelcomeCard');
+    const { MemoryRouter } = await import('react-router-dom');
+    const { render: pintar, screen: pantalla, fireEvent } = await import('@testing-library/react');
+    useSettings.setState({ ...DEFAULT_SETTINGS, welcomeDismissed: false });
+    pintar(
+      <MemoryRouter>
+        <WelcomeCard />
+      </MemoryRouter>,
+    );
+    fireEvent.click(pantalla.getByRole('button', { name: 'Juliano' }));
+    fireEvent.click(pantalla.getByRole('button', { name: 'Eslava' }));
+    fireEvent.click(pantalla.getByRole('button', { name: 'Breve' }));
+    const ajustes = useSettings.getState();
+    expect(ajustes.calendarStyle).toBe('juliano');
+    expect(ajustes.greekMode).toBe('oculto');
+    expect(ajustes.officeLength).toEqual({ manana: 'breve', mediodia: 'breve', noche: 'breve' });
+  });
+});

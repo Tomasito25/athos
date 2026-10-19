@@ -110,7 +110,20 @@ const es = {
 
   welcome: {
     eyebrow: 'Primera vez en ATHOS',
-    title: 'Lo que hay en cada sitio',
+    title: 'Tres preguntas para empezar',
+    whereTitle: 'Y lo que hay en cada sitio',
+    calendarQ: '¿Qué calendario sigue tu parroquia?',
+    calendarNew: 'Nuevo',
+    calendarOld: 'Juliano',
+    calendarHint:
+      'El nuevo lo siguen Constantinopla, Grecia, Rumanía, Bulgaria o Antioquía; el juliano, Rusia, Serbia, Georgia o Jerusalén, y con él las fiestas fijas caen trece días después. La Pascua es la misma.',
+    traditionQ: '¿Tu tradición es griega o eslava?',
+    traditionGreek: 'Griega',
+    traditionSlavic: 'Eslava',
+    traditionHint:
+      'Por ahora sólo cambia si las fórmulas de los oficios salen también en griego. Las lecturas de cada día siguen el uso eslavo.',
+    measureQ: '¿Cuánto tiempo tienes para los oficios?',
+    measureHint: 'Breve, unos minutos; habitual, lo de cada día; extenso, con todo. Se puede cambiar cada oficio por separado.',
     pray: 'los tres oficios del día, el libro de oración y la oración de Jesús',
     read: 'la Biblia, el Salterio y las lecturas de cada día',
     calendar: 'los santos, las fiestas y el ayuno de cada día',

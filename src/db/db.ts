@@ -18,6 +18,7 @@ import type {
   Bookmark,
   Canon,
   ChurchFather,
+  DiptychName,
   Favorite,
   Feast,
   HistoryEntry,
@@ -67,6 +68,7 @@ export class AthosDatabase extends Dexie {
   jesus_prayer_sessions!: EntityTable<JesusPrayerSession, 'id'>;
   reading_progress!: EntityTable<ReadingProgress, 'id'>;
   user_prayers!: EntityTable<UserPrayer, 'id'>;
+  diptychs!: EntityTable<DiptychName, 'id'>;
   settings!: EntityTable<SettingRecord, 'key'>;
 
   constructor(name = 'athos') {
@@ -181,6 +183,9 @@ export class AthosDatabase extends Dexie {
      * describen en `src/content/bible.ts` y no hace falta copiarlas aquí.
      */
     this.version(4).stores({ bible_translations: null });
+
+    /** Versión 5 — la lista de nombres de vivos y difuntos. */
+    this.version(5).stores({ diptychs: 'id, list, saintId' });
   }
 }
 
@@ -208,6 +213,7 @@ export const USER_TABLES = [
   'jesus_prayer_sessions',
   'reading_progress',
   'user_prayers',
+  'diptychs',
   'settings',
 ] as const;
 

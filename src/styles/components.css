@@ -2526,3 +2526,34 @@ input[type='range']:focus-visible::-webkit-slider-thumb {
   font-size: var(--text-base);
   margin: var(--sp-4) 0 var(--sp-2);
 }
+
+/* ---------- Los nombres de la lista, en la conmemoración ---------- */
+
+.commemoration {
+  margin: 0.9em 0;
+  padding: 0.6em 0.9em;
+  border-inline-start: 2px solid var(--gold);
+  background: color-mix(in srgb, var(--gold) 7%, transparent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.commemoration__label {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  margin: 0;
+}
+
+.commemoration__names {
+  margin: 0.2em 0;
+  font-weight: 500;
+}
+
+.commemoration__edit,
+.commemoration__empty {
+  font-size: var(--text-sm);
+}
+
+.commemoration__empty {
+  margin: 0;
+  color: var(--ink-muted);
+}

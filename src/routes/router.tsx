@@ -34,6 +34,7 @@ export const routes: RouteObject[] = [
       { path: 'orar/oraciones/orden/:orderId', lazy: page(() => import('@/features/prayers/PrayerOrderPage'), 'PrayerOrderPage') },
       { path: 'orar/oraciones/:prayerId', lazy: page(() => import('@/features/prayers/PrayerPage'), 'PrayerPage') },
       { path: 'orar/oficio/:time', lazy: page(() => import('@/features/office/OfficePage'), 'OfficePage') },
+      { path: 'orar/nombres', lazy: page(() => import('@/features/prayers/NamesPage'), 'NamesPage') },
       { path: 'orar/mis-oraciones', lazy: page(() => import('@/features/office/MyPrayersPage'), 'MyPrayersPage') },
       { path: 'orar/regla', lazy: page(() => import('@/features/rule/RulePage'), 'RulePage') },
       { path: 'orar/regla/editar/:ruleId', lazy: page(() => import('@/features/rule/RuleEditorPage'), 'RuleEditorPage') },

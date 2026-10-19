@@ -17,6 +17,7 @@ import type {
   RuleItem,
   RuleTime,
   UserPrayer,
+  DiptychName,
 } from '@/types';
 import { db } from './db';
 import { addDaysIso, toIsoDate } from '@/lib/calendar/jdn';
@@ -392,3 +393,36 @@ export async function prayerStats(today = toIsoDate(new Date())): Promise<Prayer
 }
 
 export const clearSessions = () => db.jesus_prayer_sessions.clear();
+
+/* ============================================================
+   Los nombres de vivos y difuntos
+   ============================================================ */
+
+export async function listDiptychs(list?: DiptychName['list']): Promise<DiptychName[]> {
+  const todos = list ? await db.diptychs.where('list').equals(list).toArray() : await db.diptychs.toArray();
+  return todos.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+}
+
+export async function saveDiptych(
+  input: Omit<DiptychName, 'id' | 'createdAt' | 'updatedAt'> & { id?: string; createdAt?: string },
+): Promise<DiptychName> {
+  const stamp = now();
+  const nombre: DiptychName = {
+    ...input,
+    name: input.name.trim(),
+    note: input.note?.trim() || undefined,
+    id: input.id ?? newId(),
+    createdAt: input.createdAt ?? stamp,
+    updatedAt: stamp,
+  };
+  await db.diptychs.put(nombre);
+  return nombre;
+}
+
+export const deleteDiptych = (id: string) => db.diptychs.delete(id);
+
+/** Los nombres cuyo santo se celebra en alguno de esos santos. */
+export async function diptychsForSaints(saintIds: string[]): Promise<DiptychName[]> {
+  if (!saintIds.length) return [];
+  return db.diptychs.where('saintId').anyOf(saintIds).toArray();
+}

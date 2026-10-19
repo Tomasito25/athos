@@ -30,6 +30,7 @@ import {
   IconCross,
   IconEdit,
   IconPray,
+  IconPeople,
   IconScroll,
   IconSun,
 } from '@/components/icons';
@@ -108,6 +109,9 @@ export function PrayHub() {
         </Link>
         <Link className="shortcut" to="/orar/regla">
           <IconScroll size={16} /> {es.rule.title}
+        </Link>
+        <Link className="shortcut" to="/orar/nombres">
+          <IconPeople size={16} /> {es.names.title}
         </Link>
         <Link className="shortcut" to="/orar/metanoias">
           <IconCross size={16} /> {es.metanoia.title}

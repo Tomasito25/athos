@@ -609,6 +609,7 @@ const seeds: Seed[] = [
     // de los difuntos del libro de oraciones, tal cual.
     blocks: [
       t('Acuérdate, Señor, de todos los que se han dormido en la esperanza de la resurrección y de la vida eterna, nuestros padres, hermanos y hermanas, los que yacen aquí y en todas partes, cristianos ortodoxos: hazlos habitar con tus santos, donde brilla la luz de tu rostro, y ten piedad de nosotros, porque eres bueno y amante de los hombres. Amén.'),
+      { kind: 'commemoration', content: 'Tus nombres', ref: 'difuntos' },
       t('Concede, Señor, el perdón de los pecados a todos los que se durmieron antes que nosotros en la fe y en la esperanza de la resurrección, nuestros padres, hermanos y hermanas, y hazles memoria eterna. <em>(tres veces)</em>'),
     ],
     meta: traduccion(`${MOLITVOSLOV}, conmemoración de los difuntos`, 'eslavo'),

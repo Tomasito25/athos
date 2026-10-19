@@ -10,6 +10,7 @@ import {
   IconHome,
   IconLibrary,
   IconMore,
+  IconPeople,
   IconPath,
   IconPray,
   IconScroll,
@@ -90,6 +91,7 @@ export const APP_MAP: MapGroup[] = [
       { to: '/orar/regla', label: es.rule.title, hint: 'La tuya, editable paso a paso', icon: IconScroll },
       { to: '/orar/oracion-de-jesus', label: es.jesusPrayer.title, hint: 'Con contador o con el komboskini', icon: IconChotki },
       { to: '/orar/mis-oraciones', label: 'Mis oraciones', icon: IconEdit },
+      { to: '/orar/nombres', label: 'Nombres para la oración', hint: 'Los vivos y los difuntos que encomiendas', icon: IconPeople },
     ],
   },
   {

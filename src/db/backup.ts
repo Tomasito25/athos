@@ -7,6 +7,8 @@
  */
 import type {
   Bookmark,
+  DiptychName,
+  ReadingProgress,
   Favorite,
   JesusPrayerSession,
   Note,
@@ -35,6 +37,9 @@ export interface AthosBackup {
     notes: Note[];
     jesus_prayer_sessions: JesusPrayerSession[];
     user_prayers: UserPrayer[];
+    /** Desde la 1.31: antes el avance de los planes no se copiaba. */
+    reading_progress?: ReadingProgress[];
+    diptychs?: DiptychName[];
     settings: SettingRecord[];
   };
 }
@@ -52,6 +57,8 @@ export async function exportBackup(sections?: BackupSection[]): Promise<AthosBac
       'notes',
       'jesus_prayer_sessions',
       'user_prayers',
+      'reading_progress',
+      'diptychs',
       'settings',
     ],
   );
@@ -74,9 +81,14 @@ export async function exportBackup(sections?: BackupSection[]): Promise<AthosBac
         db.jesus_prayer_sessions.toArray(),
       ),
       user_prayers: await take('user_prayers', () => db.user_prayers.toArray()),
+      reading_progress: await take('reading_progress', () => db.reading_progress.toArray()),
+      diptychs: await take('diptychs', () => db.diptychs.toArray()),
       settings: await take('settings', () =>
-        // Los ajustes internos de siembra no se exportan.
-        db.settings.filter((s) => !s.key.startsWith('content.')).toArray(),
+        // Los ajustes internos de siembra, de la Biblia guardada y del aviso
+        // de copia no se exportan: son de este dispositivo.
+        db.settings
+          .filter((s) => !/^(content|bible|psalter|backup)\./.test(s.key))
+          .toArray(),
       ),
     },
   };
@@ -104,6 +116,8 @@ const VALIDATORS: Record<BackupSection, (row: unknown) => boolean> = {
   notes: (r) => hasStringId(r) && typeof (r as Note).body === 'string',
   jesus_prayer_sessions: (r) => hasStringId(r) && typeof (r as JesusPrayerSession).count === 'number',
   user_prayers: (r) => hasStringId(r) && typeof (r as UserPrayer).title === 'string',
+  reading_progress: (r) => hasStringId(r) && typeof (r as ReadingProgress).kind === 'string',
+  diptychs: (r) => hasStringId(r) && typeof (r as DiptychName).name === 'string',
   settings: (r) => isObject(r) && typeof r.key === 'string',
 };
 
@@ -169,6 +183,8 @@ export async function importBackup(
     notes: db.notes,
     jesus_prayer_sessions: db.jesus_prayer_sessions,
     user_prayers: db.user_prayers,
+    reading_progress: db.reading_progress,
+    diptychs: db.diptychs,
     settings: db.settings,
   } as const;
 
@@ -216,6 +232,19 @@ export function backupToMarkdown(backup: AthosBackup): string {
     for (const oracion of backup.data.user_prayers) {
       lines.push(`### ${oracion.title}`, '', oracion.body, '');
       if (oracion.greek) lines.push(oracion.greek, '');
+    }
+  }
+
+  if (backup.data.diptychs?.length) {
+    for (const [lista, titulo] of [
+      ['vivos', '## Por los vivos'],
+      ['difuntos', '## Por los difuntos'],
+    ] as const) {
+      const nombres = backup.data.diptychs.filter((d) => d.list === lista);
+      if (!nombres.length) continue;
+      lines.push(titulo, '');
+      for (const d of nombres) lines.push(`- ${d.name}${d.note ? ` (${d.note})` : ''}`);
+      lines.push('');
     }
   }
 

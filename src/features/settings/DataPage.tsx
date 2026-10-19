@@ -136,8 +136,8 @@ export function DataPage() {
         <Panel>
           <p className="muted text-sm">
             Se exportan las reglas de oración, las notas, los marcadores, los favoritos, las
-            sesiones de oración y las preferencias. El contenido religioso no se exporta: forma
-            parte de la aplicación.
+            sesiones de oración, el avance de los planes de lectura, los nombres para la oración y
+            las preferencias. El contenido religioso no se exporta: forma parte de la aplicación.
           </p>
           <div className="btn-row" style={{ marginTop: 'var(--sp-3)' }}>
             <Button onClick={exportJson}>

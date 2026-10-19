@@ -373,6 +373,7 @@ export const MORE_PRAYERS: MorePrayerSeed[] = [
     category: 'familia',
     blocks: [
       rub('Donde va N. se dice el nombre, uno a uno y sin prisa. Es la parte de la oración en que se hace sitio a los demás.'),
+      { kind: 'commemoration', content: 'Tus nombres', ref: 'vivos' },
       t('Salva, Señor, y ten piedad de mi padre espiritual N., y por sus santas oraciones perdona mis pecados.'),
       t('Salva, Señor, y ten piedad de mis padres N. y N., de mis hermanos y hermanas, de mis parientes según la carne y de todos mis allegados, y concédeles tu paz.'),
       t('Salva, Señor, y ten piedad de los que me hacen bien, y recompénsalos con tus bienes celestiales.'),
@@ -429,6 +430,7 @@ export const MORE_PRAYERS: MorePrayerSeed[] = [
     title: 'Por los padres difuntos',
     category: 'difuntos',
     blocks: [
+      { kind: 'commemoration', content: 'Tus nombres', ref: 'difuntos' },
       t('Recuerda, Señor, las almas de tus siervos difuntos, mis padres N. y N., y de todos mis parientes según la carne, y perdónales todos sus pecados, voluntarios e involuntarios, concediéndoles el Reino y la participación en tus bienes eternos y el gozo de tu vida bienaventurada e inacabable.'),
       t('Memoria eterna. <em>(tres veces)</em>'),
     ],

@@ -649,6 +649,7 @@ const DayReadings = lazy(() => import('@/components/office/DayReadings'));
 const DayKathismata = lazy(() => import('@/components/office/DayKathismata'));
 const DayDevotion = lazy(() => import('@/components/office/DayDevotion'));
 const EmbeddedText = lazy(() => import('@/components/office/EmbeddedText'));
+const Commemoration = lazy(() => import('@/components/office/Commemoration'));
 
 /** El griego y su transliteración, debajo del español. */
 function GreekLines({ block }: { block: TextBlock }) {
@@ -766,6 +767,12 @@ export function Blocks({
             return (
               <Suspense key={key} fallback={<p className="muted">{block.content}</p>}>
                 <EmbeddedText reference={block.ref ?? ''} label={block.content} />
+              </Suspense>
+            );
+          case 'commemoration':
+            return (
+              <Suspense key={key} fallback={null}>
+                <Commemoration list={block.ref === 'difuntos' ? 'difuntos' : 'vivos'} />
               </Suspense>
             );
           case 'day-akathist':

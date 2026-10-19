@@ -28,7 +28,7 @@ import { getSetting, setSetting } from '@/db/db';
 import { currentPlan } from '@/db/plans';
 import { DAILY_OFFICES } from '@/content/hours';
 import { LENGTH_INFO, minutesFor } from '@/content/office-lengths';
-import { isRulePrayed, ruleForTime, ruleItems } from '@/db/user';
+import { diptychsForSaints, isRulePrayed, ruleForTime, ruleItems } from '@/db/user';
 import { db } from '@/db/db';
 import { useSettings, type SettingsState } from '@/stores/settings';
 import { isFastDay } from '@/lib/calendar/fasting';
@@ -71,6 +71,7 @@ export const REMINDERS: ReminderDefinition[] = [
   { id: 'santo', group: 'dia', title: 'Santo del día', description: 'A quién recuerda hoy la Iglesia.', defaultTime: '08:00' },
   { id: 'ayuno', group: 'dia', title: 'Comienzo de un ayuno', description: 'Sólo el primer día de cada periodo de ayuno.', defaultTime: '07:30' },
   { id: 'fiesta', group: 'dia', title: 'Grandes fiestas', description: 'Sólo en las grandes fiestas y en Pascua.', defaultTime: '07:30' },
+  { id: 'onomastica', group: 'dia', title: 'Santos de tus nombres', description: 'El día del santo de alguien de tu lista de nombres para la oración.', defaultTime: '08:30' },
 ];
 
 const OFICIO_DE: Record<string, RuleTime> = {
@@ -183,6 +184,20 @@ export async function reminderContent(
         title: `Hoy empieza: ${dia.fasting.period ?? dia.fasting.label}`,
         body: dia.fasting.label,
         path: '/calendario/ayuno',
+      };
+    }
+
+    case 'onomastica': {
+      const nombres = await diptychsForSaints(dia.saints.map((s) => s.id));
+      if (!nombres.length) return null;
+      const santo = dia.saints.find((s) => s.id === nombres[0]!.saintId);
+      const quienes = nombres.map((n) => n.name);
+      const enumerados =
+        quienes.length > 1 ? `${quienes.slice(0, -1).join(', ')} y ${quienes.at(-1)}` : quienes[0];
+      return {
+        title: santo ? `Hoy es ${santo.name}` : 'Hoy es el santo de los tuyos',
+        body: `El santo de ${enumerados}.`,
+        path: '/orar/nombres',
       };
     }
 

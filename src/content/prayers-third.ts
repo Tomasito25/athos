@@ -197,6 +197,7 @@ export const THIRD_PRAYERS: ThirdPrayerSeed[] = [
     category: 'duelo',
     blocks: [
       rub('El oficio breve por los difuntos, llamado también litía. Donde dice N. se dice el nombre del difunto; para una mujer se cambian las formas.'),
+      { kind: 'commemoration', content: 'Tus nombres', ref: 'difuntos' },
       rub('Se empieza como toda oración: Bendito sea nuestro Dios, y el comienzo habitual:'),
       ...COMIENZO_HABITUAL,
       head('Troparios'),

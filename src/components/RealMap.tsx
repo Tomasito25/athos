@@ -10,9 +10,9 @@
  * mapa la pantalla pone la misma información en una lista: un dibujo con
  * veinte rótulos no se lee con un lector de pantalla.
  */
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import type { MapaBase } from '@/content/generated/mapas';
-import { proyectar } from '@/lib/mapa';
+import { LETRA, RADIO, proyectar, rotulo, vista, type Aspecto, type Encuadre, type Lado } from '@/lib/mapa';
 
 export interface MapPoint {
   id: string;
@@ -20,15 +20,21 @@ export interface MapPoint {
   lat: number;
   label: string;
   /** A qué lado va el rótulo. */
-  side?: 'derecha' | 'izquierda' | 'arriba' | 'abajo';
+  side?: Lado;
   /** Desplazamiento vertical extra del rótulo, en unidades del dibujo. */
   dy?: number;
   /** Cómo se pinta el punto. */
-  look?: 'lleno' | 'hueco' | 'discontinuo' | 'tachado' | 'pequeño';
-  /** Fuera del recuadro: se pinta en `en` con una flecha hacia donde está. */
+  look?: Aspecto;
+  /** Fuera del recuadro: se pinta en esas unidades del dibujo, con una flecha hacia donde está. */
   fuera?: { x: number; y: number };
-  /** Si se pincha, a dónde lleva. */
-  href?: string;
+}
+
+/** El nombre de un mar, un lago o un río, en cursiva y sin punto. */
+export interface MapWater {
+  id: string;
+  lon: number;
+  lat: number;
+  label: string;
 }
 
 export interface MapRoute {
@@ -39,19 +45,38 @@ export interface MapRoute {
 }
 
 const ESTILO = {
-  lleno: { fill: 'var(--gold)', stroke: 'var(--gold)', r: 10 },
-  hueco: { fill: 'var(--surface)', stroke: 'var(--ink-muted)', r: 9 },
-  discontinuo: { fill: 'var(--surface)', stroke: 'var(--ink-muted)', r: 9, dash: '4 3' },
-  tachado: { fill: 'var(--surface)', stroke: 'var(--red)', r: 9 },
-  pequeño: { fill: 'var(--ink-muted)', stroke: 'var(--ink-muted)', r: 6 },
+  lleno: { fill: 'var(--gold)', stroke: 'var(--gold)' },
+  hueco: { fill: 'var(--surface)', stroke: 'var(--ink-muted)' },
+  discontinuo: { fill: 'var(--surface)', stroke: 'var(--ink-muted)', dash: '4 3' },
+  tachado: { fill: 'var(--surface)', stroke: 'var(--red)' },
+  pequeño: { fill: 'var(--ink-muted)', stroke: 'var(--ink-muted)' },
 } as const;
 
-const LETRA = 30;
+/** La muestra de la leyenda: el mismo punto que en el mapa, en pequeño. */
+export function MapKey({ look }: { look: Aspecto }) {
+  const estilo = ESTILO[look];
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+      <circle
+        cx="7"
+        cy="7"
+        r={look === 'pequeño' ? 3.5 : 5}
+        fill={estilo.fill}
+        stroke={estilo.stroke}
+        strokeWidth="1.6"
+        strokeDasharray={'dash' in estilo ? '2 1.5' : undefined}
+      />
+      {look === 'tachado' ? <line x1="3" y1="11" x2="11" y2="3" stroke={estilo.stroke} strokeWidth="1.6" /> : null}
+    </svg>
+  );
+}
 
 export function RealMap({
   mapa,
   points,
   routes = [],
+  waters = [],
+  encuadre,
   title,
   description,
   onSelect,
@@ -61,6 +86,9 @@ export function RealMap({
   mapa: MapaBase;
   points: MapPoint[];
   routes?: MapRoute[];
+  waters?: MapWater[];
+  /** Oeste, sur, este, norte: la parte del mapa que se enseña. Sin él, entero. */
+  encuadre?: Encuadre;
   title: string;
   description: string;
   onSelect?: (id: string) => void;
@@ -68,61 +96,73 @@ export function RealMap({
   children?: ReactNode;
 }) {
   const id = `mapa-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+  const v = vista(mapa, encuadre);
+  const letra = LETRA * v.f;
   return (
     <svg
-      viewBox={`0 0 ${mapa.ancho} ${mapa.alto}`}
+      viewBox={`${v.x} ${v.y} ${v.ancho} ${v.alto}`}
       className="mapa-real"
       role="img"
       aria-labelledby={`${id}-t ${id}-d`}
+      style={{ '--f': v.f } as CSSProperties}
     >
       <title id={`${id}-t`}>{title}</title>
       <desc id={`${id}-d`}>{description}</desc>
 
-      <rect width={mapa.ancho} height={mapa.alto} className="mapa-real__mar" />
+      <rect x={v.x} y={v.y} width={v.ancho} height={v.alto} className="mapa-real__mar" />
       <path d={mapa.tierra} className="mapa-real__tierra" fillRule="evenodd" />
-      {mapa.lagos ? <path d={mapa.lagos} className="mapa-real__mar mapa-real__lago" /> : null}
+      {/* El río antes que los lagos: el Jordán no se dibuja cruzando el mar de Galilea. */}
       {mapa.rios ? <path d={mapa.rios} className="mapa-real__rio" /> : null}
+      {mapa.lagos ? <path d={mapa.lagos} className="mapa-real__mar mapa-real__lago" /> : null}
 
       {routes.map((ruta) => (
         <polyline
           key={ruta.id}
           className="mapa-real__ruta"
-          strokeDasharray={ruta.dashed ? '10 8' : undefined}
+          strokeDasharray={ruta.dashed ? `${10 * v.f} ${8 * v.f}` : undefined}
           points={ruta.points.map(([lon, lat]) => proyectar(mapa, lon, lat).join(',')).join(' ')}
         />
       ))}
+
+      {waters.map((agua) => {
+        const [x, y] = proyectar(mapa, agua.lon, agua.lat);
+        return (
+          <text key={agua.id} x={x} y={y} textAnchor="middle" className="mapa-real__agua">
+            {agua.label.split('\n').map((linea, i) => (
+              <tspan key={linea} x={x} dy={i === 0 ? 0 : letra}>
+                {linea}
+              </tspan>
+            ))}
+          </text>
+        );
+      })}
 
       {children}
 
       {points.map((p) => {
         const [x, y] = p.fuera ? [p.fuera.x, p.fuera.y] : proyectar(mapa, p.lon, p.lat);
-        const estilo = ESTILO[p.look ?? 'lleno'];
-        const lado = p.side ?? 'derecha';
-        const separacion = estilo.r + 7;
-        const tx = lado === 'derecha' ? x + separacion : lado === 'izquierda' ? x - separacion : x;
-        const ty =
-          (lado === 'arriba' ? y - separacion - 4 : lado === 'abajo' ? y + separacion + LETRA * 0.8 : y + LETRA * 0.35) +
-          (p.dy ?? 0);
-        const anchor = lado === 'derecha' ? 'start' : lado === 'izquierda' ? 'end' : 'middle';
-        const lineas = p.label.split('\n');
+        const aspecto = p.look ?? 'lleno';
+        const estilo = ESTILO[aspecto];
+        const r = RADIO[aspecto] * v.f;
+        const t = rotulo(x, y, p.label, r, v.f, p.side, p.dy);
         const elegido = selected === p.id;
         const contenido = (
           <g className={elegido ? 'mapa-real__punto mapa-real__punto--elegido' : 'mapa-real__punto'}>
             <circle
               cx={x}
               cy={y}
-              r={elegido ? estilo.r + 4 : estilo.r}
+              r={elegido ? r + 4 * v.f : r}
               fill={estilo.fill}
               stroke={estilo.stroke}
-              strokeWidth={3}
+              strokeWidth={3 * v.f}
               strokeDasharray={'dash' in estilo ? estilo.dash : undefined}
             />
             {p.look === 'tachado' ? (
-              <line x1={x - 9} y1={y + 9} x2={x + 9} y2={y - 9} stroke={estilo.stroke} strokeWidth={3} />
+              <line x1={x - r} y1={y + r} x2={x + r} y2={y - r} stroke={estilo.stroke} strokeWidth={3 * v.f} />
             ) : null}
-            <text x={tx} y={ty} textAnchor={anchor} className="mapa-real__rotulo">
-              {lineas.map((linea, i) => (
-                <tspan key={linea} x={tx} dy={i === 0 ? 0 : LETRA * 1.1}>
+            <text x={t.x} y={t.y} textAnchor={t.anchor} className="mapa-real__rotulo">
+              {t.lineas.map((linea, i) => (
+                <tspan key={linea} x={t.x} dy={i === 0 ? 0 : t.salto}>
                   {linea}
                 </tspan>
               ))}

@@ -355,6 +355,14 @@ export const IconCross = (props: IconProps) => (
   </Svg>
 );
 
+/** Un mapa plegado en tres. */
+export const IconMap = (props: IconProps) => (
+  <Svg {...props}>
+    <path d="M3 6.5l6-2.5 6 2.5 6-2.5v13.5l-6 2.5-6-2.5-6 2.5z" />
+    <path d="M9 4v13.5M15 6.5V20" />
+  </Svg>
+);
+
 /** El camino que se estrecha hacia el horizonte. */
 export const IconPath = (props: IconProps) => (
   <Svg {...props}>

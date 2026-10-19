@@ -5,9 +5,13 @@
  * disputas. Cada ficha dice cuándo se comprobó quién la preside: es lo que
  * más deprisa se queda viejo.
  */
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { CHURCHES_NOTE, CHURCH_DISPUTES, ORTHODOX_CHURCHES, type OrthodoxChurch } from '@/content/iglesias-hoy';
 import { Notice, PageHead, Panel, Section, Tag } from '@/components/ui';
+import { MapKey, RealMap } from '@/components/RealMap';
+import { MAPAS_BASE } from '@/content/generated/mapas';
+import { MAP_EPOCHS, SEE_STATUS_LABELS, SEE_STATUS_LOOK } from '@/content/history-maps';
+import { useHashScroll } from '@/hooks/useHashScroll';
 import { formatDayMonth } from '@/lib/format';
 import { reportIssueUrl } from '@/lib/site';
 import es from '@/locales/es';
@@ -92,9 +96,48 @@ function Ficha({ iglesia }: { iglesia: OrthodoxChurch }) {
   );
 }
 
+/**
+ * Dónde está cada una. Es el mapa de hoy de la historia, con las mismas sedes;
+ * aquí, tocando una, se baja a su ficha.
+ */
+function MapaDeHoy() {
+  const navigate = useNavigate();
+  const hoy = MAP_EPOCHS.find((e) => e.id === 'hoy')!;
+  const rangos = [...new Set(hoy.sees.map((s) => s.status))];
+  return (
+    <figure className="mapa__figura">
+      <RealMap
+        mapa={MAPAS_BASE.mediterraneo}
+        points={hoy.sees.map((sede) => ({
+          id: sede.id,
+          lon: sede.lon,
+          lat: sede.lat,
+          label: sede.offMap ? `${sede.label ?? sede.name} ↖` : (sede.label ?? sede.name),
+          side: sede.labelSide,
+          dy: sede.labelDy,
+          look: SEE_STATUS_LOOK[sede.status],
+          fuera: sede.offMap,
+        }))}
+        title="Las Iglesias ortodoxas hoy"
+        description={`Mapa con la sede de cada una de las ${hoy.sees.length} Iglesias. Tocando una se baja a su ficha.`}
+        onSelect={(id) => navigate({ hash: id })}
+      />
+      <figcaption className="mapa__pie">
+        {rangos.map((rango) => (
+          <span key={rango} className="mapa__clave">
+            <MapKey look={SEE_STATUS_LOOK[rango]} />
+            {SEE_STATUS_LABELS[rango]}
+          </span>
+        ))}
+      </figcaption>
+    </figure>
+  );
+}
+
 export function ChurchesTodayPage() {
   const reconocidas = ORTHODOX_CHURCHES.filter((c) => c.status === 'reconocida');
   const disputadas = ORTHODOX_CHURCHES.filter((c) => c.status === 'disputada');
+  useHashScroll([]);
 
   return (
     <div className="page page--reading">
@@ -107,6 +150,8 @@ export function ChurchesTodayPage() {
       />
 
       <Notice>{CHURCHES_NOTE}</Notice>
+
+      <MapaDeHoy />
 
       <Section title={es.churches.recognized}>
         <div className="stack">

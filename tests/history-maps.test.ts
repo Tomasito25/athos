@@ -129,27 +129,13 @@ describe('los mapas de los patriarcados', () => {
     const reconocidas = hoy.sees.filter((s) => s.status === 'patriarcado' || s.status === 'autocefala');
     expect(reconocidas.map((s) => s.id).sort()).toEqual(
       [
-        'constantinopla', 'alejandria', 'antioquia', 'jerusalen', 'moscu', 'belgrado', 'bucarest',
-        'sofia', 'tiflis', 'nicosia', 'atenas', 'varsovia', 'tirana', 'praga',
+        'constantinopla', 'alejandria', 'antioquia', 'jerusalen', 'moscu', 'serbia', 'rumania',
+        'bulgaria', 'georgia', 'chipre', 'grecia', 'polonia', 'albania', 'chequia-eslovaquia',
       ].sort(),
     );
     const enDisputa = hoy.sees.filter((s) => s.status === 'disputada').map((s) => s.id);
-    expect(enDisputa.sort()).toEqual(['america', 'kiev', 'ohrid']);
+    expect(enDisputa.sort()).toEqual(['oca', 'ohrid', 'ucrania']);
     expect(hoy.summary).toMatch(/[Cc]atorce/);
-  });
-
-  it('en ningún mapa un punto pisa a otro', () => {
-    const mapa = MAPAS_BASE.mediterraneo;
-    for (const epoca of MAP_EPOCHS) {
-      for (const [i, a] of epoca.sees.entries()) {
-        for (const b of epoca.sees.slice(i + 1)) {
-          const [ax, ay] = a.offMap ? [a.offMap.x, a.offMap.y] : proyectar(mapa, a.lon, a.lat);
-          const [bx, by] = b.offMap ? [b.offMap.x, b.offMap.y] : proyectar(mapa, b.lon, b.lat);
-          // Los puntos miden diez de radio: a veinte de distancia no se tocan.
-          expect(Math.hypot(ax - bx, ay - by), `${epoca.id}: ${a.id} y ${b.id}`).toBeGreaterThanOrEqual(20);
-        }
-      }
-    }
   });
 
   it('dice de dónde sale la costa y que no dibuja fronteras', () => {

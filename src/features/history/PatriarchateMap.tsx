@@ -10,32 +10,10 @@
  * lector de pantalla, y en un móvil estrecho tampoco se lee con los ojos.
  */
 import { useState } from 'react';
-import { MAP_EPOCHS, SEE_STATUS_LABELS, type SeeStatus } from '@/content/history-maps';
+import { MAP_EPOCHS, SEE_STATUS_LABELS, SEE_STATUS_LOOK } from '@/content/history-maps';
 import { MAPAS_BASE } from '@/content/generated/mapas';
-import { RealMap, type MapPoint } from '@/components/RealMap';
+import { MapKey, RealMap, type MapPoint } from '@/components/RealMap';
 import { Segmented } from '@/components/ui';
-
-/** Cada rango tiene su forma, además de su color: no se depende sólo del color. */
-const ASPECTO: Record<SeeStatus, NonNullable<MapPoint['look']>> = {
-  pentarquia: 'lleno',
-  patriarcado: 'lleno',
-  autocefala: 'hueco',
-  separada: 'tachado',
-  disputada: 'discontinuo',
-};
-
-/** La clave de la leyenda, con la misma forma que en el mapa. */
-function Clave({ rango }: { rango: SeeStatus }) {
-  const aspecto = ASPECTO[rango];
-  const relleno = aspecto === 'lleno' ? 'var(--gold)' : 'var(--surface)';
-  const trazo = aspecto === 'lleno' ? 'var(--gold)' : aspecto === 'tachado' ? 'var(--red)' : 'var(--ink-muted)';
-  return (
-    <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
-      <circle cx="7" cy="7" r="5" fill={relleno} stroke={trazo} strokeWidth="1.6" strokeDasharray={aspecto === 'discontinuo' ? '2 1.5' : undefined} />
-      {aspecto === 'tachado' ? <line x1="3" y1="11" x2="11" y2="3" stroke={trazo} strokeWidth="1.6" /> : null}
-    </svg>
-  );
-}
 
 export function PatriarchateMap() {
   const [epocaId, setEpocaId] = useState(MAP_EPOCHS[0]!.id);
@@ -49,7 +27,7 @@ export function PatriarchateMap() {
     label: sede.offMap ? `${sede.label ?? sede.name} ↖` : (sede.label ?? sede.name),
     side: sede.labelSide ?? 'derecha',
     dy: sede.labelDy,
-    look: ASPECTO[sede.status],
+    look: SEE_STATUS_LOOK[sede.status],
     fuera: sede.offMap,
   }));
 
@@ -75,7 +53,7 @@ export function PatriarchateMap() {
         <figcaption className="mapa__pie">
           {rangos.map((rango) => (
             <span key={rango} className="mapa__clave">
-              <Clave rango={rango} />
+              <MapKey look={SEE_STATUS_LOOK[rango]} />
               {SEE_STATUS_LABELS[rango]}
             </span>
           ))}

@@ -401,6 +401,7 @@ const es = {
   },
 
   bible: {
+    maps: 'Mapas de la Biblia',
     version: 'Versión',
     versionsTitle: 'Qué versiones hay, y por qué no otras',
     versionsHow: 'Dentro de cada capítulo puedes elegir leerlo en español, en griego o en los dos a la vez, versículo a versículo.',

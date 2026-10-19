@@ -145,6 +145,16 @@ mayoría de las jurisdicciones. La aplicación muestra siempre, junto a ellas:
 
 ATHOS no presenta estas reglas como una obligación canónica individual.
 
+## Mapas
+
+La costa, los lagos y los ríos de los mapas —las sedes de la Iglesia por
+épocas, las Iglesias de hoy, Tierra Santa, los viajes de san Pablo y las siete
+Iglesias del Apocalipsis— salen de [Natural Earth](https://www.naturalearthdata.com),
+de **dominio público**. `scripts/build-mapas.mjs` los recorta y simplifica una
+vez y los guarda en el código: los mapas no descargan nada. Las coordenadas de
+cada lugar y sus notas son de ATHOS, bajo CC BY-SA 4.0; donde se discute dónde
+estaba un sitio, su nota lo dice. Los mapas no dibujan fronteras.
+
 ## Monte Athos
 
 Reseñas redactadas para ATHOS a partir de la historia documentada de la

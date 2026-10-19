@@ -15,6 +15,8 @@
  */
 
 /** Qué era una sede en una época concreta. */
+import type { Aspecto } from '@/lib/mapa';
+
 export type SeeStatus =
   /** Patriarcado de la pentarquía antigua. */
   | 'pentarquia'
@@ -33,6 +35,15 @@ export const SEE_STATUS_LABELS: Record<SeeStatus, string> = {
   autocefala: 'Iglesia autocéfala',
   separada: 'Fuera de comunión',
   disputada: 'Autocefalia en disputa',
+};
+
+/** Cada rango tiene su forma, además de su color: no se depende sólo del color. */
+export const SEE_STATUS_LOOK: Record<SeeStatus, Aspecto> = {
+  pentarquia: 'lleno',
+  patriarcado: 'lleno',
+  autocefala: 'hueco',
+  separada: 'tachado',
+  disputada: 'discontinuo',
 };
 
 export interface See {
@@ -180,17 +191,17 @@ export const MAP_EPOCHS: MapEpoch[] = [
       { id: 'antioquia', name: 'Antioquía', ...P.antioquia, status: 'patriarcado', note: 'Patriarcado de Antioquía y todo Oriente, con sede en Damasco desde el siglo XIV. Su grey se ha dispersado por la guerra en Siria.' },
       { id: 'jerusalen', name: 'Jerusalén', ...P.jerusalen, status: 'patriarcado', note: 'Patriarcado de Jerusalén, custodio de los Santos Lugares.' },
       { id: 'moscu', name: 'Moscú', ...P.moscu, status: 'patriarcado', note: 'La Iglesia ortodoxa más numerosa. Desde 2018, sin comunión con Constantinopla.' },
-      { id: 'belgrado', name: 'Serbia', ...P.belgrado, status: 'patriarcado', labelSide: 'izquierda', note: 'Patriarcado de Serbia, con sede en Belgrado. Autocéfala desde san Sava, en 1219.' },
-      { id: 'bucarest', name: 'Rumanía', ...P.bucarest, status: 'patriarcado', note: 'Patriarcado de Rumanía: autocéfala desde 1885, patriarcado desde 1925.' },
-      { id: 'sofia', name: 'Bulgaria', ...P.sofia, status: 'patriarcado', note: 'Patriarcado de Bulgaria, con sede en Sofía. Patriarcado reconocido desde 1961.' },
-      { id: 'tiflis', name: 'Georgia', ...P.tiflis, status: 'patriarcado', labelSide: 'izquierda', note: 'Iglesia ortodoxa de Georgia, de raíz muy antigua; su autocefalia restaurada se reconoció en 1990.' },
-      { id: 'nicosia', name: 'Chipre', ...P.nicosia, status: 'autocefala', note: 'Autocéfala desde el Concilio de Éfeso (431).' },
-      { id: 'atenas', name: 'Grecia', ...P.atenas, status: 'autocefala', labelSide: 'izquierda', note: 'Iglesia de Grecia, autocéfala desde 1850.' },
-      { id: 'varsovia', name: 'Polonia', ...P.varsovia, status: 'autocefala', labelSide: 'izquierda', note: 'Iglesia ortodoxa de Polonia, con sede en Varsovia. Autocéfala desde 1924.' },
-      { id: 'tirana', name: 'Albania', ...P.tirana, status: 'autocefala', labelSide: 'izquierda', note: 'Iglesia ortodoxa de Albania, autocéfala desde 1937. Prohibida con toda religión en 1967, renació desde 1991.' },
-      { id: 'praga', name: 'Tierras Checas y Eslovaquia', label: 'Chequia y\nEslovaquia', ...P.praga, status: 'autocefala', note: 'Con sedes en Praga y Prešov. Autocéfala por Moscú en 1951; Constantinopla la reconoció en 1998.' },
-      { id: 'kiev', name: 'Ucrania', ...P.kiev, status: 'disputada', note: 'La Iglesia ortodoxa de Ucrania recibió la autocefalia de Constantinopla en 2019; la reconocen además Alejandría, Grecia y Chipre. Moscú no, y en Ucrania sigue también la Iglesia que dependía de Moscú.' },
-      { id: 'america', name: 'América (OCA)', ...P.america, status: 'disputada', note: 'La Iglesia ortodoxa en América, fuera del esquema. Moscú le concedió la autocefalia en 1970; Constantinopla y la mayoría la tratan todavía como Iglesia autónoma.' },
+      { id: 'serbia', name: 'Serbia', ...P.belgrado, status: 'patriarcado', labelSide: 'izquierda', note: 'Patriarcado de Serbia, con sede en Belgrado. Autocéfala desde san Sava, en 1219.' },
+      { id: 'rumania', name: 'Rumanía', ...P.bucarest, status: 'patriarcado', note: 'Patriarcado de Rumanía: autocéfala desde 1885, patriarcado desde 1925.' },
+      { id: 'bulgaria', name: 'Bulgaria', ...P.sofia, status: 'patriarcado', note: 'Patriarcado de Bulgaria, con sede en Sofía. Patriarcado reconocido desde 1961.' },
+      { id: 'georgia', name: 'Georgia', ...P.tiflis, status: 'patriarcado', labelSide: 'izquierda', note: 'Iglesia ortodoxa de Georgia, de raíz muy antigua; su autocefalia restaurada se reconoció en 1990.' },
+      { id: 'chipre', name: 'Chipre', ...P.nicosia, status: 'autocefala', note: 'Autocéfala desde el Concilio de Éfeso (431).' },
+      { id: 'grecia', name: 'Grecia', ...P.atenas, status: 'autocefala', labelSide: 'izquierda', note: 'Iglesia de Grecia, autocéfala desde 1850.' },
+      { id: 'polonia', name: 'Polonia', ...P.varsovia, status: 'autocefala', labelSide: 'izquierda', note: 'Iglesia ortodoxa de Polonia, con sede en Varsovia. Autocéfala desde 1924.' },
+      { id: 'albania', name: 'Albania', ...P.tirana, status: 'autocefala', labelSide: 'izquierda', note: 'Iglesia ortodoxa de Albania, autocéfala desde 1937. Prohibida con toda religión en 1967, renació desde 1991.' },
+      { id: 'chequia-eslovaquia', name: 'Tierras Checas y Eslovaquia', label: 'Chequia y\nEslovaquia', ...P.praga, status: 'autocefala', note: 'Con sedes en Praga y Prešov. Autocéfala por Moscú en 1951; Constantinopla la reconoció en 1998.' },
+      { id: 'ucrania', name: 'Ucrania', ...P.kiev, status: 'disputada', note: 'La Iglesia ortodoxa de Ucrania recibió la autocefalia de Constantinopla en 2019; la reconocen además Alejandría, Grecia y Chipre. Moscú no, y en Ucrania sigue también la Iglesia que dependía de Moscú.' },
+      { id: 'oca', name: 'América (OCA)', ...P.america, status: 'disputada', note: 'La Iglesia ortodoxa en América, fuera del esquema. Moscú le concedió la autocefalia en 1970; Constantinopla y la mayoría la tratan todavía como Iglesia autónoma.' },
       { id: 'ohrid', name: 'Ohrid', ...P.ohrid, status: 'disputada', note: 'La Iglesia de Macedonia del Norte. Proclamó su autocefalia en 1967; en 2022 Constantinopla la recibió en comunión y Serbia se la concedió, pero no todas la reconocen.' },
     ],
   },

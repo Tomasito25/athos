@@ -122,6 +122,9 @@ export function BiblePage() {
               {TESTAMENT_LABELS[testament]}
             </a>
           ))}
+          <Link className="shortcut" to="/biblioteca/mapas">
+            {es.bible.maps}
+          </Link>
         </nav>
         {groups.map(([testament, sections]) => (
           <div key={testament}>

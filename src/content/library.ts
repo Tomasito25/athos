@@ -17,6 +17,7 @@ import { OFFICES } from './offices';
 import { STUDY_COURSES, STUDY_WORKS } from './study';
 import { GLOSSARY } from './glossary';
 import { ORTHODOX_CHURCHES } from './iglesias-hoy';
+import { ASIA_PLACES, HOLY_LAND, PAUL_JOURNEYS } from './mapas-biblicos';
 import { TEMPLE_PARTS } from './temple';
 import es from '@/locales/es';
 
@@ -32,6 +33,7 @@ export interface LibrarySection {
     | 'candle'
     | 'chalice'
     | 'lamp'
+    | 'map'
     | 'note'
     | 'journal'
     | 'people'
@@ -173,6 +175,15 @@ export const LIBRARY_GROUPS: LibraryGroup[] = [
         text: 'Una ficha por Iglesia: quién la preside, su sede, desde cuándo es autocéfala, cuántos fieles tiene, su calendario, sus lenguas y sus diócesis en España y América Latina. Y las disputas abiertas, contadas como disputas.',
         count: ORTHODOX_CHURCHES.length,
         unit: 'Iglesias',
+      },
+      {
+        id: 'mapas',
+        to: '/biblioteca/mapas',
+        icon: 'map',
+        title: es.bible.maps,
+        text: 'Tierra Santa con los lugares del Evangelio, los cuatro viajes de san Pablo y las siete Iglesias del Apocalipsis con los concilios, sobre la costa de verdad. Cada lugar lleva a sus pasajes.',
+        count: HOLY_LAND.length + PAUL_JOURNEYS.length + ASIA_PLACES.length,
+        unit: 'lugares y viajes',
       },
       {
         id: 'athos',

@@ -85,6 +85,21 @@ puede borrar los datos de una web que no se abre en semanas, y la copia es lo
 - **Monte Athos**: los veinte monasterios con lo que son hoy y quién vivió en
   ellos, y artículos sobre el gobierno, el ávaton, los sketes, el canto y cómo
   se llega.
+- **Las Iglesias ortodoxas hoy**: una ficha por Iglesia con quién la preside
+  y cuándo se comprobó, su sede, su calendario, sus lenguas y sus diócesis en
+  España y América Latina; y las disputas abiertas, contadas como disputas.
+- **Mapas sobre la costa de verdad**, sin conexión: Tierra Santa con los
+  lugares del Evangelio enlazados a sus pasajes, los cuatro viajes de san
+  Pablo, las siete Iglesias del Apocalipsis con los concilios, y las sedes de
+  la Iglesia época por época.
+- **Nombres para la oración**: los vivos y los difuntos que se encomiendan,
+  rezados en su sitio en los oficios y en la panihida, con aviso el día del
+  santo de cada nombre.
+- **Al calendario del teléfono**: las fiestas, los ayunos y los recordatorios
+  de oración en un archivo `.ics`, que avisa aunque ATHOS esté cerrada.
+- **Compartir y leer en voz alta** un versículo, una oración o la vida de un
+  santo, con la voz del propio dispositivo; y la pantalla encendida mientras
+  se reza un oficio.
 - **Oración de Jesús y komboskini**, con contador, temporizador e historial.
 - **Ornamentos bizantinos** dibujados con trazo —cabeceras de entrelazo,
   capitulares iluminadas, filete de tabla de icono—, que se pueden apagar.

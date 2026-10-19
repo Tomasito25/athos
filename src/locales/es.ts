@@ -1,8 +1,12 @@
 /**
- * Textos de la interfaz en español.
+ * Textos de la interfaz.
  *
- * Ninguna cadena visible debe escribirse en un componente: todas viven aquí,
- * para que añadir otro idioma sea sólo aportar un archivo equivalente.
+ * ATHOS está en español, interfaz y contenido. Las cadenas de la interfaz se
+ * reúnen aquí para que no se repitan y se puedan revisar juntas; no hay
+ * mecanismo de traducción. Lo hubo —i18next con un selector de siete
+ * idiomas «pendientes de traducir»—, pero las pantallas leían este archivo
+ * directamente, así que una traducción nueva no se habría usado nunca. Se
+ * quitó antes que prometer algo que no funcionaba. Véase CONTRIBUTING.md.
  */
 const es = {
   app: {
@@ -21,6 +25,10 @@ const es = {
     updateHint: 'Se instala en un momento y no se pierde nada de lo tuyo.',
     updating: 'Actualizando ATHOS…',
     updatedTo: 'ATHOS se ha actualizado a la versión {{version}}',
+    staleChunk: 'ATHOS se ha actualizado en otra ventana',
+    staleChunkReloading: 'Recargando para traer la versión nueva…',
+    staleChunkFailed:
+      'Esta ventana se quedó con la versión anterior y falta una parte de ella. Recargar lo arregla; si no, comprueba la conexión.',
     seeNews: 'Ver novedades',
     later: 'Más tarde',
     close: 'Cerrar',
@@ -753,8 +761,6 @@ const es = {
     data: 'Datos',
     install: 'Instalar ATHOS',
     about: 'Acerca de ATHOS',
-    language: 'Idioma',
-    languageNote: 'Sólo el español está completo. Los demás idiomas están preparados en la arquitectura pero aún sin traducir.',
     storage: 'Almacenamiento',
     storageUsed: '{{used}} de {{quota}}',
     persistent: 'Almacenamiento persistente',
@@ -787,6 +793,19 @@ const es = {
     minutesAgo: 'hace {{n}} min',
     hoursAgo: 'hace {{n}} h',
     sources: 'Fuentes y licencias',
+  },
+
+  about: {
+    contact: 'Contacto y errores',
+    reportError: 'Informar de un error',
+    reportErrorHint: 'abre una incidencia en el repositorio con la versión ya escrita.',
+    openIssues: 'Ver los errores ya avisados',
+    sourceCode: 'El código de ATHOS',
+    email: 'Correo',
+    privacyPolicy: 'Política de privacidad completa',
+    privacyTitle: 'Privacidad',
+    privacyUpdated: 'Actualizada el {{date}}',
+    privacyFixedUrl: 'Esta misma política, con dirección fija y legible sin la aplicación:',
   },
 
   install: {

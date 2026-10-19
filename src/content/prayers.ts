@@ -2,10 +2,11 @@
  * Biblioteca de oraciones.
  *
  * Los textos incorporados son oraciones litúrgicas tradicionales, de dominio
- * público en su original y de uso corriente en las parroquias ortodoxas de
- * lengua española. Cuando no ha sido posible verificar una versión española
- * completa, la ficha se conserva y el texto queda marcado como pendiente:
- * ATHOS nunca redacta un texto propio haciéndolo pasar por litúrgico.
+ * público en su original griego o eslavo. Su versión española es de tres
+ * clases, y la ficha dice cuál: traducción hecha para ATHOS (`traduccion`),
+ * redactada para ATHOS (`propia`) o tradicional sin verificar (`TRAD`), cuya
+ * procedencia se está comprobando texto por texto. ATHOS nunca redacta un
+ * texto propio haciéndolo pasar por litúrgico.
  */
 import type { Prayer, PrayerCategory, PrayerCategoryId, SourceMeta, TextBlock } from '@/types';
 import { MORE_PRAYERS } from './prayers-more';
@@ -75,7 +76,12 @@ const TRAD: SourceMeta = {
   license: 'traditional',
   copyright: 'Texto litúrgico tradicional, de dominio público en su original griego o eslavo.',
   dateAdded: '2026-01-01',
-  notes: 'Versión española de uso corriente en las parroquias ortodoxas hispanohablantes.',
+  // No se sabe todavía si esta versión española es traducción propia o se
+  // tomó de un libro parroquial: se está comprobando texto por texto
+  // (docs/PROCEDENCIA.md). Hasta entonces, la ficha no afirma más de lo que
+  // se sabe.
+  notes:
+    'Versión española tradicional. Su procedencia exacta —traducción propia o libro parroquial publicado— está pendiente de verificar texto por texto.',
 };
 
 const meta = (over: Partial<SourceMeta> = {}): SourceMeta => ({ ...TRAD, ...over });

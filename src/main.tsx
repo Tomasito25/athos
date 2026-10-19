@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import { router } from '@/routes/router';
 import { bootstrap } from '@/lib/bootstrap';
+import { reloadOnce } from '@/lib/chunk-reload';
 
 import '@/styles/fonts.css';
 import '@/styles/tokens.css';
@@ -13,6 +14,14 @@ import '@/styles/shell.css';
 import '@/styles/components.css';
 import '@/styles/byzantine.css';
 import '@/styles/hubs.css';
+
+// Vite avisa así cuando no puede descargar el código o el estilo de una
+// pantalla: otra ventana aplicó una versión nueva y estos archivos ya no
+// existen. Se recarga una vez; si no se puede, el error sigue su curso y lo
+// recoge la pantalla de error.
+window.addEventListener('vite:preloadError', (event) => {
+  if (reloadOnce()) event.preventDefault();
+});
 
 const container = document.getElementById('root');
 if (!container) throw new Error('Falta el elemento raíz');

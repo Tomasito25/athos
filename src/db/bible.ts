@@ -8,6 +8,7 @@
  */
 import type { BibleVerse } from '@/types';
 import { BIBLE_BOOKS, BOOKS_BY_ID } from '@/content/bible';
+import { contentUrl, contentVersions } from '@/lib/content-url';
 import { db, getSetting, setSetting } from './db';
 
 export const DEFAULT_TRANSLATION = 'rv1909';
@@ -22,7 +23,7 @@ const memory = new Map<string, BibleBookFile>();
 const inFlight = new Map<string, Promise<BibleBookFile>>();
 
 const fileUrl = (bookId: string, translationId: string) =>
-  `${import.meta.env.BASE_URL}content/bible/${translationId}/${bookId}.json`;
+  contentUrl(`bible/${translationId}/${bookId}.json`);
 
 /**
  * La traducción de la que hay que leer un libro.
@@ -93,12 +94,106 @@ export function chapterVerses(
     .sort((a, b) => a.verse - b.verse);
 }
 
+/* ---------- Que lo guardado no se quede viejo ---------- */
+
+const VERSIONS_KEY = 'bible.versions';
+/** Las traducciones de las que se construye el Salterio. */
+const DEL_SALTERIO = new Set(['rv1909', 'blm']);
+/** Debe coincidir con la clave de `psalter.ts`; no se importa para no hacer un ciclo. */
+const PSALTER_KEY = 'psalter.built.v2';
+const CONTENT_CACHE = 'athos-content-v2';
+
+let comprobacion: Promise<string[]> | null = null;
+
+/**
+ * Tira lo guardado de cada traducción cuyo texto haya cambiado.
+ *
+ * Los libros se guardan en IndexedDB al leerlos y no se volvían a pedir
+ * nunca: una corrección de la Biblia no llegaba a quien ya la tenía. Ahora
+ * cada traducción lleva la huella de sus archivos (`__CONTENT_VERSIONS__`), y
+ * si la guardada no es la de esta compilación se borran sus versículos, se
+ * desmarca su indexación y, si alimenta el Salterio, el Salterio se
+ * reconstruye. Lo del usuario —favoritos, notas, avance— apunta a
+ * referencias, no a filas, y no se toca.
+ *
+ * Quien venía de una versión sin huellas no tiene ninguna guardada: se le
+ * renueva todo una vez, porque no hay forma de saber si lo suyo es lo último.
+ *
+ * Devuelve las traducciones renovadas. Se ejecuta una vez por sesión.
+ */
+export function ensureBibleCurrent(): Promise<string[]> {
+  comprobacion ??= renewStaleTranslations().catch(() => {
+    // Si falla —IndexedDB bloqueada—, se lee lo que haya y se reintenta otro día.
+    comprobacion = null;
+    return [];
+  });
+  return comprobacion;
+}
+
+export async function renewStaleTranslations(): Promise<string[]> {
+  const actuales: Record<string, string> = {};
+  for (const [grupo, huella] of Object.entries(contentVersions())) {
+    if (grupo.startsWith('bible/')) actuales[grupo.slice('bible/'.length)] = huella;
+  }
+  if (!Object.keys(actuales).length) return [];
+
+  const guardadas = await getSetting<Record<string, string>>(VERSIONS_KEY, {});
+  const viejas = Object.keys(actuales).filter((t) => guardadas[t] !== actuales[t]);
+  if (!viejas.length) return [];
+
+  await db.transaction('rw', [db.bible_verses, db.bible_chapters, db.psalms, db.settings], async () => {
+    for (const traduccion of viejas) {
+      await db.bible_verses.where('translationId').equals(traduccion).delete();
+      await db.bible_chapters.where('translationId').equals(traduccion).delete();
+    }
+
+    // Los libros indexados cuya traducción ha cambiado vuelven a indexarse.
+    const indexados = await getSetting<string[]>(INDEX_KEY, []);
+    const siguen = indexados.filter((libro) => !viejas.includes(effectiveTranslation(libro)));
+    if (siguen.length !== indexados.length) await setSetting(INDEX_KEY, siguen);
+
+    if (viejas.some((t) => DEL_SALTERIO.has(t))) {
+      await db.psalms.clear();
+      await setSetting(PSALTER_KEY, false);
+    }
+
+    await setSetting(VERSIONS_KEY, { ...guardadas, ...actuales });
+  });
+
+  for (const traduccion of viejas) {
+    for (const clave of memory.keys()) if (clave.startsWith(`${traduccion}:`)) memory.delete(clave);
+  }
+  await limpiarCache(viejas, actuales);
+  return viejas;
+}
+
+/**
+ * Quita de la caché del Service Worker los libros con huella vieja.
+ *
+ * No es imprescindible —la dirección nueva ya no los encuentra—, pero si no
+ * se quitan ocupan sitio hasta que caducan, dentro de un año.
+ */
+async function limpiarCache(viejas: string[], actuales: Record<string, string>): Promise<void> {
+  if (typeof caches === 'undefined') return;
+  try {
+    const cache = await caches.open(CONTENT_CACHE);
+    for (const peticion of await cache.keys()) {
+      const url = new URL(peticion.url);
+      const traduccion = viejas.find((t) => url.pathname.includes(`/content/bible/${t}/`));
+      if (traduccion && url.searchParams.get('v') !== actuales[traduccion]) await cache.delete(peticion);
+    }
+  } catch {
+    // Sin acceso a la caché no se pierde nada: sólo ocupa sitio un tiempo.
+  }
+}
+
 /** Versículos de un capítulo, con IndexedDB como caché de lectura. */
 export async function getChapter(
   bookId: string,
   chapter: number,
   requested = DEFAULT_TRANSLATION,
 ): Promise<BibleVerse[]> {
+  await ensureBibleCurrent();
   const translationId = effectiveTranslation(bookId, requested);
   const stored = await db.bible_verses
     .where('[translationId+bookId+chapter]')
@@ -156,6 +251,7 @@ export async function indexWholeBible(
   signal?: AbortSignal,
   translationId = DEFAULT_TRANSLATION,
 ): Promise<void> {
+  await ensureBibleCurrent();
   const available = BIBLE_BOOKS.filter((b) => b.status !== 'pending');
   const already = new Set(await indexedBooks());
   let done = already.size;

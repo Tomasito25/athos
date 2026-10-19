@@ -41,6 +41,11 @@ interface UpdateState {
   lastCheck: string | null;
   /** El aviso se ha dejado para luego en esta sesión. */
   postponed: boolean;
+  /**
+   * Otra ventana aplicó la versión nueva y ésta sigue con el código viejo.
+   * Se recarga en cuanto se sale de lo que se está rezando.
+   */
+  outdated: boolean;
   setStatus(status: UpdateStatus): void;
   markChecked(): void;
   postpone(): void;
@@ -52,6 +57,7 @@ export const useUpdate = create<UpdateState>()((set) => ({
   status: 'idle',
   lastCheck: leerUltima(),
   postponed: false,
+  outdated: false,
   setStatus: (status) => set({ status }),
   markChecked: () => {
     const ahora = new Date().toISOString();

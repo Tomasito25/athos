@@ -2409,3 +2409,19 @@ input[type='range']:focus-visible::-webkit-slider-thumb {
   color: var(--ink-strong);
   overflow-wrap: anywhere;
 }
+
+/* ---------- Acerca de: contacto y errores ---------- */
+
+.about-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--sp-2);
+}
+
+.about-links a {
+  display: inline-block;
+  min-height: 2.75rem;
+  line-height: 2.75rem;
+}

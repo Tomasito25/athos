@@ -1,7 +1,7 @@
 # Comprueba ATHOS en cada empujón y en cada propuesta de cambio.
 #
 # Es lo mismo que `npm run check` en local: lint, tipos, pruebas y compilación.
-# No publica nada; para eso está deploy.sh.
+# No publica nada; para eso está deploy.yml.
 name: Comprobar
 
 on:

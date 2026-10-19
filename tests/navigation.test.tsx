@@ -12,14 +12,12 @@ import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import { routes } from '@/routes/router';
 import { db } from '@/db/db';
 import { seedContent, seedUserDefaults } from '@/db/seed';
-import { initI18n } from '@/lib/i18n';
 
 beforeAll(async () => {
   await db.delete();
   await db.open();
   await seedContent();
   await seedUserDefaults();
-  await initI18n('es');
 });
 
 function renderAt(path: string) {

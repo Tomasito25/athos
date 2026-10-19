@@ -101,6 +101,7 @@ export const routes: RouteObject[] = [
       { path: 'configuracion/fuentes', lazy: page(() => import('@/features/settings/SourcesPage'), 'SourcesPage') },
       { path: 'configuracion/acerca-de', lazy: page(() => import('@/features/settings/AboutPage'), 'AboutPage') },
       { path: 'configuracion/novedades', lazy: page(() => import('@/features/settings/NewsPage'), 'NewsPage') },
+      { path: 'configuracion/privacidad', lazy: page(() => import('@/features/settings/PrivacyPage'), 'PrivacyPage') },
 
       { path: '*', lazy: page(() => import('@/features/error/NotFoundPage'), 'NotFoundPage') },
     ],

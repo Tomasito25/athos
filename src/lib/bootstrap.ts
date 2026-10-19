@@ -1,12 +1,11 @@
 /**
  * Arranque de ATHOS.
  *
- * Prepara lo imprescindible antes del primer render —tema, idioma, base de
- * datos— y deja para más tarde lo que puede esperar: construir el Salterio e
- * indexar la Biblia se hacen cuando el navegador está ocioso, para que la
- * primera pantalla aparezca cuanto antes.
+ * Prepara lo imprescindible antes del primer render —tema y base de datos— y
+ * deja para más tarde lo que puede esperar: construir el Salterio e indexar
+ * la Biblia se hacen cuando el navegador está ocioso, para que la primera
+ * pantalla aparezca cuanto antes.
  */
-import { initI18n, applyDocumentLanguage } from '@/lib/i18n';
 import { applySettingsToDocument, useSettings } from '@/stores/settings';
 import { seedContent, seedUserDefaults } from '@/db/seed';
 import { requestPersistentStorage } from '@/db/db';
@@ -27,8 +26,6 @@ export async function bootstrap(): Promise<void> {
   const settings = useSettings.getState();
 
   applySettingsToDocument(settings);
-  applyDocumentLanguage(settings.language);
-  await initI18n(settings.language);
 
   // El tema del sistema puede cambiar mientras la aplicación está abierta.
   window

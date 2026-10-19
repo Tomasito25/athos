@@ -13,7 +13,6 @@ import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import { routes } from '@/routes/router';
 import { db } from '@/db/db';
 import { seedContent, seedUserDefaults } from '@/db/seed';
-import { initI18n } from '@/lib/i18n';
 import { useSettings } from '@/stores/settings';
 import { useUi } from '@/stores/ui';
 
@@ -32,7 +31,6 @@ beforeEach(async () => {
   await db.open();
   await seedContent();
   await seedUserDefaults();
-  await initI18n('es');
   useSettings.getState().set('installPromptDismissed', false);
   useUi.setState({ installEvent: null });
   delete (window as { __athosInstall?: unknown }).__athosInstall;

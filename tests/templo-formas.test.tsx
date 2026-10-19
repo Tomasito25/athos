@@ -12,7 +12,6 @@ import { RouterProvider, createMemoryRouter, matchRoutes } from 'react-router-do
 import { routes } from '@/routes/router';
 import { db } from '@/db/db';
 import { seedContent, seedUserDefaults } from '@/db/seed';
-import { initI18n } from '@/lib/i18n';
 import { computeLiturgicalDay } from '@/lib/calendar/liturgical';
 import { prostrationsToday } from '@/lib/calendar/prostrations';
 import { STUDY_COURSES, STUDY_WORKS } from '@/content/study';
@@ -27,7 +26,6 @@ beforeAll(async () => {
   await db.open();
   await seedContent();
   await seedUserDefaults();
-  await initI18n('es');
 });
 
 const dia = (iso: string) => computeLiturgicalDay(iso, 'nuevo');

@@ -12,7 +12,6 @@ import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import { routes } from '@/routes/router';
 import { db } from '@/db/db';
 import { seedContent, seedUserDefaults } from '@/db/seed';
-import { initI18n } from '@/lib/i18n';
 import es from '@/locales/es';
 
 beforeAll(async () => {
@@ -20,7 +19,6 @@ beforeAll(async () => {
   await db.open();
   await seedContent();
   await seedUserDefaults();
-  await initI18n('es');
 });
 
 // `document.title` es global y sobrevive a cada prueba: si no se limpia, una

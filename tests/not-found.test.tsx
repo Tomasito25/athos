@@ -12,7 +12,6 @@ import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import { routes } from '@/routes/router';
 import { db } from '@/db/db';
 import { seedContent, seedUserDefaults } from '@/db/seed';
-import { initI18n } from '@/lib/i18n';
 import { screenName } from '@/lib/screens';
 import es from '@/locales/es';
 
@@ -21,7 +20,6 @@ beforeAll(async () => {
   await db.open();
   await seedContent();
   await seedUserDefaults();
-  await initI18n('es');
 });
 
 /** Una dirección rota por cada pantalla de ficha de la aplicación. */

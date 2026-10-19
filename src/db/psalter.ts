@@ -17,9 +17,10 @@ import {
   kathismaOf,
 } from '@/content/psalter';
 import { db, getSetting, setSetting } from './db';
-import { chapterVerses, loadBookFile, DEFAULT_TRANSLATION } from './bible';
+import { chapterVerses, ensureBibleCurrent, loadBookFile, DEFAULT_TRANSLATION } from './bible';
 
 // La versión 2 añade el Salmo 151: hay que reconstruir el Salterio ya guardado.
+// `bible.ts` la repite para desmarcarlo cuando cambia el texto bíblico.
 const PSALTER_KEY = 'psalter.built.v2';
 const PSALM_COUNT = 151;
 
@@ -75,6 +76,8 @@ function buildPsalm(
 
 /** Construye los 151 salmos a partir del texto bíblico. Se ejecuta una vez. */
 export async function ensurePsalterBuilt(force = false): Promise<void> {
+  // Si el texto bíblico ha cambiado, esto deja el Salterio desmarcado.
+  await ensureBibleCurrent();
   if (!force && (await getSetting<boolean>(PSALTER_KEY, false))) {
     if (await db.psalms.count()) return;
   }

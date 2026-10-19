@@ -48,7 +48,6 @@ export interface SettingsState {
   officeExtras: { troparion: boolean; akathist: boolean };
 
   calendarStyle: CalendarStyle;
-  language: string;
   bibleView: BibleViewChoice;
 
   /** Hora a la que empieza cada oficio. La noche se extiende hasta la mañana. */
@@ -92,7 +91,6 @@ export const DEFAULT_SETTINGS = {
   officeLength: { manana: 'habitual', mediodia: 'habitual', noche: 'habitual' } as Record<RuleTime, OfficeLength>,
   officeExtras: { troparion: true, akathist: true },
   calendarStyle: 'nuevo' as CalendarStyle,
-  language: 'es',
   bibleView: 'es' as BibleViewChoice,
   officeHours: { manana: 5, mediodia: 12, noche: 19 },
   jesusPrayerVibration: true,

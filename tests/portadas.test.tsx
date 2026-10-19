@@ -11,7 +11,6 @@ import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import { routes } from '@/routes/router';
 import { db } from '@/db/db';
 import { seedContent, seedUserDefaults } from '@/db/seed';
-import { initI18n } from '@/lib/i18n';
 import { useSettings } from '@/stores/settings';
 import { nextGreatFeast } from '@/lib/calendar/next-feast';
 import { LIBRARY_GROUPS } from '@/content/library';
@@ -24,7 +23,6 @@ beforeAll(async () => {
   await db.open();
   await seedContent();
   await seedUserDefaults();
-  await initI18n('es');
 });
 
 beforeEach(() => {

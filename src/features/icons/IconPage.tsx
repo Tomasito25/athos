@@ -32,7 +32,7 @@ export function IconPage() {
       <PageHead eyebrow={ICON_CATEGORY_LABELS[item.category]} title={item.name} subtitle={item.place} />
 
       <figure style={{ maxWidth: '22rem', margin: '0 auto var(--sp-5)' }}>
-        <IconPlate name={item.name} image={item.image} eager />
+        <IconPlate name={item.name} image={item.image} fallback={item.thumb} eager />
         {item.credit ? (
           <figcaption className="source-note" style={{ marginTop: 'var(--sp-2)', borderTop: 'none', paddingTop: 0 }}>
             {item.credit.author}

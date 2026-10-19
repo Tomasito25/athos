@@ -41,15 +41,34 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      # GitHub dice aquí dónde se va a servir el sitio: la subcarpeta
+      # (/athos) y el dominio (https://tomasito25.github.io, o el propio si
+      # algún día se configura uno). Se lee de aquí en vez de escribirlo a
+      # mano para que un cambio de dominio no deje la compilación apuntando
+      # al viejo.
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
       # Se compila antes de probar a propósito: hay pruebas que necesitan la
       # aplicación compilada —arrancan server.py contra dist/— y si no existe
       # se saltan en silencio, que es la peor manera de no comprobar algo.
       # `npm run build` incluye la comprobación de tipos.
+      #
+      # ATHOS_URL es lo que hace absolutas las etiquetas Open Graph. Sin ella,
+      # WhatsApp y Telegram no encontraban la imagen de vista previa.
       - name: Build
-        run: ATHOS_BASE=/athos/ npm run build
+        run: npm run build
+        env:
+          ATHOS_BASE: ${{ steps.pages.outputs.base_path }}/
+          ATHOS_URL: ${{ steps.pages.outputs.origin }}
+          # El correo de contacto que enseñan «Acerca de» y la política de
+          # privacidad. Es una variable del repositorio, no un secreto: va a
+          # quedar publicado. Si no está, remiten a las incidencias.
+          ATHOS_CONTACTO: ${{ vars.ATHOS_CONTACTO }}
 
       # No se publica una versión rota en una dirección que la gente ya tiene
-      # guardada. Es lo mismo que hace deploy.sh antes de subir nada.
+      # guardada.
       - name: Pruebas
         run: npm run test
 
@@ -58,9 +77,6 @@ jobs:
       # primera vez, antes de que el Service Worker esté instalado.
       - name: Reserva para las rutas de la aplicación
         run: cp dist/index.html dist/404.html
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

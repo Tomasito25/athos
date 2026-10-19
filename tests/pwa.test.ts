@@ -168,6 +168,22 @@ describe.skipIf(!built)('index.html', () => {
     expect(html).toMatch(/rel="apple-touch-icon"/);
   });
 
+  it('los iconos y las pantallas de arranque no dependen de la página abierta', () => {
+    // Eran relativos: en /athos/leer/biblia el navegador pedía
+    // /athos/leer/biblia/icons/apple-touch-icon.png y recibía un 404. Lo
+    // comprobado en la web publicada: favicon, icono de iPhone y pantallas de
+    // arranque fallaban en cualquier página que no fuera la portada.
+    const rutas = [
+      ...html.matchAll(/<link[^>]*rel="(?:icon|apple-touch-icon|apple-touch-startup-image)"[^>]*href="([^"]+)"/g),
+    ].map((m) => m[1]);
+    expect(rutas.length).toBeGreaterThan(10);
+    const manifest = JSON.parse(read('manifest.webmanifest')) as { scope: string };
+    for (const ruta of rutas) {
+      expect(ruta.startsWith(manifest.scope), `${ruta} no cuelga de ${manifest.scope}`).toBe(true);
+      expect(existsSync(resolve(dist, ruta.slice(manifest.scope.length))), `falta ${ruta}`).toBe(true);
+    }
+  });
+
   it('declara el color de tema para los dos esquemas', () => {
     expect(html).toMatch(/name="theme-color"[^>]*prefers-color-scheme: light/);
     expect(html).toMatch(/name="theme-color"[^>]*prefers-color-scheme: dark/);
@@ -300,6 +316,17 @@ describe.skipIf(!built)('salida de la compilación', () => {
   it('no repite entradas en el precaché', () => {
     const urls = [...read('sw.js').matchAll(/\burl:"([^"]+)"/g)].map((m) => m[1]);
     expect(urls.length).toBe(new Set(urls).size);
+  });
+
+  it('publica la política de privacidad con dirección fija y sin JavaScript', () => {
+    // Las tiendas de aplicaciones piden una dirección que se lea sin la
+    // aplicación. Se genera del mismo texto que enseña la pantalla.
+    const html = read('privacidad.html');
+    expect(html).toContain('<h1>Privacidad</h1>');
+    expect(html).not.toContain('<script');
+    expect(html).toMatch(/github\.com\/Tomasito25\/athos\/issues/);
+    // Y está en el precaché, para que se abra también sin conexión.
+    expect([...read('sw.js').matchAll(/\burl:"([^"]+)"/g)].map((m) => m[1])).toContain('privacidad.html');
   });
 
   it('deja los archivos imprescindibles en dist/', () => {

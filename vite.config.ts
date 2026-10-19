@@ -5,6 +5,8 @@ import { fileURLToPath, URL } from 'node:url';
 import { copyFileSync, existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { recentChangelog } from './scripts/changelog.ts';
+import { contentVersions } from './scripts/content-versions.ts';
+import { privacyPageHtml } from './scripts/privacy-page.ts';
 
 const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf-8')) as {
   version: string;
@@ -37,6 +39,10 @@ export default defineConfig({
     __BUILD_DATE__: JSON.stringify(new Date().toISOString().slice(0, 10)),
     // Las últimas versiones del registro de cambios, para «Novedades».
     __CHANGELOG__: JSON.stringify(recentChangelog(new URL('./CHANGELOG.md', import.meta.url))),
+    // La huella de cada carpeta del corpus: una corrección cambia la dirección.
+    __CONTENT_VERSIONS__: JSON.stringify(contentVersions(new URL('./public/content/', import.meta.url))),
+    // Correo de contacto, sólo si se da al compilar. Véase src/lib/site.ts.
+    __CONTACT_EMAIL__: JSON.stringify(process.env.ATHOS_CONTACTO ?? ''),
   },
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
@@ -51,7 +57,6 @@ export default defineConfig({
             if (id.includes('react-router')) return 'vendor-router';
             if (id.includes('react-dom') || id.includes('/react/')) return 'vendor-react';
             if (id.includes('dexie')) return 'vendor-db';
-            if (id.includes('i18next')) return 'vendor-i18n';
             return 'vendor';
           }
           // El corpus textual se separa del código de la aplicación.
@@ -89,17 +94,47 @@ export default defineConfig({
       },
     },
     {
-      // Open Graph con direcciones absolutas, si se sabe cuál es el sitio.
+      /**
+       * `privacidad.html`: la política de privacidad con dirección fija y sin
+       * JavaScript, generada del mismo texto que enseña la aplicación.
+       */
+      name: 'athos-privacidad',
+      apply: 'build' as const,
+      generateBundle() {
+        this.emitFile({
+          type: 'asset',
+          fileName: 'privacidad.html',
+          source: privacyPageHtml({
+            base,
+            contacto: process.env.ATHOS_CONTACTO ?? '',
+          }),
+        });
+      },
+    },
+    {
+      /**
+       * Open Graph con direcciones absolutas, si se sabe cuál es el sitio.
+       *
+       * Corre después de que Vite haya puesto la base a las rutas del
+       * documento: `/icons/og-image.png` llega aquí como `/athos/icons/…`, y
+       * sólo falta anteponerle el dominio.
+       */
       name: 'athos-og-absoluto',
-      transformIndexHtml(html: string) {
-        if (!siteUrl) return html;
-        const raiz = `${siteUrl}${base}`;
-        return html
-          .replace('content="icons/og-image.png"', `content="${raiz}icons/og-image.png"`)
-          .replace(
-            '<meta property="og:type" content="website" />',
-            `<meta property="og:url" content="${raiz}" />\n    <meta property="og:type" content="website" />`,
-          );
+      transformIndexHtml: {
+        order: 'post' as const,
+        handler(html: string) {
+          if (!siteUrl) return html;
+          const raiz = `${siteUrl}${base}`;
+          return html
+            .replace(
+              /(<meta property="og:image" content=")\/(?!\/)([^"]*)"/,
+              (_, inicio: string, ruta: string) => `${inicio}${siteUrl}/${ruta}"`,
+            )
+            .replace(
+              '<meta property="og:type" content="website" />',
+              `<meta property="og:url" content="${raiz}" />\n    <meta property="og:type" content="website" />`,
+            );
+        },
       },
     },
     VitePWA({
@@ -207,8 +242,14 @@ export default defineConfig({
           'icons/icon.svg',
         ],
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
+        // El corpus se pide con `?v=<huella>` (src/lib/content-url.ts). Lo
+        // precacheado ya lleva su revisión: para encontrarlo en el precaché
+        // hay que ignorar ese parámetro, o se pediría otra vez a la red.
+        ignoreURLParametersMatching: [/^utm_/, /^fbclid$/, /^v$/],
         navigateFallback: `${base}index.html`,
-        navigateFallbackDenylist: [/^\/api\//],
+        // La página de privacidad es un documento aparte, no una ruta de la
+        // aplicación: se sirve tal cual, también sin conexión.
+        navigateFallbackDenylist: [/^\/api\//, /privacidad\.html$/],
         cleanupOutdatedCaches: true,
         /**
          * El Service Worker toma el control de la página en cuanto se activa.
@@ -238,8 +279,11 @@ export default defineConfig({
             },
           },
           {
-            // El corpus lleva huella de versión y no cambia: una vez guardado,
-            // se sirve de la caché sin volver a pedirlo por la red.
+            // El corpus se pide con la huella de su carpeta en la dirección
+            // (`?v=…`): una vez guardado se sirve de la caché sin volver a la
+            // red, y si el texto se corrige, la dirección nueva no está en la
+            // caché y se descarga. Antes no llevaba huella y una corrección
+            // no llegaba nunca.
             urlPattern: ({ url }) => url.pathname.startsWith(`${base}content/`),
             handler: 'CacheFirst',
             options: {

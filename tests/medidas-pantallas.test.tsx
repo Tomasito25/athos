@@ -15,7 +15,6 @@ import { db } from '@/db/db';
 import { seedContent, seedUserDefaults } from '@/db/seed';
 import { completeRule, completionsOn, officeWeek, ruleForTime, uncompleteRule } from '@/db/user';
 import { resolveItems } from '@/features/office/useOfficeSteps';
-import { initI18n } from '@/lib/i18n';
 import { toIsoDate } from '@/lib/calendar/jdn';
 import { useSettings } from '@/stores/settings';
 import type { RuleItem } from '@/types';
@@ -28,7 +27,6 @@ beforeAll(async () => {
   await db.open();
   await seedContent();
   await seedUserDefaults();
-  await initI18n('es');
 });
 
 beforeEach(async () => {

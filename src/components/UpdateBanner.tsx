@@ -62,6 +62,19 @@ export function UpdateBanner() {
     onRegisteredSW(_url, registration) {
       registro.current = registration ?? null;
     },
+    /**
+     * La versión nueva ha tomado el control.
+     *
+     * Si la ha aplicado esta ventana, se recarga ya: es lo que se pidió. Si
+     * la aplicó otra, esta ventana se ha quedado con el código viejo y la
+     * próxima pantalla que abra puede no existir; pero recargar en mitad de
+     * una oración es justo lo que ATHOS promete no hacer. Se apunta, y se
+     * recarga al salir de lo que se esté rezando.
+     */
+    onNeedReload() {
+      if (useUpdate.getState().status === 'applying') window.location.reload();
+      else useUpdate.setState({ outdated: true });
+    },
     onRegisterError(error) {
       console.warn('No se ha podido registrar el Service Worker', error);
     },
@@ -152,6 +165,14 @@ export function UpdateBanner() {
   }, []);
 
   const rezando = REZANDO.some((r) => r.test(pathname));
+  const outdated = useUpdate((s) => s.outdated);
+
+  // Se recarga en cuanto no se esté rezando: al llegar el aviso, o al salir
+  // del oficio. La dirección ya es la de la pantalla nueva, así que se abre
+  // ésa, con la versión nueva.
+  useEffect(() => {
+    if (outdated && !rezando) window.location.reload();
+  }, [outdated, rezando]);
   const visible = (status === 'available' || status === 'applying') && !postponed && !rezando;
   if (!visible) return null;
 

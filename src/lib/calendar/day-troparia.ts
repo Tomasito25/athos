@@ -31,7 +31,7 @@ import {
   PASCHAL_CYCLE_META,
   RESURRECTION_TROPARIA,
 } from '@/content/troparia-domingo';
-import { SAINTS } from '@/content/saints';
+import { SAINT_INDEX } from '@/content/saints';
 
 export interface DayTroparionItem {
   /** Por quién o por qué se canta: «San Nicolás», «Domingo, tono 3». */
@@ -92,7 +92,7 @@ function deLasFiestasMoviles(day: LiturgicalDay): DayTroparionItem[] {
       continue;
     }
     const santoId = MOVABLE_SAINT_OF[feast.id];
-    const santo = santoId ? SAINTS.find((s) => s.id === santoId) : undefined;
+    const santo = santoId ? SAINT_INDEX.find((s) => s.id === santoId) : undefined;
     const tr = santo ? generalTroparionFor(santo.category, santo.id) : null;
     if (santo && tr) {
       items.push({

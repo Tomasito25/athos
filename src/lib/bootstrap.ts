@@ -9,10 +9,7 @@
 import { applySettingsToDocument, useSettings } from '@/stores/settings';
 import { seedContent, seedUserDefaults } from '@/db/seed';
 import { requestPersistentStorage } from '@/db/db';
-import { ensurePsalterBuilt } from '@/db/psalter';
-import { bibleIndexStatus, indexWholeBible } from '@/db/bible';
 import { loadLectionary } from '@/db/lectionary';
-import { startReminders } from '@/lib/reminders';
 
 const idle = (task: () => void, timeout = 4000) => {
   if ('requestIdleCallback' in window) {
@@ -44,21 +41,31 @@ export async function bootstrap(): Promise<void> {
   // bloquear el render, y la pantalla se actualiza en cuanto llegan.
   void loadLectionary(settings.calendarStyle);
 
+  // Lo que sigue se importa al usarlo, no arriba: si se importara arriba, su
+  // código —y el calendario y el santoral de los que tira— se descargaría y
+  // analizaría antes de pintar la primera pantalla.
+
   // Los recordatorios se programan en cada arranque: antes sólo al tocar el
   // interruptor, y al recargar la aplicación no quedaba ninguno programado.
-  idle(() => startReminders(), 2000);
+  idle(() => void import('@/lib/reminders').then((m) => m.startReminders()), 2000);
 
   // Sin bloquear el arranque.
   idle(() => {
     void requestPersistentStorage();
-    void ensurePsalterBuilt().catch(() => {
-      /* Sin conexión y sin el archivo en caché todavía: se reintentará. */
-    });
+    void import('@/db/psalter')
+      .then((m) => m.ensurePsalterBuilt())
+      .catch(() => {
+        /* Sin conexión y sin el archivo en caché todavía: se reintentará. */
+      });
   });
+
+  // El corpus que no va en el precaché, para que se lea sin conexión.
+  idle(() => void import('@/lib/corpus').then((m) => m.scheduleCorpusWarmup()), 6000);
 
   idle(() => {
     if (!useSettings.getState().autoIndexBible) return;
-    void bibleIndexStatus().then(({ done, total }) => {
+    void import('@/db/bible').then(async ({ bibleIndexStatus, indexWholeBible }) => {
+      const { done, total } = await bibleIndexStatus();
       if (done < total) void indexWholeBible().catch(() => undefined);
     });
   }, 12_000);

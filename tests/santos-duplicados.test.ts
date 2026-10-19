@@ -13,7 +13,7 @@
  * comparten una palabra se declaran abajo, uno por uno.
  */
 import { describe, expect, it } from 'vitest';
-import { SAINTS } from '@/content/saints';
+import { SAINTS } from '@/content/santoral';
 
 const COMUNES = new Set(
   (

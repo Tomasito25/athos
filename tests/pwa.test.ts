@@ -253,6 +253,7 @@ describe.skipIf(!built)('service worker', () => {
   it('declara cachés en tiempo de ejecución para las fuentes y el corpus', () => {
     expect(sw).toContain('athos-fonts-v1');
     expect(sw).toContain('athos-content-v2');
+    expect(sw).toContain('athos-corpus-v1');
   });
 });
 
@@ -301,6 +302,37 @@ describe.skipIf(!built)('precaché', () => {
     expect(entries.some((url) => url.endsWith('.css'))).toBe(true);
     expect(entries.some((url) => url.includes('-latin.woff2'))).toBe(true);
     expect(entries.some((url) => url.endsWith('index.html'))).toBe(true);
+  });
+
+  it('deja fuera el corpus que no hace falta para arrancar, y dice cuál es', () => {
+    // Le quedaban 85 KB al límite de 5 MB. El corpus —oraciones, oficios,
+    // vidas, catecismo— va ahora en trozos por sección que se descargan
+    // después de arrancar (src/lib/corpus.ts), con la lista en corpus.json.
+    const diferido = JSON.parse(read('corpus.json')) as string[];
+    expect(diferido.length, 'no se difiere nada').toBeGreaterThan(5);
+    for (const archivo of diferido) {
+      expect(existsSync(resolve(dist, archivo)), `falta ${archivo}`).toBe(true);
+      expect(entries, `${archivo} sigue en el precaché`).not.toContain(archivo);
+    }
+    // Y nada de lo que se carga al arrancar está entre lo diferido: sin red y
+    // antes de la descarga, la aplicación tiene que poder abrirse.
+    const html = read('index.html');
+    const arranque = [...html.matchAll(/(?:modulepreload|type="module")[^>]*(?:href|src)="[^"]*\/(assets\/[^"]+\.js)"/g)].map(
+      (m) => m[1],
+    );
+    expect(arranque.length).toBeGreaterThan(3);
+    for (const archivo of arranque) expect(diferido, archivo).not.toContain(archivo);
+    expect(entries).toContain('corpus.json');
+  });
+
+  it('las reglas de caché no dependen de variables que el Service Worker no tiene', () => {
+    // Las reglas eran funciones con `${base}` dentro, y Workbox las copia tal
+    // cual en sw.js, donde `base` no existe: ni las fuentes, ni los iconos
+    // grandes, ni los libros se guardaban nunca.
+    expect(sw).not.toMatch(/\$\{base\}/);
+    for (const cache of ['athos-fonts-v1', 'athos-content-v2', 'athos-corpus-v1']) {
+      expect(sw, cache).toMatch(new RegExp(`registerRoute\\(/[^,]+,new \\w+\\.CacheFirst\\(\\{cacheName:"${cache}"`));
+    }
   });
 
   it('cada entrada lleva revisión o huella en el nombre', () => {

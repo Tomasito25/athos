@@ -9,7 +9,7 @@
  * en ningún sitio se dé a entender que el general es el suyo.
  */
 import { describe, expect, it } from 'vitest';
-import { SAINTS } from '@/content/saints';
+import { SAINTS } from '@/content/santoral';
 import {
   GENERAL_TROPARIA,
   GENERAL_TROPARION_META,

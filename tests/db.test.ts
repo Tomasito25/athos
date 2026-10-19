@@ -22,7 +22,7 @@ import {
   toggleRuleItem,
 } from '@/db/user';
 import { CONTENT_VERSION } from '@/content';
-import { SAINTS } from '@/content/saints';
+import { SAINTS } from '@/content/santoral';
 
 async function reset() {
   await db.delete();

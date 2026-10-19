@@ -29,8 +29,30 @@ const base = process.env.ATHOS_BASE || '/';
  */
 const siteUrl = (process.env.ATHOS_URL || '').replace(/\/+$/, '');
 
+/**
+ * Patrón para las reglas de caché en tiempo de ejecución: lo que cuelga de
+ * `<base><carpeta>/`.
+ *
+ * Tiene que ser una expresión regular y no una función. Workbox copia la
+ * función tal cual dentro de sw.js, y allí `base` no existe: cada petición a
+ * las fuentes, al corpus o a los libros lanzaba un error al buscar su regla,
+ * y nada de eso se guardaba nunca. Por eso el icono grande salía roto sin
+ * conexión, y las letras griegas o cirílicas nunca quedaban guardadas. Una
+ * expresión regular se escribe en sw.js con su valor ya puesto.
+ */
+const bajoLaBase = (carpeta: string) =>
+  new RegExp(`${(base + carpeta + '/').replace(/[.*+?^${}()|[\]\\/]/g, '\\$&')}`);
+
 /** Carpeta donde se está compilando, para el alias del manifest. */
 let salidaDeLaCompilacion = 'dist';
+
+/**
+ * Los trozos del corpus que no hacen falta para arrancar.
+ *
+ * Los llena el plugin `athos-corpus-diferido` al cerrar el paquete y los lee
+ * Workbox al hacer el precaché, que los deja fuera. Véase allí.
+ */
+const corpusDiferido = new Set<string>();
 
 export default defineConfig({
   base,
@@ -59,8 +81,8 @@ export default defineConfig({
             if (id.includes('dexie')) return 'vendor-db';
             return 'vendor';
           }
-          // El corpus textual se separa del código de la aplicación.
-          if (id.includes('/src/content/')) return 'content';
+          // El corpus ya no va en un solo trozo: cada pantalla se lleva lo que
+          // usa, y lo que no se abre no se descarga ni se analiza al arrancar.
           return undefined;
         },
       },
@@ -91,6 +113,49 @@ export default defineConfig({
         if (existsSync(origen)) {
           copyFileSync(origen, resolve(salidaDeLaCompilacion, 'manifest.json'));
         }
+      },
+    },
+    {
+      /**
+       * El corpus que no hace falta para arrancar no entra en el precaché.
+       *
+       * Todo lo que va en el precaché se descarga antes de que el Service
+       * Worker se active, y hasta entonces no se ofrece instalar ATHOS. El
+       * corpus —oraciones, oficios, vidas, catecismo— es casi la mitad, y le
+       * quedaban unos 85 KB al límite de 5 MB: cada texto nuevo acercaba el
+       * día en que no cabría.
+       *
+       * Ahora el precaché lleva lo que hace falta para arrancar y rezar, y el
+       * resto del corpus —cada sección en su trozo— se descarga después, en
+       * segundo plano, con la lista de `corpus.json` (`src/lib/corpus.ts`).
+       * Queda en la caché igual que lo precacheado, y sin conexión se lee
+       * igual; sólo cambia cuándo se descarga.
+       */
+      name: 'athos-corpus-diferido',
+      apply: 'build' as const,
+      generateBundle(_opciones, paquete) {
+        corpusDiferido.clear();
+        const trozos = Object.values(paquete).filter(
+          (t): t is Extract<typeof t, { type: 'chunk' }> => t.type === 'chunk',
+        );
+        const porArchivo = new Map(trozos.map((t) => [t.fileName, t]));
+        const arranque = new Set<string>();
+        const visitar = (archivo: string) => {
+          if (arranque.has(archivo)) return;
+          arranque.add(archivo);
+          for (const importado of porArchivo.get(archivo)?.imports ?? []) visitar(importado);
+        };
+        for (const t of trozos) if (t.isEntry) visitar(t.fileName);
+        for (const t of trozos) {
+          if (arranque.has(t.fileName)) continue;
+          const reales = t.moduleIds.filter((id) => !id.startsWith('\0'));
+          if (reales.length && reales.every((id) => id.includes('/src/content/'))) corpusDiferido.add(t.fileName);
+        }
+        this.emitFile({
+          type: 'asset',
+          fileName: 'corpus.json',
+          source: JSON.stringify([...corpusDiferido].sort()),
+        });
       },
     },
     {
@@ -208,6 +273,8 @@ export default defineConfig({
          */
         globPatterns: [
           '**/*.{js,css,html,ico,svg,png}',
+          // La lista del corpus que se descarga después de arrancar.
+          'corpus.json',
           'fonts/*-latin.woff2',
           // El español entero cabe en el subconjunto latino. El extendido sólo
           // hace falta para nombres como Popović o Brâncoveanu, y desde la 1.30
@@ -246,6 +313,14 @@ export default defineConfig({
         // precacheado ya lleva su revisión: para encontrarlo en el precaché
         // hay que ignorar ese parámetro, o se pediría otra vez a la red.
         ignoreURLParametersMatching: [/^utm_/, /^fbclid$/, /^v$/],
+        // Fuera del precaché el corpus que no hace falta para arrancar: lo
+        // descarga después src/lib/corpus.ts. Véase `athos-corpus-diferido`.
+        manifestTransforms: [
+          async (entradas) => ({
+            manifest: entradas.filter((e) => !corpusDiferido.has(e.url)),
+            warnings: [],
+          }),
+        ],
         navigateFallback: `${base}index.html`,
         // La página de privacidad es un documento aparte, no una ruta de la
         // aplicación: se sirve tal cual, también sin conexión.
@@ -270,11 +345,23 @@ export default defineConfig({
         importScripts: ['sw-recordatorios.js'],
         runtimeCaching: [
           {
-            urlPattern: ({ url }) => url.pathname.startsWith(`${base}fonts/`),
+            urlPattern: bajoLaBase('fonts'),
             handler: 'CacheFirst',
             options: {
               cacheName: 'athos-fonts-v1',
               expiration: { maxEntries: 60, maxAgeSeconds: 60 * 60 * 24 * 365 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            // El corpus que no va en el precaché. Los nombres llevan huella,
+            // así que lo guardado no cambia nunca: se sirve de la caché sin
+            // volver a la red. Lo descarga src/lib/corpus.ts al arrancar.
+            urlPattern: bajoLaBase('assets'),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'athos-corpus-v1',
+              expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 365 },
               cacheableResponse: { statuses: [0, 200] },
             },
           },
@@ -284,7 +371,7 @@ export default defineConfig({
             // red, y si el texto se corrige, la dirección nueva no está en la
             // caché y se descarga. Antes no llevaba huella y una corrección
             // no llegaba nunca.
-            urlPattern: ({ url }) => url.pathname.startsWith(`${base}content/`),
+            urlPattern: bajoLaBase('content'),
             handler: 'CacheFirst',
             options: {
               cacheName: 'athos-content-v2',

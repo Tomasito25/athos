@@ -9,7 +9,8 @@
  * escritas para ATHOS, y ninguna puede presentarse como texto litúrgico.
  */
 import { describe, expect, it } from 'vitest';
-import { SAINTS, SAINT_DAYS, saintsOnDay } from '@/content/saints';
+import { SAINT_DAYS, SAINT_INDEX, saintsOnDay } from '@/content/saints';
+import { SAINTS, VIDAS } from '@/content/santoral';
 
 /** Los 366 días, con el bisiesto incluido. */
 function todosLosDias(): string[] {
@@ -108,5 +109,26 @@ describe('las fichas', () => {
     for (const santo of SAINTS) {
       expect(santo.category.length, santo.name).toBeGreaterThan(0);
     }
+  });
+});
+
+describe('el índice y las vidas', () => {
+  // Las vidas van aparte del índice para que el calendario no las cargue al
+  // arrancar. Así que hay que comprobar que no se descuelgan.
+  it('cada santo del índice tiene su vida, y cada vida su santo', () => {
+    const indice = new Set(SAINT_INDEX.map((s) => s.id));
+    const sinVida = [...indice].filter((id) => !VIDAS[id]?.trim());
+    const huerfanas = Object.keys(VIDAS).filter((id) => !indice.has(id));
+    expect(sinVida, 'santos sin vida').toEqual([]);
+    expect(huerfanas, 'vidas sin santo').toEqual([]);
+  });
+
+  it('el índice no lleva las vidas dentro', () => {
+    for (const santo of SAINT_INDEX) expect('biography' in santo, santo.id).toBe(false);
+  });
+
+  it('el santoral completo es el índice con su vida', () => {
+    expect(SAINTS.map((s) => s.id)).toEqual(SAINT_INDEX.map((s) => s.id));
+    for (const santo of SAINTS) expect(santo.biography, santo.id).toBe(VIDAS[santo.id]);
   });
 });

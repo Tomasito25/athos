@@ -9,9 +9,38 @@
  * No se usa —nunca— sobre texto litúrgico. Una oración, un tropario o un
  * canon se muestran tal cual: la regla es la misma que impide inventarlos.
  */
+import { useSyncExternalStore } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { linkify } from '@/content/links';
+import type { linkify as Linkify } from '@/content/links';
+
+/*
+ * El índice de nombres se carga aparte, la primera vez que hace falta.
+ *
+ * Para saber qué nombres tienen ficha hay que recorrer los Padres, los
+ * oficios, los monasterios, los iconos y las épocas de la historia: importarlo
+ * de golpe arrastraba todo eso al arranque, aunque la primera pantalla no
+ * tuviera un solo párrafo que enlazar. Ahora el texto se pinta enseguida tal
+ * cual, y los enlaces aparecen en cuanto el índice está listo.
+ */
+let enlazar: typeof Linkify | null = null;
+let carga: Promise<void> | null = null;
+const avisar = new Set<() => void>();
+
+function cargarIndice(): void {
+  carga ??= import('@/content/links').then((m) => {
+    enlazar = m.linkify;
+    for (const aviso of avisar) aviso();
+  });
+}
+
+function suscribir(aviso: () => void): () => void {
+  avisar.add(aviso);
+  cargarIndice();
+  return () => avisar.delete(aviso);
+}
+
+const leer = () => enlazar;
 
 export function RichText({
   children,
@@ -22,7 +51,8 @@ export function RichText({
   max?: number;
 }) {
   const { pathname } = useLocation();
-  const trozos = linkify(children, { omitir: pathname, maximo: max });
+  const linkify = useSyncExternalStore(suscribir, leer, leer);
+  const trozos = linkify ? linkify(children, { omitir: pathname, maximo: max }) : [{ text: children }];
 
   return (
     <>

@@ -4,22 +4,7 @@
  * Es idempotente y sólo escribe en las tablas de contenido: los datos del
  * usuario nunca se tocan. Se vuelve a ejecutar cuando cambia CONTENT_VERSION.
  */
-import {
-  AKATHISTS,
-  ALL_FEASTS,
-  BIBLE_BOOKS,
-  CANONS,
-  CHURCH_FATHERS,
-  CONTENT_VERSION,
-  FIXED_READINGS,
-  ICONS,
-  MONASTERIES,
-  MOVABLE_READINGS,
-  ATHOS_ARTICLES,
-  OFFICES,
-  PRAYERS,
-  SAINTS,
-} from '@/content';
+import { CONTENT_VERSION } from '@/content/version';
 import { DAILY_OFFICES, stepsToItems } from '@/content/hours';
 import { stepsFor } from '@/content/office-lengths';
 import type { OfficeLength, PrayerRule, RuleItem, RuleTime } from '@/types';
@@ -58,6 +43,24 @@ export async function seedContent(force = false): Promise<boolean> {
   const currentApp = await getSetting<string>(APP_VERSION_KEY, '');
   const alDia = current === CONTENT_VERSION && currentApp === appVersion();
   if (!force && alDia) return false;
+
+  // El corpus se carga sólo cuando hay que sembrar: la primera vez y tras
+  // cada actualización. En los demás arranques no se descarga entero.
+  const {
+    AKATHISTS,
+    ALL_FEASTS,
+    BIBLE_BOOKS,
+    CANONS,
+    CHURCH_FATHERS,
+    FIXED_READINGS,
+    ICONS,
+    MONASTERIES,
+    MOVABLE_READINGS,
+    ATHOS_ARTICLES,
+    OFFICES,
+    PRAYERS,
+    SAINTS,
+  } = await import('@/content');
 
   await db.transaction(
     'rw',

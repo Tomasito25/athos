@@ -271,6 +271,12 @@ export interface Saint {
   searchText: string;
 }
 
+/** Un santo sin su vida ni sus himnos: lo que necesitan el calendario y la portada. */
+export type SaintSummary = Pick<
+  Saint,
+  'id' | 'name' | 'fullName' | 'day' | 'otherDays' | 'category' | 'century' | 'place'
+>;
+
 export type FeastRank =
   | 'pascua'
   | 'gran-fiesta'
@@ -789,7 +795,7 @@ export interface LiturgicalDay {
   tone: number | null;
   season: LiturgicalSeason;
   feasts: Feast[];
-  saints: Saint[];
+  saints: SaintSummary[];
   fasting: FastingInfo;
   readings: LiturgicalReading | null;
 }

@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Dialog, Loading } from '@/components/ui';
 import { IconSearch } from '@/components/icons';
-import { searchAll } from '@/db/search';
 import type { SearchOutcome } from '@/db/search';
 import { useUi } from '@/stores/ui';
 import { highlight, tokenize } from '@/lib/text';
@@ -44,7 +43,10 @@ export function SearchDialog() {
     let alive = true;
     const timer = setTimeout(() => {
       setBusy(true);
-      searchAll(trimmed, { limitPerGroup: 5 })
+      // El buscador recorre las oraciones, los órdenes de oración y los
+      // kontakia: se descarga al buscar por primera vez, no al arrancar.
+      import('@/db/search')
+        .then(({ searchAll }) => searchAll(trimmed, { limitPerGroup: 5 }))
         .then((result) => {
           if (alive) setOutcome(result);
         })

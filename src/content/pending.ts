@@ -13,7 +13,7 @@ import { AKATHISTS, CANONS } from './hymns';
 import { CHURCH_FATHERS } from './fathers';
 import { OFFICES } from './offices';
 import { PRAYERS } from './prayers';
-import { SAINTS } from './saints';
+import { SAINT_INDEX as SAINTS } from './saints';
 import { generalTroparionFor } from './troparia-general';
 import { SAINT_KONTAKIA } from './kontakia';
 

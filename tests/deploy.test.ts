@@ -6,7 +6,8 @@
  * un teléfono necesita.
  */
 import { describe, expect, it } from 'vitest';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 
 const raiz = process.cwd();
@@ -57,6 +58,27 @@ describe('rutas relativas a la base', () => {
     // Pasa por contentUrl, que además le pone la huella de su traducción.
     expect(leer('src/db/bible.ts')).toContain('contentUrl(');
     expect(leer('src/lib/content-url.ts')).toContain('import.meta.env.BASE_URL');
+  });
+});
+
+describe('tipografía', () => {
+  it('no hay dos archivos de fuente iguales', () => {
+    // Las dos fuentes son variables: el 400, el 500 y el 600 eran el mismo
+    // archivo copiado tres veces, y el precaché bajaba la latina tres veces.
+    const dir = resolve(raiz, 'public/fonts');
+    const huellas = new Map<string, string>();
+    for (const nombre of readdirSync(dir)) {
+      const huella = createHash('sha256').update(readFileSync(resolve(dir, nombre))).digest('hex');
+      expect(huellas.get(huella), `${nombre} repite ${huellas.get(huella)}`).toBeUndefined();
+      huellas.set(huella, nombre);
+    }
+  });
+
+  it('cada archivo que nombra fonts.css existe', () => {
+    const css = leer('src/styles/fonts.css');
+    const archivos = [...css.matchAll(/url\(\/fonts\/([^)]+)\)/g)].map((m) => m[1]);
+    expect(archivos.length).toBeGreaterThan(10);
+    for (const archivo of archivos) expect(existsSync(resolve(raiz, 'public/fonts', archivo)), archivo).toBe(true);
   });
 });
 

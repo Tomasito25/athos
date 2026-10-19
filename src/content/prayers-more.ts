@@ -207,9 +207,22 @@ export const MORE_PRAYERS: MorePrayerSeed[] = [
     title: 'Después de la cena',
     category: 'despues-comer',
     blocks: [
+      rub('Con versículos de los salmos 91 y 4, que son ya los de la noche:'),
+      t('Nos alegraste, Señor, con tus obras, y nos regocijamos en las obras de tus manos. Se ha marcado sobre nosotros la luz de tu rostro, Señor; has dado alegría a nuestro corazón. Con el fruto de su trigo, de su vino y de su aceite se han colmado. En paz nos acostaremos y dormiremos juntos, porque sólo Tú, Señor, nos haces habitar confiados.'),
+      t('Gloria al Padre, y al Hijo, y al Espíritu Santo, ahora y siempre, y por los siglos de los siglos. Amén.'),
+      t('Señor, ten piedad. <em>(tres veces)</em> Bendice.'),
+      rub('El que preside, o el sacerdote si está:'),
       t('Bendito es Dios, que tiene misericordia de nosotros y nos alimenta con sus dones abundantes, por su gracia y su compasión, ahora y siempre, y por los siglos de los siglos. Amén.'),
     ],
-    meta: meta({ source: 'Horologion, acción de gracias después de la cena' }),
+    meta: meta({
+      source:
+        'Horologion griego, acción de gracias después de la cena (salmos 91, 5 y 4, 7-9, y la bendición). Traducción al español hecha para ATHOS a partir del original griego, que es de dominio público',
+      license: 'cc-by-sa-4.0',
+      copyright:
+        'Texto litúrgico tradicional; el original griego es de dominio público. Esta versión española es una traducción hecha para ATHOS y se publica bajo CC BY-SA 4.0.',
+      notes:
+        'Es una traducción de un texto que existe, no una oración escrita para ATHOS. La versión española es de ATHOS: no procede de un libro litúrgico español publicado.',
+    }),
   },
 
   /* ═════════════════════ EL CAMINO ═════════════════════ */

@@ -34,13 +34,13 @@ sin tocar nada más.
 
 ## 2. De dónde sale cada texto español
 
-**Es el mayor riesgo legal.** `docs/PROCEDENCIA.md` lista los 196 textos
+**Es el mayor riesgo legal.** `docs/PROCEDENCIA.md` lista los 197 textos
 litúrgicos con la clase de su versión española, tal como la declara su ficha:
 
 | Clase | Qué hay que hacer |
 | --- | --- |
-| **Tradicional sin verificar** (37) | Averiguar si es traducción propia o se tomó de un libro parroquial. Si es lo segundo y no hay permiso, retirarlo o volver a traducirlo del original. |
-| Traducción de ATHOS (102) | Comprobar que la traducción está bien hecha, a ser posible cotejándola con el original. |
+| **Tradicional sin verificar** (36) | Averiguar si es traducción propia o se tomó de un libro parroquial. Si es lo segundo y no hay permiso, retirarlo o volver a traducirlo del original. |
+| Traducción de ATHOS (104) | Comprobar que la traducción está bien hecha, a ser posible cotejándola con el original. |
 | Redactada para ATHOS (36) | Revisión teológica (punto 3). |
 | Dominio público (21) | Nada, salvo confirmar la fuente. |
 
@@ -62,7 +62,7 @@ es lo que más la necesita:
 - **Reglas de ayuno** (`src/lib/calendar/fasting.ts`): la aplicación ya avisa
   de que pueden variar según la tradición y que se consulte al sacerdote, pero
   las reglas mismas tienen que estar bien.
-- **Las 102 traducciones** del punto anterior.
+- **Las 104 traducciones** del punto anterior.
 
 ## 4. Privacidad, contacto y errores
 

@@ -589,6 +589,18 @@ const seeds: Seed[] = [
     ],
     meta: traduccion(`${MOLITVOSLOV}, conmemoración de los vivos y oraciones por los que nos odian y nos ofenden`, 'eslavo'),
   },
+  {
+    id: 'perdona-a-los-que-nos-odian',
+    title: 'Perdona a los que nos odian',
+    subtitle: 'La oración con que terminan las Completas en el libro eslavo',
+    category: 'enemigos',
+    blocks: [
+      rub('En los monasterios eslavos, al acabar las Completas, cada uno se retira a su celda diciendo esta oración, que el libro pone para todo el mundo. Empieza por los que nos hacen daño y desde ahí se abre a todos: a los de casa, a los enfermos, a los que viajan, a los difuntos y, al final, a uno mismo.'),
+      t('Perdona, Señor amigo de los hombres, a los que nos odian y nos hacen daño. Haz bien a los que nos hacen bien. Concede a nuestros hermanos y familiares lo que piden para su salvación, y la vida eterna. Visita a los enfermos y dales la curación. Guía a los que están en el mar. Acompaña a los que viajan. Concede el perdón de los pecados a los que nos sirven y tienen misericordia de nosotros. A los que nos han pedido a nosotros, indignos, que oremos por ellos, ten piedad de ellos según tu gran misericordia.'),
+      t('Acuérdate, Señor, de nuestros padres y hermanos que se durmieron antes, y dales descanso donde brilla la luz de tu rostro. Acuérdate, Señor, de nuestros hermanos cautivos, y líbralos de toda adversidad. Acuérdate, Señor, de los que traen ofrendas y hacen el bien en tus santas iglesias, y dales lo que piden para su salvación, y la vida eterna. Acuérdate, Señor, también de nosotros, tus siervos humildes, pecadores e indignos; ilumina nuestra mente con la luz de tu conocimiento y guíanos por el sendero de tus mandamientos, por las oraciones de nuestra purísima Señora, la Theotokos y siempre Virgen María, y de todos tus santos, porque bendito eres por los siglos de los siglos. Amén.'),
+    ],
+    meta: traduccion('Chasoslov eslavo, final de las Completas', 'eslavo'),
+  },
 
   /* ======================= DIFUNTOS ======================= */
   {

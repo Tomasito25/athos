@@ -14,19 +14,19 @@ del original.
 
 | Versión española | Textos |
 | --- | --- |
-| Traducción de ATHOS | 102 |
-| **Tradicional sin verificar** | 37 |
+| Traducción de ATHOS | 104 |
+| **Tradicional sin verificar** | 36 |
 | Redactada para ATHOS | 36 |
 | Dominio público | 21 |
-| **Total** | **196** |
+| **Total** | **197** |
 
-Revisados: 0 de 196.
+Revisados: 0 de 197.
 
 Las vidas de santos, el catecismo, los cursos, la historia y los artículos del
 Monte Athos son textos **redactados para ATHOS** (CC BY-SA 4.0) y no están en
 esta tabla; su revisión es teológica, no de derechos.
 
-## Oraciones (169)
+## Oraciones (170)
 
 | Id | Título | Versión española | Fuente declarada | Revisado |
 | --- | --- | --- | --- | --- |
@@ -63,7 +63,7 @@ esta tabla; su revisión es teológica, no de derechos.
 | `antes-de-cenar` | Antes de la cena | **Tradicional sin verificar** | Horologion, bendición de la mesa de la tarde; Salmo 21 (22), 27 | pendiente |
 | `mesa-pascual` | Bendición de la mesa en Pascua | **Tradicional sin verificar** | Pentecostarion; tropario pascual y bendición de la mesa del Horologion | pendiente |
 | `despues-de-comer` | Acción de gracias después de comer | **Tradicional sin verificar** | Libro de oraciones ortodoxo (Horologion y Molitvoslov), uso tradicional | pendiente |
-| `despues-de-cenar` | Después de la cena | **Tradicional sin verificar** | Horologion, acción de gracias después de la cena | pendiente |
+| `despues-de-cenar` | Después de la cena | Traducción de ATHOS | Horologion griego, acción de gracias después de la cena (salmos 91, 5 y 4, 7-9, y la bendición). Traducción al español hecha para ATHOS a partir del original griego, que es de dominio público | pendiente |
 | `antes-de-viajar` | Antes de emprender viaje | Traducción de ATHOS | Libro de oraciones ortodoxo eslavo (Molitvoslov), en la transcripción de Wikisource y Trebnik eslavo, oraciones por los que van de camino. Traducción al español hecha para ATHOS a partir del original eslavo, que es de dominio público | pendiente |
 | `san-nicolas-viaje` | A san Nicolás, por los que van de camino | **Tradicional sin verificar** | Menaion, 6 de diciembre; tropario de san Nicolás de Mira, tono 4 | pendiente |
 | `salmo-120` | Salmo 120 | Dominio público | Salterio, salmo 120 según la numeración de los Setenta (121 hebreo). Reina-Valera 1909 | pendiente |
@@ -123,6 +123,7 @@ esta tabla; su revisión es teológica, no de derechos.
 | `por-los-bienhechores` | Por los bienhechores | **Tradicional sin verificar** | Libro de oraciones, conmemoración de los vivos | pendiente |
 | `por-el-amor-mutuo` | Por el amor de unos a otros | Traducción de ATHOS | Libro de oraciones ortodoxo eslavo (Molitvoslov), en la transcripción de Wikisource, oraciones para diversas necesidades: por el aumento del amor y contra el odio y toda malicia. Traducción al español hecha para ATHOS a partir del original eslavo, que es de dominio público | pendiente |
 | `por-los-enemigos` | Por los enemigos | Traducción de ATHOS | Libro de oraciones ortodoxo eslavo (Molitvoslov), en la transcripción de Wikisource, conmemoración de los vivos y oraciones por los que nos odian y nos ofenden. Traducción al español hecha para ATHOS a partir del original eslavo, que es de dominio público | pendiente |
+| `perdona-a-los-que-nos-odian` | Perdona a los que nos odian | Traducción de ATHOS | Chasoslov eslavo, final de las Completas. Traducción al español hecha para ATHOS a partir del original eslavo, que es de dominio público | pendiente |
 | `palabras-del-senor-enemigos` | Las palabras del Señor sobre los enemigos | Dominio público | Evangelio según San Mateo 5, 44 y San Lucas 23, 34, según la Reina-Valera 1909 | pendiente |
 | `por-el-enfermo` | Por un enfermo | Traducción de ATHOS | Libro de oraciones ortodoxo eslavo (Molitvoslov), en la transcripción de Wikisource y Trebnik eslavo, oraciones por los enfermos. Traducción al español hecha para ATHOS a partir del original eslavo, que es de dominio público | pendiente |
 | `en-la-propia-enfermedad` | En la propia enfermedad | Redactada para ATHOS | Oración redactada para ATHOS | pendiente |

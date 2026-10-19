@@ -12,6 +12,7 @@ import { formatReference } from './bible';
 import { BOOKS_BY_ID } from '@/content/bible';
 import { STUDY_COURSES, STUDY_WORKS } from '@/content/study';
 import { PRAYER_ORDERS } from '@/content/prayer-orders';
+import { citationFor } from '@/lib/citation';
 
 export const KIND_LABELS: Record<SearchKind, string> = {
   prayer: 'Oraciones',
@@ -64,6 +65,10 @@ export async function searchAll(query: string, options: SearchOptions = {}): Pro
 
   if (!tokens.length) return { groups: [], total: 0, bibleIndexed: true };
 
+  // Una cita —«Juan 3, 16»— no se busca como palabras: se ofrece abrirla,
+  // lo primero de todo, como ya hacía la portada de la Biblia.
+  const cita = wanted.has('bible') ? citationFor(query) : null;
+
   const buckets = new Map<SearchKind, SearchResult[]>();
   const push = (kind: SearchKind, result: SearchResult) => {
     if (!wanted.has(kind)) return;
@@ -71,6 +76,20 @@ export async function searchAll(query: string, options: SearchOptions = {}): Pro
     list.push(result);
     buckets.set(kind, list);
   };
+
+  if (cita) {
+    const [, libro, capitulo, versiculo] = cita.path.match(/biblia\/([^/]+)\/(\d+)(?:#v(\d+))?/) ?? [];
+    const texto = versiculo ? await db.bible_verses.get(`${libro}.${capitulo}.${versiculo}`) : undefined;
+    push('bible', {
+      id: `cita-${cita.path}`,
+      kind: 'bible',
+      title: cita.label,
+      subtitle: 'Abrir el pasaje',
+      snippet: texto?.text ?? '',
+      path: cita.path,
+      score: 1000,
+    });
+  }
 
   /* ---- Oraciones ---- */
   if (wanted.has('prayer')) {
@@ -325,33 +344,42 @@ export async function searchAll(query: string, options: SearchOptions = {}): Pro
     bibleIndexed = verseCount > 0;
     if (bibleIndexed) {
       const needles = tokens;
-      const found: SearchResult[] = [];
+      const frase = needles.length > 1 ? needles.join(' ') : null;
+      // Las que traen la frase seguida se cuentan aparte: si no, el límite se
+      // llenaba con las del Génesis que tienen las palabras sueltas y la
+      // frase exacta del Evangelio no llegaba a mirarse.
+      const exactas: SearchResult[] = [];
+      const sueltas: SearchResult[] = [];
       await db.bible_verses.each((verse) => {
-        if (found.length >= BIBLE_SCAN_LIMIT) return;
+        if (exactas.length >= BIBLE_SCAN_LIMIT) return;
         // El texto griego no entra en la búsqueda: sus capítulos no siempre
         // coinciden con los de la Biblia española a la que lleva el resultado.
         if (verse.translationId === 'lxx' || verse.translationId === 'grc-nt') return;
         const body = normalize(verse.text);
+        const exacta = frase !== null && body.includes(frase);
+        if (!exacta && sueltas.length >= BIBLE_SCAN_LIMIT) return;
         if (needles.every((token) => body.includes(token))) {
           const book = BOOKS_BY_ID.get(verse.bookId);
-          found.push({
+          (exacta ? exactas : sueltas).push({
             id: verse.id,
             kind: 'bible',
             title: formatReference(verse.bookId, verse.chapter, verse.verse),
             subtitle: book?.name,
             snippet: snippet(verse.text, tokens, 190),
             path: `/leer/biblia/${verse.bookId}/${verse.chapter}#v${verse.verse}`,
-            score: 5 + needles.length,
+            // La frase seguida, antes que las palabras sueltas por el versículo.
+            score: 5 + needles.length + (exacta ? 20 : 0),
           });
         }
       });
-      for (const result of found) push('bible', result);
+      for (const result of [...exactas, ...sueltas]) push('bible', result);
     }
   }
 
   const groups: SearchGroup[] = [];
   let total = 0;
-  for (const kind of KIND_ORDER) {
+  const orden = cita ? (['bible', ...KIND_ORDER.filter((k) => k !== 'bible')] as SearchKind[]) : KIND_ORDER;
+  for (const kind of orden) {
     const results = buckets.get(kind);
     if (!results?.length) continue;
     results.sort((a, b) => b.score - a.score);

@@ -194,3 +194,41 @@ describe('los órdenes del libro de oración', () => {
     expect(oraciones?.results[0]?.path).toBe('/orar/oraciones/orden/manana');
   });
 });
+
+describe('el buscador, mejorado', () => {
+  it('reconoce una cita y la ofrece lo primero', async () => {
+    const r = await searchAll('Juan 3, 16');
+    expect(r.groups[0]?.kind).toBe('bible');
+    expect(r.groups[0]?.results[0]).toMatchObject({ path: '/leer/biblia/JHN/3#v16' });
+    expect(r.groups[0]?.results[0]?.title).toMatch(/Juan 3, 16$/);
+  });
+
+  it('reconoce las abreviaturas y la cita sin versículo', async () => {
+    const r = await searchAll('Mt 5');
+    expect(r.groups[0]?.results[0]).toMatchObject({ path: '/leer/biblia/MAT/5' });
+  });
+
+  it('no toma por cita lo que no lo es', async () => {
+    const r = await searchAll('oración de la mañana');
+    expect(r.groups.flatMap((g) => g.results).some((x) => x.id.startsWith('cita-'))).toBe(false);
+  });
+
+  it('pone primero la frase exacta', () => {
+    const seguida = score(['venid', 'adoremos'], 'venid adoremos y postremonos', 'Título');
+    const suelta = score(['venid', 'adoremos'], 'adoremos todos y venid luego', 'Título');
+    expect(seguida).toBeGreaterThan(suelta);
+  });
+
+  it('el extracto enseña la parte que coincide, aunque haya signos y acentos antes', () => {
+    // Con la forma normalizada desplazada, el corte caía antes de la frase.
+    const texto =
+      '«¡Oh, Señor!», dijo; —y luego, ¿qué?— ' + 'palabra, '.repeat(40) + 'y al final dice ten misericordia de mí.';
+    const extracto = snippet(texto, ['misericordia'], 60);
+    expect(extracto).toContain('misericordia');
+  });
+
+  it('el extracto prefiere la frase entera a la primera palabra suelta', () => {
+    const texto = 'Señor aparece aquí. ' + 'relleno '.repeat(40) + 'Y aquí: Señor Jesucristo, Hijo de Dios.';
+    expect(snippet(texto, ['senor', 'jesucristo'], 50)).toContain('Señor Jesucristo');
+  });
+});

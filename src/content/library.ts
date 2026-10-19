@@ -168,7 +168,7 @@ export const LIBRARY_GROUPS: LibraryGroup[] = [
       {
         id: 'iglesias',
         to: '/biblioteca/iglesias',
-        icon: 'church',
+        icon: 'cross',
         title: 'Las Iglesias ortodoxas hoy',
         text: 'Una ficha por Iglesia: quién la preside, su sede, desde cuándo es autocéfala, cuántos fieles tiene, su calendario, sus lenguas y sus diócesis en España y América Latina. Y las disputas abiertas, contadas como disputas.',
         count: ORTHODOX_CHURCHES.length,

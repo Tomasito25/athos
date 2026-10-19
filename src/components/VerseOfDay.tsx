@@ -19,9 +19,13 @@ import { getChapter } from '@/db/bible';
 import { chaptersOf, inPericope, parsePassage } from '@/lib/pericope';
 import { verseReferenceFor } from '@/content/verse-of-day';
 import { Skeleton } from '@/components/ui';
+import { IconShare } from '@/components/icons';
+import { shareText } from '@/lib/lectura';
+import { useUi } from '@/stores/ui';
 import es from '@/locales/es';
 
 export function VerseOfDay({ prominent = false }: { prominent?: boolean }) {
+  const toast = useUi((s) => s.toast);
   // La fecha se calcula una vez: si no, cada render daría un objeto nuevo y
   // la carga se repetiría sin motivo.
   const referencia = useMemo(() => verseReferenceFor(new Date()), []);
@@ -85,6 +89,22 @@ export function VerseOfDay({ prominent = false }: { prominent?: boolean }) {
         <p className="verse-day__ref">{cita}</p>
         {prominent ? <p className="verse-day__more">{es.home.verseRead}</p> : null}
       </Link>
+      <button
+        type="button"
+        className="icon-btn verse-day__share"
+        aria-label={es.reader.share}
+        title={es.reader.share}
+        onClick={async () => {
+          const url = new URL(
+            `${import.meta.env.BASE_URL}leer/biblia/${pericopa.bookId}/${primero.chapter}#v${primero.verse}`,
+            window.location.href,
+          ).href;
+          const resultado = await shareText(cita, lista.map((v) => v.text).join(' '), url);
+          if (resultado === 'copied') toast(es.reader.copied);
+        }}
+      >
+        <IconShare size={18} />
+      </button>
     </section>
   );
 }

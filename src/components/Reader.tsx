@@ -3,9 +3,11 @@
  * la Escritura y los oficios. Evita repetir la barra de herramientas y el
  * panel de notas en cada pantalla.
  */
-import { useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Button, Dialog, FavoriteButton, Panel } from '@/components/ui';
-import { IconNote } from '@/components/icons';
+import { IconNote, IconShare, IconSpeaker, IconStop } from '@/components/icons';
+import { pageParagraphs, readAloud, shareText, speechSupported, type Reading } from '@/lib/lectura';
+import { releaseWakeLock, requestWakeLock } from '@/lib/wakelock';
 import { useFavorite } from '@/hooks/useFavorite';
 import { useAsync } from '@/hooks/useAsync';
 import { notesFor, removeNote, saveNote } from '@/db/user';
@@ -29,6 +31,53 @@ export function ReaderToolbar({ favorite, note, extraActions }: Omit<ReaderProps
   const prayerMode = useUi((s) => s.prayerMode);
   const { active, toggle } = useFavorite(favorite ?? null);
   const [notesOpen, setNotesOpen] = useState(false);
+  const toast = useUi((s) => s.toast);
+  const barra = useRef<HTMLDivElement>(null);
+  const lectura = useRef<Reading | null>(null);
+  const [voz, setVoz] = useState<'parada' | 'leyendo' | 'pausa'>('parada');
+  const dueno = useRef(Symbol('voz'));
+
+  /** La página que se lee: el artículo en que está la barra. */
+  const pagina = () => barra.current?.closest('article') ?? document.getElementById('contenido');
+
+  const compartir = async () => {
+    const raiz = pagina();
+    const parrafos = raiz ? pageParagraphs(raiz) : [];
+    const titulo = favorite?.title ?? parrafos[0] ?? document.title;
+    const cuerpo = parrafos.slice(parrafos[0] === titulo ? 1 : 0).join('\n\n');
+    const resultado = await shareText(titulo, cuerpo, window.location.href);
+    if (resultado === 'copied') toast(es.reader.copied);
+    if (resultado === 'failed') toast(es.reader.shareFailed);
+  };
+
+  const leer = () => {
+    if (voz === 'leyendo') {
+      lectura.current?.pause();
+      setVoz('pausa');
+      return;
+    }
+    if (voz === 'pausa') {
+      lectura.current?.resume();
+      setVoz('leyendo');
+      return;
+    }
+    const raiz = pagina();
+    const parrafos = raiz ? pageParagraphs(raiz) : [];
+    if (!parrafos.length) return;
+    // Mientras se lee, la pantalla no se apaga: si se apaga, el navegador
+    // puede dejar de leer.
+    void requestWakeLock(dueno.current);
+    lectura.current = readAloud(parrafos, {
+      onEnd: () => {
+        setVoz('parada');
+        void releaseWakeLock(dueno.current);
+      },
+    });
+    setVoz('leyendo');
+  };
+
+  // Al salir de la página se calla: lo leído es de la página que se deja.
+  useEffect(() => () => lectura.current?.stop(), []);
 
   const step = (direction: 1 | -1) => {
     const index = FONT_STEPS.findIndex((value) => Math.abs(value - fontScale) < 0.01);
@@ -39,8 +88,44 @@ export function ReaderToolbar({ favorite, note, extraActions }: Omit<ReaderProps
 
   return (
     <>
-      <div className="row row--wrap" style={{ gap: 'var(--sp-1)' }}>
+      <div className="row row--wrap" style={{ gap: 'var(--sp-1)' }} ref={barra}>
         {favorite ? <FavoriteButton active={active} onToggle={toggle} /> : null}
+
+        <button
+          type="button"
+          className="icon-btn"
+          onClick={() => void compartir()}
+          aria-label={es.reader.share}
+          title={es.reader.share}
+        >
+          <IconShare size={20} />
+        </button>
+
+        {speechSupported() ? (
+          <>
+            <button
+              type="button"
+              className="icon-btn"
+              onClick={leer}
+              aria-label={voz === 'leyendo' ? es.reader.pause : voz === 'pausa' ? es.reader.resume : es.reader.readAloud}
+              title={voz === 'leyendo' ? es.reader.pause : voz === 'pausa' ? es.reader.resume : es.reader.readAloud}
+              aria-pressed={voz !== 'parada'}
+            >
+              <IconSpeaker size={20} />
+            </button>
+            {voz !== 'parada' ? (
+              <button
+                type="button"
+                className="icon-btn"
+                onClick={() => lectura.current?.stop()}
+                aria-label={es.reader.stop}
+                title={es.reader.stop}
+              >
+                <IconStop size={20} />
+              </button>
+            ) : null}
+          </>
+        ) : null}
 
         {note ? (
           <button

@@ -2497,3 +2497,9 @@ input[type='range']:focus-visible::-webkit-slider-thumb {
   border-radius: var(--radius-sm);
   box-shadow: 0 0 0 0.35em color-mix(in srgb, var(--gold) 14%, transparent);
 }
+
+/* Compartir el versículo del día: discreto, debajo de la cita. */
+.verse-day__share {
+  margin: var(--sp-2) auto 0;
+  color: var(--ink-muted);
+}

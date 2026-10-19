@@ -251,6 +251,30 @@ export const IconDownload = (props: IconProps) => (
   </Svg>
 );
 
+export const IconShare = (props: IconProps) => (
+  <Svg {...props}>
+    <circle cx="18" cy="5.5" r="2.5" />
+    <circle cx="6" cy="12" r="2.5" />
+    <circle cx="18" cy="18.5" r="2.5" />
+    <path d="M8.2 10.8l7.6-4.1" />
+    <path d="M8.2 13.2l7.6 4.1" />
+  </Svg>
+);
+
+export const IconSpeaker = (props: IconProps) => (
+  <Svg {...props}>
+    <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" />
+    <path d="M15.5 9a4 4 0 010 6" />
+    <path d="M18 6.5a7.5 7.5 0 010 11" />
+  </Svg>
+);
+
+export const IconStop = (props: IconProps) => (
+  <Svg {...props}>
+    <rect x="6.5" y="6.5" width="11" height="11" rx="1.5" />
+  </Svg>
+);
+
 export const IconUpload = (props: IconProps) => (
   <Svg {...props}>
     <path d="M12 15.5v-11" />

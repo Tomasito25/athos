@@ -844,6 +844,16 @@ const es = {
     sources: 'Fuentes y licencias',
   },
 
+  reader: {
+    share: 'Compartir',
+    copied: 'Copiado, con el enlace: pégalo donde quieras',
+    shareFailed: 'Este navegador no deja compartir ni copiar',
+    readAloud: 'Leer en voz alta',
+    pause: 'Pausar la lectura',
+    resume: 'Seguir leyendo',
+    stop: 'Parar la lectura',
+  },
+
   churches: {
     title: 'Las Iglesias ortodoxas hoy',
     subtitle: '{{recognized}} Iglesias autocéfalas que todas reconocen, y {{disputed}} cuya autocefalia está en disputa.',

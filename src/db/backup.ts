@@ -259,3 +259,47 @@ export async function wipeUserData(): Promise<void> {
     await Promise.all(tablas.map((tabla) => tabla.clear()));
   });
 }
+
+/* ---------------- El aviso de copia de seguridad ---------------- */
+
+const ULTIMA_COPIA = 'backup.lastAt';
+const APLAZADA_HASTA = 'backup.snoozedUntil';
+/** Cada cuánto se recuerda hacer una copia. */
+export const BACKUP_EVERY_DAYS = 30;
+
+/** Apunta que se acaba de hacer una copia. */
+export async function markBackupDone(cuando = new Date()): Promise<void> {
+  await db.settings.put({ key: ULTIMA_COPIA, value: cuando.toISOString(), updatedAt: cuando.toISOString() });
+}
+
+/** No volver a recordarlo hasta dentro de `dias`. */
+export async function snoozeBackupReminder(dias = BACKUP_EVERY_DAYS, desde = new Date()): Promise<void> {
+  const hasta = new Date(desde.getTime() + dias * 86_400_000).toISOString();
+  await db.settings.put({ key: APLAZADA_HASTA, value: hasta, updatedAt: desde.toISOString() });
+}
+
+/**
+ * ¿Toca recordar que se haga una copia?
+ *
+ * Los datos sólo viven en el dispositivo, y Safari borra los de una web que
+ * no se abre en semanas; también se pierden al limpiar el navegador. Se
+ * recuerda cuando hay algo que perder —algo rezado, guardado o escrito— y la
+ * última copia tiene más de un mes, o no la hay. Si se aplaza, se calla un mes.
+ */
+export async function backupReminderDue(ahora = new Date()): Promise<boolean> {
+  const aplazada = (await db.settings.get(APLAZADA_HASTA))?.value as string | undefined;
+  if (aplazada && new Date(aplazada) > ahora) return false;
+  const ultima = (await db.settings.get(ULTIMA_COPIA))?.value as string | undefined;
+  if (ultima && ahora.getTime() - new Date(ultima).getTime() < BACKUP_EVERY_DAYS * 86_400_000) return false;
+
+  const cuantos = await Promise.all([
+    db.rule_completions.count(),
+    db.favorites.count(),
+    db.bookmarks.count(),
+    db.notes.count(),
+    db.jesus_prayer_sessions.count(),
+    db.reading_progress.count(),
+    db.user_prayers.count(),
+  ]);
+  return cuantos.some((n) => n > 0);
+}

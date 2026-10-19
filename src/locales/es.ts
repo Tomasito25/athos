@@ -553,6 +553,26 @@ const es = {
     test: 'Probar una notificación',
     testBody: 'Así se verán los recordatorios. Al tocarlos, se abre la pantalla que toca.',
     testFailed: 'El navegador no ha mostrado la notificación',
+    closedTitle: 'Con ATHOS cerrada, no te fíes de estos avisos',
+    closedIos:
+      'En iPhone y iPad no llega ningún aviso con ATHOS cerrada: Safari no deja que una aplicación web avise sin un servidor, y ATHOS no lo tiene.',
+    closedAndroid:
+      'En Android dependen de Chrome: sólo llegan con ATHOS instalada, cuando el sistema la despierta, y pueden llegar tarde o no llegar.',
+    closedOther:
+      'Con ATHOS cerrada sólo llegan en Chrome y Edge, con ATHOS instalada, y cuando el sistema la despierta: pueden llegar tarde o no llegar.',
+    closedFix: 'Para que avisen siempre, pásalos al calendario del teléfono: ése sí suena aunque ATHOS lleve semanas cerrada.',
+    toCalendar: 'Al calendario del teléfono',
+    toCalendarText:
+      'Se descarga un archivo de calendario (.ics) que el teléfono abre y añade a su calendario. Se genera aquí mismo: no se envía nada a ningún sitio.',
+    exportReminders: 'Los avisos que tienes activados',
+    exportRemindersHint:
+      'Los oficios, a su hora y cada día. El Evangelio, el santo, los ayunos y las fiestas, día por día durante seis meses: vuelve a exportarlos cuando se acaben o si cambias la hora.',
+    exportFeasts: 'Fiestas y ayunos del año',
+    exportFeastsHint: 'Las grandes fiestas y los periodos de ayuno de los próximos doce meses, de día entero y sin aviso.',
+    exportNone: 'Activa primero algún aviso de los de arriba.',
+    exported: 'Calendario descargado: ábrelo para añadirlo',
+    calendarHow:
+      'En iPhone, al abrir el archivo se ofrece «Añadir todo». En Android, algunos calendarios lo abren directamente; Google Calendar sólo lo importa desde su web (calendar.google.com → Configuración → Importar).',
   },
 
   ways: {
@@ -820,6 +840,19 @@ const es = {
     minutesAgo: 'hace {{n}} min',
     hoursAgo: 'hace {{n}} h',
     sources: 'Fuentes y licencias',
+  },
+
+  backup: {
+    eyebrow: 'Tus datos',
+    title: 'Haz una copia de seguridad',
+    text:
+      'Tus reglas, favoritos y avance sólo están en este dispositivo. Si se borran los datos del navegador, una copia es lo único que los recupera. Es un archivo pequeño: guárdalo donde quieras.',
+    textIos:
+      'Tus reglas, favoritos y avance sólo están en este iPhone. Safari puede borrarlos si ATHOS no se abre en unas semanas, y una copia es lo único que los recupera. Es un archivo pequeño: guárdalo en Archivos o mándatelo.',
+    now: 'Hacer la copia',
+    later: 'Dentro de un mes',
+    more: 'Más opciones',
+    done: 'Copia descargada. Guárdala en un sitio seguro.',
   },
 
   about: {

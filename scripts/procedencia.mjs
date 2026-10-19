@@ -31,6 +31,8 @@ const server = await createServer({
     __CONTACT_EMAIL__: '""',
   },
   server: { middlewareMode: true, hmr: false },
+  // Sólo se carga el corpus: no hace falta preparar las dependencias del navegador.
+  optimizeDeps: { noDiscovery: true, include: [] },
   appType: 'custom',
 });
 

@@ -34,6 +34,7 @@ import { Tile, TileGrid } from '@/components/hub';
 import { OfficeInvitation } from '@/features/office/OfficeInvitation';
 import { useOfficeProgress } from '@/features/office/useOfficeProgress';
 import { WelcomeCard } from './WelcomeCard';
+import { BackupReminder } from './BackupReminder';
 import { PericopeText } from '@/components/PericopeText';
 import { VerseOfDay } from '@/components/VerseOfDay';
 import {
@@ -124,6 +125,7 @@ export function HomePage() {
       <VerseOfDay prominent />
 
       <WelcomeCard />
+      <BackupReminder />
 
       <div className="home-grid">
         {/* ---------- La Iglesia, hoy ---------- */}

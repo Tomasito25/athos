@@ -24,6 +24,11 @@ import {
   type ReminderGroup,
 } from '@/lib/reminders';
 import { Button, Notice, PageHead, Panel, Section, Switch } from '@/components/ui';
+import { IconDownload } from '@/components/icons';
+import { downloadFile } from '@/db/backup';
+import { calendarFile, feastAndFastEvents, reminderEvents } from '@/lib/ics';
+import { detectPlatform } from '@/lib/pwa';
+import { toIsoDate } from '@/lib/calendar/jdn';
 import { useSettings } from '@/stores/settings';
 import { useUi } from '@/stores/ui';
 import es from '@/locales/es';
@@ -48,6 +53,25 @@ export function NotificationsPage() {
   const supported = notificationsSupported();
   const granted = permission.data === 'granted';
   const grupos = Object.keys(REMINDER_GROUPS) as ReminderGroup[];
+  const plataforma = detectPlatform();
+  const cerrada =
+    plataforma === 'ios'
+      ? es.notifications.closedIos
+      : plataforma === 'android'
+        ? es.notifications.closedAndroid
+        : es.notifications.closedOther;
+  const hayActivos = REMINDERS.some((r) => settings.notifications[r.id] && !r.needsApp && r.id !== 'lectura');
+
+  const exportarAvisos = async () => {
+    const eventos = await reminderEvents(settings);
+    downloadFile(`athos-avisos-${toIsoDate(new Date())}.ics`, calendarFile('ATHOS · Avisos', eventos), 'text/calendar');
+    toast(es.notifications.exported);
+  };
+  const exportarFiestas = () => {
+    const eventos = feastAndFastEvents(settings.calendarStyle);
+    downloadFile(`athos-fiestas-${toIsoDate(new Date())}.ics`, calendarFile('ATHOS · Fiestas y ayunos', eventos), 'text/calendar');
+    toast(es.notifications.exported);
+  };
 
   return (
     <div className="page page--reading">
@@ -85,6 +109,17 @@ export function NotificationsPage() {
         </Panel>
       ) : null}
 
+      <Notice variant="warn">
+        <div>
+          <p>
+            <strong>{es.notifications.closedTitle}.</strong> {cerrada}
+          </p>
+          <p style={{ marginTop: 'var(--sp-2)' }}>
+            <a href="#al-calendario">{es.notifications.closedFix}</a>
+          </p>
+        </div>
+      </Notice>
+
       {grupos.map((grupo) => (
         <Section key={grupo} title={REMINDER_GROUPS[grupo]}>
           <div className="stack stack--tight">
@@ -117,6 +152,29 @@ export function NotificationsPage() {
           {es.notifications.test}
         </Button>
       </div>
+
+      <Section title={es.notifications.toCalendar} id="al-calendario">
+        <Panel>
+          <p className="muted text-sm">{es.notifications.toCalendarText}</p>
+          <div className="stack stack--tight" style={{ marginTop: 'var(--sp-3)' }}>
+            <div>
+              <Button onClick={() => void exportarAvisos()} disabled={!hayActivos}>
+                <IconDownload size={16} /> {es.notifications.exportReminders}
+              </Button>
+              <p className="field__hint">{hayActivos ? es.notifications.exportRemindersHint : es.notifications.exportNone}</p>
+            </div>
+            <div>
+              <Button onClick={exportarFiestas}>
+                <IconDownload size={16} /> {es.notifications.exportFeasts}
+              </Button>
+              <p className="field__hint">{es.notifications.exportFeastsHint}</p>
+            </div>
+          </div>
+          <p className="muted text-sm" style={{ marginTop: 'var(--sp-3)' }}>
+            {es.notifications.calendarHow}
+          </p>
+        </Panel>
+      </Section>
 
       <p className="source-note">{NOTIFICATIONS_LIMITATION_NOTE}</p>
     </div>

@@ -6,6 +6,7 @@ import {
   downloadFile,
   exportBackup,
   importBackup,
+  markBackupDone,
   validateBackup,
   wipeUserData,
   type AthosBackup,
@@ -62,6 +63,7 @@ export function DataPage() {
       JSON.stringify(backup, null, 2),
       'application/json',
     );
+    await markBackupDone();
     toast('Copia exportada');
   };
 

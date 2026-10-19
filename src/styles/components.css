@@ -2489,3 +2489,11 @@ input[type='range']:focus-visible::-webkit-slider-thumb {
     gap: 0;
   }
 }
+
+/* El versículo al que lleva una cita o un resultado de búsqueda. */
+.book-surface p:target,
+.bible-parallel__verse:target {
+  background: color-mix(in srgb, var(--gold) 14%, transparent);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0 0 0.35em color-mix(in srgb, var(--gold) 14%, transparent);
+}

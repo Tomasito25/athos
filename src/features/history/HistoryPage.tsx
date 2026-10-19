@@ -43,6 +43,9 @@ export function HistoryPage() {
           {es.history.mapIntro}
         </p>
         <PatriarchateMap />
+        <p className="text-sm" style={{ marginTop: 'var(--sp-4)' }}>
+          <Link to="/biblioteca/iglesias">{es.churches.title}</Link>: {es.history.churchesLink}
+        </p>
         <p className="source-note" style={{ marginTop: 'var(--sp-4)' }}>{MAPS_NOTE}</p>
       </Section>
 

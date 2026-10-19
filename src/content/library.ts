@@ -16,6 +16,7 @@ import { ICONS } from './icons';
 import { OFFICES } from './offices';
 import { STUDY_COURSES, STUDY_WORKS } from './study';
 import { GLOSSARY } from './glossary';
+import { ORTHODOX_CHURCHES } from './iglesias-hoy';
 import { TEMPLE_PARTS } from './temple';
 import es from '@/locales/es';
 
@@ -163,6 +164,15 @@ export const LIBRARY_GROUPS: LibraryGroup[] = [
         text: 'Cada obra dice de qué trata y cuándo se escribió, tenga texto incorporado o no. Donde falta la traducción, al menos se sabe qué se está echando de menos.',
         count: OBRAS_PATRISTICAS,
         unit: 'obras con ficha',
+      },
+      {
+        id: 'iglesias',
+        to: '/biblioteca/iglesias',
+        icon: 'church',
+        title: 'Las Iglesias ortodoxas hoy',
+        text: 'Una ficha por Iglesia: quién la preside, su sede, desde cuándo es autocéfala, cuántos fieles tiene, su calendario, sus lenguas y sus diócesis en España y América Latina. Y las disputas abiertas, contadas como disputas.',
+        count: ORTHODOX_CHURCHES.length,
+        unit: 'Iglesias',
       },
       {
         id: 'athos',

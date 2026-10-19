@@ -2441,3 +2441,51 @@ input[type='range']:focus-visible::-webkit-slider-thumb {
   font-size: var(--text-lg);
   margin: var(--sp-1) 0 var(--sp-2);
 }
+
+/* ---------- Las Iglesias ortodoxas hoy ---------- */
+
+.church-card__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.church-card__name {
+  font-size: var(--text-lg);
+  margin: 0;
+}
+
+.church-card__primate {
+  margin: var(--sp-2) 0 var(--sp-3);
+}
+
+.church-card__datos {
+  display: grid;
+  gap: var(--sp-2);
+  margin: 0 0 var(--sp-3);
+}
+
+.church-card__datos div {
+  display: grid;
+  grid-template-columns: minmax(7rem, 30%) 1fr;
+  gap: var(--sp-2);
+}
+
+.church-card__datos dt {
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
+}
+
+.church-card__datos dd {
+  margin: 0;
+  font-size: var(--text-sm);
+}
+
+@media (max-width: 30rem) {
+  .church-card__datos div {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

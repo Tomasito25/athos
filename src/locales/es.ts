@@ -85,6 +85,7 @@ const es = {
     '/biblioteca/padres': 'a los Padres de la Iglesia',
     '/biblioteca/athos': 'al Monte Athos',
     '/biblioteca/historia': 'a la Historia de la Iglesia',
+    '/biblioteca/iglesias': 'a las Iglesias de hoy',
     '/biblioteca/catecismo': 'al Catecismo',
     '/biblioteca/estudio': 'al Estudio',
     '/biblioteca/glosario': 'al Glosario',
@@ -652,6 +653,7 @@ const es = {
   },
 
   history: {
+    churchesLink: 'quién preside cada una, su calendario, sus lenguas y sus diócesis en España y América Latina.',
     title: 'Historia de la Iglesia',
     subtitle: 'De Pentecostés a hoy: {{events}} hechos fechados y {{councils}} concilios.',
     periods: 'Épocas',
@@ -840,6 +842,31 @@ const es = {
     minutesAgo: 'hace {{n}} min',
     hoursAgo: 'hace {{n}} h',
     sources: 'Fuentes y licencias',
+  },
+
+  churches: {
+    title: 'Las Iglesias ortodoxas hoy',
+    subtitle: '{{recognized}} Iglesias autocéfalas que todas reconocen, y {{disputed}} cuya autocefalia está en disputa.',
+    recognized: 'Las que todas reconocen',
+    disputedTitle: 'Con la autocefalia en disputa',
+    disputes: 'Las disputas abiertas',
+    disputed: 'En disputa',
+    disputeSince: 'Desde {{year}}',
+    disputesOf: 'Disputas:',
+    since: 'desde {{year}}',
+    verified: 'comprobado el {{date}}',
+    see: 'Sede',
+    autocephaly: 'Autocefalia',
+    faithful: 'Fieles',
+    calendar: 'Calendario',
+    languages: 'Lenguas litúrgicas',
+    autonomous: 'Iglesias autónomas',
+    hispanic: 'En España y América Latina',
+    calendarNew: 'Nuevo (juliano revisado)',
+    calendarJulian: 'Juliano',
+    calendarMixed: 'Según la parroquia',
+    outdated: '¿Algún dato ya no es así?',
+    seeHistory: 'Cómo se llegó hasta aquí, en la Historia',
   },
 
   backup: {

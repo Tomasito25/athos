@@ -188,8 +188,5 @@ export const SAINTS_COVERAGE_NOTE =
   'general de su rango, que es justo lo que la Iglesia canta cuando no dispone del propio. Todos ' +
   'van traducidos del griego para ATHOS y su ficha lo dice.';
 
-/** Cuántos días del año tienen conmemoración. Los 366 desde agosto de 2026. */
-export const SAINT_DAYS_COVERED = new Set(SAINTS.map((s) => s.day)).size;
-
 /** Días del año que ya tienen alguna conmemoración incorporada. */
 export const SAINT_DAYS = new Set(SAINTS.map((s) => s.day));

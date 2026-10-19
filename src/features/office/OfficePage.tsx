@@ -32,6 +32,7 @@ import {
   uncompleteRule,
 } from '@/db/user';
 import { useToday } from '@/hooks/useLiturgicalDay';
+import { useKeepAwake } from '@/hooks/useKeepAwake';
 import {
   Blocks,
   Button,
@@ -43,7 +44,6 @@ import {
   Segmented,
   Rule,
   SourceNote,
-  Tag,
 } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { InlineCounter } from './InlineCounter';
@@ -65,6 +65,7 @@ export function OfficePage() {
 
   const regla = useAsync(() => ruleForTime(time as RuleTime), [time]);
   const pasos = useOfficeSteps(regla.data?.id ?? '', time as RuleTime, medida);
+  useKeepAwake();
   const pasosRegla = useAsync(
     async () => (regla.data ? ruleItems(regla.data.id) : []),
     [regla.data?.id],
@@ -379,9 +380,4 @@ function Step({ paso, numero }: { paso: ResolvedStep; numero: number }) {
       {paso.meta ? <SourceNote meta={paso.meta} /> : null}
     </section>
   );
-}
-
-export function OfficeTag({ time }: { time: RuleTime }) {
-  const definicion = OFFICE_BY_TIME.get(time);
-  return <Tag tone="gold">{definicion?.name ?? time}</Tag>;
 }

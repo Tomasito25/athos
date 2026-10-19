@@ -217,17 +217,6 @@ export async function getChapter(
   return verses;
 }
 
-/** Número de capítulos reales del libro según el archivo descargado. */
-export async function getBookChapterCount(
-  bookId: string,
-  translationId = DEFAULT_TRANSLATION,
-): Promise<number> {
-  const book = BOOKS_BY_ID.get(bookId);
-  if (book && book.status === 'pending') return 0;
-  const file = await loadBookFile(bookId, translationId);
-  return Object.keys(file.chapters).length;
-}
-
 /* ---------- Indexación completa para la búsqueda sin conexión ---------- */
 
 const INDEX_KEY = 'bible.indexedBooks';

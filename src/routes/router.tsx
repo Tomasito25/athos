@@ -38,8 +38,10 @@ export const routes: RouteObject[] = [
       { path: 'orar/regla', lazy: page(() => import('@/features/rule/RulePage'), 'RulePage') },
       { path: 'orar/regla/editar/:ruleId', lazy: page(() => import('@/features/rule/RuleEditorPage'), 'RuleEditorPage') },
       { path: 'orar/oracion-de-jesus', lazy: page(() => import('@/features/jesus-prayer/JesusPrayerPage'), 'JesusPrayerPage') },
-      { path: 'orar/komboskini', lazy: page(() => import('@/features/jesus-prayer/ChotkiPage'), 'ChotkiPage') },
-      { path: 'orar/chotki', lazy: page(() => import('@/features/jesus-prayer/ChotkiPage'), 'ChotkiPage') },
+      // El komboskini es la otra vista de la misma pantalla; las direcciones
+      // se conservan porque están en reglas, atajos y marcadores.
+      { path: 'orar/komboskini', lazy: page(() => import('@/features/jesus-prayer/JesusPrayerPage'), 'JesusPrayerPage') },
+      { path: 'orar/chotki', lazy: page(() => import('@/features/jesus-prayer/JesusPrayerPage'), 'JesusPrayerPage') },
 
       /* ---------------- Leer ---------------- */
       { path: 'leer', lazy: page(() => import('@/features/read/ReadHub'), 'ReadHub') },

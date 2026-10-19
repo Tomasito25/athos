@@ -18,7 +18,6 @@ import {
   ATHOS_ARTICLES,
   OFFICES,
   PRAYERS,
-  RV1909,
   SAINTS,
 } from '@/content';
 import { DAILY_OFFICES, stepsToItems } from '@/content/hours';
@@ -50,7 +49,7 @@ function appVersion(): string {
  * enseñando lo viejo sin que nada avise. El número a mano es fácil de olvidar;
  * la versión del paquete sube en cada publicación por fuerza.
  *
- * Sembrar es barato —vaciar catorce tablas y volver a escribirlas— y no toca
+ * Sembrar es barato —vaciar trece tablas y volver a escribirlas— y no toca
  * nada del usuario, así que hacerlo de más no cuesta nada y hacerlo de menos
  * cuesta que alguien lea durante meses un texto que ya se corrigió.
  */
@@ -65,7 +64,6 @@ export async function seedContent(force = false): Promise<boolean> {
     [
       db.prayers,
       db.bible_books,
-      db.bible_translations,
       db.saints,
       db.feasts,
       db.liturgical_readings,
@@ -96,7 +94,6 @@ export async function seedContent(force = false): Promise<boolean> {
       await Promise.all([
         db.prayers.clear(),
         db.bible_books.clear(),
-        db.bible_translations.clear(),
         db.saints.clear(),
         db.feasts.clear(),
         db.liturgical_readings.clear(),
@@ -111,7 +108,6 @@ export async function seedContent(force = false): Promise<boolean> {
 
       await db.prayers.bulkPut(PRAYERS);
       await db.bible_books.bulkPut(BIBLE_BOOKS);
-      await db.bible_translations.bulkPut([RV1909]);
       await db.saints.bulkPut(SAINTS);
       await db.feasts.bulkPut(ALL_FEASTS);
       await db.liturgical_readings.bulkPut([...MOVABLE_READINGS, ...FIXED_READINGS]);

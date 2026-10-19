@@ -69,7 +69,11 @@ export function ChapterPage() {
         <Link to={`/leer/biblia/${book.id}`} className="eyebrow" style={{ textDecoration: 'none' }}>
           {book.name}
         </Link>
-        <h1 className="display" style={{ fontSize: 'var(--text-2xl)', margin: 'var(--sp-2) 0' }}>
+        <h1
+          className="display"
+          style={{ fontSize: 'var(--text-2xl)', margin: 'var(--sp-2) 0' }}
+          data-tab-title={`${book.name} ${chapterNumber}`}
+        >
           {es.bible.chapter.replace('{{n}}', String(chapterNumber))}
         </h1>
 

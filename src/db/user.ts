@@ -15,7 +15,6 @@ import type {
   PrayerRule,
   RuleCompletion,
   RuleItem,
-  RuleScope,
   RuleTime,
   UserPrayer,
 } from '@/types';
@@ -141,12 +140,6 @@ export async function listRules(): Promise<PrayerRule[]> {
 export async function ruleForTime(time: RuleTime): Promise<PrayerRule | undefined> {
   const todas = await listRules();
   return todas.find((r) => r.time === time);
-}
-
-export async function rulesForScope(scope: RuleScope): Promise<PrayerRule[]> {
-  const all = await listRules();
-  const specific = all.filter((r) => r.scope === scope);
-  return specific.length ? specific : all.filter((r) => r.scope === 'diario');
 }
 
 export async function saveRule(rule: Omit<PrayerRule, 'createdAt' | 'updatedAt'> & { createdAt?: string }): Promise<PrayerRule> {
@@ -310,15 +303,6 @@ export async function ruleProgress(date: string, rule: PrayerRule): Promise<Rule
   };
 }
 
-/** Progreso conjunto de todas las reglas del día, para el panel de Inicio. */
-export async function dayRuleProgress(date: string, scope: RuleScope = 'diario') {
-  const rules = await rulesForScope(scope);
-  const progress = await Promise.all(rules.map((rule) => ruleProgress(date, rule)));
-  const total = progress.reduce((sum, p) => sum + p.items.length, 0);
-  const done = progress.reduce((sum, p) => sum + p.completed.size, 0);
-  return { progress, total, done, ratio: total ? done / total : 0 };
-}
-
 /** Días consecutivos con la regla completada, hasta hoy. */
 export async function ruleStreak(today = toIsoDate(new Date())): Promise<number> {
   const rules = await listRules();
@@ -345,10 +329,6 @@ export async function ruleStreak(today = toIsoDate(new Date())): Promise<number>
 
 export async function listUserPrayers(): Promise<UserPrayer[]> {
   return (await db.user_prayers.toArray()).sort((a, b) => a.title.localeCompare(b.title, 'es'));
-}
-
-export async function getUserPrayer(id: string): Promise<UserPrayer | undefined> {
-  return db.user_prayers.get(id);
 }
 
 export async function saveUserPrayer(

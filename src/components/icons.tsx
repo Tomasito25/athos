@@ -134,15 +134,6 @@ export const IconJournal = (props: IconProps) => (
   </Svg>
 );
 
-export const IconHabits = (props: IconProps) => (
-  <Svg {...props}>
-    <rect x="3.5" y="3.5" width="6" height="6" rx="1" />
-    <rect x="14.5" y="3.5" width="6" height="6" rx="1" />
-    <rect x="3.5" y="14.5" width="6" height="6" rx="1" />
-    <path d="M15 17.5l1.8 1.8 3.4-3.6" />
-  </Svg>
-);
-
 export const IconChevronRight = (props: IconProps) => (
   <Svg {...props}>
     <path d="M9.5 5l7 7-7 7" />
@@ -268,14 +259,6 @@ export const IconUpload = (props: IconProps) => (
   </Svg>
 );
 
-export const IconLock = (props: IconProps) => (
-  <Svg {...props}>
-    <rect x="4.5" y="10" width="15" height="10.5" rx="1.5" />
-    <path d="M8 10V7a4 4 0 018 0v3" />
-    <path d="M12 14v2.5" />
-  </Svg>
-);
-
 export const IconBell = (props: IconProps) => (
   <Svg {...props}>
     <path d="M6 10a6 6 0 0112 0c0 4 1.5 5.5 1.5 5.5h-15S6 14 6 10z" />
@@ -296,24 +279,6 @@ export const IconInstall = (props: IconProps) => (
     <rect x="6" y="2.5" width="12" height="19" rx="2" />
     <path d="M12 7v7" />
     <path d="M9.2 11.2L12 14l2.8-2.8" />
-  </Svg>
-);
-
-export const IconDrag = (props: IconProps) => (
-  <Svg {...props}>
-    <circle cx="9" cy="6" r="1.1" fill="currentColor" stroke="none" />
-    <circle cx="15" cy="6" r="1.1" fill="currentColor" stroke="none" />
-    <circle cx="9" cy="12" r="1.1" fill="currentColor" stroke="none" />
-    <circle cx="15" cy="12" r="1.1" fill="currentColor" stroke="none" />
-    <circle cx="9" cy="18" r="1.1" fill="currentColor" stroke="none" />
-    <circle cx="15" cy="18" r="1.1" fill="currentColor" stroke="none" />
-  </Svg>
-);
-
-export const IconReset = (props: IconProps) => (
-  <Svg {...props}>
-    <path d="M4 12a8 8 0 108-8 8 8 0 00-5.7 2.4L4 8.5" />
-    <path d="M4 4v4.5h4.5" />
   </Svg>
 );
 

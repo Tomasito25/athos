@@ -42,10 +42,6 @@ export function isStandalone(): boolean {
   );
 }
 
-export function supportsInstallPrompt(): boolean {
-  return 'BeforeInstallPromptEvent' in window || 'onbeforeinstallprompt' in window;
-}
-
 /** Escucha el evento de instalación de los navegadores basados en Chromium. */
 /**
  * Avisa cuando el navegador ofrece instalar ATHOS.

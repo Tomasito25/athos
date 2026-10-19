@@ -100,8 +100,6 @@ export const BIBLE_VERSIONS = [
   { id: 'ambas', label: 'Las dos', note: 'El español y el griego, versículo a versículo' },
 ] as const;
 
-export type BibleView = (typeof BIBLE_VERSIONS)[number]['id'];
-
 export const BIBLE_VERSIONS_NOTE =
   'ATHOS sólo trae traducciones que se pueden distribuir libremente. La Biblia de Jerusalén, la de ' +
   'Nácar-Colunga, la del Peregrino, la Reina-Valera de 1960 y las demás versiones españolas modernas ' +

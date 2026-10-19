@@ -94,15 +94,3 @@ export function lookupReadings(iso: string, estilo: CalendarStyle): ReadingRef[]
     note: r.note,
   }));
 }
-
-export function lectionaryMeta(estilo: CalendarStyle): LectionaryFile | null {
-  return cargados.get(estilo) ?? null;
-}
-
-/** Años cubiertos por el leccionario incorporado. */
-export function lectionaryRange(estilo: CalendarStyle): [number, number] | null {
-  const datos = cargados.get(estilo);
-  if (!datos) return null;
-  const anios = Object.keys(datos.years).map(Number).sort((a, b) => a - b);
-  return anios.length ? [anios[0], anios.at(-1)!] : null;
-}

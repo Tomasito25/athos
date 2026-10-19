@@ -5,7 +5,6 @@ import {
   IconCalendar,
   IconCandle,
   IconChotki,
-  IconCross,
   IconEdit,
   IconFast,
   IconHome,
@@ -48,8 +47,6 @@ export const FOOTER_NAV: NavItem[] = [
   { to: '/configuracion', label: es.nav.settings, icon: IconSettings },
 ];
 
-export const MORE_NAV: NavItem = { to: '/mas', label: es.nav.more, icon: IconMore };
-
 export const SIDEBAR_GROUPS: Array<{ label?: string; items: NavItem[] }> = [
   { items: PRIMARY_NAV },
   { label: es.favorites.title, items: PERSONAL_NAV },
@@ -91,8 +88,7 @@ export const APP_MAP: MapGroup[] = [
       { to: '/orar', label: es.nav.pray, hint: 'Los tres momentos del día', icon: IconPray },
       { to: '/orar/oraciones', label: es.prayers.title, hint: 'Por momento del día y por necesidad', icon: IconPray },
       { to: '/orar/regla', label: es.rule.title, hint: 'La tuya, editable paso a paso', icon: IconScroll },
-      { to: '/orar/oracion-de-jesus', label: es.jesusPrayer.title, icon: IconCross },
-      { to: '/orar/komboskini', label: 'Komboskini', hint: 'El cordón de nudos, con contador', icon: IconChotki },
+      { to: '/orar/oracion-de-jesus', label: es.jesusPrayer.title, hint: 'Con contador o con el komboskini', icon: IconChotki },
       { to: '/orar/mis-oraciones', label: 'Mis oraciones', icon: IconEdit },
     ],
   },

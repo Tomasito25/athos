@@ -37,19 +37,27 @@ export function PageHead({
   eyebrow,
   actions,
   ornate = false,
+  tabTitle,
 }: {
   title: string;
   subtitle?: string;
   eyebrow?: string;
   actions?: ReactNode;
   ornate?: boolean;
+  /**
+   * El título de la pestaña, si el encabezado solo no basta: «Día 3» no dice
+   * de qué plan. Lo lee RouteAnnouncer.
+   */
+  tabTitle?: string;
 }) {
   return (
     <header className={ornate ? 'page-head page-head--ornate' : 'page-head'}>
       {ornate ? <Headpiece /> : null}
       {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
       <div className="page-head__row">
-        <h1 className="page-head__title display">{title}</h1>
+        <h1 className="page-head__title display" data-tab-title={tabTitle}>
+          {title}
+        </h1>
         {actions ? <div className="page-head__actions">{actions}</div> : null}
       </div>
       {subtitle ? <p className="page-head__sub">{subtitle}</p> : null}
@@ -222,10 +230,6 @@ export function ListRow({
       {inner}
     </button>
   );
-}
-
-export function List({ children }: { children: ReactNode }) {
-  return <div className="list">{children}</div>;
 }
 
 /* ---------------- Progreso ---------------- */

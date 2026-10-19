@@ -361,12 +361,6 @@ export function startReminders(): void {
   });
 }
 
-export function stopReminders(): void {
-  window.clearTimeout(temporizador);
-  desuscribir?.();
-  desuscribir = undefined;
-}
-
 /** Vuelve a programar: tras dar permiso, por ejemplo. */
 export const refreshReminders = () => programar();
 

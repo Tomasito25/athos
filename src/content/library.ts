@@ -11,7 +11,7 @@ import { AKATHISTS, CANONS } from './hymns';
 import { ATHOS_ARTICLES, MONASTERIES } from './athos';
 import { CATECHISM_INDEX } from './catechism-parts';
 import { CHURCH_FATHERS } from './fathers';
-import { COUNCILS, HISTORY_PERIODS } from './history-all';
+import { COUNCILS } from './history-all';
 import { ICONS } from './icons';
 import { OFFICES } from './offices';
 import { STUDY_COURSES, STUDY_WORKS } from './study';
@@ -188,6 +188,3 @@ export const LIBRARY_GROUPS: LibraryGroup[] = [
 
 /** Todas las secciones, sueltas. */
 export const LIBRARY_SECTIONS = LIBRARY_GROUPS.flatMap((g) => g.sections);
-
-/** Cuántas épocas de la historia hay escritas; se usa en la portada. */
-export const LIBRARY_PERIODS = HISTORY_PERIODS.length;

@@ -10,6 +10,10 @@
  * El título se saca del `h1` que acaba de pintarse, no de una tabla aparte:
  * lo que se anuncia y lo que se lee en la pestaña es exactamente lo que el
  * usuario ve como encabezado, y no hay dos sitios que puedan discrepar.
+ *
+ * Salvo cuando el encabezado no se entiende solo: la pestaña de un capítulo
+ * decía «Capítulo 3», sin el libro, porque el libro va encima, en otra línea.
+ * Esas pantallas dan el título completo en `data-tab-title`.
  */
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -31,7 +35,10 @@ export function RouteAnnouncer() {
     let observer: MutationObserver | null = null;
     let limite = 0;
 
-    const encabezado = () => main.querySelector('h1')?.textContent?.trim() || null;
+    const encabezado = () => {
+      const h1 = main.querySelector('h1');
+      return h1?.dataset.tabTitle?.trim() || h1?.textContent?.trim() || null;
+    };
 
     const aplicar = (texto: string) => {
       if (!vivo) return;

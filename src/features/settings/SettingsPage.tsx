@@ -30,6 +30,7 @@ import type {
 import { GREEK_NOTE } from '@/content/greek';
 import { useHashScroll } from '@/hooks/useHashScroll';
 import { OFFICE_LENGTHS, minutesFor } from '@/content/office-lengths';
+import { wakeLockSupported } from '@/lib/wakelock';
 import es from '@/locales/es';
 
 export function SettingsPage() {
@@ -286,6 +287,16 @@ export function SettingsPage() {
             onChange={(value) => settings.set('officeExtras', { ...settings.officeExtras, akathist: value })}
             title={es.office.extrasAkathist}
             description={es.office.extrasAkathistHint}
+          />
+
+          <h3 className="panel__title" style={{ marginTop: 'var(--sp-5)' }}>
+            {es.office.screen}
+          </h3>
+          <Switch
+            checked={settings.keepAwakeInOffices ?? true}
+            onChange={(value) => settings.set('keepAwakeInOffices', value)}
+            title={es.office.keepAwake}
+            description={wakeLockSupported() ? es.office.keepAwakeHint : es.prayerMode.wakeLockUnsupported}
           />
         </Panel>
       </Section>

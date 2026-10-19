@@ -16,7 +16,7 @@ import type {
   SettingRecord,
   UserPrayer,
 } from '@/types';
-import { db } from './db';
+import { db, USER_TABLES } from './db';
 
 export const BACKUP_FORMAT = 'athos-backup';
 export const BACKUP_VERSION = 1;
@@ -247,37 +247,15 @@ export function downloadFile(filename: string, content: string, type: string): v
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-/** Borrado completo de los datos del usuario. Deja el contenido intacto. */
+/**
+ * Borrado completo de los datos del usuario. Deja el contenido intacto.
+ *
+ * Recorre USER_TABLES: la lista de lo que es del usuario vive en un solo
+ * sitio, y una tabla nueva entra en el borrado al entrar en ella.
+ */
 export async function wipeUserData(): Promise<void> {
-  await db.transaction(
-    'rw',
-    [
-      db.daily_rules,
-      db.rule_items,
-      db.rule_completions,
-      db.favorites,
-      db.bookmarks,
-      db.notes,
-      db.history,
-      db.jesus_prayer_sessions,
-      db.reading_progress,
-      db.user_prayers,
-      db.settings,
-    ],
-    async () => {
-      await Promise.all([
-        db.daily_rules.clear(),
-        db.rule_items.clear(),
-        db.rule_completions.clear(),
-        db.favorites.clear(),
-        db.bookmarks.clear(),
-        db.notes.clear(),
-        db.history.clear(),
-        db.jesus_prayer_sessions.clear(),
-        db.reading_progress.clear(),
-        db.user_prayers.clear(),
-        db.settings.clear(),
-      ]);
-    },
-  );
+  const tablas = USER_TABLES.map((nombre) => db.table(nombre));
+  await db.transaction('rw', tablas, async () => {
+    await Promise.all(tablas.map((tabla) => tabla.clear()));
+  });
 }

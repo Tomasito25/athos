@@ -59,13 +59,6 @@ export function jdnToJulian(jdn: number): CivilDate {
   };
 }
 
-/** Días que el calendario gregoriano lleva de adelanto sobre el juliano. */
-export function julianOffsetDays(gregorianYear: number): number {
-  const g = gregorianToJdn(gregorianYear, 3, 1);
-  const j = julianToJdn(gregorianYear, 3, 1);
-  return g - j;
-}
-
 /* ---------- Puentes con fechas ISO y `Date` ---------- */
 
 export function isoToJdn(iso: string): number {
@@ -102,10 +95,6 @@ export function addDaysIso(iso: string, days: number): string {
   return jdnToIso(isoToJdn(iso) + days);
 }
 
-export function diffDaysIso(a: string, b: string): number {
-  return isoToJdn(a) - isoToJdn(b);
-}
-
 /** 0 = domingo … 6 = sábado. */
 export function weekdayFromJdn(jdn: number): number {
   return (jdn + 1) % 7;
@@ -114,8 +103,4 @@ export function weekdayFromJdn(jdn: number): number {
 /** `MM-DD` de una fecha civil, para indexar el calendario fijo. */
 export function monthDay({ month, day }: CivilDate): string {
   return `${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-}
-
-export function daysInMonth(year: number, month: number): number {
-  return new Date(year, month, 0).getDate();
 }

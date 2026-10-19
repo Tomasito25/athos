@@ -111,7 +111,3 @@ export function highlight(text: string, tokens: string[]): string {
   }
   return (out + source.slice(donde[cursor]!)).normalize('NFC');
 }
-
-export function pluralize(count: number, one: string, many: string): string {
-  return count === 1 ? one : many;
-}

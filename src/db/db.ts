@@ -14,7 +14,6 @@ import type {
   AthosArticle,
   BibleBook,
   BibleChapter,
-  BibleTranslation,
   BibleVerse,
   Bookmark,
   Canon,
@@ -45,7 +44,6 @@ export class AthosDatabase extends Dexie {
   bible_books!: EntityTable<BibleBook, 'id'>;
   bible_chapters!: EntityTable<BibleChapter, 'id'>;
   bible_verses!: EntityTable<BibleVerse, 'id'>;
-  bible_translations!: EntityTable<BibleTranslation, 'id'>;
   psalms!: EntityTable<Psalm, 'id'>;
   saints!: EntityTable<Saint, 'id'>;
   feasts!: EntityTable<Feast, 'id'>;
@@ -175,6 +173,14 @@ export class AthosDatabase extends Dexie {
         // Así el sembrado vuelve a ejecutarse y crea los tres oficios.
         await tx.table('settings').delete('user.defaultsCreated');
       });
+
+    /**
+     * Versión 4 — fuera la tabla de traducciones bíblicas.
+     *
+     * Sólo guardaba la Reina-Valera y nadie la leía: las traducciones se
+     * describen en `src/content/bible.ts` y no hace falta copiarlas aquí.
+     */
+    this.version(4).stores({ bible_translations: null });
   }
 }
 
@@ -205,25 +211,6 @@ export const USER_TABLES = [
   'settings',
 ] as const;
 
-export const CONTENT_TABLES = [
-  'prayers',
-  'bible_books',
-  'bible_chapters',
-  'bible_verses',
-  'bible_translations',
-  'psalms',
-  'saints',
-  'feasts',
-  'liturgical_readings',
-  'liturgies',
-  'akathists',
-  'canons',
-  'church_fathers',
-  'monasteries',
-  'athos_articles',
-  'icons',
-] as const;
-
 /* ---------- Ajustes con respaldo en IndexedDB ---------- */
 
 export async function getSetting<T>(key: string, fallback: T): Promise<T> {
@@ -233,16 +220,6 @@ export async function getSetting<T>(key: string, fallback: T): Promise<T> {
 
 export async function setSetting<T>(key: string, value: T): Promise<void> {
   await db.settings.put({ key, value, updatedAt: new Date().toISOString() });
-}
-
-/** ¿Está IndexedDB realmente disponible? Safari en modo privado la bloquea. */
-export async function isStorageAvailable(): Promise<boolean> {
-  try {
-    await db.open();
-    return true;
-  } catch {
-    return false;
-  }
 }
 
 /**

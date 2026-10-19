@@ -12,6 +12,7 @@ import {
   type ImportMode,
 } from '@/db/backup';
 import { ARCHIVE_KEY, db, requestPersistentStorage, storageEstimate } from '@/db/db';
+import { clearHistory, clearSessions } from '@/db/user';
 import type { PersonalArchive } from '@/db/db';
 import { bibleIndexStatus, clearBibleIndex, indexWholeBible } from '@/db/bible';
 import { ensurePsalterBuilt } from '@/db/psalter';
@@ -293,6 +294,29 @@ export function DataPage() {
       </Section>
 
       <Section title="Borrar">
+        <Panel>
+          <p className="muted text-sm">{es.settings.clearPartialNote}</p>
+          <div className="btn-row" style={{ marginTop: 'var(--sp-3)' }}>
+            <Button
+              onClick={async () => {
+                if (!confirm(es.settings.clearHistoryConfirm)) return;
+                await clearHistory();
+                toast(es.settings.historyCleared);
+              }}
+            >
+              {es.settings.clearHistory}
+            </Button>
+            <Button
+              onClick={async () => {
+                if (!confirm(es.settings.clearSessionsConfirm)) return;
+                await clearSessions();
+                toast(es.settings.sessionsCleared);
+              }}
+            >
+              {es.settings.clearSessions}
+            </Button>
+          </div>
+        </Panel>
         <Panel>
           <Notice variant="warn">{es.settings.wipeConfirm}</Notice>
           <Button

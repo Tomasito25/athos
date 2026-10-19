@@ -295,9 +295,6 @@ const COMPARTEN: Record<string, string> = {
   'sinaxis-theotokos': 'natividad-senor',
 };
 
-/** Los propios de las grandes fiestas, para las pruebas y para el índice. */
-export const FEAST_TROPARIA = Object.entries(FIESTAS).map(([id, f]) => ({ id, ...f }));
-
 /** Todos los generales, para la pantalla que los explica. */
 export const GENERAL_TROPARIA = ORDEN.filter((c) => GENERALES[c]).map((c) => ({
   category: c,

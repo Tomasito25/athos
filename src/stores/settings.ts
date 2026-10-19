@@ -56,6 +56,8 @@ export interface SettingsState {
   jesusPrayerVibration: boolean;
   jesusPrayerSound: boolean;
   jesusPrayerKeepAwake: boolean;
+  /** La pantalla no se apaga mientras se reza un oficio o un akathisto. */
+  keepAwakeInOffices: boolean;
   prayerModeDark: boolean;
 
   notifications: Record<string, boolean>;
@@ -96,6 +98,7 @@ export const DEFAULT_SETTINGS = {
   jesusPrayerVibration: true,
   jesusPrayerSound: false,
   jesusPrayerKeepAwake: true,
+  keepAwakeInOffices: true,
   prayerModeDark: true,
   notifications: {} as Record<string, boolean>,
   notificationTimes: {} as Record<string, string>,

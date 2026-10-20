@@ -50,15 +50,22 @@ export async function loadBookFile(
   const pending = inFlight.get(key);
   if (pending) return pending;
 
+  // La descarga en curso se guarda para no pedir el mismo libro dos veces a
+  // la vez; se suelta salga bien o mal. Si no se soltara al fallar, un libro
+  // pedido sin conexión —el versículo de dentro de una semana, para su
+  // aviso— no se podría abrir en toda la sesión aunque volviera la red.
   const request = (async () => {
-    const response = await fetch(fileUrl(bookId, translationId));
-    if (!response.ok) {
-      throw new Error(`No se ha podido cargar ${bookId} (${response.status})`);
+    try {
+      const response = await fetch(fileUrl(bookId, translationId));
+      if (!response.ok) {
+        throw new Error(`No se ha podido cargar ${bookId} (${response.status})`);
+      }
+      const file = (await response.json()) as BibleBookFile;
+      memory.set(key, file);
+      return file;
+    } finally {
+      inFlight.delete(key);
     }
-    const file = (await response.json()) as BibleBookFile;
-    memory.set(key, file);
-    inFlight.delete(key);
-    return file;
   })();
 
   inFlight.set(key, request);

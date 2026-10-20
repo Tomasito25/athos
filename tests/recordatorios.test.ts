@@ -4,13 +4,21 @@
  * Dicen lo que toca ese día, sólo suenan cuando hay algo que decir, respetan
  * la hora elegida y se dejan preparados en la cola para el Service Worker.
  */
-import { beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { db, getSetting } from '@/db/db';
 import { seedContent, seedUserDefaults } from '@/db/seed';
 import { completeRule, ruleForTime } from '@/db/user';
 import { toggleDay } from '@/db/plans';
 import { daysOf } from '@/content/plans';
-import { QUEUE_KEY, REMINDERS, buildQueue, refreshReminders, reminderContent, timeFor } from '@/lib/reminders';
+import { QUEUE_KEY, REMINDERS, avisarVencidos, buildQueue, refreshReminders, reminderContent, timeFor } from '@/lib/reminders';
+import { showNotification } from '@/lib/notifications';
+import { verseReferenceFor } from '@/content/verse-of-day';
+
+// Los avisos no se enseñan de verdad: se anota cuáles se habrían enseñado.
+vi.mock('@/lib/notifications', async (original) => ({
+  ...(await original<Record<string, unknown>>()),
+  showNotification: vi.fn(async () => true),
+}));
 import { useSettings } from '@/stores/settings';
 import { toIsoDate } from '@/lib/calendar/jdn';
 
@@ -95,6 +103,36 @@ describe('el apotegma y el versículo, por separado', () => {
     expect(c?.title).toMatch(/^Versículo del día/);
     expect(c?.body.length).toBeGreaterThan(5);
     expect(c?.path).toMatch(/^\/leer\/biblia\//);
+  });
+
+  it('el versículo lleva su texto cuando el libro está guardado', async () => {
+    // El día del año en que toca el salmo 1, que es el que sirven las pruebas.
+    let dia = new Date(2026, 0, 1);
+    while (verseReferenceFor(dia) !== 'Salmos 1, 1') dia = new Date(dia.getFullYear(), dia.getMonth(), dia.getDate() + 1);
+    const c = await reminderContent('versiculo', toIsoDate(dia), ajustes);
+    expect(c?.title).toBe('Versículo del día · Salmos 1, 1');
+    expect(c?.body).toMatch(/^BIENAVENTURADO el varón/);
+    expect(c?.path).toBe('/leer/biblia/PSA/1#v1');
+  });
+
+  it('dos avisos a la misma hora se enseñan los dos', async () => {
+    const enseñar = vi.mocked(showNotification);
+    enseñar.mockClear();
+    const a = (id: string) => ({ id, date: '2026-10-20', at: new Date(2026, 9, 20, 8, 0).toISOString(), title: id, body: id, url: '/' });
+    const cola = [a('apotegma'), a('santo')];
+    await avisarVencidos(cola, new Date(2026, 9, 20, 8, 0, 1).getTime());
+    expect(enseñar.mock.calls.map((c) => c[2])).toEqual(['apotegma', 'santo']);
+    // Y no se repiten.
+    await avisarVencidos(cola, new Date(2026, 9, 20, 8, 5).getTime());
+    expect(enseñar).toHaveBeenCalledTimes(2);
+  });
+
+  it('lo vencido hace más de seis horas ya no se enseña', async () => {
+    const enseñar = vi.mocked(showNotification);
+    enseñar.mockClear();
+    const viejo = { id: 'apotegma', date: '2026-10-19', at: new Date(2026, 9, 19, 7, 45).toISOString(), title: '', body: '', url: '/' };
+    await avisarVencidos([viejo], new Date(2026, 9, 19, 14, 0).getTime());
+    expect(enseñar).not.toHaveBeenCalled();
   });
 
   it('son dos avisos distintos, cada uno a su hora', async () => {

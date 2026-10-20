@@ -73,15 +73,18 @@ describe('el de cada día', () => {
     expect(noche.id).toBe(manana.id);
   });
 
-  it('en un año salen todos, y cambian de un día al siguiente', () => {
+  it('en un año salen todos', () => {
     const vistos = new Set<string>();
-    let anterior = '';
-    for (let d = 0; d < 365; d += 1) {
-      const dicho = apophthegmFor(new Date(2026, 0, 1 + d));
-      expect(dicho.id).not.toBe(anterior);
-      anterior = dicho.id;
-      vistos.add(dicho.id);
-    }
+    for (let d = 0; d < 365; d += 1) vistos.add(apophthegmFor(new Date(2026, 0, 1 + d)).id);
     expect(vistos.size).toBe(Math.min(APOPHTHEGMS.length, 365));
+  });
+
+  it('dos días seguidos no repiten Padre, tampoco al cambiar de año ni al dar la vuelta a la lista', () => {
+    let anterior = apophthegmFor(new Date(2025, 11, 1));
+    for (let d = 1; d < 3 * 366; d += 1) {
+      const dicho = apophthegmFor(new Date(2025, 11, 1 + d));
+      expect(dicho.abba, `${dicho.id} tras ${anterior.id}`).not.toBe(anterior.abba);
+      anterior = dicho;
+    }
   });
 });

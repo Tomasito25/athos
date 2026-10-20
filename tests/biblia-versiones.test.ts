@@ -106,3 +106,19 @@ describe('al actualizar', () => {
     expect(await db.favorites.count()).toBe(1);
   });
 });
+
+describe('sin conexión', () => {
+  it('un libro que no se pudo descargar se vuelve a pedir cuando hay red', async () => {
+    const { getChapter } = await import('@/db/bible');
+    const fetchDeLasPruebas = globalThis.fetch;
+    // Sin red: la descarga falla.
+    globalThis.fetch = (async () => {
+      throw new TypeError('Failed to fetch');
+    }) as typeof fetch;
+    await expect(getChapter('ROM', 1)).rejects.toThrow();
+    // Vuelve la red: el mismo libro se pide otra vez y se abre.
+    globalThis.fetch = fetchDeLasPruebas;
+    const versiculos = await getChapter('ROM', 1);
+    expect(versiculos.length).toBeGreaterThan(0);
+  });
+});

@@ -95,7 +95,10 @@ export const timeFor = (id: string, times: Record<string, string> | undefined): 
 
 export interface ReminderContent {
   title: string;
+  /** Lo que cabe en un aviso. */
   body: string;
+  /** El texto entero, si el aviso lo recorta: el calendario no tiene límite. */
+  full?: string;
   /** Pantalla que abre al tocarlo. */
   path: string;
 }
@@ -228,6 +231,7 @@ export async function reminderContent(
       return {
         title: `Apotegma del día · ${dicho.abba}`,
         body: recortar(dicho.text),
+        full: dicho.text,
         path: `/biblioteca/apotegmas#${dicho.id}`,
       };
     }
@@ -238,7 +242,12 @@ export async function reminderContent(
       // el aviso lleva al menos la cita, y abrirlo lo descarga.
       const versiculo = await verseOfDay(fecha).catch(() => null);
       if (versiculo) {
-        return { title: `Versículo del día · ${versiculo.cita}`, body: recortar(versiculo.texto), path: versiculo.path };
+        return {
+          title: `Versículo del día · ${versiculo.cita}`,
+          body: recortar(versiculo.texto),
+          full: versiculo.texto,
+          path: versiculo.path,
+        };
       }
       const referencia = verseReferenceFor(fecha);
       return { title: 'Versículo del día', body: referencia, path: citationFor(referencia)?.path ?? '/' };
@@ -388,15 +397,35 @@ async function programar(): Promise<void> {
   // setTimeout no admite esperas de más de 24 días; con la cola de diez, sobra.
   const espera = Math.max(0, new Date(siguiente.at).getTime() - Date.now());
   temporizador = window.setTimeout(async () => {
-    const ya = await vistos();
-    if (!ya[`${siguiente.id}|${siguiente.date}`]) {
-      // En el momento de avisar se vuelve a mirar: quizá ya se ha rezado.
-      const contenido = await reminderContent(siguiente.id, siguiente.date, useSettings.getState(), true);
-      if (contenido) await showNotification(contenido.title, contenido.body, siguiente.id, contenido.path);
-      await marcarVisto(siguiente.id, siguiente.date);
-    }
+    await avisarVencidos(cola);
     void programar();
   }, espera + 500);
+}
+
+/** Más allá de esto, un aviso atrasado ya no tiene sentido. Es lo mismo que espera el Service Worker. */
+const CADUCA = 6 * 60 * 60 * 1000;
+
+/**
+ * Enseña todos los avisos de la cola que ya han vencido y no se han enseñado.
+ *
+ * No sólo el primero: dos avisos a la misma hora —el apotegma y el santo, si
+ * se ponen a las ocho— vencen juntos, y si el teléfono durmió y el
+ * temporizador llegó tarde, pueden haber vencido varios. Al volver a
+ * programar, la cola se rehace sin lo vencido, así que lo que no se enseñe
+ * aquí ya no lo enseña nadie.
+ */
+export async function avisarVencidos(cola: QueuedReminder[], ahora = Date.now()): Promise<void> {
+  const ya = await vistos();
+  for (const aviso of cola) {
+    const cuando = Date.parse(aviso.at);
+    // La cola va ordenada por hora: lo que queda es futuro.
+    if (cuando > ahora) break;
+    if (ahora - cuando > CADUCA || ya[`${aviso.id}|${aviso.date}`]) continue;
+    // En el momento de avisar se vuelve a mirar: quizá ya se ha rezado.
+    const contenido = await reminderContent(aviso.id, aviso.date, useSettings.getState(), true);
+    if (contenido) await showNotification(contenido.title, contenido.body, aviso.id, contenido.path);
+    await marcarVisto(aviso.id, aviso.date);
+  }
 }
 
 /**

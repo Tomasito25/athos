@@ -15,7 +15,15 @@ Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 - **Dos avisos nuevos, por separado**: el apotegma por la mañana (7:45) y el
   versículo, entero, por la tarde (18:00). Las horas se cambian como las de
   los demás avisos, y se exportan al calendario del teléfono cada día con su
-  texto.
+  texto entero.
+
+### Corregido
+
+- Un libro de la Biblia que no se pudo descargar sin conexión no se volvía a
+  pedir en toda la sesión, aunque volviera la red: no se abría hasta
+  recargar ATHOS.
+- Dos avisos a la misma hora, o los que vencían mientras el teléfono
+  dormía, se quedaban en uno: sólo se enseñaba el primero.
 
 ## [1.31.0]
 

@@ -26,7 +26,7 @@ function Dicho({ dicho, hoy }: { dicho: Apophthegm; hoy: boolean }) {
   const toast = useUi((s) => s.toast);
   return (
     <article id={dicho.id} className={hoy ? 'apotegma apotegma--hoy' : 'apotegma'}>
-      {hoy ? <p className="eyebrow apotegma__hoy">{es.home.apophthegmOfDay}</p> : null}
+      {hoy ? <h2 className="eyebrow apotegma__hoy">{es.home.apophthegmOfDay}</h2> : null}
       <p className="apotegma__texto">{dicho.text}</p>
       <p className="apotegma__autor">
         {dicho.saintId ? <Link to={`/calendario/santos/${dicho.saintId}`}>{dicho.abba}</Link> : dicho.abba}

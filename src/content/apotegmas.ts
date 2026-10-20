@@ -11,16 +11,16 @@
  *
  * El original griego es de dominio público; las traducciones modernas, en
  * castellano y en las demás lenguas, tienen derechos. Así que cada dicho va
- * traducido para ATHOS del griego (o, donde se dice, del latín de Pelagio), y
- * sólo entra si se ha comprobado que existe en la colección con esa
- * atribución. Lo dudoso se ha dejado fuera: aquí vale más un dicho menos que
- * uno inventado.
+ * traducido para ATHOS del griego, y sólo entró después de cotejar con la
+ * colección que existe y con esa atribución; lo dudoso se dejó fuera, porque
+ * aquí vale más un dicho menos que uno inventado. Donde se pudo asegurar, el
+ * dicho lleva su número en la colección alfabética. Falta, como en todas las
+ * traducciones de ATHOS, que una persona lo revise con el original delante
+ * (docs/ANTES-DE-PUBLICAR.md).
  *
- * El reparto es como el del versículo: por día del año, así que el apotegma
- * de un día concreto es siempre el mismo.
+ * Como el versículo, el apotegma de un día concreto es siempre el mismo.
  */
 import type { SourceMeta } from '@/types';
-import { dayOfYear } from './verse-of-day';
 
 export type ApophthegmTheme =
   | 'humildad'
@@ -73,14 +73,14 @@ export interface Apophthegm {
 export const APOPHTHEGMS_META: SourceMeta = {
   title: 'Apophthegmata Patrum',
   source:
-    'Apophthegmata Patrum, colección alfabética griega (PG 65) y, donde se indica, la latina de Pelagio y Juan (PL 73). Traducción al español hecha para ATHOS a partir del original, que es de dominio público',
+    'Apophthegmata Patrum, colección alfabética griega (PG 65). Traducción al español hecha para ATHOS a partir del original, que es de dominio público',
   language: 'es',
   license: 'cc-by-sa-4.0',
   dateAdded: '2026-10-20',
   copyright:
     'Obra de dominio público en su original. Esta versión española es una traducción hecha para ATHOS y se publica bajo CC BY-SA 4.0.',
   notes:
-    'No procede de ninguna traducción española publicada. Cada dicho se ha comprobado en la colección con su atribución; los que no se pudieron comprobar no están.',
+    'No procede de ninguna traducción española publicada. Cada dicho se cotejó con la colección y su atribución antes de entrar, y los dudosos se dejaron fuera; donde se pudo asegurar, lleva su número en la colección alfabética. Está pendiente la revisión de una persona con el original delante.',
 };
 
 /**
@@ -94,6 +94,7 @@ export const APOPHTHEGMS: Apophthegm[] = [
     abba: 'Abba Poemen',
     theme: 'oracion',
     ref: 'Poemen 183',
+    saintId: 'pimen-grande',
     text:
       'Decía abba Poemen: «El agua es blanda por naturaleza, y la piedra, dura. Y, sin embargo, un cántaro colgado encima de la piedra, que deja caer el agua gota a gota, acaba agujereándola. Así también la palabra de Dios es suave, y nuestro corazón, duro; pero cuando uno la oye a menudo, el corazón se le abre al temor de Dios».',
   },
@@ -111,6 +112,7 @@ export const APOPHTHEGMS: Apophthegm[] = [
     abba: 'Abba Poemen',
     theme: 'silencio',
     ref: 'Poemen 27',
+    saintId: 'pimen-grande',
     text:
       'Decía abba Poemen: «Hay quien parece callar, pero en su corazón condena a los demás: ese no para de hablar. Y hay quien habla de la mañana a la noche y guarda silencio; es decir, no dice nada que no sea de provecho».',
   },
@@ -127,6 +129,7 @@ export const APOPHTHEGMS: Apophthegm[] = [
     id: 'poemen-3',
     abba: 'Abba Poemen',
     theme: 'tentacion',
+    saintId: 'pimen-grande',
     text:
       'Un hermano fue a ver a abba Poemen y le dijo: «Me vienen muchos pensamientos y me ponen en peligro». El anciano lo sacó al aire libre y le dijo: «Abre tu manto y atrapa los vientos». «No puedo», respondió el hermano. Y el anciano le dijo: «Si eso no puedes, tampoco puedes impedir que los pensamientos vengan; lo que te toca es hacerles frente».',
   },
@@ -144,6 +147,7 @@ export const APOPHTHEGMS: Apophthegm[] = [
     abba: 'Abba Poemen',
     theme: 'no-juzgar',
     ref: 'Poemen 64',
+    saintId: 'pimen-grande',
     text:
       'Un hermano preguntó a abba Poemen: «Si veo a un hermano en pecado, ¿está bien cubrirlo?». El anciano le dijo: «En el momento en que cubrimos el pecado de nuestro hermano, Dios cubre el nuestro; y en el momento en que lo sacamos a la luz, Dios saca a la luz también el nuestro».',
   },
@@ -160,6 +164,7 @@ export const APOPHTHEGMS: Apophthegm[] = [
     id: 'poemen-5',
     abba: 'Abba Poemen',
     theme: 'arrepentimiento',
+    saintId: 'pimen-grande',
     text:
       'Un hermano dijo a abba Poemen: «He cometido un gran pecado y quiero hacer penitencia tres años». «Es mucho», le dijo el anciano. «¿Un año, entonces?». «Es mucho». Los que estaban allí preguntaron: «¿Cuarenta días?». «Es mucho», repitió. Y añadió: «Yo digo que, si uno se arrepiente de todo corazón y no vuelve a cometer ese pecado, Dios lo acoge en tres días».',
   },
@@ -176,6 +181,7 @@ export const APOPHTHEGMS: Apophthegm[] = [
     id: 'poemen-6',
     abba: 'Abba Poemen',
     theme: 'amor',
+    saintId: 'pimen-grande',
     text:
       'Decía abba Poemen: «Nadie tiene amor más grande que el que da la vida por su prójimo. Si alguien oye una palabra que le duele y, pudiendo contestar con otra igual, se esfuerza por callar; o si le hacen una injusticia y la soporta sin devolverla, ese da la vida por su prójimo».',
   },
@@ -191,6 +197,7 @@ export const APOPHTHEGMS: Apophthegm[] = [
     id: 'poemen-7',
     abba: 'Abba Poemen',
     theme: 'vigilancia',
+    saintId: 'pimen-grande',
     text:
       'Un hermano preguntó a abba Poemen qué quiere decir no devolver mal por mal. El anciano le dijo: «Esta pasión tiene cuatro grados: el primero, en el corazón; el segundo, en el rostro; el tercero, en la lengua; y el cuarto, en no hacer mal por mal. Si puedes purificar tu corazón, no llega al rostro; si llega al rostro, guárdate de hablar; y si llegas a hablar, córtalo pronto, para no devolver mal por mal».',
   },
@@ -207,6 +214,7 @@ export const APOPHTHEGMS: Apophthegm[] = [
     id: 'poemen-8',
     abba: 'Abba Poemen',
     theme: 'discernimiento',
+    saintId: 'pimen-grande',
     text:
       'Abba José preguntó a abba Poemen: «¿Cómo hay que ayunar?». Le respondió: «Yo prefiero que se coma cada día, pero poco, sin llegar a saciarse». «Y tú, de joven, ¿no ayunabas dos días seguidos?». «Sí, y tres, y cuatro, y la semana entera. Los Padres, que eran fuertes, lo probaron todo, y vieron que lo bueno es comer cada día, pero poco. Así nos dejaron el camino real, que es ligero».',
   },
@@ -222,6 +230,7 @@ export const APOPHTHEGMS: Apophthegm[] = [
     id: 'poemen-9',
     abba: 'Abba Poemen',
     theme: 'humildad',
+    saintId: 'pimen-grande',
     text:
       'Decía abba Poemen: «El hombre necesita la humildad y el temor de Dios como el aliento que le sale por la nariz».',
   },
@@ -237,6 +246,7 @@ export const APOPHTHEGMS: Apophthegm[] = [
     id: 'poemen-10',
     abba: 'Abba Poemen',
     theme: 'trabajo',
+    saintId: 'pimen-grande',
     text:
       'Decía abba Poemen: «Si tres viven juntos, y uno guarda bien el recogimiento, otro está enfermo y da gracias, y el tercero sirve con intención limpia, los tres hacen la misma obra».',
   },
@@ -253,6 +263,7 @@ export const APOPHTHEGMS: Apophthegm[] = [
     id: 'poemen-11',
     abba: 'Abba Poemen',
     theme: 'paciencia',
+    saintId: 'pimen-grande',
     text:
       'Decía abba Poemen: «En cualquier dificultad que te venga, la victoria sobre ella está en callar».',
   },
@@ -269,6 +280,7 @@ export const APOPHTHEGMS: Apophthegm[] = [
     id: 'poemen-12',
     abba: 'Abba Poemen',
     theme: 'paz',
+    saintId: 'pimen-grande',
     text:
       'Decía abba Poemen: «Si te tienes en poco, encontrarás descanso dondequiera que vivas».',
   },
@@ -285,6 +297,7 @@ export const APOPHTHEGMS: Apophthegm[] = [
     abba: 'Abba Poemen',
     theme: 'silencio',
     ref: 'Poemen 58',
+    saintId: 'pimen-grande',
     text:
       'Un hermano fue a ver a abba Poemen en la segunda semana de Cuaresma, le abrió sus pensamientos y recobró la paz. Le dijo: «Hoy casi no vengo». «¿Por qué?», preguntó el anciano. «Pensé que, siendo Cuaresma, a lo mejor no me abrías». Abba Poemen le dijo: «No aprendimos a cerrar la puerta de madera, sino la puerta de la lengua».',
   },
@@ -300,6 +313,7 @@ export const APOPHTHEGMS: Apophthegm[] = [
     id: 'poemen-14',
     abba: 'Abba Poemen',
     theme: 'tentacion',
+    saintId: 'pimen-grande',
     text:
       'Decía abba Poemen: «Si alguien encierra una serpiente y un escorpión en una vasija y la deja cerrada, con el tiempo mueren. Así pasa con los malos pensamientos que siembran los demonios: con la paciencia desaparecen».',
   },
@@ -315,6 +329,7 @@ export const APOPHTHEGMS: Apophthegm[] = [
     id: 'poemen-15',
     abba: 'Abba Poemen',
     theme: 'amor',
+    saintId: 'pimen-grande',
     text:
       'Unos ancianos fueron a ver a abba Poemen y le preguntaron: «Si vemos que algún hermano se duerme durante el oficio, ¿quieres que lo despertemos para que esté en vela?». Él les dijo: «Yo, cuando veo a un hermano que se duerme, le pongo la cabeza sobre mis rodillas y lo dejo descansar».',
   },
@@ -331,6 +346,7 @@ export const APOPHTHEGMS: Apophthegm[] = [
     abba: 'Abba Poemen',
     theme: 'vigilancia',
     ref: 'Poemen 85',
+    saintId: 'pimen-grande',
     text:
       'Abba Poemen decía de abba Pior que cada día volvía a empezar.',
   },
@@ -348,6 +364,7 @@ export const APOPHTHEGMS: Apophthegm[] = [
     abba: 'Abba Poemen',
     theme: 'discernimiento',
     ref: 'Poemen 184',
+    saintId: 'pimen-grande',
     text:
       'Decía abba Poemen: «Nosotros no aprendimos a matar el cuerpo, sino a matar las pasiones».',
   },
@@ -365,6 +382,7 @@ export const APOPHTHEGMS: Apophthegm[] = [
     abba: 'Abba Poemen',
     theme: 'humildad',
     ref: 'Poemen 174',
+    saintId: 'pimen-grande',
     text:
       'Un hermano preguntó a abba Poemen: «Viven conmigo unos hermanos; ¿quieres que los dirija?». «No», le dijo el anciano; «tú trabaja primero, y si ellos quieren vivir así, ya se ocuparán». «Pero son ellos, padre, los que quieren que los dirija». Y el anciano respondió: «No. Sé para ellos un modelo, no un legislador».',
   },
@@ -404,6 +422,7 @@ export const APOPHTHEGMS: Apophthegm[] = [
     id: 'poemen-19',
     abba: 'Abba Poemen',
     theme: 'silencio',
+    saintId: 'pimen-grande',
     text:
       'Decía abba Poemen: «Si guardas silencio, encontrarás descanso en cualquier lugar donde vivas».',
   },
@@ -507,6 +526,7 @@ export const APOPHTHEGMS: Apophthegm[] = [
     id: 'poemen-20',
     abba: 'Abba Poemen',
     theme: 'discernimiento',
+    saintId: 'pimen-grande',
     text:
       'Un hermano preguntó a abba Poemen: «¿Qué es mejor, hablar o callar?». El anciano le dijo: «El que habla por Dios hace bien, y el que calla por Dios, también».',
   },
@@ -662,6 +682,7 @@ export const APOPHTHEGMS: Apophthegm[] = [
     id: 'poemen-21',
     abba: 'Abba Poemen',
     theme: 'humildad',
+    saintId: 'pimen-grande',
     text:
       'Decía abba Poemen: «No te midas a ti mismo; arrímate a quien vive bien».',
   },
@@ -849,6 +870,7 @@ export const APOPHTHEGMS: Apophthegm[] = [
     id: 'poemen-22',
     abba: 'Abba Poemen',
     theme: 'discernimiento',
+    saintId: 'pimen-grande',
     text:
       'Decía abba Poemen: «Todo lo que pasa de la medida viene de los demonios».',
   },
@@ -906,8 +928,14 @@ export const APOPHTHEGMS: Apophthegm[] = [
   },
 ];
 
-/** El apotegma que toca un día. */
+/**
+ * El apotegma que toca un día.
+ *
+ * Se cuentan los días seguidos desde 1970, no el día del año: así el 1 de
+ * enero sigue al 31 de diciembre en la lista, y tampoco al cambiar de año
+ * hablan dos días seguidos por boca del mismo Padre.
+ */
 export function apophthegmFor(date: Date): Apophthegm {
-  const indice = (dayOfYear(date) - 1 + date.getFullYear()) % APOPHTHEGMS.length;
-  return APOPHTHEGMS[indice]!;
+  const dias = Math.floor(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86_400_000);
+  return APOPHTHEGMS[dias % APOPHTHEGMS.length]!;
 }

@@ -47,7 +47,7 @@ export function ApophthegmOfDay({ prominent = false }: { prominent?: boolean }) 
       <button
         type="button"
         className="icon-btn verse-day__share"
-        aria-label={es.reader.share}
+        aria-label={`${es.reader.share}: ${es.home.apophthegmOfDay.toLowerCase()}`}
         title={es.reader.share}
         onClick={async () => {
           const url = new URL(`${import.meta.env.BASE_URL}${ruta.slice(1)}`, window.location.href).href;

@@ -1440,9 +1440,12 @@ button.cal-cell:hover {
    el apotegma ocupa todo el ancho. */
 .home-sayings {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
   gap: var(--sp-4);
   margin: var(--sp-5) 0 var(--sp-2);
+  /* La letra se ajusta a si las tarjetas caben juntas, no al ancho de la
+     ventana: con la barra lateral, una ventana ancha deja poco sitio. */
+  container-type: inline-size;
 }
 
 .home-sayings > .verse-day {
@@ -1464,7 +1467,8 @@ button.cal-cell:hover {
   text-align: left;
 }
 
-@media (min-width: 52rem) {
+/* Dos columnas de 20rem y el hueco entre ellas. */
+@container (min-width: 41rem) {
   .home-sayings .verse-day--hero .verse-day__text {
     font-size: var(--text-lg);
   }

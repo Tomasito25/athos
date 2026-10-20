@@ -160,7 +160,7 @@ export async function reminderEvents(ajustes: ExportSettings, desde = toIsoDate(
       eventos.push({
         uid: `${r.id}-${iso}`,
         titulo: contenido.title,
-        descripcion: contenido.body,
+        descripcion: contenido.full ?? contenido.body,
         inicio: { iso, hora },
         aviso: true,
       });

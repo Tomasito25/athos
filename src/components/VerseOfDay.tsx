@@ -62,7 +62,7 @@ export function VerseOfDay({ prominent = false }: { prominent?: boolean }) {
       <button
         type="button"
         className="icon-btn verse-day__share"
-        aria-label={es.reader.share}
+        aria-label={`${es.reader.share}: ${es.home.verseOfDay.toLowerCase()}`}
         title={es.reader.share}
         onClick={async () => {
           const url = new URL(`${import.meta.env.BASE_URL}${datos.path.slice(1)}`, window.location.href).href;

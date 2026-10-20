@@ -147,12 +147,13 @@ ATHOS no presenta estas reglas como una obligación canónica individual.
 
 ## Apotegmas de los Padres del desierto
 
-Los dichos de los Padres del desierto salen de los *Apophthegmata Patrum*: la
-colección alfabética griega (PG 65) y, donde se indica, la latina de Pelagio
-y Juan (PL 73), de **dominio público**. Las traducciones modernas, en
-castellano y en otras lenguas, tienen derechos y no se han usado: cada dicho
-está traducido del original para ATHOS, bajo CC BY-SA 4.0, y sólo entra si se
-ha comprobado que existe en la colección con esa atribución.
+Los dichos de los Padres del desierto salen de los *Apophthegmata Patrum*, la
+colección alfabética griega (PG 65), de **dominio público**. Las traducciones
+modernas, en castellano y en otras lenguas, tienen derechos y no se han
+usado: cada dicho está traducido del original para ATHOS, bajo CC BY-SA 4.0,
+y sólo entró después de cotejar con la colección que existe y con esa
+atribución. Donde se pudo asegurar, lleva su número en la colección. Está
+pendiente la revisión de una persona con el original delante.
 
 ## Mapas
 

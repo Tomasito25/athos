@@ -8,6 +8,7 @@ import { createBrowserRouter, type RouteObject } from 'react-router-dom';
 import { AppShell } from '@/components/layout/AppShell';
 import { StartRedirect } from '@/features/home/StartRedirect';
 import { ErrorPage } from '@/features/error/ErrorPage';
+import { BootScreen } from '@/components/layout/BootScreen';
 
 const page = (loader: () => Promise<Record<string, unknown>>, name: string) => async () => {
   const module = await loader();
@@ -20,6 +21,8 @@ export const routes: RouteObject[] = [
     path: '/',
     element: <AppShell />,
     errorElement: <ErrorPage />,
+    // Lo que se ve mientras llega el código de la primera pantalla.
+    HydrateFallback: BootScreen,
     children: [
       { index: true, element: <StartRedirect /> },
 

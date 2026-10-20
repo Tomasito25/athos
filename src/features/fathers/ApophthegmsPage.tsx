@@ -18,12 +18,11 @@ import {
   type ApophthegmTheme,
 } from '@/content/apotegmas';
 import { useHashScroll } from '@/hooks/useHashScroll';
-import { shareText } from '@/lib/lectura';
-import { useUi } from '@/stores/ui';
+import { absoluteUrl, useShare } from '@/hooks/useShare';
 import es from '@/locales/es';
 
 function Dicho({ dicho, hoy }: { dicho: Apophthegm; hoy: boolean }) {
-  const toast = useUi((s) => s.toast);
+  const compartir = useShare();
   return (
     <article id={dicho.id} className={hoy ? 'apotegma apotegma--hoy' : 'apotegma'}>
       {hoy ? <h2 className="eyebrow apotegma__hoy">{es.home.apophthegmOfDay}</h2> : null}
@@ -36,13 +35,7 @@ function Dicho({ dicho, hoy }: { dicho: Apophthegm; hoy: boolean }) {
           className="icon-btn apotegma__compartir"
           aria-label={`${es.reader.share}: ${dicho.abba}`}
           title={es.reader.share}
-          onClick={async () => {
-            const url = new URL(
-              `${import.meta.env.BASE_URL}biblioteca/apotegmas#${dicho.id}`,
-              window.location.href,
-            ).href;
-            if ((await shareText(dicho.abba, dicho.text, url)) === 'copied') toast(es.reader.copied);
-          }}
+          onClick={() => void compartir(dicho.abba, dicho.text, absoluteUrl(`/biblioteca/apotegmas#${dicho.id}`))}
         >
           <IconShare size={16} />
         </button>

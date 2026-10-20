@@ -188,6 +188,12 @@ hr {
   animation: boot-in var(--dur-slow) var(--ease);
 }
 
+/* La misma pantalla, repetida por React mientras llega la primera página:
+   ya se estaba viendo, así que no vuelve a entrar. */
+.boot-screen--seguida {
+  animation: none;
+}
+
 .boot-word {
   font-family: var(--font-serif);
   font-size: var(--text-lg);

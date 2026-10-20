@@ -6,7 +6,19 @@
  * un teléfono necesita.
  */
 import { describe, expect, it } from 'vitest';
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import {
+  copyFileSync,
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  utimesSync,
+  writeFileSync,
+} from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { tmpdir } from 'node:os';
 import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 
@@ -183,6 +195,44 @@ describe('scripts de uso', () => {
 
   it('run.sh explica que sin HTTPS no se puede instalar', () => {
     expect(leer('run.sh')).toMatch(/no.*instalar|NO instalarla/i);
+  });
+
+  it('run.sh se da cuenta de que lo compilado es más viejo que el código', () => {
+    // Antes sólo miraba si dist/ existía. Tras traer cambios con git, dist/
+    // seguía allí y el lanzador del escritorio abría la versión anterior: el
+    // apotegma del día y todo lo nuevo, sin rastro.
+    const dir = mkdtempSync(resolve(tmpdir(), 'athos-run-'));
+    try {
+      copyFileSync(resolve(raiz, 'run.sh'), resolve(dir, 'run.sh'));
+      mkdirSync(resolve(dir, 'src'));
+      mkdirSync(resolve(dir, 'dist'));
+      writeFileSync(resolve(dir, 'src/main.tsx'), '');
+      writeFileSync(resolve(dir, 'dist/index.html'), '');
+      const alDia = () =>
+        spawnSync('bash', [resolve(dir, 'run.sh'), '--al-dia'], {
+          encoding: 'utf-8',
+          env: { ...process.env, XDG_DATA_HOME: resolve(dir, 'datos') },
+        });
+
+      const ayer = new Date(Date.now() - 86_400_000);
+      const hoy = new Date();
+      utimesSync(resolve(dir, 'src'), ayer, ayer);
+      utimesSync(resolve(dir, 'src/main.tsx'), ayer, ayer);
+      utimesSync(resolve(dir, 'dist/index.html'), hoy, hoy);
+      expect(alDia().status, 'compilado después del código').toBe(0);
+
+      // Llega un cambio: el código es ahora más nuevo que lo compilado.
+      const luego = new Date(Date.now() + 60_000);
+      utimesSync(resolve(dir, 'src/main.tsx'), luego, luego);
+      const viejo = alDia();
+      expect(viejo.status).toBe(1);
+      expect(viejo.stdout).toContain('src/main.tsx');
+
+      rmSync(resolve(dir, 'dist'), { recursive: true });
+      expect(alDia().status, 'sin compilar').toBe(1);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 
   it('deploy.sh comprueba la aplicación antes de compilarla', () => {

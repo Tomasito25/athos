@@ -167,6 +167,49 @@ describe('la cola', () => {
     expect(cola.filter((c) => c.id === 'regla').every((c) => c.needsApp)).toBe(true);
   });
 
+  it('encender un aviso y cambiarle la hora enseguida deja sólo el de la hora nueva', async () => {
+    // Preparar la cola tarda, así que las dos peticiones se solapan. Antes
+    // quedaban los dos temporizadores, y el de la hora vieja avisaba a esa
+    // hora y daba por visto el de la nueva.
+    const hhmm = (d: Date) => `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    const vieja = hhmm(new Date(Date.now() + 5 * 3_600_000));
+    const nueva = hhmm(new Date(Date.now() + 2 * 3_600_000));
+
+    const poner = window.setTimeout;
+    const quitar = window.clearTimeout;
+    const vivos = new Map<number, number>();
+    window.setTimeout = ((fn: TimerHandler, ms?: number, ...resto: unknown[]) => {
+      const id = poner(fn, ms, ...resto);
+      if ((ms ?? 0) > 60_000) vivos.set(id, ms!);
+      return id;
+    }) as typeof window.setTimeout;
+    window.clearTimeout = ((id?: number) => {
+      if (id !== undefined) vivos.delete(id);
+      quitar(id);
+    }) as typeof window.clearTimeout;
+
+    try {
+      useSettings.getState().set('notifications', { apotegma: true });
+      useSettings.getState().set('notificationTimes', { apotegma: vieja });
+      const primera = refreshReminders();
+      useSettings.getState().set('notificationTimes', { apotegma: nueva });
+      const segunda = refreshReminders();
+      await Promise.all([primera, segunda]);
+
+      expect(vivos.size).toBe(1);
+      // Dos horas, con el minuto de redondeo y el medio segundo de margen.
+      const espera = [...vivos.values()][0]!;
+      expect(espera).toBeGreaterThan(2 * 3_600_000 - 61_000);
+      expect(espera).toBeLessThan(2 * 3_600_000 + 1_000);
+      const cola = await getSetting<Array<{ at: string }>>(QUEUE_KEY, []);
+      expect(hhmm(new Date(cola[0]!.at))).toBe(nueva);
+    } finally {
+      for (const id of vivos.keys()) quitar(id);
+      window.setTimeout = poner;
+      window.clearTimeout = quitar;
+    }
+  });
+
   it('cada recordatorio tiene una hora por defecto válida', () => {
     for (const r of REMINDERS) expect(timeFor(r.id, {})).toMatch(/^\d{2}:\d{2}$/);
   });

@@ -17,6 +17,7 @@ import { OFFICES } from './offices';
 import { STUDY_COURSES, STUDY_WORKS } from './study';
 import { GLOSSARY } from './glossary';
 import { ORTHODOX_CHURCHES } from './iglesias-hoy';
+import { APOPHTHEGMS } from './apotegmas';
 import { ASIA_PLACES, HOLY_LAND, PAUL_JOURNEYS } from './mapas-biblicos';
 import { TEMPLE_PARTS } from './temple';
 import es from '@/locales/es';
@@ -166,6 +167,15 @@ export const LIBRARY_GROUPS: LibraryGroup[] = [
         text: 'Cada obra dice de qué trata y cuándo se escribió, tenga texto incorporado o no. Donde falta la traducción, al menos se sabe qué se está echando de menos.',
         count: OBRAS_PATRISTICAS,
         unit: 'obras con ficha',
+      },
+      {
+        id: 'apotegmas',
+        to: '/biblioteca/apotegmas',
+        icon: 'lamp',
+        title: es.apophthegms.title,
+        text: 'Lo que los monjes de Egipto, Palestina y Siria contestaban a quien les pedía «una palabra». Traducidos del griego, por temas: la humildad, la oración, el silencio, no juzgar. Uno cada día en la portada.',
+        count: APOPHTHEGMS.length,
+        unit: 'dichos',
       },
       {
         id: 'iglesias',

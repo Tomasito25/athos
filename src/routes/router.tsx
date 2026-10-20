@@ -77,6 +77,7 @@ export const routes: RouteObject[] = [
       { path: 'biblioteca/padres', lazy: page(() => import('@/features/fathers/FathersPage'), 'FathersPage') },
       { path: 'biblioteca/padres/:fatherId', lazy: page(() => import('@/features/fathers/FatherPage'), 'FatherPage') },
       { path: 'biblioteca/padres/:fatherId/:workId', lazy: page(() => import('@/features/fathers/WorkPage'), 'WorkPage') },
+      { path: 'biblioteca/apotegmas', lazy: page(() => import('@/features/fathers/ApophthegmsPage'), 'ApophthegmsPage') },
       { path: 'biblioteca/athos', lazy: page(() => import('@/features/athos/AthosPage'), 'AthosPage') },
       { path: 'biblioteca/athos/monasterio/:monasteryId', lazy: page(() => import('@/features/athos/MonasteryPage'), 'MonasteryPage') },
       { path: 'biblioteca/athos/:articleId', lazy: page(() => import('@/features/athos/AthosArticlePage'), 'AthosArticlePage') },

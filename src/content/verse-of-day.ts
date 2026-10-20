@@ -167,8 +167,8 @@ export const VERSES_OF_DAY: string[] = [
   'Sofonías 3, 17',
 ];
 
-/** Día del año, de 1 a 366, en hora local. */
-function dayOfYear(date: Date): number {
+/** Día del año, de 1 a 366, en hora local. También lo usa el apotegma del día. */
+export function dayOfYear(date: Date): number {
   const inicio = Date.UTC(date.getFullYear(), 0, 1);
   const hoy = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
   return Math.floor((hoy - inicio) / 86_400_000) + 1;

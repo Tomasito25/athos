@@ -2667,3 +2667,57 @@ input[type='range']:focus-visible::-webkit-slider-thumb {
   padding-left: var(--sp-4);
   font-size: var(--text-sm);
 }
+
+/* ---------- Apotegmas ---------- */
+
+.apotegmas {
+  display: grid;
+  gap: var(--sp-3);
+}
+
+.apotegma {
+  padding: var(--sp-3) var(--sp-4);
+  border-left: 2px solid var(--gold-soft);
+  scroll-margin-top: calc(var(--topbar-h) + var(--sp-3));
+}
+
+.apotegma--hoy {
+  margin: var(--sp-4) 0;
+  padding: var(--sp-4);
+  border: 1px solid var(--gold-soft);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-gold);
+}
+
+.apotegma:target {
+  background: color-mix(in srgb, var(--gold) 12%, transparent);
+}
+
+.apotegma__hoy {
+  color: var(--gold);
+  margin-bottom: var(--sp-2);
+}
+
+.apotegma__texto {
+  font-family: var(--font-serif);
+  font-size: var(--text-md);
+  line-height: 1.6;
+  color: var(--ink-strong);
+  text-wrap: pretty;
+}
+
+.apotegma__autor {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+  margin-top: var(--sp-2);
+  font-size: var(--text-sm);
+  color: var(--gold);
+}
+
+.apotegma__compartir {
+  margin-left: auto;
+  color: var(--ink-muted);
+}

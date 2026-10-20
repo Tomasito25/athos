@@ -73,6 +73,41 @@ describe('lo que dice cada uno', () => {
   });
 });
 
+describe('el apotegma y el versículo, por separado', () => {
+  const hora = (id: string) => REMINDERS.find((r) => r.id === id)!.defaultTime;
+
+  it('el apotegma llega por la mañana y el versículo por la tarde', () => {
+    expect(hora('apotegma') < '12:00').toBe(true);
+    expect(hora('versiculo') >= '14:00' && hora('versiculo') < '21:00').toBe(true);
+  });
+
+  it('el apotegma dice el dicho y quién lo dijo, y lleva a él', async () => {
+    const c = await reminderContent('apotegma', '2026-10-20', ajustes);
+    expect(c?.title).toMatch(/^Apotegma del día · (Abba|Amma) /);
+    expect(c?.path).toMatch(/^\/biblioteca\/apotegmas#[a-z0-9-]+$/);
+    expect(c!.body.length).toBeLessThanOrEqual(301);
+    const otro = await reminderContent('apotegma', '2026-10-21', ajustes);
+    expect(otro?.body).not.toBe(c?.body);
+  });
+
+  it('el versículo lleva a su capítulo, aunque el libro no esté guardado', async () => {
+    const c = await reminderContent('versiculo', '2026-10-20', ajustes);
+    expect(c?.title).toMatch(/^Versículo del día/);
+    expect(c?.body.length).toBeGreaterThan(5);
+    expect(c?.path).toMatch(/^\/leer\/biblia\//);
+  });
+
+  it('son dos avisos distintos, cada uno a su hora', async () => {
+    useSettings.getState().set('notifications', { apotegma: true, versiculo: true });
+    const manana = new Date(2026, 9, 20, 0, 1);
+    const cola = await buildQueue(manana);
+    const delDia = cola.filter((q) => q.date === '2026-10-20');
+    expect(delDia.map((q) => q.id)).toEqual(['apotegma', 'versiculo']);
+    expect(new Date(delDia[0]!.at).getHours()).toBeLessThan(12);
+    expect(new Date(delDia[1]!.at).getHours()).toBeGreaterThanOrEqual(14);
+  });
+});
+
 describe('la cola', () => {
   it('respeta la hora elegida y sólo lleva los activados', async () => {
     useSettings.getState().set('notifications', { santo: true });

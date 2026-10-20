@@ -85,6 +85,10 @@ puede borrar los datos de una web que no se abre en semanas, y la copia es lo
 - **Monte Athos**: los veinte monasterios con lo que son hoy y quién vivió en
   ellos, y artículos sobre el gobierno, el ávaton, los sketes, el canto y cómo
   se llega.
+- **El versículo y el apotegma del día**, uno al lado del otro en Inicio: un
+  versículo de la Escritura y un dicho de los Padres del desierto, traducido
+  del griego. Si se quiere, llegan como avisos aparte: el apotegma por la
+  mañana y el versículo por la tarde.
 - **Las Iglesias ortodoxas hoy**: una ficha por Iglesia con quién la preside
   y cuándo se comprobó, su sede, su calendario, sus lenguas y sus diócesis en
   España y América Latina; y las disputas abiertas, contadas como disputas.

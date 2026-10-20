@@ -37,6 +37,7 @@ import { WelcomeCard } from './WelcomeCard';
 import { BackupReminder } from './BackupReminder';
 import { PericopeText } from '@/components/PericopeText';
 import { VerseOfDay } from '@/components/VerseOfDay';
+import { ApophthegmOfDay } from '@/components/ApophthegmOfDay';
 import {
   IconBook,
   IconCandle,
@@ -119,10 +120,14 @@ export function HomePage() {
         <OfficeInvitation />
       </div>
 
-      {/* La frase que uno se lleva puesta el resto del día. Iba al pie de la
-          segunda columna, debajo de todo, y casi nadie llegaba a verla: ahora
-          va justo debajo del día, a todo lo ancho. */}
-      <VerseOfDay prominent />
+      {/* Lo que uno se lleva puesto el resto del día: el versículo y, a su
+          lado, un dicho de los Padres del desierto. Iban al pie de la segunda
+          columna y casi nadie llegaba a verlos: ahora van justo debajo del
+          día. En el teléfono, uno debajo del otro. */}
+      <div className="home-sayings">
+        <VerseOfDay prominent />
+        <ApophthegmOfDay prominent />
+      </div>
 
       <WelcomeCard />
       <BackupReminder />

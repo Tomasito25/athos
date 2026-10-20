@@ -32,6 +32,10 @@ import { diptychsForSaints, isRulePrayed, ruleForTime, ruleItems } from '@/db/us
 import { db } from '@/db/db';
 import { useSettings, type SettingsState } from '@/stores/settings';
 import { isFastDay } from '@/lib/calendar/fasting';
+import { verseOfDay } from '@/lib/verse-of-day';
+import { citationFor } from '@/lib/citation';
+import { verseReferenceFor } from '@/content/verse-of-day';
+import { apophthegmFor } from '@/content/apotegmas';
 import { appUrl, notificationPermission, showNotification } from './notifications';
 import type { RuleTime } from '@/types';
 
@@ -68,10 +72,12 @@ export const REMINDERS: ReminderDefinition[] = [
   { id: 'regla', group: 'rezar', title: 'Lo que queda por rezar', description: 'Sólo si a esa hora queda algún oficio del día sin rezar. Necesita ATHOS abierta o en segundo plano.', defaultTime: '22:30', needsApp: true },
   { id: 'evangelio', group: 'leer', title: 'Evangelio del día', description: 'Con la referencia de la lectura de hoy.', defaultTime: '09:00' },
   { id: 'lectura', group: 'leer', title: 'Tu plan de lectura', description: 'Lo que toca hoy en el plan que llevas. Sólo si llevas alguno.', defaultTime: '20:00' },
+  { id: 'apotegma', group: 'dia', title: 'Apotegma del día', description: 'Un dicho de los Padres del desierto, para llevártelo por la mañana.', defaultTime: '07:45' },
   { id: 'santo', group: 'dia', title: 'Santo del día', description: 'A quién recuerda hoy la Iglesia.', defaultTime: '08:00' },
   { id: 'ayuno', group: 'dia', title: 'Comienzo de un ayuno', description: 'Sólo el primer día de cada periodo de ayuno.', defaultTime: '07:30' },
   { id: 'fiesta', group: 'dia', title: 'Grandes fiestas', description: 'Sólo en las grandes fiestas y en Pascua.', defaultTime: '07:30' },
   { id: 'onomastica', group: 'dia', title: 'Santos de tus nombres', description: 'El día del santo de alguien de tu lista de nombres para la oración.', defaultTime: '08:30' },
+  { id: 'versiculo', group: 'dia', title: 'Versículo del día', description: 'El versículo de hoy, entero, para la tarde.', defaultTime: '18:00' },
 ];
 
 const OFICIO_DE: Record<string, RuleTime> = {
@@ -95,6 +101,22 @@ export interface ReminderContent {
 }
 
 type Ajustes = Pick<SettingsState, 'calendarStyle' | 'officeLength'>;
+
+/** El día `YYYY-MM-DD` como fecha local, que es lo que piden el versículo y el apotegma. */
+function fechaLocal(iso: string): Date {
+  const [y, m, d] = iso.split('-').map(Number);
+  return new Date(y!, m! - 1, d!);
+}
+
+/**
+ * Un texto largo, cortado en una palabra para que quepa en el aviso. El
+ * aviso abre el texto entero.
+ */
+function recortar(texto: string, max = 300): string {
+  if (texto.length <= max) return texto;
+  const corte = texto.lastIndexOf(' ', max - 1);
+  return `${texto.slice(0, corte > max * 0.6 ? corte : max - 1).replace(/[\s,;:.]+$/, '')}…`;
+}
 
 /**
  * Lo que dice un recordatorio un día; `null` si ese día no tiene nada que
@@ -199,6 +221,27 @@ export async function reminderContent(
         body: `El santo de ${enumerados}.`,
         path: '/orar/nombres',
       };
+    }
+
+    case 'apotegma': {
+      const dicho = apophthegmFor(fechaLocal(iso));
+      return {
+        title: `Apotegma del día · ${dicho.abba}`,
+        body: recortar(dicho.text),
+        path: `/biblioteca/apotegmas#${dicho.id}`,
+      };
+    }
+
+    case 'versiculo': {
+      const fecha = fechaLocal(iso);
+      // El texto es el de la Biblia guardada; si el libro todavía no está,
+      // el aviso lleva al menos la cita, y abrirlo lo descarga.
+      const versiculo = await verseOfDay(fecha).catch(() => null);
+      if (versiculo) {
+        return { title: `Versículo del día · ${versiculo.cita}`, body: recortar(versiculo.texto), path: versiculo.path };
+      }
+      const referencia = verseReferenceFor(fecha);
+      return { title: 'Versículo del día', body: referencia, path: citationFor(referencia)?.path ?? '/' };
     }
 
     case 'fiesta': {

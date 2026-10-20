@@ -107,6 +107,16 @@ describe('búsqueda global', () => {
     expect(santos?.results.some((r) => r.title.includes('Crisóstomo'))).toBe(true);
   });
 
+  it('encuentra los apotegmas por lo que dicen, y lleva al dicho', async () => {
+    const { APOPHTHEGMS } = await import('@/content/apotegmas');
+    const dicho = APOPHTHEGMS[0]!;
+    // Dos palabras largas del propio dicho bastan para encontrarlo.
+    const palabras = dicho.text.split(/[^\p{L}]+/u).filter((p) => p.length > 6).slice(0, 2).join(' ');
+    const resultado = await searchAll(palabras, { limitPerGroup: 100 });
+    const padres = resultado.groups.find((g) => g.kind === 'father');
+    expect(padres?.results.some((r) => r.path === `/biblioteca/apotegmas#${dicho.id}`)).toBe(true);
+  });
+
   it('encuentra monasterios del Athos', async () => {
     const resultado = await searchAll('simonopetra');
     expect(resultado.groups.find((g) => g.kind === 'monastery')?.total).toBe(1);

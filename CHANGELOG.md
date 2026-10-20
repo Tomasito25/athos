@@ -2,6 +2,21 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.32.0]
+
+### Añadido
+
+- **El apotegma del día**, al lado del versículo en Inicio: un dicho de los
+  Padres del desierto, traducido del griego para ATHOS y comprobado en la
+  colección con su atribución. En pantalla ancha van uno al lado del otro;
+  en el teléfono, uno debajo del otro. Se comparte como el versículo.
+- **Apotegmas de los Padres del desierto**, en la Biblioteca: todos los
+  dichos por temas, con el de hoy arriba.
+- **Dos avisos nuevos, por separado**: el apotegma por la mañana (7:45) y el
+  versículo, entero, por la tarde (18:00). Las horas se cambian como las de
+  los demás avisos, y se exportan al calendario del teléfono cada día con su
+  texto.
+
 ## [1.31.0]
 
 ### Añadido

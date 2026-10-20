@@ -189,6 +189,8 @@ const es = {
     greetingAfternoon: 'Buenas tardes',
     greetingEvening: 'Buenas noches',
     verseOfDay: 'Versículo del día',
+    apophthegmOfDay: 'Apotegma del día',
+    apophthegmMore: 'Más dichos de los Padres',
     verseRead: 'Leer el capítulo entero',
     saintOfDay: 'Santo del día',
     feast: 'Fiesta',
@@ -402,6 +404,14 @@ const es = {
     darkModeHint: 'Fondo más oscuro alrededor del contador.',
   },
 
+  apophthegms: {
+    title: 'Apotegmas de los Padres del desierto',
+    subtitle: 'Una palabra para cada día',
+    intro:
+      'A quien les pedía «una palabra», los monjes de los desiertos de Egipto, Palestina y Siria, en los siglos IV y V, le contestaban con una frase, o con algo que había pasado. Se recogieron en griego por el nombre de quien las dijo, y desde entonces se leen en todos los monasterios. Aquí están traducidas del original para ATHOS.',
+    daily: 'La portada trae uno cada día, y si quieres te llega por la mañana como aviso.',
+    notify: 'Activar el aviso',
+  },
   bible: {
     maps: 'Mapas de la Biblia',
     version: 'Versión',
@@ -583,7 +593,7 @@ const es = {
       'Se descarga un archivo de calendario (.ics) que el teléfono abre y añade a su calendario. Se genera aquí mismo: no se envía nada a ningún sitio.',
     exportReminders: 'Los avisos que tienes activados',
     exportRemindersHint:
-      'Los oficios, a su hora y cada día. El Evangelio, el santo, los ayunos y las fiestas, día por día durante seis meses: vuelve a exportarlos cuando se acaben o si cambias la hora.',
+      'Los oficios, a su hora y cada día. El Evangelio, el santo, el apotegma, el versículo, los ayunos y las fiestas, día por día durante seis meses, cada uno con su texto: vuelve a exportarlos cuando se acaben o si cambias la hora.',
     exportFeasts: 'Fiestas y ayunos del año',
     exportFeastsHint: 'Las grandes fiestas y los periodos de ayuno de los próximos doce meses, de día entero y sin aviso.',
     exportNone: 'Activa primero algún aviso de los de arriba.',

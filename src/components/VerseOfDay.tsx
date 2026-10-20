@@ -15,9 +15,7 @@
 import { Link } from 'react-router-dom';
 import { useMemo } from 'react';
 import { useAsync } from '@/hooks/useAsync';
-import { getChapter } from '@/db/bible';
-import { chaptersOf, inPericope, parsePassage } from '@/lib/pericope';
-import { verseReferenceFor } from '@/content/verse-of-day';
+import { verseOfDay } from '@/lib/verse-of-day';
 import { Skeleton } from '@/components/ui';
 import { IconShare } from '@/components/icons';
 import { shareText } from '@/lib/lectura';
@@ -28,25 +26,10 @@ export function VerseOfDay({ prominent = false }: { prominent?: boolean }) {
   const toast = useUi((s) => s.toast);
   // La fecha se calcula una vez: si no, cada render daría un objeto nuevo y
   // la carga se repetiría sin motivo.
-  const referencia = useMemo(() => verseReferenceFor(new Date()), []);
-  const pericopas = useMemo(() => parsePassage(referencia), [referencia]);
+  const hoy = useMemo(() => new Date(), []);
+  const versiculo = useAsync(() => verseOfDay(hoy), [hoy]);
 
-  const versiculos = useAsync(async () => {
-    if (!pericopas?.length) return null;
-    const p = pericopas[0]!;
-    const capitulos = await Promise.all(
-      chaptersOf(p.ranges).map((capitulo) => getChapter(p.bookId, capitulo)),
-    );
-    return {
-      pericopa: p,
-      lista: capitulos
-        .flat()
-        .filter((v) => inPericope(p.ranges, v.chapter, v.verse))
-        .sort((a, b) => a.chapter - b.chapter || a.verse - b.verse),
-    };
-  }, [referencia]);
-
-  if (versiculos.loading) {
+  if (versiculo.loading) {
     return (
       <div className={prominent ? 'verse-day verse-day--hero' : 'verse-day'} aria-hidden="true">
         <Skeleton lines={2} />
@@ -57,16 +40,8 @@ export function VerseOfDay({ prominent = false }: { prominent?: boolean }) {
   // Sin conexión y sin ese libro todavía guardado no hay versículo. No se
   // avisa de nada: la portada tiene más cosas que decir, y un error aquí
   // sería un mal comienzo de mañana.
-  const datos = versiculos.data;
-  if (!datos || !datos.lista.length) return null;
-
-  const { pericopa, lista } = datos;
-  const primero = lista[0]!;
-  const ultimo = lista[lista.length - 1]!;
-  const cita =
-    lista.length === 1
-      ? `${pericopa.bookName} ${primero.chapter}, ${primero.verse}`
-      : `${pericopa.bookName} ${primero.chapter}, ${primero.verse}-${ultimo.verse}`;
+  const datos = versiculo.data;
+  if (!datos) return null;
 
   return (
     <section className={prominent ? 'verse-day verse-day--hero' : 'verse-day'} aria-labelledby="versiculo-del-dia">
@@ -79,14 +54,9 @@ export function VerseOfDay({ prominent = false }: { prominent?: boolean }) {
         </span>
       ) : null}
 
-      <Link
-        to={`/leer/biblia/${pericopa.bookId}/${primero.chapter}#v${primero.verse}`}
-        className="verse-day__link"
-      >
-        <p className="verse-day__text">
-          {lista.map((v) => v.text).join(' ')}
-        </p>
-        <p className="verse-day__ref">{cita}</p>
+      <Link to={datos.path} className="verse-day__link">
+        <p className="verse-day__text">{datos.texto}</p>
+        <p className="verse-day__ref">{datos.cita}</p>
         {prominent ? <p className="verse-day__more">{es.home.verseRead}</p> : null}
       </Link>
       <button
@@ -95,11 +65,8 @@ export function VerseOfDay({ prominent = false }: { prominent?: boolean }) {
         aria-label={es.reader.share}
         title={es.reader.share}
         onClick={async () => {
-          const url = new URL(
-            `${import.meta.env.BASE_URL}leer/biblia/${pericopa.bookId}/${primero.chapter}#v${primero.verse}`,
-            window.location.href,
-          ).href;
-          const resultado = await shareText(cita, lista.map((v) => v.text).join(' '), url);
+          const url = new URL(`${import.meta.env.BASE_URL}${datos.path.slice(1)}`, window.location.href).href;
+          const resultado = await shareText(datos.cita, datos.texto, url);
           if (resultado === 'copied') toast(es.reader.copied);
         }}
       >

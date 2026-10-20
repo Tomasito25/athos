@@ -12,6 +12,7 @@ import { formatReference } from './bible';
 import { BOOKS_BY_ID } from '@/content/bible';
 import { STUDY_COURSES, STUDY_WORKS } from '@/content/study';
 import { PRAYER_ORDERS } from '@/content/prayer-orders';
+import { APOPHTHEGMS } from '@/content/apotegmas';
 import { citationFor } from '@/lib/citation';
 
 export const KIND_LABELS: Record<SearchKind, string> = {
@@ -175,6 +176,21 @@ export async function searchAll(query: string, options: SearchOptions = {}): Pro
           subtitle: f.century,
           snippet: snippet(f.biography, tokens),
           path: `/biblioteca/padres/${f.id}`,
+          score: s,
+        });
+      }
+    }
+    // Los apotegmas van con los Padres: «humildad» o «celda» encuentra el dicho.
+    for (const a of APOPHTHEGMS) {
+      const s = score(tokens, a.text, a.abba);
+      if (s > 0) {
+        push('father', {
+          id: `apotegma/${a.id}`,
+          kind: 'father',
+          title: a.abba,
+          subtitle: 'Apotegma',
+          snippet: snippet(a.text, tokens),
+          path: `/biblioteca/apotegmas#${a.id}`,
           score: s,
         });
       }

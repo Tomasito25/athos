@@ -58,6 +58,9 @@ es lo que más la necesita:
 - **Vidas de santos**: 541 reseñas (`src/content/vidas/`).
 - **Historia de la Iglesia**: 8 épocas y 13 concilios
   (`src/content/history*.ts`), con los conflictos actuales.
+- **Apotegmas de los Padres del desierto** (`src/content/apotegmas.ts`):
+  traducidos del griego para ATHOS; cotejarlos con el original y comprobar
+  cada atribución.
 - **Monte Athos**: 12 artículos y 20 monasterios (`src/content/athos*.ts`).
 - **Reglas de ayuno** (`src/lib/calendar/fasting.ts`): la aplicación ya avisa
   de que pueden variar según la tradición y que se consulte al sacerdote, pero

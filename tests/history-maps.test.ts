@@ -15,6 +15,8 @@ import {
   TIMELINE_START,
 } from '@/content/history-maps';
 import { HISTORY_PERIODS } from '@/content/history-all';
+import { MAPAS_BASE } from '@/content/generated/mapas';
+import { dentroDelMapa, proyectar } from '@/lib/mapa';
 
 describe('los mapas de los patriarcados', () => {
   it('hay una época por cada momento que cambia el mapa', () => {
@@ -23,13 +25,12 @@ describe('los mapas de los patriarcados', () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it('todas las sedes caben dentro del esquema', () => {
+  it('todas las sedes caben dentro del mapa, salvo las que dicen estar fuera', () => {
+    const mapa = MAPAS_BASE.mediterraneo;
     for (const epoca of MAP_EPOCHS) {
       for (const sede of epoca.sees) {
-        expect(sede.x, `${epoca.id}/${sede.id}`).toBeGreaterThanOrEqual(0);
-        expect(sede.x, `${epoca.id}/${sede.id}`).toBeLessThanOrEqual(100);
-        expect(sede.y, `${epoca.id}/${sede.id}`).toBeGreaterThanOrEqual(0);
-        expect(sede.y, `${epoca.id}/${sede.id}`).toBeLessThanOrEqual(88);
+        if (sede.offMap) continue;
+        expect(dentroDelMapa(mapa, sede.lon, sede.lat), `${epoca.id}/${sede.id}`).toBe(true);
       }
     }
   });
@@ -38,10 +39,45 @@ describe('los mapas de los patriarcados', () => {
     const sitio = new Map<string, string>();
     for (const epoca of MAP_EPOCHS) {
       for (const sede of epoca.sees) {
-        const clave = `${sede.x},${sede.y}`;
+        const clave = `${sede.lon},${sede.lat}`;
         const visto = sitio.get(sede.id);
         if (visto) expect(clave, `${sede.id} se mueve`).toBe(visto);
         else sitio.set(sede.id, clave);
+      }
+    }
+  });
+
+  it('cada sede cae en tierra firme, no en el mar', () => {
+    // Las coordenadas se comprueban contra la propia costa del dibujo: una
+    // sede en el agua es una latitud o una longitud equivocada. Se da un
+    // margen de una docena de unidades —unos 50 km— porque las ciudades de
+    // costa, Constantinopla en el Bósforo, quedan a veces al otro lado de
+    // una costa simplificada.
+    const mapa = MAPAS_BASE.mediterraneo;
+    // jsdom no sabe si un punto está dentro de un trazado: se hace a mano.
+    const anillos = mapa.tierra
+      .split('M')
+      .filter(Boolean)
+      .map((t) => t.replace('Z', '').split('L').map((p) => p.split(' ').map(Number) as [number, number]));
+    const enTierra = (x: number, y: number) => {
+      let dentro = false;
+      for (const anillo of anillos) {
+        for (let i = 0, j = anillo.length - 1; i < anillo.length; j = i++) {
+          const [xi, yi] = anillo[i]!;
+          const [xj, yj] = anillo[j]!;
+          if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) dentro = !dentro;
+        }
+      }
+      return dentro;
+    };
+    for (const epoca of MAP_EPOCHS) {
+      for (const sede of epoca.sees) {
+        if (sede.offMap) continue;
+        const [x, y] = proyectar(mapa, sede.lon, sede.lat);
+        const cerca = [[0, 0], [12, 0], [-12, 0], [0, 12], [0, -12], [9, 9], [-9, 9], [9, -9], [-9, -9]].some(
+          ([dx, dy]) => enTierra(x + dx!, y + dy!),
+        );
+        expect(cerca, `${sede.id} cae en el mar`).toBe(true);
       }
     }
   });
@@ -86,9 +122,26 @@ describe('los mapas de los patriarcados', () => {
     }
   });
 
-  it('dice que es un esquema y no un mapa a escala', () => {
-    expect(MAPS_NOTE).toMatch(/esquemas?/i);
-    expect(MAPS_NOTE).toMatch(/no sobre un mapa a escala|no a escala/i);
+  it('el mapa de hoy tiene las catorce Iglesias autocéfalas y las tres en disputa', () => {
+    // Faltaban Albania, Polonia, Chequia y Eslovaquia y la OCA, aunque la
+    // propia Historia habla de catorce Iglesias autocéfalas.
+    const hoy = MAP_EPOCHS.find((e) => e.id === 'hoy')!;
+    const reconocidas = hoy.sees.filter((s) => s.status === 'patriarcado' || s.status === 'autocefala');
+    expect(reconocidas.map((s) => s.id).sort()).toEqual(
+      [
+        'constantinopla', 'alejandria', 'antioquia', 'jerusalen', 'moscu', 'serbia', 'rumania',
+        'bulgaria', 'georgia', 'chipre', 'grecia', 'polonia', 'albania', 'chequia-eslovaquia',
+      ].sort(),
+    );
+    const enDisputa = hoy.sees.filter((s) => s.status === 'disputada').map((s) => s.id);
+    expect(enDisputa.sort()).toEqual(['oca', 'ohrid', 'ucrania']);
+    expect(hoy.summary).toMatch(/[Cc]atorce/);
+  });
+
+  it('dice de dónde sale la costa y que no dibuja fronteras', () => {
+    expect(MAPS_NOTE).toMatch(/Natural Earth/);
+    expect(MAPS_NOTE).toMatch(/dominio público/);
+    expect(MAPS_NOTE).toMatch(/fronteras/);
   });
 });
 
@@ -113,6 +166,11 @@ describe('la cronología de las divisiones', () => {
     // Es el punto que el dibujo existe para dejar claro.
     const protestantes = CHURCH_BRANCHES.find((b) => b.id === 'protestantes')!;
     expect(protestantes.from).toBe('roma');
+  });
+
+  it('la línea llega hasta el año en curso', () => {
+    // Acababa en 2025 y ahí se quedaba.
+    expect(TIMELINE_END).toBe(new Date().getFullYear());
   });
 
   it('todos los años caben en el eje', () => {

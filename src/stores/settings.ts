@@ -48,7 +48,6 @@ export interface SettingsState {
   officeExtras: { troparion: boolean; akathist: boolean };
 
   calendarStyle: CalendarStyle;
-  language: string;
   bibleView: BibleViewChoice;
 
   /** Hora a la que empieza cada oficio. La noche se extiende hasta la mañana. */
@@ -57,6 +56,8 @@ export interface SettingsState {
   jesusPrayerVibration: boolean;
   jesusPrayerSound: boolean;
   jesusPrayerKeepAwake: boolean;
+  /** La pantalla no se apaga mientras se reza un oficio o un akathisto. */
+  keepAwakeInOffices: boolean;
   prayerModeDark: boolean;
 
   notifications: Record<string, boolean>;
@@ -92,12 +93,12 @@ export const DEFAULT_SETTINGS = {
   officeLength: { manana: 'habitual', mediodia: 'habitual', noche: 'habitual' } as Record<RuleTime, OfficeLength>,
   officeExtras: { troparion: true, akathist: true },
   calendarStyle: 'nuevo' as CalendarStyle,
-  language: 'es',
   bibleView: 'es' as BibleViewChoice,
   officeHours: { manana: 5, mediodia: 12, noche: 19 },
   jesusPrayerVibration: true,
   jesusPrayerSound: false,
   jesusPrayerKeepAwake: true,
+  keepAwakeInOffices: true,
   prayerModeDark: true,
   notifications: {} as Record<string, boolean>,
   notificationTimes: {} as Record<string, string>,

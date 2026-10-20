@@ -30,6 +30,7 @@ import {
   IconCross,
   IconEdit,
   IconPray,
+  IconPeople,
   IconScroll,
   IconSun,
 } from '@/components/icons';
@@ -103,14 +104,14 @@ export function PrayHub() {
 
       <nav className="shortcut-row" aria-label={es.pray.tools}>
         <Link className="shortcut" to="/orar/oracion-de-jesus">
-          <IconCross size={16} /> {es.jesusPrayer.title}
-        </Link>
-        <Link className="shortcut" to="/orar/komboskini">
-          <IconChotki size={16} /> {es.jesusPrayer.chotkiAlt}
+          <IconChotki size={16} /> {es.jesusPrayer.title}
           {stats.data?.today ? <span className="shortcut__badge">{stats.data.today}</span> : null}
         </Link>
         <Link className="shortcut" to="/orar/regla">
           <IconScroll size={16} /> {es.rule.title}
+        </Link>
+        <Link className="shortcut" to="/orar/nombres">
+          <IconPeople size={16} /> {es.names.title}
         </Link>
         <Link className="shortcut" to="/orar/metanoias">
           <IconCross size={16} /> {es.metanoia.title}

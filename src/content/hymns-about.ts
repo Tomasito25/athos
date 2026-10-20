@@ -119,6 +119,18 @@ export const OFFICE_ABOUT: Record<string, Explicacion> = {
     structure:
       'Las Pequeñas: los salmos 50, 69 y 142, la doxología, el Símbolo de la Fe, los troparios, la oración de toda hora y las oraciones a la Theotokos y a Cristo. Las Grandes, en tres partes: «Dios está con nosotros» y la oración de san Basilio, la oración de Manasés y los troparios de compunción, y «Señor de las potestades» con la oración de san Efrén. Las dos terminan con el perdón mutuo y las peticiones por todos.',
   },
+  'horas-de-pascua': {
+    about:
+      'El oficio con que se sustituyen las Horas y las Completas durante la Semana Luminosa, del domingo de Pascua al sábado siguiente. Es breve, todo cantado y siempre igual: la Iglesia vive esa semana como un solo día de Pascua, y en lugar de salmos repite el anuncio de la Resurrección.',
+    structure:
+      '«Cristo ha resucitado» tres veces, «Habiendo contemplado la Resurrección de Cristo» tres veces, el hipakoí y el kontakion de Pascua, tres troparios —del sepulcro, de la Resurrección y de la Theotokos—, cuarenta veces «Señor, ten piedad», «Más honorable que los querubines» y la despedida.',
+  },
+  tipica: {
+    about:
+      'Las Típicas —Typiká en griego, obédnitsa en eslavo— se rezan después de la Hora Sexta los días en que no hay Divina Liturgia, y en la Cuaresma después de la Novena. Toman de la Liturgia lo que no necesita sacerdote, y por eso son también el oficio de quien no tiene una iglesia cerca: rezadas el domingo en casa, unen a la Liturgia que se celebra en otra parte.',
+    structure:
+      'Los salmos típicos (102 y 145), «Hijo unigénito», las Bienaventuranzas, «El coro celestial», el Símbolo de la fe, «Perdona, remite», el Padre Nuestro, los kontakia del día, cuarenta veces «Señor, ten piedad», la oración «Santísima Trinidad, poder consustancial», «Bendito sea el nombre del Señor» con el salmo 33, y la despedida.',
+  },
   medianoche: {
     about:
       'El oficio de medianoche, que en los monasterios se reza al levantarse, mucho antes del alba. Su sentido es la espera del Esposo que llega a deshora: «He aquí que el Esposo viene a medianoche». Es el oficio menos conocido fuera del monasterio, porque en las parroquias casi nunca se celebra.',

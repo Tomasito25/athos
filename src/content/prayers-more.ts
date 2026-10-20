@@ -17,7 +17,9 @@ const TRAD: SourceMeta = {
   license: 'traditional',
   copyright: 'Texto litúrgico tradicional, de dominio público en su original griego o eslavo.',
   dateAdded: '2026-08-24',
-  notes: 'Versión española de uso corriente en las parroquias ortodoxas hispanohablantes.',
+  // Procedencia por comprobar: véase TRAD en prayers.ts y docs/PROCEDENCIA.md.
+  notes:
+    'Versión española tradicional. Su procedencia exacta —traducción propia o libro parroquial publicado— está pendiente de verificar texto por texto.',
 };
 
 const meta = (over: Partial<SourceMeta> = {}): SourceMeta => ({ ...TRAD, ...over });
@@ -205,9 +207,22 @@ export const MORE_PRAYERS: MorePrayerSeed[] = [
     title: 'Después de la cena',
     category: 'despues-comer',
     blocks: [
+      rub('Con versículos de los salmos 91 y 4, que son ya los de la noche:'),
+      t('Nos alegraste, Señor, con tus obras, y nos regocijamos en las obras de tus manos. Se ha marcado sobre nosotros la luz de tu rostro, Señor; has dado alegría a nuestro corazón. Con el fruto de su trigo, de su vino y de su aceite se han colmado. En paz nos acostaremos y dormiremos juntos, porque sólo Tú, Señor, nos haces habitar confiados.'),
+      t('Gloria al Padre, y al Hijo, y al Espíritu Santo, ahora y siempre, y por los siglos de los siglos. Amén.'),
+      t('Señor, ten piedad. <em>(tres veces)</em> Bendice.'),
+      rub('El que preside, o el sacerdote si está:'),
       t('Bendito es Dios, que tiene misericordia de nosotros y nos alimenta con sus dones abundantes, por su gracia y su compasión, ahora y siempre, y por los siglos de los siglos. Amén.'),
     ],
-    meta: meta({ source: 'Horologion, acción de gracias después de la cena' }),
+    meta: meta({
+      source:
+        'Horologion griego, acción de gracias después de la cena (salmos 91, 5 y 4, 7-9, y la bendición). Traducción al español hecha para ATHOS a partir del original griego, que es de dominio público',
+      license: 'cc-by-sa-4.0',
+      copyright:
+        'Texto litúrgico tradicional; el original griego es de dominio público. Esta versión española es una traducción hecha para ATHOS y se publica bajo CC BY-SA 4.0.',
+      notes:
+        'Es una traducción de un texto que existe, no una oración escrita para ATHOS. La versión española es de ATHOS: no procede de un libro litúrgico español publicado.',
+    }),
   },
 
   /* ═════════════════════ EL CAMINO ═════════════════════ */
@@ -371,6 +386,7 @@ export const MORE_PRAYERS: MorePrayerSeed[] = [
     category: 'familia',
     blocks: [
       rub('Donde va N. se dice el nombre, uno a uno y sin prisa. Es la parte de la oración en que se hace sitio a los demás.'),
+      { kind: 'commemoration', content: 'Tus nombres', ref: 'vivos' },
       t('Salva, Señor, y ten piedad de mi padre espiritual N., y por sus santas oraciones perdona mis pecados.'),
       t('Salva, Señor, y ten piedad de mis padres N. y N., de mis hermanos y hermanas, de mis parientes según la carne y de todos mis allegados, y concédeles tu paz.'),
       t('Salva, Señor, y ten piedad de los que me hacen bien, y recompénsalos con tus bienes celestiales.'),
@@ -427,6 +443,7 @@ export const MORE_PRAYERS: MorePrayerSeed[] = [
     title: 'Por los padres difuntos',
     category: 'difuntos',
     blocks: [
+      { kind: 'commemoration', content: 'Tus nombres', ref: 'difuntos' },
       t('Recuerda, Señor, las almas de tus siervos difuntos, mis padres N. y N., y de todos mis parientes según la carne, y perdónales todos sus pecados, voluntarios e involuntarios, concediéndoles el Reino y la participación en tus bienes eternos y el gozo de tu vida bienaventurada e inacabable.'),
       t('Memoria eterna. <em>(tres veces)</em>'),
     ],

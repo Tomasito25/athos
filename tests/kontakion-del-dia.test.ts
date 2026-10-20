@@ -18,7 +18,7 @@ import {
   WEEKDAY_KONTAKIA,
 } from '@/content/kontakia';
 import { MOVABLE_FEASTS } from '@/content/feasts';
-import { SAINTS } from '@/content/saints';
+import { SAINTS } from '@/content/santoral';
 import { OFFICES } from '@/content/offices';
 
 const PASCUA = paschaIso(2026);

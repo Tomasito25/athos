@@ -7,6 +7,7 @@ import { formatChurchDate, formatLongDate, fastTone, relativeDayLabel, toneLabel
 import { ListRow, PageHead, Panel, Section, Tag } from '@/components/ui';
 import { IconChevronLeft, IconChevronRight } from '@/components/icons';
 import { readingLabel, readingNote, readingTitle, splitReadings } from '@/lib/readings';
+import { useSaintLives } from '@/hooks/useSaintLives';
 import es from '@/locales/es';
 
 /** Ficha completa de un día del año litúrgico. */
@@ -14,6 +15,7 @@ export function DayPage() {
   const { date = '' } = useParams();
   const today = useToday();
   const day = useLiturgicalDay(date);
+  const vidas = useSaintLives(day.saints.map((s) => s.id));
   const relative = relativeDayLabel(date, today);
 
   return (
@@ -53,7 +55,7 @@ export function DayPage() {
                 key={saint.id}
                 to={`/calendario/santos/${saint.id}`}
                 title={saint.name}
-                meta={saint.biography}
+                meta={vidas[saint.id]}
               />
             ))}
           </div>

@@ -31,21 +31,33 @@ en tu teléfono.
 
 Después se abre en su propia ventana, arranca al instante y **funciona entera
 sin conexión**: la Biblia, el Salterio, el calendario y las oraciones quedan en
-el dispositivo. No ocupa apenas espacio y no envía nada a ningún servidor,
-porque no hay servidor.
+el dispositivo. No ocupa apenas espacio y **no envía nada tuyo a ningún
+servidor**: sólo pide a GitHub, donde está publicada, los textos la primera vez
+que se abren y, cada hora mientras está abierta, si hay versión nueva. Lo
+detalla la [política de privacidad](https://tomasito25.github.io/athos/privacidad.html).
+
+Lo tuyo —reglas, favoritos, avance— vive sólo en ese dispositivo y en ese
+navegador. **Haz una copia de vez en cuando** (Configuración → Datos): Safari
+puede borrar los datos de una web que no se abre en semanas, y la copia es lo
+único que los recupera.
 
 ---
 
 ## Qué trae
 
-- **Oraciones por el momento, no por el título.** Treinta y un momentos —al
+- **Oraciones por el momento, no por el título.** Treinta y dos momentos —al
   despertar, al salir de casa, antes y después de comer, al caer en el pecado,
   en la angustia, junto a un moribundo, en el duelo, en la espera de un hijo,
   cuando falla la fe—, con el que corresponde a la hora destacado al abrir.
 - **Tres oficios diarios** con la estructura del Horologion: mañana, Hora Sexta
   y Pequeñas Completas, con sus salmos y las fórmulas en griego.
-- **La Biblia completa** en Reina-Valera 1909, con búsqueda sin conexión y
-  salto directo a una cita: se escribe «Juan 3, 16» y se abre el capítulo.
+- **La Biblia entera, con los libros de los Setenta**: la Reina-Valera de 1909
+  y, en los libros que ésta no trae (Tobías, Judit, Sabiduría, Eclesiástico,
+  los Macabeos…), la Biblia libre para el mundo. Al lado, si se quiere, **el
+  griego que lee la Iglesia**: los Setenta en la edición de Brenton y el Nuevo
+  Testamento patriarcal de 1904, versículo a versículo. Con búsqueda sin
+  conexión y salto directo a una cita: se escribe «Juan 3, 16» y se abre el
+  capítulo.
 - **Planes de lectura**: los Evangelios, el Nuevo Testamento, el Salterio o la
   Biblia entera, repartidos por días, con lo leído marcado.
 - **El Salterio** en la numeración de los Setenta, repartido en los veinte
@@ -73,6 +85,25 @@ porque no hay servidor.
 - **Monte Athos**: los veinte monasterios con lo que son hoy y quién vivió en
   ellos, y artículos sobre el gobierno, el ávaton, los sketes, el canto y cómo
   se llega.
+- **El versículo y el apotegma del día**, uno al lado del otro en Inicio: un
+  versículo de la Escritura y un dicho de los Padres del desierto, traducido
+  del griego. Si se quiere, llegan como avisos aparte: el apotegma por la
+  mañana y el versículo por la tarde.
+- **Las Iglesias ortodoxas hoy**: una ficha por Iglesia con quién la preside
+  y cuándo se comprobó, su sede, su calendario, sus lenguas y sus diócesis en
+  España y América Latina; y las disputas abiertas, contadas como disputas.
+- **Mapas sobre la costa de verdad**, sin conexión: Tierra Santa con los
+  lugares del Evangelio enlazados a sus pasajes, los cuatro viajes de san
+  Pablo, las siete Iglesias del Apocalipsis con los concilios, y las sedes de
+  la Iglesia época por época.
+- **Nombres para la oración**: los vivos y los difuntos que se encomiendan,
+  rezados en su sitio en los oficios y en la panihida, con aviso el día del
+  santo de cada nombre.
+- **Al calendario del teléfono**: las fiestas, los ayunos y los recordatorios
+  de oración en un archivo `.ics`, que avisa aunque ATHOS esté cerrada.
+- **Compartir y leer en voz alta** un versículo, una oración o la vida de un
+  santo, con la voz del propio dispositivo; y la pantalla encendida mientras
+  se reza un oficio.
 - **Oración de Jesús y komboskini**, con contador, temporizador e historial.
 - **Ornamentos bizantinos** dibujados con trazo —cabeceras de entrelazo,
   capitulares iluminadas, filete de tabla de icono—, que se pueden apagar.
@@ -93,10 +124,13 @@ ayuno no cuadra con tu jurisdicción, díselo — con la fuente que lo respalde.
 Las diferencias entre tradiciones son reales y ATHOS quiere reflejarlas, no
 aplanarlas.
 
-**Traducciones de la interfaz.** Ningún texto está escrito dentro de un
-componente: todos viven en `src/locales/`. Traducir consiste en copiar el
-archivo español y traducirlo. Los idiomas que ya existen son los archivos que
-haya en esa carpeta.
+**Revisión de los textos.** Un sacerdote, un teólogo o alguien que conozca los
+libros litúrgicos en español puede decir si una oración coincide con un libro
+publicado, si una traducción está bien hecha o si una regla de ayuno no cuadra.
+`docs/PROCEDENCIA.md` lista texto por texto lo que hay que comprobar.
+
+ATHOS está sólo en español, interfaz y contenido: no hay mecanismo de
+traducción, y traducir la interfaz sin traducir las oraciones serviría de poco.
 
 **Código.** Errores, accesibilidad, rendimiento. `CONTRIBUTING.md` explica los
 criterios; el más importante es que nada se dé por bueno sin una prueba que lo
@@ -135,8 +169,9 @@ Lo largo está en **[CONTRIBUTING.md](CONTRIBUTING.md)**: qué licencias se
 aceptan, cómo se distingue una rúbrica de una oración, y qué hacer con el
 calendario litúrgico, que es la parte más delicada del proyecto.
 
-**[Abrir una incidencia](https://github.com/Tomasito25/athos/issues)** ·
-**[Ver las abiertas](https://github.com/Tomasito25/athos/issues)**
+**[Informar de un error](https://github.com/Tomasito25/athos/issues/new)** ·
+**[Ver los abiertos](https://github.com/Tomasito25/athos/issues)** ·
+**[Privacidad](https://tomasito25.github.io/athos/privacidad.html)**
 ## La regla de la casa
 
 **Aquí no se inventa un texto litúrgico.** Cuando una oración, un himno o una
@@ -159,6 +194,8 @@ licencia y derechos. Se puede consultar entera en **Configuración → Fuentes**
 
 Código bajo [AGPL-3.0-or-later](LICENSE). El contenido religioso conserva cada
 uno su propia licencia, declarada en su ficha y visible en la aplicación; ver
-[NOTICE.md](NOTICE.md). Reina-Valera 1909 (La OSB no la he podido encontrar en español), dominio público. EB Garamond e
-Inter, SIL Open Font License 1.1. **La licencia del código no cubre el
-contenido religioso de terceros.**
+[NOTICE.md](NOTICE.md). Los cuatro textos bíblicos son de dominio público:
+Reina-Valera 1909, Biblia libre para el mundo, los Setenta de Brenton (1851) y
+el Nuevo Testamento patriarcal de 1904. EB Garamond e Inter, SIL Open Font
+License 1.1. **La licencia del código no cubre el contenido religioso de
+terceros.**

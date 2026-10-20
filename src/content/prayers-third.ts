@@ -25,7 +25,9 @@ const TRAD: SourceMeta = {
   license: 'traditional',
   copyright: 'Texto litúrgico tradicional, de dominio público en su original griego o eslavo.',
   dateAdded: '2026-08-29',
-  notes: 'Versión española de uso corriente en las parroquias ortodoxas hispanohablantes.',
+  // Procedencia por comprobar: véase TRAD en prayers.ts y docs/PROCEDENCIA.md.
+  notes:
+    'Versión española tradicional. Su procedencia exacta —traducción propia o libro parroquial publicado— está pendiente de verificar texto por texto.',
 };
 
 const meta = (over: Partial<SourceMeta> = {}): SourceMeta => ({ ...TRAD, ...over });
@@ -195,6 +197,7 @@ export const THIRD_PRAYERS: ThirdPrayerSeed[] = [
     category: 'duelo',
     blocks: [
       rub('El oficio breve por los difuntos, llamado también litía. Donde dice N. se dice el nombre del difunto; para una mujer se cambian las formas.'),
+      { kind: 'commemoration', content: 'Tus nombres', ref: 'difuntos' },
       rub('Se empieza como toda oración: Bendito sea nuestro Dios, y el comienzo habitual:'),
       ...COMIENZO_HABITUAL,
       head('Troparios'),

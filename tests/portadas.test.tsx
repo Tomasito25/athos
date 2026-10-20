@@ -11,7 +11,6 @@ import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import { routes } from '@/routes/router';
 import { db } from '@/db/db';
 import { seedContent, seedUserDefaults } from '@/db/seed';
-import { initI18n } from '@/lib/i18n';
 import { useSettings } from '@/stores/settings';
 import { nextGreatFeast } from '@/lib/calendar/next-feast';
 import { LIBRARY_GROUPS } from '@/content/library';
@@ -24,7 +23,6 @@ beforeAll(async () => {
   await db.open();
   await seedContent();
   await seedUserDefaults();
-  await initI18n('es');
 });
 
 beforeEach(() => {
@@ -119,5 +117,27 @@ describe('los signos', () => {
 
   it('cada entrada del mapa lleva el suyo', () => {
     for (const grupo of APP_MAP) for (const e of grupo.entries) expect(e.icon, e.to).toBeTruthy();
+  });
+});
+
+describe('el primer arranque', () => {
+  it('pregunta el calendario, la tradición y la medida, y lo aplica al momento', async () => {
+    const { useSettings, DEFAULT_SETTINGS } = await import('@/stores/settings');
+    const { WelcomeCard } = await import('@/features/home/WelcomeCard');
+    const { MemoryRouter } = await import('react-router-dom');
+    const { render: pintar, screen: pantalla, fireEvent } = await import('@testing-library/react');
+    useSettings.setState({ ...DEFAULT_SETTINGS, welcomeDismissed: false });
+    pintar(
+      <MemoryRouter>
+        <WelcomeCard />
+      </MemoryRouter>,
+    );
+    fireEvent.click(pantalla.getByRole('button', { name: 'Juliano' }));
+    fireEvent.click(pantalla.getByRole('button', { name: 'Eslava' }));
+    fireEvent.click(pantalla.getByRole('button', { name: 'Breve' }));
+    const ajustes = useSettings.getState();
+    expect(ajustes.calendarStyle).toBe('juliano');
+    expect(ajustes.greekMode).toBe('oculto');
+    expect(ajustes.officeLength).toEqual({ manana: 'breve', mediodia: 'breve', noche: 'breve' });
   });
 });

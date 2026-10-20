@@ -78,7 +78,9 @@ export interface TextBlock {
      * oficio se pueden pedir secciones con `office:<id>#a,b`. Sustituye a las
      * rúbricas que decían «está en Biblioteca → …» y obligaban a salir.
      */
-    | 'embed';
+    | 'embed'
+    /** Los nombres de la lista del usuario (`ref`: `vivos` o `difuntos`), en la conmemoración. */
+    | 'commemoration';
   content: string;
   /** Número de versículo, estrofa u oda, cuando aplica. */
   ref?: string;
@@ -270,6 +272,12 @@ export interface Saint {
   meta: SourceMeta;
   searchText: string;
 }
+
+/** Un santo sin su vida ni sus himnos: lo que necesitan el calendario y la portada. */
+export type SaintSummary = Pick<
+  Saint,
+  'id' | 'name' | 'fullName' | 'day' | 'otherDays' | 'category' | 'century' | 'place'
+>;
 
 export type FeastRank =
   | 'pascua'
@@ -666,6 +674,22 @@ export interface RuleCompletion {
   length?: OfficeLength;
 }
 
+/**
+ * Un nombre de la lista de vivos o de difuntos: los dípticos de cada uno, los
+ * nombres que se dicen en la conmemoración.
+ */
+export interface DiptychName {
+  id: string;
+  name: string;
+  list: 'vivos' | 'difuntos';
+  /** El santo de su nombre, para avisar el día de su fiesta. */
+  saintId?: string;
+  /** «mi padre espiritual», «enfermo», «aniversario el 3 de mayo»… */
+  note?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 /** Una oración escrita o pegada por el propio usuario. */
 export interface UserPrayer {
   id: string;
@@ -789,7 +813,7 @@ export interface LiturgicalDay {
   tone: number | null;
   season: LiturgicalSeason;
   feasts: Feast[];
-  saints: Saint[];
+  saints: SaintSummary[];
   fasting: FastingInfo;
   readings: LiturgicalReading | null;
 }

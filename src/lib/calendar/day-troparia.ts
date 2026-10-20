@@ -31,7 +31,7 @@ import {
   PASCHAL_CYCLE_META,
   RESURRECTION_TROPARIA,
 } from '@/content/troparia-domingo';
-import { SAINTS } from '@/content/saints';
+import { SAINT_INDEX } from '@/content/saints';
 
 export interface DayTroparionItem {
   /** Por quién o por qué se canta: «San Nicolás», «Domingo, tono 3». */
@@ -61,7 +61,7 @@ function deLosSantos(day: LiturgicalDay): DayTroparionItem[] {
       Number(ES_FIESTA_DEL_SENOR_O_THEOTOKOS(a.category)),
   );
   for (const saint of ordenados) {
-    const tr = generalTroparionFor(saint.category, saint.id);
+    const tr = generalTroparionFor(saint.category, saint.id, saint.name);
     if (!tr) continue;
     const fiesta = tr.own && ES_FIESTA_DEL_SENOR_O_THEOTOKOS(saint.category);
     items.push({
@@ -92,8 +92,8 @@ function deLasFiestasMoviles(day: LiturgicalDay): DayTroparionItem[] {
       continue;
     }
     const santoId = MOVABLE_SAINT_OF[feast.id];
-    const santo = santoId ? SAINTS.find((s) => s.id === santoId) : undefined;
-    const tr = santo ? generalTroparionFor(santo.category, santo.id) : null;
+    const santo = santoId ? SAINT_INDEX.find((s) => s.id === santoId) : undefined;
+    const tr = santo ? generalTroparionFor(santo.category, santo.id, santo.name) : null;
     if (santo && tr) {
       items.push({
         occasion: feast.name,

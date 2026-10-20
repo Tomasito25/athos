@@ -22,34 +22,70 @@ en su ficha, con licencia CC BY-SA 4.0.
 
 ## Texto bíblico
 
-**Reina-Valera 1909** — dominio público.
+Cuatro textos, los cuatro de dominio público. Cada capítulo dice en la
+aplicación de cuál procede.
 
-Publicada en 1909; versión de Casiodoro de Reina revisada por Cipriano de Valera.
-Texto digitalizado en formato USFX, procedente del proyecto
-[open-bibles](https://github.com/seven1m/open-bibles).
+**Reina-Valera 1909** — dominio público. Publicada en 1909; versión de
+Casiodoro de Reina revisada por Cipriano de Valera. Texto digitalizado en
+formato USFX, procedente del proyecto
+[open-bibles](https://github.com/seven1m/open-bibles). Es el español de los
+libros del canon hebreo.
 
-Sigue el canon hebreo corto y la numeración hebrea de los Salmos. ATHOS muestra
-además la numeración de los Setenta, que es la del culto ortodoxo, mediante una
-tabla de correspondencia explícita (`src/content/psalter.ts`). El texto no se
-altera en ningún caso.
+**Santa Biblia libre para el mundo (BLM)** — dominio público por voluntad de
+sus autores, David Williams y Michael Paul Johnson; edición de eBible.org
+(`spablm`). ATHOS la usa sólo en los libros que la Reina-Valera no trae y la
+Iglesia ortodoxa lee porque están en los Setenta: Tobías, Judit, Sabiduría,
+Eclesiástico, Baruc y la Carta de Jeremías, los cuatro libros de los Macabeos,
+1 Esdras, la Oración de Manasés, el Salmo 151 y los textos griegos de Ester y
+Daniel. **Sus autores la presentan como un borrador en revisión**: puede tener
+erratas y cambiar. Cada compilación calcula una huella de sus archivos, y
+cuando cambia, la aplicación tira lo que tenía guardado y vuelve a
+descargarlo: una corrección llega a quien ya la tenía.
 
-Los libros deuterocanónicos de la Septuaginta figuran en el canon con su ficha,
-pero su texto está **pendiente de incorporar**: la RV1909 no los contiene.
+**Los Setenta** — el Antiguo Testamento griego en la edición de Lancelot C. L.
+Brenton (1851), dominio público; edición de eBible.org (`grcbrent`).
+
+**Nuevo Testamento griego, edición patriarcal de 1904** — el texto del
+Patriarcado Ecuménico de Constantinopla, con veinte correcciones de ediciones
+posteriores; dominio público; edición de eBible.org (`grcbyz`).
+
+La Reina-Valera sigue la numeración hebrea de los Salmos. ATHOS muestra además
+la de los Setenta, que es la del culto ortodoxo, mediante una tabla de
+correspondencia explícita (`src/content/psalter.ts`), y pone al lado de cada
+capítulo el que le corresponde en griego (`src/lib/greek-bible.ts`). El texto
+no se altera en ningún caso.
 
 ## Oraciones y textos litúrgicos
 
-Oraciones litúrgicas tradicionales, de dominio público en su original griego o
-eslavo, en la versión española de uso corriente en las parroquias ortodoxas
-hispanohablantes.
+Las oraciones son textos litúrgicos tradicionales, de dominio público en su
+original griego o eslavo. Su **versión española** es de una de estas tres
+clases, y la ficha de cada una dice cuál:
+
+- **Traducción hecha para ATHOS** desde el original griego o eslavo, bajo
+  CC BY-SA 4.0. La ficha nombra el original.
+- **Redactada para ATHOS**, cuando no hay texto en el libro de oraciones con el
+  que sustituirla; la propia oración lo dice en una rúbrica.
+- **Versión tradicional sin verificar.** Es la mayoría de las oraciones de uso
+  diario. **Su procedencia exacta está pendiente de comprobar texto por
+  texto**: puede ser traducción propia o haberse tomado de un libro parroquial,
+  que puede tener derechos. Hasta que se compruebe, ATHOS no afirma de ellas
+  más de lo que sabe.
+
+`docs/PROCEDENCIA.md` lista cada texto con su clase y su estado de revisión;
+se regenera con `npm run procedencia`.
 
 Si el titular de los derechos de una versión española concreta lo comunica, esa
 versión será sustituida. Abre una incidencia si detectas un texto protegido.
 
-## Himnografía
+## Himnografía y oficios
 
-Akathistos y cánones del Triodion, el Pentecostario y el Menaion. Se incorporan
-el kontakion inicial del Akáthistos a la Theotokos, los irmos verificados y los
-estribillos; el resto figura con ficha y estado *pendiente*.
+Los akathistos, los cánones (el Gran Canon, la Paráclesis, el canon de la
+Comunión, los de difuntos…), los oficios de las Horas, Vísperas, Maitines y
+Completas, la Divina Liturgia y los troparios y kontakia del Menaion están
+enteros. Su versión española es **traducción hecha para ATHOS** desde el
+original griego o el eslavo eclesiástico, de dominio público, bajo
+CC BY-SA 4.0; la ficha de cada texto dice de cuál. No procede de ningún libro
+litúrgico español publicado, ni se ha cotejado con una edición crítica.
 
 ## Padres de la Iglesia
 
@@ -69,7 +105,7 @@ lecturas de veintidós años y las guarda como dato; las referencias se traducen
 al español. Corresponde a la **tradición eslava**, que es la que orthocal usa
 por defecto.
 
-El texto de los pasajes es el de la Reina-Valera 1909, ya descrita arriba.
+El texto de los pasajes es el de la Biblia de ATHOS, ya descrita arriba.
 
 ## Iconografía: reproducciones
 
@@ -109,6 +145,26 @@ mayoría de las jurisdicciones. La aplicación muestra siempre, junto a ellas:
 
 ATHOS no presenta estas reglas como una obligación canónica individual.
 
+## Apotegmas de los Padres del desierto
+
+Los dichos de los Padres del desierto salen de los *Apophthegmata Patrum*, la
+colección alfabética griega (PG 65), de **dominio público**. Las traducciones
+modernas, en castellano y en otras lenguas, tienen derechos y no se han
+usado: cada dicho está traducido del original para ATHOS, bajo CC BY-SA 4.0,
+y sólo entró después de cotejar con la colección que existe y con esa
+atribución. Donde se pudo asegurar, lleva su número en la colección. Está
+pendiente la revisión de una persona con el original delante.
+
+## Mapas
+
+La costa, los lagos y los ríos de los mapas —las sedes de la Iglesia por
+épocas, las Iglesias de hoy, Tierra Santa, los viajes de san Pablo y las siete
+Iglesias del Apocalipsis— salen de [Natural Earth](https://www.naturalearthdata.com),
+de **dominio público**. `scripts/build-mapas.mjs` los recorta y simplifica una
+vez y los guarda en el código: los mapas no descargan nada. Las coordenadas de
+cada lugar y sus notas son de ATHOS, bajo CC BY-SA 4.0; donde se discute dónde
+estaba un sitio, su nota lo dice. Los mapas no dibujan fronteras.
+
 ## Monte Athos
 
 Reseñas redactadas para ATHOS a partir de la historia documentada de la
@@ -138,7 +194,7 @@ sin conexión y sin consultar servidores ajenos.
 
 ## Dependencias
 
-React, React Router, Dexie, Zustand, i18next, Vite, Workbox y las demás
+React, React Router, Dexie, Zustand, Vite, Workbox y las demás
 dependencias conservan sus respectivas licencias, todas ellas permisivas (MIT o
 Apache-2.0). Consulta `package.json` y `npm ls` para el detalle.
 

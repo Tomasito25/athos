@@ -7,6 +7,8 @@
  */
 import type {
   Bookmark,
+  DiptychName,
+  ReadingProgress,
   Favorite,
   JesusPrayerSession,
   Note,
@@ -16,7 +18,7 @@ import type {
   SettingRecord,
   UserPrayer,
 } from '@/types';
-import { db } from './db';
+import { db, USER_TABLES } from './db';
 
 export const BACKUP_FORMAT = 'athos-backup';
 export const BACKUP_VERSION = 1;
@@ -35,6 +37,9 @@ export interface AthosBackup {
     notes: Note[];
     jesus_prayer_sessions: JesusPrayerSession[];
     user_prayers: UserPrayer[];
+    /** Desde la 1.31: antes el avance de los planes no se copiaba. */
+    reading_progress?: ReadingProgress[];
+    diptychs?: DiptychName[];
     settings: SettingRecord[];
   };
 }
@@ -52,6 +57,8 @@ export async function exportBackup(sections?: BackupSection[]): Promise<AthosBac
       'notes',
       'jesus_prayer_sessions',
       'user_prayers',
+      'reading_progress',
+      'diptychs',
       'settings',
     ],
   );
@@ -74,9 +81,14 @@ export async function exportBackup(sections?: BackupSection[]): Promise<AthosBac
         db.jesus_prayer_sessions.toArray(),
       ),
       user_prayers: await take('user_prayers', () => db.user_prayers.toArray()),
+      reading_progress: await take('reading_progress', () => db.reading_progress.toArray()),
+      diptychs: await take('diptychs', () => db.diptychs.toArray()),
       settings: await take('settings', () =>
-        // Los ajustes internos de siembra no se exportan.
-        db.settings.filter((s) => !s.key.startsWith('content.')).toArray(),
+        // Los ajustes internos de siembra, de la Biblia guardada y del aviso
+        // de copia no se exportan: son de este dispositivo.
+        db.settings
+          .filter((s) => !/^(content|bible|psalter|backup)\./.test(s.key))
+          .toArray(),
       ),
     },
   };
@@ -104,6 +116,8 @@ const VALIDATORS: Record<BackupSection, (row: unknown) => boolean> = {
   notes: (r) => hasStringId(r) && typeof (r as Note).body === 'string',
   jesus_prayer_sessions: (r) => hasStringId(r) && typeof (r as JesusPrayerSession).count === 'number',
   user_prayers: (r) => hasStringId(r) && typeof (r as UserPrayer).title === 'string',
+  reading_progress: (r) => hasStringId(r) && typeof (r as ReadingProgress).kind === 'string',
+  diptychs: (r) => hasStringId(r) && typeof (r as DiptychName).name === 'string',
   settings: (r) => isObject(r) && typeof r.key === 'string',
 };
 
@@ -169,6 +183,8 @@ export async function importBackup(
     notes: db.notes,
     jesus_prayer_sessions: db.jesus_prayer_sessions,
     user_prayers: db.user_prayers,
+    reading_progress: db.reading_progress,
+    diptychs: db.diptychs,
     settings: db.settings,
   } as const;
 
@@ -219,6 +235,19 @@ export function backupToMarkdown(backup: AthosBackup): string {
     }
   }
 
+  if (backup.data.diptychs?.length) {
+    for (const [lista, titulo] of [
+      ['vivos', '## Por los vivos'],
+      ['difuntos', '## Por los difuntos'],
+    ] as const) {
+      const nombres = backup.data.diptychs.filter((d) => d.list === lista);
+      if (!nombres.length) continue;
+      lines.push(titulo, '');
+      for (const d of nombres) lines.push(`- ${d.name}${d.note ? ` (${d.note})` : ''}`);
+      lines.push('');
+    }
+  }
+
   if (backup.data.favorites.length) {
     lines.push('## Favoritos', '');
     for (const fav of backup.data.favorites) lines.push(`- ${fav.title} (${fav.kind})`);
@@ -247,37 +276,59 @@ export function downloadFile(filename: string, content: string, type: string): v
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-/** Borrado completo de los datos del usuario. Deja el contenido intacto. */
+/**
+ * Borrado completo de los datos del usuario. Deja el contenido intacto.
+ *
+ * Recorre USER_TABLES: la lista de lo que es del usuario vive en un solo
+ * sitio, y una tabla nueva entra en el borrado al entrar en ella.
+ */
 export async function wipeUserData(): Promise<void> {
-  await db.transaction(
-    'rw',
-    [
-      db.daily_rules,
-      db.rule_items,
-      db.rule_completions,
-      db.favorites,
-      db.bookmarks,
-      db.notes,
-      db.history,
-      db.jesus_prayer_sessions,
-      db.reading_progress,
-      db.user_prayers,
-      db.settings,
-    ],
-    async () => {
-      await Promise.all([
-        db.daily_rules.clear(),
-        db.rule_items.clear(),
-        db.rule_completions.clear(),
-        db.favorites.clear(),
-        db.bookmarks.clear(),
-        db.notes.clear(),
-        db.history.clear(),
-        db.jesus_prayer_sessions.clear(),
-        db.reading_progress.clear(),
-        db.user_prayers.clear(),
-        db.settings.clear(),
-      ]);
-    },
-  );
+  const tablas = USER_TABLES.map((nombre) => db.table(nombre));
+  await db.transaction('rw', tablas, async () => {
+    await Promise.all(tablas.map((tabla) => tabla.clear()));
+  });
+}
+
+/* ---------------- El aviso de copia de seguridad ---------------- */
+
+const ULTIMA_COPIA = 'backup.lastAt';
+const APLAZADA_HASTA = 'backup.snoozedUntil';
+/** Cada cuánto se recuerda hacer una copia. */
+export const BACKUP_EVERY_DAYS = 30;
+
+/** Apunta que se acaba de hacer una copia. */
+export async function markBackupDone(cuando = new Date()): Promise<void> {
+  await db.settings.put({ key: ULTIMA_COPIA, value: cuando.toISOString(), updatedAt: cuando.toISOString() });
+}
+
+/** No volver a recordarlo hasta dentro de `dias`. */
+export async function snoozeBackupReminder(dias = BACKUP_EVERY_DAYS, desde = new Date()): Promise<void> {
+  const hasta = new Date(desde.getTime() + dias * 86_400_000).toISOString();
+  await db.settings.put({ key: APLAZADA_HASTA, value: hasta, updatedAt: desde.toISOString() });
+}
+
+/**
+ * ¿Toca recordar que se haga una copia?
+ *
+ * Los datos sólo viven en el dispositivo, y Safari borra los de una web que
+ * no se abre en semanas; también se pierden al limpiar el navegador. Se
+ * recuerda cuando hay algo que perder —algo rezado, guardado o escrito— y la
+ * última copia tiene más de un mes, o no la hay. Si se aplaza, se calla un mes.
+ */
+export async function backupReminderDue(ahora = new Date()): Promise<boolean> {
+  const aplazada = (await db.settings.get(APLAZADA_HASTA))?.value as string | undefined;
+  if (aplazada && new Date(aplazada) > ahora) return false;
+  const ultima = (await db.settings.get(ULTIMA_COPIA))?.value as string | undefined;
+  if (ultima && ahora.getTime() - new Date(ultima).getTime() < BACKUP_EVERY_DAYS * 86_400_000) return false;
+
+  const cuantos = await Promise.all([
+    db.rule_completions.count(),
+    db.favorites.count(),
+    db.bookmarks.count(),
+    db.notes.count(),
+    db.jesus_prayer_sessions.count(),
+    db.reading_progress.count(),
+    db.user_prayers.count(),
+  ]);
+  return cuantos.some((n) => n > 0);
 }

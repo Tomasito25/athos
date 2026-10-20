@@ -1,6 +1,6 @@
 /** Alterna un favorito y refleja su estado en la interfaz. */
 import { useCallback, useEffect, useState } from 'react';
-import type { Favorite, FavoriteKind } from '@/types';
+import type { Favorite } from '@/types';
 import { isFavorite, toggleFavorite } from '@/db/user';
 import { useUi } from '@/stores/ui';
 import es from '@/locales/es';
@@ -28,14 +28,4 @@ export function useFavorite(entry: Omit<Favorite, 'id' | 'createdAt'> | null) {
   }, [entry, toast]);
 
   return { active, toggle };
-}
-
-export function favoriteEntry(
-  kind: FavoriteKind,
-  refId: string,
-  title: string,
-  path: string,
-  subtitle?: string,
-): Omit<Favorite, 'id' | 'createdAt'> {
-  return { kind, refId, title, subtitle, path };
 }

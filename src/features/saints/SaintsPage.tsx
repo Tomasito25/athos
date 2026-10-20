@@ -10,7 +10,8 @@ import { useMemo, useState } from 'react';
 import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
 import { useLiturgicalDay, useToday } from '@/hooks/useLiturgicalDay';
-import { SAINTS_COVERAGE_NOTE, SAINT_CATEGORY_LABELS } from '@/content/saints';
+import { SAINT_CATEGORY_LABELS } from '@/content/saints';
+import { SAINTS_COVERAGE_NOTE } from '@/content/saints-nota';
 import { ListRow, PageHead, Section, Segmented, Tag, SkeletonList } from '@/components/ui';
 import { normalize } from '@/lib/text';
 import { MONTHS, formatMonthDay } from '@/lib/format';
@@ -40,6 +41,8 @@ export function SaintsPage() {
   // Con su propio useMemo: si no, la lista cambia de identidad en cada render
   // y los dos cálculos de abajo se rehacen sin motivo.
   const todos = useMemo(() => saints.data ?? [], [saints.data]);
+  // El calendario trae sólo el índice; la vida está en la lista leída de la base.
+  const vidaDe = useMemo(() => new Map(todos.map((s) => [s.id, s.biography])), [todos]);
 
   // Cuántos hay en cada mes. Va en la píldora, para que se vea que ningún mes
   // está vacío sin tener que entrar a comprobarlo.
@@ -84,7 +87,7 @@ export function SaintsPage() {
                 key={saint.id}
                 to={`/calendario/santos/${saint.id}`}
                 title={saint.name}
-                meta={saint.biography}
+                meta={vidaDe.get(saint.id)}
                 trailing={<Tag tone="gold">Hoy</Tag>}
               />
             ))}

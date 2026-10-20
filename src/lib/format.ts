@@ -4,7 +4,6 @@ import type { CivilDate, LiturgicalDay } from '@/types';
 import { isoToCivil, isoToDate, toIsoDate } from './calendar/jdn';
 
 export const WEEKDAYS = es.weekdays.long;
-export const WEEKDAYS_SHORT = es.weekdays.short;
 export const WEEKDAYS_NARROW = es.weekdays.narrow;
 export const MONTHS = es.months;
 
@@ -84,10 +83,6 @@ export function fastTone(day: LiturgicalDay): 'gold' | 'red' | 'blue' | 'green' 
     default:
       return undefined;
   }
-}
-
-export function feastTone(day: LiturgicalDay): 'gold' | undefined {
-  return day.feasts.some((f) => f.rank === 'pascua' || f.rank === 'gran-fiesta') ? 'gold' : undefined;
 }
 
 export function toneLabel(tone: number | null): string {

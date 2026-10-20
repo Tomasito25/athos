@@ -28,10 +28,14 @@ import { getSetting, setSetting } from '@/db/db';
 import { currentPlan } from '@/db/plans';
 import { DAILY_OFFICES } from '@/content/hours';
 import { LENGTH_INFO, minutesFor } from '@/content/office-lengths';
-import { isRulePrayed, ruleForTime, ruleItems } from '@/db/user';
+import { diptychsForSaints, isRulePrayed, ruleForTime, ruleItems } from '@/db/user';
 import { db } from '@/db/db';
 import { useSettings, type SettingsState } from '@/stores/settings';
 import { isFastDay } from '@/lib/calendar/fasting';
+import { verseOfDay } from '@/lib/verse-of-day';
+import { citationFor } from '@/lib/citation';
+import { verseReferenceFor } from '@/content/verse-of-day';
+import { apophthegmFor } from '@/content/apotegmas';
 import { appUrl, notificationPermission, showNotification } from './notifications';
 import type { RuleTime } from '@/types';
 
@@ -68,9 +72,12 @@ export const REMINDERS: ReminderDefinition[] = [
   { id: 'regla', group: 'rezar', title: 'Lo que queda por rezar', description: 'Sólo si a esa hora queda algún oficio del día sin rezar. Necesita ATHOS abierta o en segundo plano.', defaultTime: '22:30', needsApp: true },
   { id: 'evangelio', group: 'leer', title: 'Evangelio del día', description: 'Con la referencia de la lectura de hoy.', defaultTime: '09:00' },
   { id: 'lectura', group: 'leer', title: 'Tu plan de lectura', description: 'Lo que toca hoy en el plan que llevas. Sólo si llevas alguno.', defaultTime: '20:00' },
+  { id: 'apotegma', group: 'dia', title: 'Apotegma del día', description: 'Un dicho de los Padres del desierto, para llevártelo por la mañana.', defaultTime: '07:45' },
   { id: 'santo', group: 'dia', title: 'Santo del día', description: 'A quién recuerda hoy la Iglesia.', defaultTime: '08:00' },
   { id: 'ayuno', group: 'dia', title: 'Comienzo de un ayuno', description: 'Sólo el primer día de cada periodo de ayuno.', defaultTime: '07:30' },
   { id: 'fiesta', group: 'dia', title: 'Grandes fiestas', description: 'Sólo en las grandes fiestas y en Pascua.', defaultTime: '07:30' },
+  { id: 'onomastica', group: 'dia', title: 'Santos de tus nombres', description: 'El día del santo de alguien de tu lista de nombres para la oración.', defaultTime: '08:30' },
+  { id: 'versiculo', group: 'dia', title: 'Versículo del día', description: 'El versículo de hoy, entero, para la tarde.', defaultTime: '18:00' },
 ];
 
 const OFICIO_DE: Record<string, RuleTime> = {
@@ -88,12 +95,31 @@ export const timeFor = (id: string, times: Record<string, string> | undefined): 
 
 export interface ReminderContent {
   title: string;
+  /** Lo que cabe en un aviso. */
   body: string;
+  /** El texto entero, si el aviso lo recorta: el calendario no tiene límite. */
+  full?: string;
   /** Pantalla que abre al tocarlo. */
   path: string;
 }
 
 type Ajustes = Pick<SettingsState, 'calendarStyle' | 'officeLength'>;
+
+/** El día `YYYY-MM-DD` como fecha local, que es lo que piden el versículo y el apotegma. */
+function fechaLocal(iso: string): Date {
+  const [y, m, d] = iso.split('-').map(Number);
+  return new Date(y!, m! - 1, d!);
+}
+
+/**
+ * Un texto largo, cortado en una palabra para que quepa en el aviso. El
+ * aviso abre el texto entero.
+ */
+function recortar(texto: string, max = 300): string {
+  if (texto.length <= max) return texto;
+  const corte = texto.lastIndexOf(' ', max - 1);
+  return `${texto.slice(0, corte > max * 0.6 ? corte : max - 1).replace(/[\s,;:.]+$/, '')}…`;
+}
 
 /**
  * Lo que dice un recordatorio un día; `null` si ese día no tiene nada que
@@ -184,6 +210,47 @@ export async function reminderContent(
         body: dia.fasting.label,
         path: '/calendario/ayuno',
       };
+    }
+
+    case 'onomastica': {
+      const nombres = await diptychsForSaints(dia.saints.map((s) => s.id));
+      if (!nombres.length) return null;
+      const santo = dia.saints.find((s) => s.id === nombres[0]!.saintId);
+      const quienes = nombres.map((n) => n.name);
+      const enumerados =
+        quienes.length > 1 ? `${quienes.slice(0, -1).join(', ')} y ${quienes.at(-1)}` : quienes[0];
+      return {
+        title: santo ? `Hoy es ${santo.name}` : 'Hoy es el santo de los tuyos',
+        body: `El santo de ${enumerados}.`,
+        path: '/orar/nombres',
+      };
+    }
+
+    case 'apotegma': {
+      const dicho = apophthegmFor(fechaLocal(iso));
+      return {
+        title: `Apotegma del día · ${dicho.abba}`,
+        body: recortar(dicho.text),
+        full: dicho.text,
+        path: `/biblioteca/apotegmas#${dicho.id}`,
+      };
+    }
+
+    case 'versiculo': {
+      const fecha = fechaLocal(iso);
+      // El texto es el de la Biblia guardada; si el libro todavía no está,
+      // el aviso lleva al menos la cita, y abrirlo lo descarga.
+      const versiculo = await verseOfDay(fecha).catch(() => null);
+      if (versiculo) {
+        return {
+          title: `Versículo del día · ${versiculo.cita}`,
+          body: recortar(versiculo.texto),
+          full: versiculo.texto,
+          path: versiculo.path,
+        };
+      }
+      const referencia = verseReferenceFor(fecha);
+      return { title: 'Versículo del día', body: referencia, path: citationFor(referencia)?.path ?? '/' };
     }
 
     case 'fiesta': {
@@ -330,15 +397,35 @@ async function programar(): Promise<void> {
   // setTimeout no admite esperas de más de 24 días; con la cola de diez, sobra.
   const espera = Math.max(0, new Date(siguiente.at).getTime() - Date.now());
   temporizador = window.setTimeout(async () => {
-    const ya = await vistos();
-    if (!ya[`${siguiente.id}|${siguiente.date}`]) {
-      // En el momento de avisar se vuelve a mirar: quizá ya se ha rezado.
-      const contenido = await reminderContent(siguiente.id, siguiente.date, useSettings.getState(), true);
-      if (contenido) await showNotification(contenido.title, contenido.body, siguiente.id, contenido.path);
-      await marcarVisto(siguiente.id, siguiente.date);
-    }
+    await avisarVencidos(cola);
     void programar();
   }, espera + 500);
+}
+
+/** Más allá de esto, un aviso atrasado ya no tiene sentido. Es lo mismo que espera el Service Worker. */
+const CADUCA = 6 * 60 * 60 * 1000;
+
+/**
+ * Enseña todos los avisos de la cola que ya han vencido y no se han enseñado.
+ *
+ * No sólo el primero: dos avisos a la misma hora —el apotegma y el santo, si
+ * se ponen a las ocho— vencen juntos, y si el teléfono durmió y el
+ * temporizador llegó tarde, pueden haber vencido varios. Al volver a
+ * programar, la cola se rehace sin lo vencido, así que lo que no se enseñe
+ * aquí ya no lo enseña nadie.
+ */
+export async function avisarVencidos(cola: QueuedReminder[], ahora = Date.now()): Promise<void> {
+  const ya = await vistos();
+  for (const aviso of cola) {
+    const cuando = Date.parse(aviso.at);
+    // La cola va ordenada por hora: lo que queda es futuro.
+    if (cuando > ahora) break;
+    if (ahora - cuando > CADUCA || ya[`${aviso.id}|${aviso.date}`]) continue;
+    // En el momento de avisar se vuelve a mirar: quizá ya se ha rezado.
+    const contenido = await reminderContent(aviso.id, aviso.date, useSettings.getState(), true);
+    if (contenido) await showNotification(contenido.title, contenido.body, aviso.id, contenido.path);
+    await marcarVisto(aviso.id, aviso.date);
+  }
 }
 
 /**
@@ -359,12 +446,6 @@ export function startReminders(): void {
       void programar();
     }
   });
-}
-
-export function stopReminders(): void {
-  window.clearTimeout(temporizador);
-  desuscribir?.();
-  desuscribir = undefined;
 }
 
 /** Vuelve a programar: tras dar permiso, por ejemplo. */

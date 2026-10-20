@@ -13,7 +13,7 @@ import { FATHERS_NOTE } from '@/content/fathers';
 import { ICONS_NOTE } from '@/content/icons';
 import { HYMNS_NOTE } from '@/content/hymns';
 import { LECTIONARY_COVERAGE_NOTE } from '@/content/lectionary';
-import { SAINTS_COVERAGE_NOTE } from '@/content/saints';
+import { SAINTS_COVERAGE_NOTE } from '@/content/saints-nota';
 import { GAPS, GAP_KINDS, PENDING_NOTE } from '@/content/pending';
 import { PSALTER_META } from '@/content/psalter';
 import { Loading, PageHead, Panel, Section, SourceNote, Tag } from '@/components/ui';

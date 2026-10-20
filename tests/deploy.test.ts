@@ -6,7 +6,8 @@
  * un teléfono necesita.
  */
 import { describe, expect, it } from 'vitest';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 
 const raiz = process.cwd();
@@ -15,9 +16,18 @@ const leer = (ruta: string) => readFileSync(resolve(raiz, ruta), 'utf-8');
 describe('rutas relativas a la base', () => {
   const html = leer('index.html');
 
-  it('index.html no fija rutas absolutas a los recursos', () => {
-    const absolutas = [...html.matchAll(/(?:href|content)="(\/[^"]*)"/g)].map((m) => m[1]);
-    expect(absolutas).toEqual([]);
+  it('index.html cuelga los recursos de la raíz, para que Vite les ponga la base', () => {
+    // Al revés de lo que se pensó al principio: una ruta relativa como
+    // `icons/apple-touch-icon.png` se resuelve contra la página abierta, y en
+    // /athos/leer/biblia daba 404. Con `/` delante, Vite le antepone la base
+    // al compilar; que el resultado acabe bien lo comprueba pwa.test.ts.
+    const recursos = [
+      ...html.matchAll(/<link[^>]*rel="(?:icon|apple-touch-icon|apple-touch-startup-image)"[^>]*href="([^"]+)"/g),
+      ...html.matchAll(/<meta property="og:image" content="([^"]+)"/g),
+    ].map((m) => m[1]);
+    expect(recursos.length).toBeGreaterThan(10);
+    const relativas = recursos.filter((ruta) => !ruta.startsWith('/'));
+    expect(relativas, 'rutas relativas a la página').toEqual([]);
   });
 
   it('el documento fuente no enlaza el manifest a mano', () => {
@@ -45,7 +55,30 @@ describe('rutas relativas a la base', () => {
   });
 
   it('el texto bíblico se pide relativo a la base', () => {
-    expect(leer('src/db/bible.ts')).toContain('import.meta.env.BASE_URL');
+    // Pasa por contentUrl, que además le pone la huella de su traducción.
+    expect(leer('src/db/bible.ts')).toContain('contentUrl(');
+    expect(leer('src/lib/content-url.ts')).toContain('import.meta.env.BASE_URL');
+  });
+});
+
+describe('tipografía', () => {
+  it('no hay dos archivos de fuente iguales', () => {
+    // Las dos fuentes son variables: el 400, el 500 y el 600 eran el mismo
+    // archivo copiado tres veces, y el precaché bajaba la latina tres veces.
+    const dir = resolve(raiz, 'public/fonts');
+    const huellas = new Map<string, string>();
+    for (const nombre of readdirSync(dir)) {
+      const huella = createHash('sha256').update(readFileSync(resolve(dir, nombre))).digest('hex');
+      expect(huellas.get(huella), `${nombre} repite ${huellas.get(huella)}`).toBeUndefined();
+      huellas.set(huella, nombre);
+    }
+  });
+
+  it('cada archivo que nombra fonts.css existe', () => {
+    const css = leer('src/styles/fonts.css');
+    const archivos = [...css.matchAll(/url\(\/fonts\/([^)]+)\)/g)].map((m) => m[1]);
+    expect(archivos.length).toBeGreaterThan(10);
+    for (const archivo of archivos) expect(existsSync(resolve(raiz, 'public/fonts', archivo)), archivo).toBe(true);
   });
 });
 
@@ -57,7 +90,7 @@ describe('metadatos para el móvil', () => {
     expect(enlaces.length).toBeGreaterThanOrEqual(8);
     // Y los archivos existen.
     for (const [, archivo] of html.matchAll(/apple-touch-startup-image" href="([^"]+)"/g)) {
-      expect(existsSync(resolve(raiz, 'public', archivo)), `falta ${archivo}`).toBe(true);
+      expect(existsSync(resolve(raiz, 'public', archivo.replace(/^\//, ''))), `falta ${archivo}`).toBe(true);
     }
   });
 
@@ -152,11 +185,11 @@ describe('scripts de uso', () => {
     expect(leer('run.sh')).toMatch(/no.*instalar|NO instalarla/i);
   });
 
-  it('deploy.sh comprueba la aplicación antes de publicarla', () => {
+  it('deploy.sh comprueba la aplicación antes de compilarla', () => {
     // Publicar una versión rota en una dirección que la gente ya tiene
     // guardada cuesta más de arreglar que los dos minutos de las pruebas.
     const sh = leer('deploy.sh');
-    const bloque = sh.slice(sh.indexOf('MODO" == "github" && "$PRUEBAS"'));
+    const bloque = sh.slice(sh.indexOf('"$PRUEBAS" == "si"'));
     expect(bloque).toContain('npm run lint');
     expect(bloque).toContain('npm run typecheck');
     expect(bloque).toContain('npm run test');
@@ -164,11 +197,14 @@ describe('scripts de uso', () => {
     expect(sh).toContain('--sin-pruebas');
   });
 
-  it('deploy.sh no inventa el nombre de la rama', () => {
-    // Decía «git push -u origin main» en un repositorio que está en master.
+  it('hay una sola manera de publicar en GitHub Pages', () => {
+    // deploy.sh subía también a una rama gh-pages, mientras el flujo de
+    // GitHub publicaba desde main: dos caminos al mismo sitio que podían
+    // pisarse. Se quedó sólo el flujo; el script prepara carpetas para otros
+    // alojamientos y no empuja nada.
     const sh = leer('deploy.sh');
-    expect(sh).toContain('branch --show-current');
-    expect(sh).not.toMatch(/git push -u origin main/);
+    expect(sh).not.toMatch(/git push/);
+    expect(sh).not.toMatch(/git checkout -qb|--rama/);
   });
 
   it('las etiquetas Open Graph pueden hacerse absolutas', () => {
@@ -190,9 +226,9 @@ describe('scripts de uso', () => {
     expect(atajos).not.toContain('orar/oracion-de-jesus');
   });
 
-  it('deploy.sh prepara GitHub Pages correctamente', () => {
+  it('deploy.sh prepara la carpeta para un alojamiento estático', () => {
     const deploy = leer('deploy.sh');
-    // Sin .nojekyll, GitHub ignora lo que empieza por guion bajo.
+    // Sin .nojekyll, algunos alojamientos ignoran lo que empieza por guion bajo.
     expect(deploy).toContain('.nojekyll');
     // Sin 404.html, un enlace profundo falla la primera vez.
     expect(deploy).toContain('404.html');
@@ -253,8 +289,16 @@ describe('el repositorio se puede clonar y compilar', () => {
     }
   });
 
-  it('la publicación compila apuntando a la subcarpeta del repositorio', () => {
-    expect(leer('.github/workflows/deploy.yml')).toContain('ATHOS_BASE=/athos/');
+  it('la publicación compila con la subcarpeta y el dominio que dice GitHub', () => {
+    // La dirección no se escribe a mano: la da configure-pages. Así un
+    // dominio propio no deja la compilación apuntando al viejo.
+    const flujo = leer('.github/workflows/deploy.yml');
+    expect(flujo).toContain('ATHOS_BASE: ${{ steps.pages.outputs.base_path }}/');
+    // Sin ATHOS_URL, la imagen de vista previa quedaba relativa y WhatsApp o
+    // Telegram no enseñaban nada. Pasó en la web publicada.
+    expect(flujo).toContain('ATHOS_URL: ${{ steps.pages.outputs.origin }}');
+    // Y configure-pages corre antes de compilar, o sus salidas llegan vacías.
+    expect(flujo.indexOf('configure-pages')).toBeLessThan(flujo.indexOf('npm run build'));
   });
 
   it('los dos flujos usan la misma versión de Node', () => {

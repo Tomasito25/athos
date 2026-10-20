@@ -9,7 +9,7 @@
 import { describe, expect, it } from 'vitest';
 import { readdirSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { SAINTS } from '@/content/saints';
+import { SAINTS } from '@/content/santoral';
 import { CHURCH_FATHERS } from '@/content/fathers';
 import { MONASTERIES, ATHOS_ARTICLES } from '@/content/athos';
 import { PRAYERS, PRAYER_CATEGORIES } from '@/content/prayers';

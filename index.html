@@ -15,9 +15,16 @@
     <meta name="theme-color" content="#F4EDE0" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#14100C" media="(prefers-color-scheme: dark)" />
 
-    <link rel="icon" href="favicon.ico" sizes="32x32" />
-    <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+    <!--
+      Las rutas de los iconos empiezan por «/» a propósito: Vite les antepone la
+      base al compilar (/athos/favicon.ico en GitHub Pages). Relativas, como
+      estaban, se resolvían contra la página abierta y daban 404 en cualquier
+      página interior: /athos/leer/biblia/icons/apple-touch-icon.png. Quien
+      añadía ATHOS a la pantalla de inicio desde ahí se quedaba sin icono.
+    -->
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
     <!--
       El enlace al manifest lo inyecta vite-plugin-pwa con la base correcta.
       Ponerlo también aquí dejaba DOS etiquetas `rel="manifest"` en la página
@@ -32,25 +39,25 @@
     <meta name="apple-mobile-web-app-title" content="ATHOS" />
 
     <!-- Pantallas de arranque de iOS: Safari no las deduce del manifest. -->
-    <link rel="apple-touch-startup-image" href="icons/splash-750x1334.png"
+    <link rel="apple-touch-startup-image" href="/icons/splash-750x1334.png"
       media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
-    <link rel="apple-touch-startup-image" href="icons/splash-828x1792.png"
+    <link rel="apple-touch-startup-image" href="/icons/splash-828x1792.png"
       media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
-    <link rel="apple-touch-startup-image" href="icons/splash-1242x2688.png"
+    <link rel="apple-touch-startup-image" href="/icons/splash-1242x2688.png"
       media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
-    <link rel="apple-touch-startup-image" href="icons/splash-1170x2532.png"
+    <link rel="apple-touch-startup-image" href="/icons/splash-1170x2532.png"
       media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
-    <link rel="apple-touch-startup-image" href="icons/splash-1179x2556.png"
+    <link rel="apple-touch-startup-image" href="/icons/splash-1179x2556.png"
       media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
-    <link rel="apple-touch-startup-image" href="icons/splash-1284x2778.png"
+    <link rel="apple-touch-startup-image" href="/icons/splash-1284x2778.png"
       media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
-    <link rel="apple-touch-startup-image" href="icons/splash-1290x2796.png"
+    <link rel="apple-touch-startup-image" href="/icons/splash-1290x2796.png"
       media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
-    <link rel="apple-touch-startup-image" href="icons/splash-1620x2160.png"
+    <link rel="apple-touch-startup-image" href="/icons/splash-1620x2160.png"
       media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
-    <link rel="apple-touch-startup-image" href="icons/splash-1668x2388.png"
+    <link rel="apple-touch-startup-image" href="/icons/splash-1668x2388.png"
       media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
-    <link rel="apple-touch-startup-image" href="icons/splash-2048x2732.png"
+    <link rel="apple-touch-startup-image" href="/icons/splash-2048x2732.png"
       media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
 
     <!-- Open Graph -->
@@ -62,7 +69,7 @@
       content="Horologion digital, libro de oración, biblioteca ortodoxa y calendario litúrgico. Sin cuenta, sin rastreo, funciona sin conexión."
     />
     <meta property="og:locale" content="es_ES" />
-    <meta property="og:image" content="icons/og-image.png" />
+    <meta property="og:image" content="/icons/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />

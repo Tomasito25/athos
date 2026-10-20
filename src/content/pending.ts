@@ -13,7 +13,7 @@ import { AKATHISTS, CANONS } from './hymns';
 import { CHURCH_FATHERS } from './fathers';
 import { OFFICES } from './offices';
 import { PRAYERS } from './prayers';
-import { SAINTS } from './saints';
+import { SAINT_INDEX as SAINTS } from './saints';
 import { generalTroparionFor } from './troparia-general';
 import { SAINT_KONTAKIA } from './kontakia';
 
@@ -53,7 +53,7 @@ const sinTexto = <T extends { status: string }>(rows: T[]) =>
 export const GAPS: Gap[] = [
   {
     label: 'Troparios propios de los santos',
-    count: SAINTS.filter((s) => !generalTroparionFor(s.category, s.id)?.own).length,
+    count: SAINTS.filter((s) => !generalTroparionFor(s.category, s.id, s.name)?.own).length,
     kind: 'propio',
     what: 'El tropario propio de cada conmemoración. Las grandes fiestas y los santos más venerados ya tienen el suyo, traducido del Menaion griego. Los demás no se quedan mudos: se muestra el tropario general de su rango, que es lo que la Iglesia canta cuando no se dispone del propio.',
   },

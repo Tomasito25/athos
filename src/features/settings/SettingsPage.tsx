@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { CALENDAR_STYLE_LABELS, CALENDAR_STYLE_NOTE } from '@/lib/calendar/liturgical';
 import { useSettings } from '@/stores/settings';
-import { SUPPORTED_LANGUAGES } from '@/lib/i18n';
 import {
   Button,
   Field,
@@ -31,6 +30,7 @@ import type {
 import { GREEK_NOTE } from '@/content/greek';
 import { useHashScroll } from '@/hooks/useHashScroll';
 import { OFFICE_LENGTHS, minutesFor } from '@/content/office-lengths';
+import { wakeLockSupported } from '@/lib/wakelock';
 import es from '@/locales/es';
 
 export function SettingsPage() {
@@ -47,7 +47,6 @@ export function SettingsPage() {
         <a className="shortcut" href="#ajustes-inicio">{es.settings.start}</a>
         <a className="shortcut" href="#ajustes-oficio">{es.office.title}</a>
         <a className="shortcut" href="#ajustes-calendario">{es.settings.calendar}</a>
-        <a className="shortcut" href="#ajustes-idioma">{es.settings.language}</a>
         <a className="shortcut" href="#ajustes-mas">{es.nav.more}</a>
       </nav>
 
@@ -289,6 +288,16 @@ export function SettingsPage() {
             title={es.office.extrasAkathist}
             description={es.office.extrasAkathistHint}
           />
+
+          <h3 className="panel__title" style={{ marginTop: 'var(--sp-5)' }}>
+            {es.office.screen}
+          </h3>
+          <Switch
+            checked={settings.keepAwakeInOffices ?? true}
+            onChange={(value) => settings.set('keepAwakeInOffices', value)}
+            title={es.office.keepAwake}
+            description={wakeLockSupported() ? es.office.keepAwakeHint : es.prayerMode.wakeLockUnsupported}
+          />
         </Panel>
       </Section>
 
@@ -310,28 +319,6 @@ export function SettingsPage() {
           <p className="muted text-sm" style={{ marginTop: 'var(--sp-3)' }}>
             {CALENDAR_STYLE_LABELS[settings.calendarStyle]}. {CALENDAR_STYLE_NOTE[settings.calendarStyle]}
           </p>
-        </Panel>
-      </Section>
-
-      <Section title={es.settings.language} id="ajustes-idioma">
-        <Panel>
-          <Field label={es.settings.language} hint={es.settings.languageNote}>
-            {(id) => (
-              <select
-                id={id}
-                className="select"
-                value={settings.language}
-                onChange={(event) => settings.set('language', event.target.value)}
-              >
-                {SUPPORTED_LANGUAGES.map((language) => (
-                  <option key={language.code} value={language.code} disabled={!language.ready}>
-                    {language.native}
-                    {language.ready ? '' : ' — pendiente de traducir'}
-                  </option>
-                ))}
-              </select>
-            )}
-          </Field>
         </Panel>
       </Section>
 

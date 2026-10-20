@@ -31,19 +31,20 @@ import {
   ruleItems,
   uncompleteRule,
 } from '@/db/user';
-import { useToday } from '@/hooks/useLiturgicalDay';
+import { useLiturgicalDay, useToday } from '@/hooks/useLiturgicalDay';
+import { useKeepAwake } from '@/hooks/useKeepAwake';
 import {
   Blocks,
   Button,
   ButtonLink,
   Empty,
   Loading,
+  Notice,
   Panel,
   ProgressBlocks,
   Segmented,
   Rule,
   SourceNote,
-  Tag,
 } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { InlineCounter } from './InlineCounter';
@@ -58,6 +59,9 @@ export function OfficePage() {
   const { time = 'manana' } = useParams<{ time: RuleTime }>();
   const today = useToday();
   const definicion = OFFICE_BY_TIME.get(time as RuleTime);
+  const dia = useLiturgicalDay(today);
+  // En la Semana Luminosa no se rezan las Horas ni las Completas, sino las de Pascua.
+  const luminosa = dia.paschaOffset >= 0 && dia.paschaOffset <= 6;
 
   const medidas = useSettings((s) => s.officeLength);
   const extras = useSettings((s) => s.officeExtras);
@@ -65,6 +69,7 @@ export function OfficePage() {
 
   const regla = useAsync(() => ruleForTime(time as RuleTime), [time]);
   const pasos = useOfficeSteps(regla.data?.id ?? '', time as RuleTime, medida);
+  useKeepAwake();
   const pasosRegla = useAsync(
     async () => (regla.data ? ruleItems(regla.data.id) : []),
     [regla.data?.id],
@@ -137,6 +142,13 @@ export function OfficePage() {
           {regla.data.name}
         </h1>
         {definicion ? <p className="muted">{definicion.subtitle}</p> : null}
+
+        {luminosa ? (
+          <Notice>
+            {es.office.brightWeek}{' '}
+            <Link to="/biblioteca/liturgia/horas-de-pascua">{es.office.brightWeekLink}</Link>
+          </Notice>
+        ) : null}
 
         <div className="office-length">
           <Segmented
@@ -379,9 +391,4 @@ function Step({ paso, numero }: { paso: ResolvedStep; numero: number }) {
       {paso.meta ? <SourceNote meta={paso.meta} /> : null}
     </section>
   );
-}
-
-export function OfficeTag({ time }: { time: RuleTime }) {
-  const definicion = OFFICE_BY_TIME.get(time);
-  return <Tag tone="gold">{definicion?.name ?? time}</Tag>;
 }

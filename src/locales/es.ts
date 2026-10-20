@@ -1,8 +1,12 @@
 /**
- * Textos de la interfaz en español.
+ * Textos de la interfaz.
  *
- * Ninguna cadena visible debe escribirse en un componente: todas viven aquí,
- * para que añadir otro idioma sea sólo aportar un archivo equivalente.
+ * ATHOS está en español, interfaz y contenido. Las cadenas de la interfaz se
+ * reúnen aquí para que no se repitan y se puedan revisar juntas; no hay
+ * mecanismo de traducción. Lo hubo —i18next con un selector de siete
+ * idiomas «pendientes de traducir»—, pero las pantallas leían este archivo
+ * directamente, así que una traducción nueva no se habría usado nunca. Se
+ * quitó antes que prometer algo que no funcionaba. Véase CONTRIBUTING.md.
  */
 const es = {
   app: {
@@ -21,6 +25,10 @@ const es = {
     updateHint: 'Se instala en un momento y no se pierde nada de lo tuyo.',
     updating: 'Actualizando ATHOS…',
     updatedTo: 'ATHOS se ha actualizado a la versión {{version}}',
+    staleChunk: 'ATHOS se ha actualizado en otra ventana',
+    staleChunkReloading: 'Recargando para traer la versión nueva…',
+    staleChunkFailed:
+      'Esta ventana se quedó con la versión anterior y falta una parte de ella. Recargar lo arregla; si no, comprueba la conexión.',
     seeNews: 'Ver novedades',
     later: 'Más tarde',
     close: 'Cerrar',
@@ -77,6 +85,7 @@ const es = {
     '/biblioteca/padres': 'a los Padres de la Iglesia',
     '/biblioteca/athos': 'al Monte Athos',
     '/biblioteca/historia': 'a la Historia de la Iglesia',
+    '/biblioteca/iglesias': 'a las Iglesias de hoy',
     '/biblioteca/catecismo': 'al Catecismo',
     '/biblioteca/estudio': 'al Estudio',
     '/biblioteca/glosario': 'al Glosario',
@@ -101,7 +110,20 @@ const es = {
 
   welcome: {
     eyebrow: 'Primera vez en ATHOS',
-    title: 'Lo que hay en cada sitio',
+    title: 'Tres preguntas para empezar',
+    whereTitle: 'Y lo que hay en cada sitio',
+    calendarQ: '¿Qué calendario sigue tu parroquia?',
+    calendarNew: 'Nuevo',
+    calendarOld: 'Juliano',
+    calendarHint:
+      'El nuevo lo siguen Constantinopla, Grecia, Rumanía, Bulgaria o Antioquía; el juliano, Rusia, Serbia, Georgia o Jerusalén, y con él las fiestas fijas caen trece días después. La Pascua es la misma.',
+    traditionQ: '¿Tu tradición es griega o eslava?',
+    traditionGreek: 'Griega',
+    traditionSlavic: 'Eslava',
+    traditionHint:
+      'Por ahora sólo cambia si las fórmulas de los oficios salen también en griego. Las lecturas de cada día siguen el uso eslavo.',
+    measureQ: '¿Cuánto tiempo tienes para los oficios?',
+    measureHint: 'Breve, unos minutos; habitual, lo de cada día; extenso, con todo. Se puede cambiar cada oficio por separado.',
     pray: 'los tres oficios del día, el libro de oración y la oración de Jesús',
     read: 'la Biblia, el Salterio y las lecturas de cada día',
     calendar: 'los santos, las fiestas y el ayuno de cada día',
@@ -167,6 +189,8 @@ const es = {
     greetingAfternoon: 'Buenas tardes',
     greetingEvening: 'Buenas noches',
     verseOfDay: 'Versículo del día',
+    apophthegmOfDay: 'Apotegma del día',
+    apophthegmMore: 'Más dichos de los Padres',
     verseRead: 'Leer el capítulo entero',
     saintOfDay: 'Santo del día',
     feast: 'Fiesta',
@@ -322,6 +346,11 @@ const es = {
     extrasTroparionHint: 'En el oficio habitual de los tres momentos, antes de la despedida. Cambian solos cada día.',
     extrasAkathist: 'El akathistos de hoy',
     extrasAkathistHint: 'Plegado, en el oficio de la noche habitual y extenso: el que toca según el día de la semana o la fiesta.',
+    screen: 'Pantalla',
+    brightWeek: 'Es la Semana Luminosa. Estos siete días, en lugar de las Horas y de las Completas se cantan las Horas de Pascua, y en el uso eslavo también en lugar de las oraciones de la mañana y de la noche.',
+    brightWeekLink: 'Rezar las Horas de Pascua',
+    keepAwake: 'Mantener la pantalla encendida',
+    keepAwakeHint: 'Mientras se reza un oficio, la Liturgia, un akathisto o un canon, la pantalla no se apaga sola.',
     source: 'Fuente:',
     minutes: 'unos {{n}} min',
     makeMine: 'Hacerla mía para cambiarla',
@@ -358,11 +387,33 @@ const es = {
     saveSession: 'Guardar sesión',
     discard: 'Descartar',
     chotki: 'Komboskini',
-    chotkiAlt: 'Komboskini · Chotki',
+    chotkiAlt: 'Komboskini',
     knots: 'nudos',
+    view: 'Cómo contar',
+    viewCounter: 'Contador',
+    ropeSubtitle: 'La cuerda de oración: komboskini en griego, chotki en eslavo. Cada nudo, una oración.',
+    inTotal: '{{count}} en total',
+    lap: 'vuelta',
+    laps: 'vueltas',
+    settings: 'Ajustes de la sesión',
+    sessionSaved: 'Sesión guardada',
+    vibrationHint: 'Un pulso corto en cada oración y otro más largo al llegar al objetivo.',
+    vibrationUnsupported: 'Este dispositivo no admite vibración.',
+    soundHint: 'Un tono muy leve cada diez oraciones.',
+    keepAwakeHint: 'Se activará al comenzar a contar.',
+    darkModeHint: 'Fondo más oscuro alrededor del contador.',
   },
 
+  apophthegms: {
+    title: 'Apotegmas de los Padres del desierto',
+    subtitle: 'Una palabra para cada día',
+    intro:
+      'A quien les pedía «una palabra», los monjes de los desiertos de Egipto, Palestina y Siria, en los siglos IV y V, le contestaban con una frase, o con algo que había pasado. Se recogieron en griego por el nombre de quien las dijo, y desde entonces se leen en todos los monasterios. Aquí están traducidas del original para ATHOS.',
+    daily: 'La portada trae uno cada día, y si quieres te llega por la mañana como aviso.',
+    notify: 'Activar el aviso',
+  },
   bible: {
+    maps: 'Mapas de la Biblia',
     version: 'Versión',
     versionsTitle: 'Qué versiones hay, y por qué no otras',
     versionsHow: 'Dentro de cada capítulo puedes elegir leerlo en español, en griego o en los dos a la vez, versículo a versículo.',
@@ -529,6 +580,26 @@ const es = {
     test: 'Probar una notificación',
     testBody: 'Así se verán los recordatorios. Al tocarlos, se abre la pantalla que toca.',
     testFailed: 'El navegador no ha mostrado la notificación',
+    closedTitle: 'Con ATHOS cerrada, no te fíes de estos avisos',
+    closedIos:
+      'En iPhone y iPad no llega ningún aviso con ATHOS cerrada: Safari no deja que una aplicación web avise sin un servidor, y ATHOS no lo tiene.',
+    closedAndroid:
+      'En Android dependen de Chrome: sólo llegan con ATHOS instalada, cuando el sistema la despierta, y pueden llegar tarde o no llegar.',
+    closedOther:
+      'Con ATHOS cerrada sólo llegan en Chrome y Edge, con ATHOS instalada, y cuando el sistema la despierta: pueden llegar tarde o no llegar.',
+    closedFix: 'Para que avisen siempre, pásalos al calendario del teléfono: ése sí suena aunque ATHOS lleve semanas cerrada.',
+    toCalendar: 'Al calendario del teléfono',
+    toCalendarText:
+      'Se descarga un archivo de calendario (.ics) que el teléfono abre y añade a su calendario. Se genera aquí mismo: no se envía nada a ningún sitio.',
+    exportReminders: 'Los avisos que tienes activados',
+    exportRemindersHint:
+      'Los oficios, a su hora y cada día. El Evangelio, el santo, el apotegma, el versículo, los ayunos y las fiestas, día por día durante seis meses, cada uno con su texto: vuelve a exportarlos cuando se acaben o si cambias la hora.',
+    exportFeasts: 'Fiestas y ayunos del año',
+    exportFeastsHint: 'Las grandes fiestas y los periodos de ayuno de los próximos doce meses, de día entero y sin aviso.',
+    exportNone: 'Activa primero algún aviso de los de arriba.',
+    exported: 'Calendario descargado: ábrelo para añadirlo',
+    calendarHow:
+      'En iPhone, al abrir el archivo se ofrece «Añadir todo». En Android, algunos calendarios lo abren directamente; Google Calendar sólo lo importa desde su web (calendar.google.com → Configuración → Importar).',
   },
 
   ways: {
@@ -608,6 +679,7 @@ const es = {
   },
 
   history: {
+    churchesLink: 'quién preside cada una, su calendario, sus lenguas y sus diócesis en España y América Latina.',
     title: 'Historia de la Iglesia',
     subtitle: 'De Pentecostés a hoy: {{events}} hechos fechados y {{councils}} concilios.',
     periods: 'Épocas',
@@ -753,8 +825,6 @@ const es = {
     data: 'Datos',
     install: 'Instalar ATHOS',
     about: 'Acerca de ATHOS',
-    language: 'Idioma',
-    languageNote: 'Sólo el español está completo. Los demás idiomas están preparados en la arquitectura pero aún sin traducir.',
     storage: 'Almacenamiento',
     storageUsed: '{{used}} de {{quota}}',
     persistent: 'Almacenamiento persistente',
@@ -765,7 +835,18 @@ const es = {
     importData: 'Importar datos',
     resetContent: 'Regenerar el contenido',
     wipeData: 'Borrar todos mis datos',
-    wipeConfirm: 'Se borrarán las reglas de oración, las notas, los marcadores y los favoritos. No se puede deshacer.',
+    wipeConfirm:
+      'Se borrará todo lo tuyo: las reglas de oración y su avance, las notas, los marcadores, los favoritos, ' +
+      'las oraciones propias, el historial, las sesiones de oración, el avance de lectura y las preferencias. ' +
+      'No se puede deshacer.',
+    clearPartialNote: 'O sólo una parte, sin tocar lo demás:',
+    clearHistory: 'Borrar el historial',
+    clearHistoryConfirm: '¿Borrar el historial de lo que has abierto? Lo demás se queda como está.',
+    historyCleared: 'Historial borrado',
+    clearSessions: 'Borrar las sesiones de oración',
+    clearSessionsConfirm:
+      '¿Borrar las sesiones de la oración de Jesús y del komboskini, con sus cuentas y estadísticas? Lo demás se queda como está.',
+    sessionsCleared: 'Sesiones borradas',
     version: 'Versión {{version}}',
     versionShort: 'Versión {{version}}',
     news: 'Novedades',
@@ -787,6 +868,98 @@ const es = {
     minutesAgo: 'hace {{n}} min',
     hoursAgo: 'hace {{n}} h',
     sources: 'Fuentes y licencias',
+  },
+
+  names: {
+    title: 'Nombres para la oración',
+    subtitle: 'Los vivos y los difuntos que encomiendas a Dios, para decirlos en su sitio.',
+    addTitle: 'Añadir un nombre',
+    list: 'Lista',
+    living: 'Por los vivos',
+    departed: 'Por los difuntos',
+    name: 'Nombre',
+    namePlaceholder: 'El de bautismo: Juan, María…',
+    note: 'Nota (opcional)',
+    notePlaceholder: 'Mi padre espiritual, enfermo, aniversario el 3 de mayo…',
+    saint: 'El santo de su nombre (opcional)',
+    saintPlaceholder: 'Busca el santo, o escribe arriba el nombre',
+    saintHint: 'Con él, ATHOS avisa el día de su fiesta si lo activas en Notificaciones.',
+    noSaint: 'Quitar',
+    add: 'Añadir',
+    added: 'Nombre añadido',
+    remove: 'Quitar a {{name}}',
+    noneLiving: 'Todavía no hay nadie en esta lista.',
+    noneDeparted: 'Todavía no hay nadie en esta lista.',
+    yourLiving: 'Tus nombres',
+    yourDeparted: 'Tus difuntos',
+    edit: 'Cambiar la lista',
+    emptyHint: 'Puedes guardar los nombres de los tuyos para que salgan aquí.',
+    where: 'Los nombres salen en su sitio en',
+    livingPrayer: 'la conmemoración de los vivos',
+    departedPrayer: 'la de los difuntos',
+    panihida: 'la panihida',
+    reminderHint: 'El aviso del día del santo se activa en',
+  },
+
+  reader: {
+    share: 'Compartir',
+    copied: 'Copiado, con el enlace: pégalo donde quieras',
+    shareFailed: 'Este navegador no deja compartir ni copiar',
+    readAloud: 'Leer en voz alta',
+    pause: 'Pausar la lectura',
+    resume: 'Seguir leyendo',
+    stop: 'Parar la lectura',
+  },
+
+  churches: {
+    title: 'Las Iglesias ortodoxas hoy',
+    subtitle: '{{recognized}} Iglesias autocéfalas que todas reconocen, y {{disputed}} cuya autocefalia está en disputa.',
+    recognized: 'Las que todas reconocen',
+    disputedTitle: 'Con la autocefalia en disputa',
+    disputes: 'Las disputas abiertas',
+    disputed: 'En disputa',
+    disputeSince: 'Desde {{year}}',
+    disputesOf: 'Disputas:',
+    since: 'desde {{year}}',
+    verified: 'comprobado el {{date}}',
+    see: 'Sede',
+    autocephaly: 'Autocefalia',
+    faithful: 'Fieles',
+    calendar: 'Calendario',
+    languages: 'Lenguas litúrgicas',
+    autonomous: 'Iglesias autónomas',
+    hispanic: 'En España y América Latina',
+    calendarNew: 'Nuevo (juliano revisado)',
+    calendarJulian: 'Juliano',
+    calendarMixed: 'Según la parroquia',
+    outdated: '¿Algún dato ya no es así?',
+    seeHistory: 'Cómo se llegó hasta aquí, en la Historia',
+  },
+
+  backup: {
+    eyebrow: 'Tus datos',
+    title: 'Haz una copia de seguridad',
+    text:
+      'Tus reglas, favoritos y avance sólo están en este dispositivo. Si se borran los datos del navegador, una copia es lo único que los recupera. Es un archivo pequeño: guárdalo donde quieras.',
+    textIos:
+      'Tus reglas, favoritos y avance sólo están en este iPhone. Safari puede borrarlos si ATHOS no se abre en unas semanas, y una copia es lo único que los recupera. Es un archivo pequeño: guárdalo en Archivos o mándatelo.',
+    now: 'Hacer la copia',
+    later: 'Dentro de un mes',
+    more: 'Más opciones',
+    done: 'Copia descargada. Guárdala en un sitio seguro.',
+  },
+
+  about: {
+    contact: 'Contacto y errores',
+    reportError: 'Informar de un error',
+    reportErrorHint: 'abre una incidencia en el repositorio con la versión ya escrita.',
+    openIssues: 'Ver los errores ya avisados',
+    sourceCode: 'El código de ATHOS',
+    email: 'Correo',
+    privacyPolicy: 'Política de privacidad completa',
+    privacyTitle: 'Privacidad',
+    privacyUpdated: 'Actualizada el {{date}}',
+    privacyFixedUrl: 'Esta misma política, con dirección fija y legible sin la aplicación:',
   },
 
   install: {

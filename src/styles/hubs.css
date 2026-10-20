@@ -1434,6 +1434,46 @@ button.cal-cell:hover {
   }
 }
 
+/* ---------------- El versículo y el apotegma, juntos ----------------
+   Uno al lado del otro cuando caben los dos con holgura; si no, uno debajo
+   del otro. Si falta el versículo (sin conexión y sin la Biblia guardada),
+   el apotegma ocupa todo el ancho. */
+.home-sayings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  gap: var(--sp-4);
+  margin: var(--sp-5) 0 var(--sp-2);
+  /* La letra se ajusta a si las tarjetas caben juntas, no al ancho de la
+     ventana: con la barra lateral, una ventana ancha deja poco sitio. */
+  container-type: inline-size;
+}
+
+.home-sayings > .verse-day {
+  margin: 0;
+  /* Lado a lado, la más corta no se queda pegada arriba con un hueco debajo. */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* El apotegma no se envuelve en comillas: casi siempre lleva dentro su propio
+   diálogo, con las suyas, y quién lo dijo va debajo. */
+.verse-day--apotegma .verse-day__text::before,
+.verse-day--apotegma .verse-day__text::after {
+  content: none;
+}
+
+.verse-day--largo .verse-day__text {
+  text-align: left;
+}
+
+/* Dos columnas de 20rem y el hueco entre ellas. */
+@container (min-width: 41rem) {
+  .home-sayings .verse-day--hero .verse-day__text {
+    font-size: var(--text-lg);
+  }
+}
+
 /* ---------------- Las oraciones para cada momento, en Orar ---------------- */
 .moments-menu {
   display: grid;

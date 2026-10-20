@@ -20,6 +20,7 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useLiturgicalDay, useToday } from '@/hooks/useLiturgicalDay';
 import { useAsync } from '@/hooks/useAsync';
+import { useSaintLives } from '@/hooks/useSaintLives';
 import { listHistory } from '@/db/user';
 import { SEASON_LABELS } from '@/lib/calendar/liturgical';
 import { isoToCivil } from '@/lib/calendar/jdn';
@@ -33,8 +34,10 @@ import { Tile, TileGrid } from '@/components/hub';
 import { OfficeInvitation } from '@/features/office/OfficeInvitation';
 import { useOfficeProgress } from '@/features/office/useOfficeProgress';
 import { WelcomeCard } from './WelcomeCard';
+import { BackupReminder } from './BackupReminder';
 import { PericopeText } from '@/components/PericopeText';
 import { VerseOfDay } from '@/components/VerseOfDay';
+import { ApophthegmOfDay } from '@/components/ApophthegmOfDay';
 import {
   IconBook,
   IconCandle,
@@ -67,6 +70,7 @@ export function HomePage() {
 
   const lead = day.feasts[0];
   const saint = day.saints[0];
+  const vidas = useSaintLives(saint ? [saint.id] : []);
   const gospel = day.readings?.readings.find((r) => r.kind === 'evangelio');
   const epistle = day.readings?.readings.find((r) => r.kind === 'epistola');
   const tono = fastTone(day);
@@ -116,12 +120,17 @@ export function HomePage() {
         <OfficeInvitation />
       </div>
 
-      {/* La frase que uno se lleva puesta el resto del día. Iba al pie de la
-          segunda columna, debajo de todo, y casi nadie llegaba a verla: ahora
-          va justo debajo del día, a todo lo ancho. */}
-      <VerseOfDay prominent />
+      {/* Lo que uno se lleva puesto el resto del día: el versículo y, a su
+          lado, un dicho de los Padres del desierto. Iban al pie de la segunda
+          columna y casi nadie llegaba a verlos: ahora van justo debajo del
+          día. En el teléfono, uno debajo del otro. */}
+      <div className="home-sayings">
+        <VerseOfDay prominent />
+        <ApophthegmOfDay prominent />
+      </div>
 
       <WelcomeCard />
+      <BackupReminder />
 
       <div className="home-grid">
         {/* ---------- La Iglesia, hoy ---------- */}
@@ -135,7 +144,7 @@ export function HomePage() {
               >
                 <span className="eyebrow">{es.home.saintOfDay}</span>
                 <span className="day-card__title">{saint ? saint.name : es.home.noSaint}</span>
-                {saint ? <span className="day-card__text">{saint.biography}</span> : null}
+                {saint && vidas[saint.id] ? <span className="day-card__text">{vidas[saint.id]}</span> : null}
                 {day.saints.length > 1 ? (
                   <span className="muted text-sm">
                     {day.saints.length === 2

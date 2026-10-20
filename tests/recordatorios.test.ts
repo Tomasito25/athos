@@ -4,13 +4,21 @@
  * Dicen lo que toca ese día, sólo suenan cuando hay algo que decir, respetan
  * la hora elegida y se dejan preparados en la cola para el Service Worker.
  */
-import { beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { db, getSetting } from '@/db/db';
 import { seedContent, seedUserDefaults } from '@/db/seed';
 import { completeRule, ruleForTime } from '@/db/user';
 import { toggleDay } from '@/db/plans';
 import { daysOf } from '@/content/plans';
-import { QUEUE_KEY, REMINDERS, buildQueue, refreshReminders, reminderContent, timeFor } from '@/lib/reminders';
+import { QUEUE_KEY, REMINDERS, avisarVencidos, buildQueue, refreshReminders, reminderContent, timeFor } from '@/lib/reminders';
+import { showNotification } from '@/lib/notifications';
+import { verseReferenceFor } from '@/content/verse-of-day';
+
+// Los avisos no se enseñan de verdad: se anota cuáles se habrían enseñado.
+vi.mock('@/lib/notifications', async (original) => ({
+  ...(await original<Record<string, unknown>>()),
+  showNotification: vi.fn(async () => true),
+}));
 import { useSettings } from '@/stores/settings';
 import { toIsoDate } from '@/lib/calendar/jdn';
 
@@ -70,6 +78,71 @@ describe('lo que dice cada uno', () => {
     const c = await reminderContent('lectura', toIsoDate(new Date()), ajustes);
     expect(c?.body).toMatch(/^Día 2: /);
     expect(c?.path).toBe('/leer/planes/evangelios/dia/2');
+  });
+});
+
+describe('el apotegma y el versículo, por separado', () => {
+  const hora = (id: string) => REMINDERS.find((r) => r.id === id)!.defaultTime;
+
+  it('el apotegma llega por la mañana y el versículo por la tarde', () => {
+    expect(hora('apotegma') < '12:00').toBe(true);
+    expect(hora('versiculo') >= '14:00' && hora('versiculo') < '21:00').toBe(true);
+  });
+
+  it('el apotegma dice el dicho y quién lo dijo, y lleva a él', async () => {
+    const c = await reminderContent('apotegma', '2026-10-20', ajustes);
+    expect(c?.title).toMatch(/^Apotegma del día · (Abba|Amma) /);
+    expect(c?.path).toMatch(/^\/biblioteca\/apotegmas#[a-z0-9-]+$/);
+    expect(c!.body.length).toBeLessThanOrEqual(301);
+    const otro = await reminderContent('apotegma', '2026-10-21', ajustes);
+    expect(otro?.body).not.toBe(c?.body);
+  });
+
+  it('el versículo lleva a su capítulo, aunque el libro no esté guardado', async () => {
+    const c = await reminderContent('versiculo', '2026-10-20', ajustes);
+    expect(c?.title).toMatch(/^Versículo del día/);
+    expect(c?.body.length).toBeGreaterThan(5);
+    expect(c?.path).toMatch(/^\/leer\/biblia\//);
+  });
+
+  it('el versículo lleva su texto cuando el libro está guardado', async () => {
+    // El día del año en que toca el salmo 1, que es el que sirven las pruebas.
+    let dia = new Date(2026, 0, 1);
+    while (verseReferenceFor(dia) !== 'Salmos 1, 1') dia = new Date(dia.getFullYear(), dia.getMonth(), dia.getDate() + 1);
+    const c = await reminderContent('versiculo', toIsoDate(dia), ajustes);
+    expect(c?.title).toBe('Versículo del día · Salmos 1, 1');
+    expect(c?.body).toMatch(/^BIENAVENTURADO el varón/);
+    expect(c?.path).toBe('/leer/biblia/PSA/1#v1');
+  });
+
+  it('dos avisos a la misma hora se enseñan los dos', async () => {
+    const enseñar = vi.mocked(showNotification);
+    enseñar.mockClear();
+    const a = (id: string) => ({ id, date: '2026-10-20', at: new Date(2026, 9, 20, 8, 0).toISOString(), title: id, body: id, url: '/' });
+    const cola = [a('apotegma'), a('santo')];
+    await avisarVencidos(cola, new Date(2026, 9, 20, 8, 0, 1).getTime());
+    expect(enseñar.mock.calls.map((c) => c[2])).toEqual(['apotegma', 'santo']);
+    // Y no se repiten.
+    await avisarVencidos(cola, new Date(2026, 9, 20, 8, 5).getTime());
+    expect(enseñar).toHaveBeenCalledTimes(2);
+  });
+
+  it('lo vencido hace más de seis horas ya no se enseña', async () => {
+    const enseñar = vi.mocked(showNotification);
+    enseñar.mockClear();
+    const viejo = { id: 'apotegma', date: '2026-10-19', at: new Date(2026, 9, 19, 7, 45).toISOString(), title: '', body: '', url: '/' };
+    await avisarVencidos([viejo], new Date(2026, 9, 19, 14, 0).getTime());
+    expect(enseñar).not.toHaveBeenCalled();
+  });
+
+  it('son dos avisos distintos, cada uno a su hora', async () => {
+    useSettings.getState().set('notifications', { apotegma: true, versiculo: true });
+    const manana = new Date(2026, 9, 20, 0, 1);
+    const cola = await buildQueue(manana);
+    const delDia = cola.filter((q) => q.date === '2026-10-20');
+    expect(delDia.map((q) => q.id)).toEqual(['apotegma', 'versiculo']);
+    expect(new Date(delDia[0]!.at).getHours()).toBeLessThan(12);
+    expect(new Date(delDia[1]!.at).getHours()).toBeGreaterThanOrEqual(14);
   });
 });
 

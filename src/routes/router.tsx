@@ -34,12 +34,15 @@ export const routes: RouteObject[] = [
       { path: 'orar/oraciones/orden/:orderId', lazy: page(() => import('@/features/prayers/PrayerOrderPage'), 'PrayerOrderPage') },
       { path: 'orar/oraciones/:prayerId', lazy: page(() => import('@/features/prayers/PrayerPage'), 'PrayerPage') },
       { path: 'orar/oficio/:time', lazy: page(() => import('@/features/office/OfficePage'), 'OfficePage') },
+      { path: 'orar/nombres', lazy: page(() => import('@/features/prayers/NamesPage'), 'NamesPage') },
       { path: 'orar/mis-oraciones', lazy: page(() => import('@/features/office/MyPrayersPage'), 'MyPrayersPage') },
       { path: 'orar/regla', lazy: page(() => import('@/features/rule/RulePage'), 'RulePage') },
       { path: 'orar/regla/editar/:ruleId', lazy: page(() => import('@/features/rule/RuleEditorPage'), 'RuleEditorPage') },
       { path: 'orar/oracion-de-jesus', lazy: page(() => import('@/features/jesus-prayer/JesusPrayerPage'), 'JesusPrayerPage') },
-      { path: 'orar/komboskini', lazy: page(() => import('@/features/jesus-prayer/ChotkiPage'), 'ChotkiPage') },
-      { path: 'orar/chotki', lazy: page(() => import('@/features/jesus-prayer/ChotkiPage'), 'ChotkiPage') },
+      // El komboskini es la otra vista de la misma pantalla; las direcciones
+      // se conservan porque están en reglas, atajos y marcadores.
+      { path: 'orar/komboskini', lazy: page(() => import('@/features/jesus-prayer/JesusPrayerPage'), 'JesusPrayerPage') },
+      { path: 'orar/chotki', lazy: page(() => import('@/features/jesus-prayer/JesusPrayerPage'), 'JesusPrayerPage') },
 
       /* ---------------- Leer ---------------- */
       { path: 'leer', lazy: page(() => import('@/features/read/ReadHub'), 'ReadHub') },
@@ -74,10 +77,13 @@ export const routes: RouteObject[] = [
       { path: 'biblioteca/padres', lazy: page(() => import('@/features/fathers/FathersPage'), 'FathersPage') },
       { path: 'biblioteca/padres/:fatherId', lazy: page(() => import('@/features/fathers/FatherPage'), 'FatherPage') },
       { path: 'biblioteca/padres/:fatherId/:workId', lazy: page(() => import('@/features/fathers/WorkPage'), 'WorkPage') },
+      { path: 'biblioteca/apotegmas', lazy: page(() => import('@/features/fathers/ApophthegmsPage'), 'ApophthegmsPage') },
       { path: 'biblioteca/athos', lazy: page(() => import('@/features/athos/AthosPage'), 'AthosPage') },
       { path: 'biblioteca/athos/monasterio/:monasteryId', lazy: page(() => import('@/features/athos/MonasteryPage'), 'MonasteryPage') },
       { path: 'biblioteca/athos/:articleId', lazy: page(() => import('@/features/athos/AthosArticlePage'), 'AthosArticlePage') },
       { path: 'biblioteca/historia', lazy: page(() => import('@/features/history/HistoryPage'), 'HistoryPage') },
+      { path: 'biblioteca/mapas', lazy: page(() => import('@/features/library/BibleMapsPage'), 'BibleMapsPage') },
+      { path: 'biblioteca/iglesias', lazy: page(() => import('@/features/history/ChurchesTodayPage'), 'ChurchesTodayPage') },
       { path: 'biblioteca/historia/:periodId', lazy: page(() => import('@/features/history/PeriodPage'), 'HistoryPeriodPage') },
       { path: 'biblioteca/catecismo', lazy: page(() => import('@/features/catechism/CatechismPage'), 'CatechismPage') },
       { path: 'biblioteca/catecismo/:partId', lazy: page(() => import('@/features/catechism/PartPage'), 'CatechismPartPage') },
@@ -101,6 +107,7 @@ export const routes: RouteObject[] = [
       { path: 'configuracion/fuentes', lazy: page(() => import('@/features/settings/SourcesPage'), 'SourcesPage') },
       { path: 'configuracion/acerca-de', lazy: page(() => import('@/features/settings/AboutPage'), 'AboutPage') },
       { path: 'configuracion/novedades', lazy: page(() => import('@/features/settings/NewsPage'), 'NewsPage') },
+      { path: 'configuracion/privacidad', lazy: page(() => import('@/features/settings/PrivacyPage'), 'PrivacyPage') },
 
       { path: '*', lazy: page(() => import('@/features/error/NotFoundPage'), 'NotFoundPage') },
     ],

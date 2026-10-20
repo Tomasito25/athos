@@ -40,7 +40,7 @@ export function SaintPage() {
   // Muchos santos son además Padres de la Iglesia, y esa otra ficha es la que
   // trae lo que enseñaron. Sin este enlace hay que salir a buscarla.
   const comoPadre = otraFicha(item.name, 'santo');
-  const general = generalTroparionFor(item.category, item.id);
+  const general = generalTroparionFor(item.category, item.id, item.name);
   const kontakion = SAINT_KONTAKIA[item.id];
 
   return (

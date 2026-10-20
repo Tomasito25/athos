@@ -163,6 +163,9 @@ export function ChurchTimeline() {
         <text x={TRONCO_X} y={fondo + 20} fontSize="12" fill="var(--ink)" textAnchor="middle">
           Iglesia ortodoxa
         </text>
+        <text x={TRONCO_X} y={fondo + 34} fontSize="11" fill="var(--ink-faint)" textAnchor="middle">
+          hoy, {TIMELINE_END}
+        </text>
       </svg>
 
       <figcaption className="cronologia__pie">

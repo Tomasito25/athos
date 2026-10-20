@@ -1,26 +1,43 @@
+import { useState } from 'react';
+import { contentUrl } from '@/lib/content-url';
+
 /**
  * Placa de icono.
  *
  * Mientras no haya una reproducción con licencia comprobada, se muestra una
  * tabla ornamental con el nombre: honesta y digna, en lugar de una imagen
  * rota o de una imagen ajena usada sin derecho.
+ *
+ * `fallback` es la miniatura. La imagen grande no va en el precaché —se
+ * guarda al abrirla por primera vez—, así que sin conexión podía salir rota
+ * aunque la miniatura sí estuviera guardada. Si la grande falla, se pone la
+ * miniatura; si falla también, la placa.
  */
 export function IconPlate({
   name,
   image,
+  fallback,
   eager = false,
 }: {
   name: string;
   image?: string;
+  fallback?: string;
   eager?: boolean;
 }) {
-  if (image) {
+  // Cuántas imágenes han fallado: 0, la grande; 1, la miniatura; 2, ninguna.
+  const [fallos, setFallos] = useState(0);
+  const fuentes = [image, fallback].filter((f): f is string => Boolean(f));
+  const actual = fuentes[fallos];
+
+  if (actual) {
     return (
       <img
-        src={`${import.meta.env.BASE_URL}${image}`}
+        key={actual}
+        src={contentUrl(actual)}
         alt={name}
         loading={eager ? 'eager' : 'lazy'}
         decoding="async"
+        onError={() => setFallos((n) => n + 1)}
         style={{
           width: '100%',
           borderRadius: 'var(--radius-sm)',
@@ -35,7 +52,9 @@ export function IconPlate({
   return (
     <div
       role="img"
-      aria-label={`${name} — imagen pendiente de incorporar`}
+      aria-label={
+        fuentes.length ? `${name} — imagen no disponible sin conexión` : `${name} — imagen pendiente de incorporar`
+      }
       style={{
         aspectRatio: '3 / 4',
         display: 'grid',

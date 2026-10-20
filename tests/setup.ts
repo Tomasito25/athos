@@ -4,7 +4,7 @@ import { cleanup } from '@testing-library/react';
 import { webcrypto } from 'node:crypto';
 import { afterEach, vi } from 'vitest';
 
-// jsdom no expone Web Crypto; el diario cifrado la necesita.
+// jsdom no expone Web Crypto; los identificadores nuevos usan randomUUID.
 if (!globalThis.crypto?.subtle) {
   Object.defineProperty(globalThis, 'crypto', { value: webcrypto, configurable: true });
 }

@@ -12,6 +12,7 @@ import { ReaderToolbar } from '@/components/Reader';
 import { Headpiece, Tailpiece } from '@/components/Ornament';
 import { useVisitLog } from '@/hooks/useVisitLog';
 import { useHashScroll } from '@/hooks/useHashScroll';
+import { useKeepAwake } from '@/hooks/useKeepAwake';
 import { PRAYER_ORDERS, orderById } from '@/content/prayer-orders';
 import { PRAYER_CATEGORIES } from '@/content/prayers';
 import es from '@/locales/es';
@@ -24,6 +25,7 @@ export function PrayerOrderPage() {
   useVisitLog(orden ? { path, title: orden.title, kind: es.prayers.title } : null);
   // El índice y las fichas enlazan con una parte concreta: hay que bajar a ella.
   useHashScroll([orderId]);
+  useKeepAwake(Boolean(orden));
 
   if (!orden) {
     return (

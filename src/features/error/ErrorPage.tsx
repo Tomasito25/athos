@@ -1,7 +1,9 @@
+import { useEffect, useState } from 'react';
 import { isRouteErrorResponse, useLocation, useNavigate, useRouteError } from 'react-router-dom';
 import { Button, ButtonLink, Empty } from '@/components/ui';
 import { OrthodoxCross } from '@/components/icons';
 import { hasAppHistory, parentPath } from '@/lib/up-navigation';
+import { canReload, isChunkLoadError, reloadNow } from '@/lib/chunk-reload';
 import es from '@/locales/es';
 
 /** Pantalla de error: sin tecnicismos, con una salida clara. */
@@ -9,6 +11,14 @@ export function ErrorPage() {
   const error = useRouteError();
   const navigate = useNavigate();
   const location = useLocation();
+  const faltaUnTrozo = isChunkLoadError(error);
+  // Si falta un trozo de la aplicación es casi siempre porque otra ventana
+  // aplicó una versión nueva: se recarga sola, una vez. Si ya se recargó hace
+  // un momento y vuelve a fallar, se enseña el error para no entrar en bucle.
+  const [recargando] = useState(() => faltaUnTrozo && canReload());
+  useEffect(() => {
+    if (recargando) reloadNow();
+  }, [recargando]);
 
   // Aquí se llega muchas veces porque el trozo de código de una pantalla no
   // se pudo descargar: la aplicación se actualizó y el nombre del archivo ya
@@ -19,11 +29,21 @@ export function ErrorPage() {
     else navigate(parentPath(location.pathname), { replace: true });
   };
 
-  const message = isRouteErrorResponse(error)
-    ? `${error.status} — ${error.statusText}`
-    : error instanceof Error
-      ? error.message
-      : 'Error desconocido';
+  const message = faltaUnTrozo
+    ? es.app.staleChunkFailed
+    : isRouteErrorResponse(error)
+      ? `${error.status} — ${error.statusText}`
+      : error instanceof Error
+        ? error.message
+        : 'Error desconocido';
+
+  if (recargando) {
+    return (
+      <div className="page page--reading" style={{ paddingTop: 'var(--sp-8)' }} role="status">
+        <Empty title={es.app.staleChunk} text={es.app.staleChunkReloading} />
+      </div>
+    );
+  }
 
   return (
     <div className="page page--reading" style={{ paddingTop: 'var(--sp-8)' }}>

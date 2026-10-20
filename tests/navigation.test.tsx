@@ -12,14 +12,12 @@ import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import { routes } from '@/routes/router';
 import { db } from '@/db/db';
 import { seedContent, seedUserDefaults } from '@/db/seed';
-import { initI18n } from '@/lib/i18n';
 
 beforeAll(async () => {
   await db.delete();
   await db.open();
   await seedContent();
   await seedUserDefaults();
-  await initI18n('es');
 });
 
 function renderAt(path: string) {
@@ -40,7 +38,16 @@ describe('secciones principales', () => {
   it('Orar reúne oraciones, regla y contadores', async () => {
     renderAt('/orar');
     await findHeading(/Regla de oración/i);
-    expect(screen.getAllByText(/Chotki/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Oración de Jesús/i).length).toBeGreaterThan(0);
+  });
+
+  it('la oración de Jesús y el komboskini son una pantalla con dos vistas', async () => {
+    // Eran dos pantallas casi iguales. La dirección del komboskini sigue
+    // valiendo —está en reglas, atajos y marcadores— y abre la vista de la cuerda.
+    renderAt('/orar/komboskini');
+    await findHeading(/Oración de Jesús/i);
+    expect(screen.getByRole('button', { name: 'Komboskini', pressed: true })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Contador', pressed: false })).toBeInTheDocument();
   });
 
   it('las oraciones se abren por el menú de momentos', async () => {

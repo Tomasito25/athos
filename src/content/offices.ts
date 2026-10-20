@@ -22,6 +22,8 @@ import { PRESANTIFICADOS } from './presantificados';
 import { COMPLETAS } from './completas';
 import { MOLEBEN } from './moleben';
 import { MAITINES_EN_CASA } from './maitines-casa';
+import { HORAS_DE_PASCUA } from './horas-pascua';
+import { TIPICA } from './tipica';
 
 const meta: SourceMeta = {
   source: 'Ieratikón y Horologion bizantinos; textos de uso tradicional',
@@ -165,6 +167,7 @@ const seeds: OfficeSeed[] = [
         rub('El día antiguo se contaba desde el amanecer y se marcaba de tres en tres horas. La Iglesia rezó en esas cuatro señales, y a cada una le quedó la memoria de un momento de la Pasión o de Pentecostés.'),
         rub('Las cuatro tienen la misma forma: tres salmos fijos, el tropario propio de la hora con su theotokion, el Trisagio, cuarenta veces «Señor, ten piedad», la oración de toda hora y una oración final distinta en cada una.'),
         t('Cada una está entera en su propia ficha. Aquí van las cuatro de un vistazo, para saber cuál toca.'),
+        rub('En la Semana Luminosa las cuatro se sustituyen por las Horas de Pascua. Y los días en que no hay Liturgia, después de la Sexta se rezan las Típicas. Las dos tienen su ficha.'),
       ]),
       section('prima', 'Hora Primera', [
         rub(HORAS_RESUMEN.find((x) => x.id === 'hora-primera')!.cuando),
@@ -187,6 +190,22 @@ const seeds: OfficeSeed[] = [
         rub(`Salmos ${HORAS_RESUMEN.find((x) => x.id === 'hora-novena')!.salmos.join(', ')}. El oficio entero está en Biblioteca → Liturgia → Hora Novena.`),
       ]),
     ],
+  },
+  {
+    id: 'horas-de-pascua',
+    title: 'Las Horas de Pascua',
+    subtitle: 'En toda la Semana Luminosa, en lugar de las Horas y las Completas',
+    kind: 'horas',
+    status: 'complete',
+    sections: HORAS_DE_PASCUA,
+  },
+  {
+    id: 'tipica',
+    title: 'Las Típicas',
+    subtitle: 'Typiká, obédnitsa — lo que se reza cuando no hay Liturgia',
+    kind: 'horas',
+    status: 'complete',
+    sections: TIPICA,
   },
   {
     id: 'moleben',

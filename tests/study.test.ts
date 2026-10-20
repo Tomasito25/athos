@@ -1,7 +1,7 @@
 /** Itinerarios de estudio y catálogo de obras. */
 import { describe, expect, it } from 'vitest';
 import { STUDY_COURSES, STUDY_WORKS, WORK_KINDS } from '@/content/study';
-import { SAINTS } from '@/content/saints';
+import { SAINTS } from '@/content/santoral';
 import { routes } from '@/routes/router';
 import type { RouteObject } from 'react-router-dom';
 

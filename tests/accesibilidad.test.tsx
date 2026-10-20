@@ -12,7 +12,6 @@ import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 import { routes } from '@/routes/router';
 import { db } from '@/db/db';
 import { seedContent, seedUserDefaults } from '@/db/seed';
-import { initI18n } from '@/lib/i18n';
 import es from '@/locales/es';
 
 beforeAll(async () => {
@@ -20,7 +19,6 @@ beforeAll(async () => {
   await db.open();
   await seedContent();
   await seedUserDefaults();
-  await initI18n('es');
 });
 
 // `document.title` es global y sobrevive a cada prueba: si no se limpia, una
@@ -39,6 +37,14 @@ describe('el cambio de página se nota', () => {
     await waitFor(() => expect(document.title).toBe(`${es.saints.title} · ${es.app.name}`), {
       timeout: 8000,
     });
+  });
+
+  it('la pestaña de un capítulo dice de qué libro es', async () => {
+    // Decía «Capítulo 3 · ATHOS»: el libro va encima del encabezado, en otra
+    // línea, y la pestaña no lo recogía. El fetch de pruebas responde con un
+    // libro mínimo, que basta para pintar el capítulo.
+    montar('/leer/biblia/PSA/1');
+    await waitFor(() => expect(document.title).toBe(`Salmos 1 · ${es.app.name}`), { timeout: 8000 });
   });
 
   it('no repite el nombre de la aplicación cuando el encabezado ya lo lleva', async () => {

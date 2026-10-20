@@ -4,7 +4,7 @@ import { useAsync } from '@/hooks/useAsync';
 import { bibleIndexStatus, indexWholeBible } from '@/db/bible';
 import { AT_ORDER, BIBLE_BOOKS, BIBLE_VERSIONS_NOTE, BLM, DEUTEROCANON_NOTE, GRC_NT, LXX, NT_ORDER, RV1909, SECTION_LABELS, TESTAMENT_LABELS } from '@/content/bible';
 import { Button, ListRow, Notice, PageHead, Progress, Section, StatusTag, Tag } from '@/components/ui';
-import { parsePassage } from '@/lib/pericope';
+import { citationFor } from '@/lib/citation';
 import { normalize } from '@/lib/text';
 import { useUi } from '@/stores/ui';
 import type { BibleSection, Testament } from '@/types';
@@ -34,19 +34,7 @@ export function BiblePage() {
    * para llegar. El análisis es el mismo que usa el leccionario, así que
    * entiende las abreviaturas y las dos notaciones.
    */
-  const cita = useMemo(() => {
-    if (query.trim().length < 3) return null;
-    const partes = parsePassage(query);
-    const primera = partes?.[0];
-    const capitulo = primera?.ranges[0]?.chapter;
-    if (!primera || !capitulo) return null;
-    const libro = BIBLE_BOOKS.find((b) => b.id === primera.bookId);
-    if (!libro || capitulo > libro.chapters) return null;
-    return {
-      label: `${libro.name} ${capitulo}`,
-      path: `/leer/biblia/${libro.id}/${capitulo}`,
-    };
-  }, [query]);
+  const cita = useMemo(() => citationFor(query), [query]);
 
   const runIndex = async () => {
     setIndexing({ done: 0, total: BIBLE_BOOKS.length });
@@ -134,6 +122,9 @@ export function BiblePage() {
               {TESTAMENT_LABELS[testament]}
             </a>
           ))}
+          <Link className="shortcut" to="/biblioteca/mapas">
+            {es.bible.maps}
+          </Link>
         </nav>
         {groups.map(([testament, sections]) => (
           <div key={testament}>

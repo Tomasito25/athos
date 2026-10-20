@@ -27,6 +27,7 @@ export function useCounter({ mode, formulaId, initialTarget = null }: CounterOpt
   const [elapsed, setElapsed] = useState(0);
   const startedAt = useRef<number | null>(null);
   const [wakeLockActive, setWakeLockActive] = useState(false);
+  const dueno = useRef(Symbol('contador'));
 
   const audioContext = useRef<AudioContext | null>(null);
 
@@ -41,13 +42,14 @@ export function useCounter({ mode, formulaId, initialTarget = null }: CounterOpt
 
   /* ---- Pantalla encendida ---- */
   useEffect(() => {
+    const yo = dueno.current;
     if (running && jesusPrayerKeepAwake) {
-      void requestWakeLock().then(setWakeLockActive);
+      void requestWakeLock(yo).then(setWakeLockActive);
     } else {
-      void releaseWakeLock().then(() => setWakeLockActive(false));
+      void releaseWakeLock(yo).then(() => setWakeLockActive(false));
     }
     return () => {
-      void releaseWakeLock();
+      void releaseWakeLock(yo);
     };
   }, [running, jesusPrayerKeepAwake]);
 

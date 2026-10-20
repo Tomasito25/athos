@@ -14,6 +14,7 @@ import {
   Tag, NotFound } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { useVisitLog } from '@/hooks/useVisitLog';
+import { useKeepAwake } from '@/hooks/useKeepAwake';
 import type { Akathist, Canon, FavoriteKind } from '@/types';
 import es from '@/locales/es';
 
@@ -67,6 +68,7 @@ export function HymnDetail({
   const path = `${basePath}/${id}`;
 
   useVisitLog(hymn.data ? { path, title: hymn.data.title, kind: eyebrow } : null);
+  useKeepAwake(Boolean(hymn.data));
 
   if (hymn.loading) return <Loading />;
   if (!hymn.data) {

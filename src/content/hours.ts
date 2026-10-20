@@ -12,17 +12,8 @@
  * cambiar, quitar y añadir pasos: esto es un punto de partida, no una regla
  * impuesta.
  */
-import type { RuleItem, RuleTime, SourceMeta, TextBlock } from '@/types';
+import type { RuleItem, RuleTime, TextBlock } from '@/types';
 import { GREEK_FORMULAS as G } from './greek';
-
-const meta: SourceMeta = {
-  source: 'Horologion bizantino: oraciones iniciales, Hora Sexta y Pequeñas Completas',
-  tradition: 'Rito bizantino',
-  language: 'es',
-  license: 'traditional',
-  copyright: 'Textos litúrgicos tradicionales, de dominio público en su original griego.',
-  dateAdded: '2026-01-01',
-};
 
 /* ---------------- Utilidades de bloque ---------------- */
 
@@ -287,8 +278,6 @@ export function stepsToItems(ruleId: string, steps: OfficeStepSeed[]): RuleItem[
     sections: step.sections,
   }));
 }
-
-export const DAILY_OFFICE_META = meta;
 
 /** Oficio que corresponde a una hora del día. */
 export function officeForHour(hour: number): DailyOfficeSeed {

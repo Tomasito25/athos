@@ -19,7 +19,7 @@ import {
   RESURRECTION_TROPARIA,
 } from '@/content/troparia-domingo';
 import { MOVABLE_FEASTS } from '@/content/feasts';
-import { SAINTS } from '@/content/saints';
+import { SAINTS } from '@/content/santoral';
 
 const PASCUA = paschaIso(2026);
 const dia = (offset: number) => computeLiturgicalDay(addDaysIso(PASCUA, offset), 'nuevo');

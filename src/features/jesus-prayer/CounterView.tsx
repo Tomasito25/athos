@@ -1,4 +1,7 @@
-/** Superficie de recuento, compartida por la oración de Jesús y el chotki. */
+/**
+ * Las dos superficies de recuento de la oración de Jesús: el aro que se llena
+ * hacia un objetivo y la cuerda del komboskini, con sus nudos y sus vueltas.
+ */
 import type { ReactNode } from 'react';
 import { formatDuration } from '@/lib/format';
 import es from '@/locales/es';
@@ -98,5 +101,105 @@ export function CounterView({
 
       {children}
     </button>
+  );
+}
+
+/** Dibuja la cuerda con sus nudos y una cruz en el cierre. */
+function Rope({ knots, filled }: { knots: number; filled: number }) {
+  const size = 250;
+  const center = size / 2;
+  const radius = 96;
+  // Con muchos nudos la cuerda se satura: se muestra una vuelta representativa.
+  const shown = Math.min(knots, 50);
+  const step = (2 * Math.PI) / shown;
+
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden="true">
+      <circle cx={center} cy={center} r={radius} fill="none" stroke="var(--line)" strokeWidth={1.5} />
+      {Array.from({ length: shown }, (_, index) => {
+        const angle = -Math.PI / 2 + index * step;
+        const x = center + radius * Math.cos(angle);
+        const y = center + radius * Math.sin(angle);
+        const done = (filled % knots || (filled > 0 ? knots : 0)) > index * (knots / shown);
+        return (
+          <circle
+            key={index}
+            cx={x}
+            cy={y}
+            r={done ? 4.6 : 3}
+            fill={done ? 'var(--gold)' : 'var(--line-strong)'}
+            style={{ transition: 'all 180ms var(--ease)' }}
+          />
+        );
+      })}
+      <g stroke="var(--gold)" strokeWidth={2} strokeLinecap="round" fill="none" opacity={0.85}>
+        <path d={`M${center} ${center + radius - 16}v30`} />
+        <path d={`M${center - 8} ${center + radius - 8}h16`} />
+        <path d={`M${center - 12} ${center + radius}h24`} />
+      </g>
+    </svg>
+  );
+}
+
+/** La cuerda: los nudos se van encendiendo conforme se avanza, como en la mano. */
+export function RopeView({
+  count,
+  knots,
+  laps,
+  elapsed,
+  onCount,
+  dark,
+}: {
+  count: number;
+  knots: number;
+  laps: number;
+  elapsed: number;
+  onCount: () => void;
+  dark?: boolean;
+}) {
+  return (
+    <div
+      style={{
+        display: 'grid',
+        placeItems: 'center',
+        gap: 'var(--sp-4)',
+        padding: 'var(--sp-5)',
+        background: dark ? 'var(--bg-deep)' : 'var(--surface)',
+        border: '1px solid var(--line)',
+        borderRadius: 'var(--radius-lg)',
+      }}
+    >
+      <button
+        type="button"
+        onClick={onCount}
+        aria-label={`${es.jesusPrayer.tapAnywhere}. ${es.jesusPrayer.count}: ${count}`}
+        style={{
+          position: 'relative',
+          display: 'grid',
+          placeItems: 'center',
+          WebkitTapHighlightColor: 'transparent',
+          touchAction: 'manipulation',
+        }}
+      >
+        <Rope knots={knots} filled={count} />
+        <span
+          className="display"
+          style={{
+            position: 'absolute',
+            fontSize: '2.8rem',
+            fontVariantNumeric: 'tabular-nums',
+            color: 'var(--ink-strong)',
+          }}
+        >
+          {count % knots || (count ? knots : 0)}
+        </span>
+      </button>
+
+      <p className="muted text-sm">
+        {es.jesusPrayer.inTotal.replace('{{count}}', String(count))}
+        {laps > 0 ? ` · ${laps} ${laps === 1 ? es.jesusPrayer.lap : es.jesusPrayer.laps}` : ''}
+        {elapsed ? ` · ${formatDuration(elapsed)}` : ''}
+      </p>
+    </div>
   );
 }

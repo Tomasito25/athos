@@ -102,14 +102,38 @@ const precache = await ev(`(async()=>{const ks=await caches.keys(); let n=0;
   return {cachés:ks.length, entradas:n};})()`);
 ok('precaché poblado', precache.entradas>100, JSON.stringify(precache));
 
+// El corpus que no va en el precaché se descarga después de arrancar
+// (src/lib/corpus.ts). Se espera a que esté entero antes de cortar la red.
+const corpus = await ev(`(async()=>{
+  const lista = await (await fetch(${JSON.stringify(BASE)}+'/corpus.json')).json();
+  for (let i = 0; i < 60; i++) {
+    const c = await caches.open('athos-corpus-v1');
+    const n = (await c.keys()).length;
+    if (n >= lista.length) return {esperados: lista.length, guardados: n};
+    await new Promise(r => setTimeout(r, 500));
+  }
+  return {esperados: lista.length, guardados: (await (await caches.open('athos-corpus-v1')).keys()).length};
+})()`);
+ok('corpus diferido descargado en segundo plano', corpus.guardados >= corpus.esperados, JSON.stringify(corpus));
+
 console.log('\n═══ 5. Funciona sin conexión ═══');
 await send('Network.emulateNetworkConditions',{offline:true,latency:0,downloadThroughput:0,uploadThroughput:0});
-for (const ruta of ['/', '/orar/oraciones', '/leer/salterio/50', '/calendario']) {
+for (const ruta of ['/', '/orar/oraciones', '/leer/salterio/50', '/calendario',
+  // Pantallas cuyo texto no va en el precaché, sino en el corpus diferido.
+  '/biblioteca/catecismo', '/biblioteca/liturgia/liturgia-crisostomo',
+  '/biblioteca/akathistos/akathistos-theotokos', '/biblioteca/historia', '/calendario/santos/basilio-magno',
+  '/biblioteca/mapas', '/biblioteca/liturgia/horas-de-pascua']) {
   await send('Page.navigate',{url:BASE+ruta});
   await new Promise(r=>setTimeout(r,3200));
   const txt = await ev(`(document.querySelector('main')?.innerText||'')`);
   ok(`sin red: ${ruta}`, txt.length>150, `${txt.length} caracteres`);
 }
+// El icono grande no va en el precaché: sin conexión, y sin haberlo abierto
+// antes, tiene que salir la miniatura en vez de una imagen rota.
+await send('Page.navigate',{url:BASE+'/biblioteca/iconos/trinidad-rublev'});
+await new Promise(r=>setTimeout(r,3500));
+const icono = await ev(`(()=>{const i=document.querySelector('figure img');return i?{src:i.getAttribute('src'),ancho:i.naturalWidth}:null})()`);
+ok('sin red: el icono sale, aunque sea la miniatura', Boolean(icono && icono.ancho>0), JSON.stringify(icono));
 await send('Network.emulateNetworkConditions',{offline:false,latency:0,downloadThroughput:-1,uploadThroughput:-1});
 
 console.log('\n═══ 6. Presentación instalada ═══');

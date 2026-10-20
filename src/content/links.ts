@@ -25,7 +25,7 @@ import { CHURCH_FATHERS } from './fathers';
 import { HISTORY_PERIODS } from './history-all';
 import { ICONS } from './icons';
 import { OFFICES } from './offices';
-import { SAINTS } from './saints';
+import { SAINT_INDEX as SAINTS } from './saints';
 
 export type LinkKind =
   | 'padre'

@@ -5,6 +5,8 @@ import { fileURLToPath, URL } from 'node:url';
 import { copyFileSync, existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { recentChangelog } from './scripts/changelog.ts';
+import { contentVersions } from './scripts/content-versions.ts';
+import { privacyPageHtml } from './scripts/privacy-page.ts';
 
 const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf-8')) as {
   version: string;
@@ -22,13 +24,43 @@ const base = process.env.ATHOS_BASE || '/';
  *
  * Las etiquetas Open Graph necesitan una dirección absoluta: una relativa como
  * `icons/og-image.png` no la resuelve ningún servicio que enseñe el enlace. Con
- * ATHOS_URL=https://usuario.github.io se reescriben a absolutas; sin ella se
+ * ATHOS_URL=https://usuario.github.io (el origen; la subcarpeta la pone
+ * ATHOS_BASE) se reescriben a absolutas; sin ella se
  * quedan como están, que es lo correcto mientras no se sepa el dominio.
  */
-const siteUrl = (process.env.ATHOS_URL || '').replace(/\/+$/, '');
+const siteUrl = (() => {
+  const url = (process.env.ATHOS_URL || '').replace(/\/+$/, '');
+  // Es el origen, sin la subcarpeta. Si alguien la pone
+  // (https://usuario.github.io/athos), se quita: si no, la imagen de vista
+  // previa saldría en /athos/athos/.
+  const carpeta = base.replace(/\/+$/, '');
+  return carpeta && url.endsWith(carpeta) ? url.slice(0, -carpeta.length) : url;
+})();
+
+/**
+ * Patrón para las reglas de caché en tiempo de ejecución: lo que cuelga de
+ * `<base><carpeta>/`.
+ *
+ * Tiene que ser una expresión regular y no una función. Workbox copia la
+ * función tal cual dentro de sw.js, y allí `base` no existe: cada petición a
+ * las fuentes, al corpus o a los libros lanzaba un error al buscar su regla,
+ * y nada de eso se guardaba nunca. Por eso el icono grande salía roto sin
+ * conexión, y las letras griegas o cirílicas nunca quedaban guardadas. Una
+ * expresión regular se escribe en sw.js con su valor ya puesto.
+ */
+const bajoLaBase = (carpeta: string) =>
+  new RegExp(`${(base + carpeta + '/').replace(/[.*+?^${}()|[\]\\/]/g, '\\$&')}`);
 
 /** Carpeta donde se está compilando, para el alias del manifest. */
 let salidaDeLaCompilacion = 'dist';
+
+/**
+ * Los trozos del corpus que no hacen falta para arrancar.
+ *
+ * Los llena el plugin `athos-corpus-diferido` al cerrar el paquete y los lee
+ * Workbox al hacer el precaché, que los deja fuera. Véase allí.
+ */
+const corpusDiferido = new Set<string>();
 
 export default defineConfig({
   base,
@@ -37,6 +69,10 @@ export default defineConfig({
     __BUILD_DATE__: JSON.stringify(new Date().toISOString().slice(0, 10)),
     // Las últimas versiones del registro de cambios, para «Novedades».
     __CHANGELOG__: JSON.stringify(recentChangelog(new URL('./CHANGELOG.md', import.meta.url))),
+    // La huella de cada carpeta del corpus: una corrección cambia la dirección.
+    __CONTENT_VERSIONS__: JSON.stringify(contentVersions(new URL('./public/content/', import.meta.url))),
+    // Correo de contacto, sólo si se da al compilar. Véase src/lib/site.ts.
+    __CONTACT_EMAIL__: JSON.stringify(process.env.ATHOS_CONTACTO ?? ''),
   },
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
@@ -51,11 +87,10 @@ export default defineConfig({
             if (id.includes('react-router')) return 'vendor-router';
             if (id.includes('react-dom') || id.includes('/react/')) return 'vendor-react';
             if (id.includes('dexie')) return 'vendor-db';
-            if (id.includes('i18next')) return 'vendor-i18n';
             return 'vendor';
           }
-          // El corpus textual se separa del código de la aplicación.
-          if (id.includes('/src/content/')) return 'content';
+          // El corpus ya no va en un solo trozo: cada pantalla se lleva lo que
+          // usa, y lo que no se abre no se descarga ni se analiza al arrancar.
           return undefined;
         },
       },
@@ -89,17 +124,90 @@ export default defineConfig({
       },
     },
     {
-      // Open Graph con direcciones absolutas, si se sabe cuál es el sitio.
+      /**
+       * El corpus que no hace falta para arrancar no entra en el precaché.
+       *
+       * Todo lo que va en el precaché se descarga antes de que el Service
+       * Worker se active, y hasta entonces no se ofrece instalar ATHOS. El
+       * corpus —oraciones, oficios, vidas, catecismo— es casi la mitad, y le
+       * quedaban unos 85 KB al límite de 5 MB: cada texto nuevo acercaba el
+       * día en que no cabría.
+       *
+       * Ahora el precaché lleva lo que hace falta para arrancar y rezar, y el
+       * resto del corpus —cada sección en su trozo— se descarga después, en
+       * segundo plano, con la lista de `corpus.json` (`src/lib/corpus.ts`).
+       * Queda en la caché igual que lo precacheado, y sin conexión se lee
+       * igual; sólo cambia cuándo se descarga.
+       */
+      name: 'athos-corpus-diferido',
+      apply: 'build' as const,
+      generateBundle(_opciones, paquete) {
+        corpusDiferido.clear();
+        const trozos = Object.values(paquete).filter(
+          (t): t is Extract<typeof t, { type: 'chunk' }> => t.type === 'chunk',
+        );
+        const porArchivo = new Map(trozos.map((t) => [t.fileName, t]));
+        const arranque = new Set<string>();
+        const visitar = (archivo: string) => {
+          if (arranque.has(archivo)) return;
+          arranque.add(archivo);
+          for (const importado of porArchivo.get(archivo)?.imports ?? []) visitar(importado);
+        };
+        for (const t of trozos) if (t.isEntry) visitar(t.fileName);
+        for (const t of trozos) {
+          if (arranque.has(t.fileName)) continue;
+          const reales = t.moduleIds.filter((id) => !id.startsWith('\0'));
+          if (reales.length && reales.every((id) => id.includes('/src/content/'))) corpusDiferido.add(t.fileName);
+        }
+        this.emitFile({
+          type: 'asset',
+          fileName: 'corpus.json',
+          source: JSON.stringify([...corpusDiferido].sort()),
+        });
+      },
+    },
+    {
+      /**
+       * `privacidad.html`: la política de privacidad con dirección fija y sin
+       * JavaScript, generada del mismo texto que enseña la aplicación.
+       */
+      name: 'athos-privacidad',
+      apply: 'build' as const,
+      generateBundle() {
+        this.emitFile({
+          type: 'asset',
+          fileName: 'privacidad.html',
+          source: privacyPageHtml({
+            base,
+            contacto: process.env.ATHOS_CONTACTO ?? '',
+          }),
+        });
+      },
+    },
+    {
+      /**
+       * Open Graph con direcciones absolutas, si se sabe cuál es el sitio.
+       *
+       * Corre después de que Vite haya puesto la base a las rutas del
+       * documento: `/icons/og-image.png` llega aquí como `/athos/icons/…`, y
+       * sólo falta anteponerle el dominio.
+       */
       name: 'athos-og-absoluto',
-      transformIndexHtml(html: string) {
-        if (!siteUrl) return html;
-        const raiz = `${siteUrl}${base}`;
-        return html
-          .replace('content="icons/og-image.png"', `content="${raiz}icons/og-image.png"`)
-          .replace(
-            '<meta property="og:type" content="website" />',
-            `<meta property="og:url" content="${raiz}" />\n    <meta property="og:type" content="website" />`,
-          );
+      transformIndexHtml: {
+        order: 'post' as const,
+        handler(html: string) {
+          if (!siteUrl) return html;
+          const raiz = `${siteUrl}${base}`;
+          return html
+            .replace(
+              /(<meta property="og:image" content=")\/(?!\/)([^"]*)"/,
+              (_, inicio: string, ruta: string) => `${inicio}${siteUrl}/${ruta}"`,
+            )
+            .replace(
+              '<meta property="og:type" content="website" />',
+              `<meta property="og:url" content="${raiz}" />\n    <meta property="og:type" content="website" />`,
+            );
+        },
       },
     },
     VitePWA({
@@ -143,7 +251,7 @@ export default defineConfig({
         // Capturas reales de la aplicación, tomadas con scripts/screenshots.
         // Chrome las usa para la ficha de instalación enriquecida.
         screenshots: [
-          { src: 'icons/screenshot-mobile.png', sizes: '540x1170', type: 'image/png', form_factor: 'narrow', label: 'El oficio que toca a esta hora, el santo del día y el ayuno' },
+          { src: 'icons/screenshot-mobile.png', sizes: '540x1170', type: 'image/png', form_factor: 'narrow', label: 'El día litúrgico, el oficio que toca a esta hora y el versículo del día' },
           { src: 'icons/screenshot-mobile-2.png', sizes: '540x1170', type: 'image/png', form_factor: 'narrow', label: 'El oficio de la mañana, con las fórmulas en griego' },
           { src: 'icons/screenshot-desktop.png', sizes: '1280x800', type: 'image/png', form_factor: 'wide', label: 'ATHOS en escritorio' },
           { src: 'icons/screenshot-desktop-2.png', sizes: '1280x800', type: 'image/png', form_factor: 'wide', label: 'El calendario litúrgico' },
@@ -173,6 +281,8 @@ export default defineConfig({
          */
         globPatterns: [
           '**/*.{js,css,html,ico,svg,png}',
+          // La lista del corpus que se descarga después de arrancar.
+          'corpus.json',
           'fonts/*-latin.woff2',
           // El español entero cabe en el subconjunto latino. El extendido sólo
           // hace falta para nombres como Popović o Brâncoveanu, y desde la 1.30
@@ -207,8 +317,22 @@ export default defineConfig({
           'icons/icon.svg',
         ],
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
+        // El corpus se pide con `?v=<huella>` (src/lib/content-url.ts). Lo
+        // precacheado ya lleva su revisión: para encontrarlo en el precaché
+        // hay que ignorar ese parámetro, o se pediría otra vez a la red.
+        ignoreURLParametersMatching: [/^utm_/, /^fbclid$/, /^v$/],
+        // Fuera del precaché el corpus que no hace falta para arrancar: lo
+        // descarga después src/lib/corpus.ts. Véase `athos-corpus-diferido`.
+        manifestTransforms: [
+          async (entradas) => ({
+            manifest: entradas.filter((e) => !corpusDiferido.has(e.url)),
+            warnings: [],
+          }),
+        ],
         navigateFallback: `${base}index.html`,
-        navigateFallbackDenylist: [/^\/api\//],
+        // La página de privacidad es un documento aparte, no una ruta de la
+        // aplicación: se sirve tal cual, también sin conexión.
+        navigateFallbackDenylist: [/^\/api\//, /privacidad\.html$/],
         cleanupOutdatedCaches: true,
         /**
          * El Service Worker toma el control de la página en cuanto se activa.
@@ -229,7 +353,7 @@ export default defineConfig({
         importScripts: ['sw-recordatorios.js'],
         runtimeCaching: [
           {
-            urlPattern: ({ url }) => url.pathname.startsWith(`${base}fonts/`),
+            urlPattern: bajoLaBase('fonts'),
             handler: 'CacheFirst',
             options: {
               cacheName: 'athos-fonts-v1',
@@ -238,9 +362,24 @@ export default defineConfig({
             },
           },
           {
-            // El corpus lleva huella de versión y no cambia: una vez guardado,
-            // se sirve de la caché sin volver a pedirlo por la red.
-            urlPattern: ({ url }) => url.pathname.startsWith(`${base}content/`),
+            // El corpus que no va en el precaché. Los nombres llevan huella,
+            // así que lo guardado no cambia nunca: se sirve de la caché sin
+            // volver a la red. Lo descarga src/lib/corpus.ts al arrancar.
+            urlPattern: bajoLaBase('assets'),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'athos-corpus-v1',
+              expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 365 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            // El corpus se pide con la huella de su carpeta en la dirección
+            // (`?v=…`): una vez guardado se sirve de la caché sin volver a la
+            // red, y si el texto se corrige, la dirección nueva no está en la
+            // caché y se descarga. Antes no llevaba huella y una corrección
+            // no llegaba nunca.
+            urlPattern: bajoLaBase('content'),
             handler: 'CacheFirst',
             options: {
               cacheName: 'athos-content-v2',

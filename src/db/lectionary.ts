@@ -11,6 +11,7 @@
  */
 import type { CalendarStyle, ReadingRef } from '@/types';
 import { create } from 'zustand';
+import { contentUrl } from '@/lib/content-url';
 
 export interface LectionaryFile {
   format: string;
@@ -36,8 +37,10 @@ interface RawReading {
 const cargados = new Map<CalendarStyle, LectionaryFile>();
 const enCurso = new Map<CalendarStyle, Promise<LectionaryFile | null>>();
 
+// Con la huella de la carpeta: el juliano no va en el precaché y, sin ella, la
+// caché del Service Worker lo servía viejo durante un año.
 const archivo = (estilo: CalendarStyle) =>
-  `${import.meta.env.BASE_URL}content/lectionary/lectionary${estilo === 'juliano' ? '-juliano' : ''}.json`;
+  contentUrl(`lectionary/lectionary${estilo === 'juliano' ? '-juliano' : ''}.json`);
 
 /** Avisa a la interfaz de que ya hay leccionario que mostrar. */
 export const useLectionaryStatus = create<{ version: number; bump: () => void }>((set) => ({
@@ -90,16 +93,4 @@ export function lookupReadings(iso: string, estilo: CalendarStyle): ReadingRef[]
     passageId: r.book && r.chapter ? `${r.book}.${r.chapter}` : undefined,
     note: r.note,
   }));
-}
-
-export function lectionaryMeta(estilo: CalendarStyle): LectionaryFile | null {
-  return cargados.get(estilo) ?? null;
-}
-
-/** Años cubiertos por el leccionario incorporado. */
-export function lectionaryRange(estilo: CalendarStyle): [number, number] | null {
-  const datos = cargados.get(estilo);
-  if (!datos) return null;
-  const anios = Object.keys(datos.years).map(Number).sort((a, b) => a - b);
-  return anios.length ? [anios[0], anios.at(-1)!] : null;
 }

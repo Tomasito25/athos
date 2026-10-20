@@ -40,7 +40,8 @@ const quoteMeta = (author: string, work: string): SourceMeta => ({
   language: 'es',
   license: 'traditional',
   dateAdded: '2026-01-01',
-  notes: 'Pasaje breve de uso corriente en español.',
+  notes:
+    'Pasaje breve. La procedencia de su versión española —traducción propia o edición publicada— está pendiente de verificar.',
 });
 
 const pendingMeta = (author: string, work: string): SourceMeta => ({

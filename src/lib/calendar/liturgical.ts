@@ -171,11 +171,6 @@ function readingsFor(
   return findReading(paschaOffset, nextPaschaOffset, md);
 }
 
-/** Fiesta principal del día, si la hay. */
-export function leadFeast(day: LiturgicalDay): Feast | null {
-  return day.feasts[0] ?? null;
-}
-
 export const CALENDAR_STYLE_LABELS: Record<CalendarStyle, string> = {
   nuevo: 'Calendario nuevo (juliano revisado)',
   juliano: 'Calendario juliano',

@@ -66,6 +66,7 @@ export function PlanDayPage() {
         eyebrow={plan.title}
         title={`${es.plans.day} ${numero}`}
         subtitle={dia.label}
+        tabTitle={`${plan.title} · ${es.plans.day} ${numero}`}
       />
       <div style={{ margin: 'var(--sp-3) 0' }}>
         <ProgressBlocks value={hechos.size / Math.max(dias.length, 1)} />

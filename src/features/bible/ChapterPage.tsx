@@ -15,6 +15,7 @@ import { ReaderToolbar } from '@/components/Reader';
 import { Headpiece } from '@/components/Ornament';
 import { IconBookmark, IconChevronLeft, IconChevronRight } from '@/components/icons';
 import { useVisitLog } from '@/hooks/useVisitLog';
+import { useHashScroll } from '@/hooks/useHashScroll';
 import { useUi } from '@/stores/ui';
 import es from '@/locales/es';
 
@@ -47,6 +48,9 @@ export function ChapterPage() {
   useVisitLog(
     book ? { path, title: `${book.name} ${chapterNumber}`, kind: es.bible.title } : null,
   );
+  // Las citas y los resultados de búsqueda llevan al versículo (`#v16`), pero
+  // nada bajaba hasta él: se quedaba arriba del capítulo.
+  useHashScroll([verses.loading, griego.loading]);
 
   if (!book) {
     return (
@@ -69,7 +73,11 @@ export function ChapterPage() {
         <Link to={`/leer/biblia/${book.id}`} className="eyebrow" style={{ textDecoration: 'none' }}>
           {book.name}
         </Link>
-        <h1 className="display" style={{ fontSize: 'var(--text-2xl)', margin: 'var(--sp-2) 0' }}>
+        <h1
+          className="display"
+          style={{ fontSize: 'var(--text-2xl)', margin: 'var(--sp-2) 0' }}
+          data-tab-title={`${book.name} ${chapterNumber}`}
+        >
           {es.bible.chapter.replace('{{n}}', String(chapterNumber))}
         </h1>
 

@@ -1205,16 +1205,6 @@ mark {
   margin: var(--sp-4) 0 0;
 }
 
-.mapa__svg {
-  display: block;
-  width: 100%;
-  height: auto;
-  background: var(--surface-sunken);
-  border: 1px solid var(--line-soft);
-  border-radius: var(--radius-lg);
-  padding: var(--sp-2);
-}
-
 .mapa__pie {
   display: flex;
   flex-wrap: wrap;
@@ -2408,4 +2398,326 @@ input[type='range']:focus-visible::-webkit-slider-thumb {
   font-family: var(--font-serif);
   color: var(--ink-strong);
   overflow-wrap: anywhere;
+}
+
+/* ---------- Acerca de: contacto y errores ---------- */
+
+.about-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--sp-2);
+}
+
+.about-links a {
+  display: inline-block;
+  min-height: 2.75rem;
+  line-height: 2.75rem;
+}
+
+/* ---------- Inicio: recordar la copia de seguridad ---------- */
+
+.backup-reminder {
+  margin: var(--sp-4) 0;
+  padding: var(--sp-4);
+  border: 1px solid var(--line-strong);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.backup-reminder__title {
+  font-size: var(--text-lg);
+  margin: var(--sp-1) 0 var(--sp-2);
+}
+
+/* ---------- Las Iglesias ortodoxas hoy ---------- */
+
+.church-card__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.church-card__name {
+  font-size: var(--text-lg);
+  margin: 0;
+}
+
+.church-card__primate {
+  margin: var(--sp-2) 0 var(--sp-3);
+}
+
+.church-card__datos {
+  display: grid;
+  gap: var(--sp-2);
+  margin: 0 0 var(--sp-3);
+}
+
+.church-card__datos div {
+  display: grid;
+  grid-template-columns: minmax(7rem, 30%) 1fr;
+  gap: var(--sp-2);
+}
+
+.church-card__datos dt {
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
+}
+
+.church-card__datos dd {
+  margin: 0;
+  font-size: var(--text-sm);
+}
+
+@media (max-width: 30rem) {
+  .church-card__datos div {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+
+/* El versículo al que lleva una cita o un resultado de búsqueda. */
+.book-surface p:target,
+.bible-parallel__verse:target {
+  background: color-mix(in srgb, var(--gold) 14%, transparent);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0 0 0.35em color-mix(in srgb, var(--gold) 14%, transparent);
+}
+
+/* Compartir el versículo del día: discreto, debajo de la cita. */
+.verse-day__share {
+  margin: var(--sp-2) auto 0;
+  color: var(--ink-muted);
+}
+
+/* ---------- Bienvenida: las tres preguntas ---------- */
+
+.welcome__questions {
+  display: grid;
+  gap: var(--sp-1);
+  margin: var(--sp-3) 0 var(--sp-4);
+}
+
+.welcome__question {
+  font-weight: 600;
+  margin-top: var(--sp-3);
+}
+
+.welcome__hint {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.welcome__subtitle {
+  font-size: var(--text-base);
+  margin: var(--sp-4) 0 var(--sp-2);
+}
+
+/* ---------- Los nombres de la lista, en la conmemoración ---------- */
+
+.commemoration {
+  margin: 0.9em 0;
+  padding: 0.6em 0.9em;
+  border-inline-start: 2px solid var(--gold);
+  background: color-mix(in srgb, var(--gold) 7%, transparent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.commemoration__label {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  margin: 0;
+}
+
+.commemoration__names {
+  margin: 0.2em 0;
+  font-weight: 500;
+}
+
+.commemoration__edit,
+.commemoration__empty {
+  font-size: var(--text-sm);
+}
+
+.commemoration__empty {
+  margin: 0;
+  color: var(--ink-muted);
+}
+
+/* ---------- Mapas con la costa de verdad ---------- */
+
+/* `--f` es lo que se ha acercado la vista: los trazos y las letras se encogen
+   en la misma proporción para verse igual en la pantalla. */
+.mapa-real {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-lg);
+  background: var(--surface-sunken);
+}
+
+.mapa-real__mar {
+  fill: color-mix(in srgb, var(--surface-sunken) 55%, #8fb3cc 45%);
+}
+
+.mapa-real__tierra {
+  fill: var(--surface);
+  stroke: var(--line-strong);
+  stroke-width: calc(1.5px * var(--f, 1));
+}
+
+.mapa-real__rio {
+  fill: none;
+  stroke: color-mix(in srgb, var(--surface-sunken) 40%, #8fb3cc 60%);
+  stroke-width: calc(3px * var(--f, 1));
+}
+
+.mapa-real__ruta {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: calc(4px * var(--f, 1));
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+
+.mapa-real__rotulo {
+  font-size: calc(30px * var(--f, 1));
+  fill: var(--ink);
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: calc(6px * var(--f, 1));
+  stroke-linejoin: round;
+}
+
+.mapa-real__agua {
+  font-size: calc(26px * var(--f, 1));
+  font-style: italic;
+  letter-spacing: 0.04em;
+  fill: color-mix(in srgb, var(--ink-muted) 45%, #3d6f93 55%);
+}
+
+.mapa-real__punto--elegido .mapa-real__rotulo {
+  font-weight: 600;
+}
+
+.mapa-real g[role='button']:focus-visible circle {
+  stroke: var(--ink-strong);
+  stroke-width: calc(5px * var(--f, 1));
+}
+
+/* ---------- Mapas de la Biblia ---------- */
+
+.mapa-biblico {
+  display: grid;
+  gap: var(--sp-4);
+}
+
+/* En pantalla ancha, la ficha al lado del mapa y quieta mientras se baja. */
+@media (min-width: 52rem) {
+  .mapa-biblico {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    align-items: start;
+  }
+
+  .mapa-biblico__ficha {
+    position: sticky;
+    top: calc(var(--topbar-h) + var(--sp-4));
+    margin-top: var(--sp-4);
+  }
+}
+
+.mapa-pasajes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+}
+
+.mapa-pasajes__cita {
+  padding: 2px 10px;
+  border: 1px solid var(--gold-soft);
+  border-radius: 99px;
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+
+.mapa-etapas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1) 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-sm);
+}
+
+.mapa-etapas li + li::before {
+  content: '→';
+  margin: 0 var(--sp-2);
+  color: var(--ink-faint);
+}
+
+.mapa-concilios {
+  margin: var(--sp-2) 0 0;
+  padding-left: var(--sp-4);
+  font-size: var(--text-sm);
+}
+
+/* ---------- Apotegmas ---------- */
+
+.apotegmas {
+  display: grid;
+  gap: var(--sp-3);
+}
+
+.apotegma {
+  padding: var(--sp-3) var(--sp-4);
+  border-left: 2px solid var(--gold-soft);
+  scroll-margin-top: calc(var(--topbar-h) + var(--sp-3));
+}
+
+.apotegma--hoy {
+  margin: var(--sp-4) 0;
+  padding: var(--sp-4);
+  border: 1px solid var(--gold-soft);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-gold);
+}
+
+.apotegma:target {
+  background: color-mix(in srgb, var(--gold) 12%, transparent);
+}
+
+.apotegma__hoy {
+  color: var(--gold);
+  margin-bottom: var(--sp-2);
+}
+
+.apotegma__texto {
+  font-family: var(--font-serif);
+  font-size: var(--text-md);
+  line-height: 1.6;
+  color: var(--ink-strong);
+  text-wrap: pretty;
+}
+
+.apotegma__autor {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+  margin-top: var(--sp-2);
+  font-size: var(--text-sm);
+  color: var(--gold);
+}
+
+.apotegma__compartir {
+  margin-left: auto;
+  color: var(--ink-muted);
 }

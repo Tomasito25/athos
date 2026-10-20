@@ -6,6 +6,7 @@ import { Blocks, Loading, Panel, SourceNote, NotFound } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { useVisitLog } from '@/hooks/useVisitLog';
 import { useHashScroll } from '@/hooks/useHashScroll';
+import { useKeepAwake } from '@/hooks/useKeepAwake';
 import es from '@/locales/es';
 
 /** Un oficio completo, sección a sección, pensado para seguirlo en la iglesia. */
@@ -17,6 +18,7 @@ export function OfficePage({ id }: { id?: string } = {}) {
   const path = id === 'maitines-en-casa' ? '/orar/maitines' : `/biblioteca/liturgia/${officeId}`;
   // El índice enlaza con cada sección; sin esto el salto no llegaba a ocurrir.
   useHashScroll([officeId, office.data?.id]);
+  useKeepAwake(Boolean(office.data));
 
   // La clase de oficio, no «Divina Liturgia» para todos: en «Por dónde ibas»
   // una Hora tiene que decir que es una Hora.

@@ -134,15 +134,6 @@ export const IconJournal = (props: IconProps) => (
   </Svg>
 );
 
-export const IconHabits = (props: IconProps) => (
-  <Svg {...props}>
-    <rect x="3.5" y="3.5" width="6" height="6" rx="1" />
-    <rect x="14.5" y="3.5" width="6" height="6" rx="1" />
-    <rect x="3.5" y="14.5" width="6" height="6" rx="1" />
-    <path d="M15 17.5l1.8 1.8 3.4-3.6" />
-  </Svg>
-);
-
 export const IconChevronRight = (props: IconProps) => (
   <Svg {...props}>
     <path d="M9.5 5l7 7-7 7" />
@@ -260,19 +251,35 @@ export const IconDownload = (props: IconProps) => (
   </Svg>
 );
 
+export const IconShare = (props: IconProps) => (
+  <Svg {...props}>
+    <circle cx="18" cy="5.5" r="2.5" />
+    <circle cx="6" cy="12" r="2.5" />
+    <circle cx="18" cy="18.5" r="2.5" />
+    <path d="M8.2 10.8l7.6-4.1" />
+    <path d="M8.2 13.2l7.6 4.1" />
+  </Svg>
+);
+
+export const IconSpeaker = (props: IconProps) => (
+  <Svg {...props}>
+    <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" />
+    <path d="M15.5 9a4 4 0 010 6" />
+    <path d="M18 6.5a7.5 7.5 0 010 11" />
+  </Svg>
+);
+
+export const IconStop = (props: IconProps) => (
+  <Svg {...props}>
+    <rect x="6.5" y="6.5" width="11" height="11" rx="1.5" />
+  </Svg>
+);
+
 export const IconUpload = (props: IconProps) => (
   <Svg {...props}>
     <path d="M12 15.5v-11" />
     <path d="M7.5 8.5L12 4l4.5 4.5" />
     <path d="M4.5 19.5h15" />
-  </Svg>
-);
-
-export const IconLock = (props: IconProps) => (
-  <Svg {...props}>
-    <rect x="4.5" y="10" width="15" height="10.5" rx="1.5" />
-    <path d="M8 10V7a4 4 0 018 0v3" />
-    <path d="M12 14v2.5" />
   </Svg>
 );
 
@@ -296,24 +303,6 @@ export const IconInstall = (props: IconProps) => (
     <rect x="6" y="2.5" width="12" height="19" rx="2" />
     <path d="M12 7v7" />
     <path d="M9.2 11.2L12 14l2.8-2.8" />
-  </Svg>
-);
-
-export const IconDrag = (props: IconProps) => (
-  <Svg {...props}>
-    <circle cx="9" cy="6" r="1.1" fill="currentColor" stroke="none" />
-    <circle cx="15" cy="6" r="1.1" fill="currentColor" stroke="none" />
-    <circle cx="9" cy="12" r="1.1" fill="currentColor" stroke="none" />
-    <circle cx="15" cy="12" r="1.1" fill="currentColor" stroke="none" />
-    <circle cx="9" cy="18" r="1.1" fill="currentColor" stroke="none" />
-    <circle cx="15" cy="18" r="1.1" fill="currentColor" stroke="none" />
-  </Svg>
-);
-
-export const IconReset = (props: IconProps) => (
-  <Svg {...props}>
-    <path d="M4 12a8 8 0 108-8 8 8 0 00-5.7 2.4L4 8.5" />
-    <path d="M4 4v4.5h4.5" />
   </Svg>
 );
 
@@ -363,6 +352,14 @@ export const IconCross = (props: IconProps) => (
     <path d="M8.5 6.5h7" />
     <path d="M6 10.5h12" />
     <path d="M8 14l8 2.5" />
+  </Svg>
+);
+
+/** Un mapa plegado en tres. */
+export const IconMap = (props: IconProps) => (
+  <Svg {...props}>
+    <path d="M3 6.5l6-2.5 6 2.5 6-2.5v13.5l-6 2.5-6-2.5-6 2.5z" />
+    <path d="M9 4v13.5M15 6.5V20" />
   </Svg>
 );
 

@@ -1,78 +1,124 @@
 /**
- * Oración de Jesús.
+ * Oración de Jesús y komboskini: una pantalla, dos vistas.
+ *
+ * Eran dos pantallas casi iguales —el mismo contador, los mismos ajustes, el
+ * mismo historial— que se diferenciaban en el dibujo: un aro que se llena
+ * hacia un objetivo, o la cuerda con sus nudos y sus vueltas. Ahora es una
+ * sola con las dos vistas, y la cuenta sigue al cambiar de una a otra.
+ *
+ * Se entra por `/orar/oracion-de-jesus` (el contador) o por
+ * `/orar/komboskini` y `/orar/chotki` (la cuerda), que siguen funcionando
+ * porque están en reglas, atajos y marcadores de la gente.
  *
  * Un contador sobrio: el texto grande, la cuenta, nada más. Las estadísticas
  * existen para recordar, no para competir.
  */
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { useCounter, TARGETS } from './useCounter';
-import { CounterView } from './CounterView';
+import { CounterView, RopeView } from './CounterView';
 import { useAsync } from '@/hooks/useAsync';
 import { listSessions, prayerStats } from '@/db/user';
 import { useToday } from '@/hooks/useLiturgicalDay';
-import {
-  Button,
-  ListRow,
-  PageHead,
-  Panel,
-  Section,
-  Switch,
-  Tag,
-} from '@/components/ui';
+import { Button, ListRow, PageHead, Panel, Section, Segmented, Switch, Tag } from '@/components/ui';
 import { useSettings } from '@/stores/settings';
 import { useUi } from '@/stores/ui';
 import { formatDuration } from '@/lib/format';
 import es from '@/locales/es';
 
-const FORMULA = 'Señor Jesucristo, Hijo de Dios, ten misericordia de mí, pecador.';
+type Vista = 'contador' | 'cuerda';
 
 export function JesusPrayerPage() {
   const [params] = useSearchParams();
+  const { pathname } = useLocation();
   const today = useToday();
   const toast = useUi((s) => s.toast);
   const settings = useSettings();
 
-  const initialTarget = params.get('objetivo') ? Number(params.get('objetivo')) : null;
-  const counter = useCounter({ mode: 'jesus-prayer', formulaId: 'jesus-prayer-es', initialTarget });
+  const [vista, setVista] = useState<Vista>(() =>
+    /\/(komboskini|chotki)/.test(pathname) ? 'cuerda' : 'contador',
+  );
+  const cuerda = vista === 'cuerda';
+
+  const objetivo = params.get('objetivo') ? Number(params.get('objetivo')) : null;
+  const counter = useCounter({
+    mode: cuerda ? 'chotki' : 'jesus-prayer',
+    formulaId: cuerda ? 'chotki' : 'jesus-prayer-es',
+    // La cuerda tiene siempre un número de nudos; el contador puede ir sin objetivo.
+    initialTarget: objetivo ?? (cuerda ? 100 : null),
+  });
   const stats = useAsync(() => prayerStats(today), [today, counter.count === 0]);
   const sessions = useAsync(() => listSessions(10), [counter.count === 0]);
   const [custom, setCustom] = useState('');
 
   useEffect(() => {
-    if (counter.complete) toast(es.jesusPrayer.completed.replace('{{count}}', String(counter.count)));
+    if (counter.complete && !cuerda) toast(es.jesusPrayer.completed.replace('{{count}}', String(counter.count)));
     // Sólo interesa el instante en que se alcanza el objetivo.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [counter.complete]);
+
+  const cambiarVista = (nueva: Vista) => {
+    setVista(nueva);
+    // La cuerda necesita nudos: si el contador iba sin objetivo, se le dan cien.
+    if (nueva === 'cuerda' && counter.target === null) counter.setTarget(100);
+  };
 
   const end = async (save: boolean) => {
     const saved = await counter.finish(save);
     stats.reload();
     sessions.reload();
-    if (saved) toast('Sesión guardada');
+    if (saved) toast(es.jesusPrayer.sessionSaved);
   };
+
+  const nudos = counter.target ?? 100;
+  const vueltas = Math.floor(counter.count / nudos);
 
   return (
     <div className="page page--reading">
-      <PageHead title={es.jesusPrayer.title} />
+      <PageHead
+        eyebrow={cuerda ? 'Κομποσκοίνι' : undefined}
+        title={es.jesusPrayer.title}
+        subtitle={cuerda ? es.jesusPrayer.ropeSubtitle : undefined}
+      />
+
+      <Segmented<Vista>
+        value={vista}
+        label={es.jesusPrayer.view}
+        options={[
+          { value: 'contador', label: es.jesusPrayer.viewCounter },
+          { value: 'cuerda', label: es.jesusPrayer.chotkiAlt },
+        ]}
+        onChange={cambiarVista}
+      />
 
       <p
         className="display text-center"
-        style={{ fontSize: 'var(--text-lg)', lineHeight: 1.5, margin: '0 0 var(--sp-5)' }}
+        style={{ fontSize: 'var(--text-lg)', lineHeight: 1.5, margin: 'var(--sp-4) 0 var(--sp-5)' }}
       >
-        {FORMULA}
+        {es.jesusPrayer.text}
       </p>
 
-      <CounterView
-        count={counter.count}
-        target={counter.target}
-        progress={counter.progress}
-        elapsed={counter.elapsed}
-        onCount={counter.increment}
-        dark={settings.prayerModeDark}
-      >
-        <span className="muted text-sm">{es.jesusPrayer.tapAnywhere}</span>
-      </CounterView>
+      {cuerda ? (
+        <RopeView
+          count={counter.count}
+          knots={nudos}
+          elapsed={counter.elapsed}
+          laps={vueltas}
+          onCount={counter.increment}
+          dark={settings.prayerModeDark}
+        />
+      ) : (
+        <CounterView
+          count={counter.count}
+          target={counter.target}
+          progress={counter.progress}
+          elapsed={counter.elapsed}
+          onCount={counter.increment}
+          dark={settings.prayerModeDark}
+        >
+          <span className="muted text-sm">{es.jesusPrayer.tapAnywhere}</span>
+        </CounterView>
+      )}
 
       <div className="row row--wrap" style={{ marginTop: 'var(--sp-4)', justifyContent: 'center' }}>
         {TARGETS.map((value) => (
@@ -80,14 +126,16 @@ export function JesusPrayerPage() {
             key={value}
             size="sm"
             variant={counter.target === value ? 'primary' : 'default'}
-            onClick={() => counter.setTarget(counter.target === value ? null : value)}
+            onClick={() => counter.setTarget(counter.target === value && !cuerda ? null : value)}
           >
             {value}
+            {cuerda ? ` ${es.jesusPrayer.knots}` : ''}
           </Button>
         ))}
         <input
           type="number"
           min={1}
+          max={1000}
           className="input"
           style={{ width: '7rem' }}
           placeholder={es.jesusPrayer.custom}
@@ -95,7 +143,8 @@ export function JesusPrayerPage() {
           aria-label={es.jesusPrayer.custom}
           onChange={(event) => {
             setCustom(event.target.value);
-            counter.setTarget(event.target.value ? Number(event.target.value) : null);
+            const valor = event.target.value ? Math.max(1, Number(event.target.value) || 1) : null;
+            counter.setTarget(valor ?? (cuerda ? 100 : null));
           }}
         />
       </div>
@@ -112,23 +161,21 @@ export function JesusPrayerPage() {
         </Button>
       </div>
 
-      <Section title="Ajustes de la sesión">
+      <Section title={es.jesusPrayer.settings}>
         <Panel variant="quiet">
           <Switch
             checked={settings.jesusPrayerVibration}
             onChange={(value) => settings.set('jesusPrayerVibration', value)}
             title={es.jesusPrayer.vibration}
             description={
-              counter.vibrationSupported
-                ? 'Un pulso corto en cada oración y otro más largo al llegar al objetivo.'
-                : 'Este dispositivo no admite vibración.'
+              counter.vibrationSupported ? es.jesusPrayer.vibrationHint : es.jesusPrayer.vibrationUnsupported
             }
           />
           <Switch
             checked={settings.jesusPrayerSound}
             onChange={(value) => settings.set('jesusPrayerSound', value)}
             title={es.jesusPrayer.sound}
-            description="Un tono muy leve cada diez oraciones."
+            description={es.jesusPrayer.soundHint}
           />
           <Switch
             checked={settings.jesusPrayerKeepAwake}
@@ -138,7 +185,7 @@ export function JesusPrayerPage() {
               counter.wakeLockSupported
                 ? counter.wakeLockActive
                   ? es.prayerMode.wakeLockOn
-                  : 'Se activará al comenzar a contar.'
+                  : es.jesusPrayer.keepAwakeHint
                 : es.prayerMode.wakeLockUnsupported
             }
           />
@@ -146,7 +193,7 @@ export function JesusPrayerPage() {
             checked={settings.prayerModeDark}
             onChange={(value) => settings.set('prayerModeDark', value)}
             title={es.jesusPrayer.darkMode}
-            description="Fondo más oscuro alrededor del contador."
+            description={es.jesusPrayer.darkModeHint}
           />
         </Panel>
       </Section>

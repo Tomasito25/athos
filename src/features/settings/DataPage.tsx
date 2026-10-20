@@ -6,12 +6,14 @@ import {
   downloadFile,
   exportBackup,
   importBackup,
+  markBackupDone,
   validateBackup,
   wipeUserData,
   type AthosBackup,
   type ImportMode,
 } from '@/db/backup';
 import { ARCHIVE_KEY, db, requestPersistentStorage, storageEstimate } from '@/db/db';
+import { clearHistory, clearSessions } from '@/db/user';
 import type { PersonalArchive } from '@/db/db';
 import { bibleIndexStatus, clearBibleIndex, indexWholeBible } from '@/db/bible';
 import { ensurePsalterBuilt } from '@/db/psalter';
@@ -61,6 +63,7 @@ export function DataPage() {
       JSON.stringify(backup, null, 2),
       'application/json',
     );
+    await markBackupDone();
     toast('Copia exportada');
   };
 
@@ -133,8 +136,8 @@ export function DataPage() {
         <Panel>
           <p className="muted text-sm">
             Se exportan las reglas de oración, las notas, los marcadores, los favoritos, las
-            sesiones de oración y las preferencias. El contenido religioso no se exporta: forma
-            parte de la aplicación.
+            sesiones de oración, el avance de los planes de lectura, los nombres para la oración y
+            las preferencias. El contenido religioso no se exporta: forma parte de la aplicación.
           </p>
           <div className="btn-row" style={{ marginTop: 'var(--sp-3)' }}>
             <Button onClick={exportJson}>
@@ -293,6 +296,29 @@ export function DataPage() {
       </Section>
 
       <Section title="Borrar">
+        <Panel>
+          <p className="muted text-sm">{es.settings.clearPartialNote}</p>
+          <div className="btn-row" style={{ marginTop: 'var(--sp-3)' }}>
+            <Button
+              onClick={async () => {
+                if (!confirm(es.settings.clearHistoryConfirm)) return;
+                await clearHistory();
+                toast(es.settings.historyCleared);
+              }}
+            >
+              {es.settings.clearHistory}
+            </Button>
+            <Button
+              onClick={async () => {
+                if (!confirm(es.settings.clearSessionsConfirm)) return;
+                await clearSessions();
+                toast(es.settings.sessionsCleared);
+              }}
+            >
+              {es.settings.clearSessions}
+            </Button>
+          </div>
+        </Panel>
         <Panel>
           <Notice variant="warn">{es.settings.wipeConfirm}</Notice>
           <Button

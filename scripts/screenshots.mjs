@@ -10,8 +10,16 @@
  *   ./run.sh --no-browser &
  *   brave --headless=new --remote-debugging-port=9333 --user-data-dir=/tmp/athos-cdp about:blank &
  *   node scripts/screenshots.mjs
+ *
+ * Con otro servidor (por ejemplo, `npx vite preview --port 4173`), su
+ * dirección en ATHOS_URL.
+ *
+ * Cada captura tiene que enseñar lo que dice su rótulo en el manifest
+ * (vite.config.ts): antes dos rótulos hablaban del oficio de la mañana y del
+ * calendario, y las capturas eran de la lista de oraciones.
  */
 import { writeFileSync, mkdirSync } from 'node:fs';
+const SERVIDOR = process.env.ATHOS_URL ?? 'http://127.0.0.1:8788';
 const list = await (await fetch('http://127.0.0.1:9333/json/list')).json();
 const t = list.find(x => x.type === 'page');
 const ws = new WebSocket(t.webSocketDebuggerUrl);
@@ -25,7 +33,7 @@ mkdirSync('public/icons', { recursive: true });
 
 // Estado limpio y datos ya sembrados
 await send('Emulation.setDeviceMetricsOverride',{width:540,height:1170,deviceScaleFactor:1,mobile:true});
-await send('Page.navigate',{url:'http://127.0.0.1:8788/'});
+await send('Page.navigate',{url:SERVIDOR+'/'});
 await new Promise(r=>setTimeout(r,3000));
 await ev(`(async()=>{for(const r of await navigator.serviceWorker.getRegistrations())await r.unregister();for(const k of await caches.keys())await caches.delete(k);
  localStorage.clear(); await new Promise(res=>{const q=indexedDB.deleteDatabase('athos');q.onsuccess=res;q.onerror=res;q.onblocked=res;});
@@ -36,15 +44,15 @@ await ev(`(async()=>{for(const r of await navigator.serviceWorker.getRegistratio
 
 const capturas = [
   { archivo: 'screenshot-mobile.png',   w: 540,  h: 1170, movil: true,  ruta: '/',                 tema: 'dark'  },
-  { archivo: 'screenshot-mobile-2.png', w: 540,  h: 1170, movil: true,  ruta: '/orar/oraciones',   tema: 'dark'  },
+  { archivo: 'screenshot-mobile-2.png', w: 540,  h: 1170, movil: true,  ruta: '/orar/oficio/manana', tema: 'dark' },
   { archivo: 'screenshot-desktop.png',  w: 1280, h: 800,  movil: false, ruta: '/',                 tema: 'light' },
-  { archivo: 'screenshot-desktop-2.png',w: 1280, h: 800,  movil: false, ruta: '/orar/oraciones',   tema: 'light' },
+  { archivo: 'screenshot-desktop-2.png',w: 1280, h: 800,  movil: false, ruta: '/calendario',       tema: 'light' },
 ];
 
 for (const c of capturas) {
   await send('Emulation.setDeviceMetricsOverride',{width:c.w,height:c.h,deviceScaleFactor:1,mobile:c.movil});
   if (c.movil) await send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:5});
-  await send('Page.navigate',{url:'http://127.0.0.1:8788'+c.ruta});
+  await send('Page.navigate',{url:SERVIDOR+c.ruta});
   await new Promise(r=>setTimeout(r,7000));
   await ev(`(async()=>{for(const r of await navigator.serviceWorker.getRegistrations())await r.unregister();
     for(const k of await caches.keys())await caches.delete(k);return 1})()`);

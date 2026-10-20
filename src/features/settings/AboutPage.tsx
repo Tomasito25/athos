@@ -1,18 +1,38 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Panel, Section } from '@/components/ui';
 import { OrthodoxCross } from '@/components/icons';
+import { CONTACT_EMAIL, ISSUES_URL, REPO_URL, reportIssueUrl } from '@/lib/site';
 import { UpdateStatusPanel } from './UpdateStatusPanel';
 import es from '@/locales/es';
 
+/**
+ * Lo que ATHOS promete, dicho de forma que sea verdad.
+ *
+ * Decía que no pedía nada a ningún servidor, y no era cierto: pregunta cada
+ * hora si hay versión nueva y descarga los textos la primera vez que se
+ * abren. No envía nada, pero pregunta. Y hablaba del diario y los hábitos,
+ * que se retiraron en la versión 3 de la base de datos.
+ */
 const PRINCIPLES = [
   ['Sin cuenta', 'ATHOS no pide registro ni identificación. No hay servidor que sepa quién eres.'],
-  ['Sin rastreo', 'No hay analítica, ni cookies de terceros, ni identificadores publicitarios.'],
+  ['Sin rastreo', 'No hay analítica, ni cookies, ni identificadores publicitarios.'],
   ['Sin publicidad', 'Nunca.'],
-  ['Sin red', 'Salvo la descarga inicial de los textos, ATHOS no hace peticiones a ningún servidor.'],
-  ['Tuyo', 'El diario, las reglas, los hábitos y las notas viven en tu dispositivo y puedes exportarlos cuando quieras.'],
+  [
+    'Nada tuyo sale del dispositivo',
+    'ATHOS sólo pide al servidor donde está publicada lo que necesita: los textos la primera vez que ' +
+      'se abren y, al abrirla y cada hora mientras está abierta, si hay versión nueva. Esas peticiones ' +
+      'no llevan nada tuyo.',
+  ],
+  [
+    'Tuyo',
+    'Las reglas de oración, los favoritos, las notas y el avance de lectura viven en tu dispositivo y ' +
+      'puedes exportarlos cuando quieras. Haz una copia de vez en cuando: si el navegador borra los ' +
+      'datos del sitio, es lo único que los recupera.',
+  ],
 ];
 
 export function AboutPage() {
+  const { pathname } = useLocation();
   return (
     <div className="page page--reading">
       <div style={{ textAlign: 'center', paddingTop: 'var(--sp-5)' }}>
@@ -38,8 +58,8 @@ export function AboutPage() {
           <p>
             ATHOS reúne en una sola aplicación lo que un cristiano ortodoxo necesita a diario:
             el libro de oración, la Escritura, el Salterio, el calendario litúrgico con sus santos y
-            sus ayunos, la biblioteca de los oficios y de los Padres, y un lugar propio donde
-            anotar la propia vida.
+            sus ayunos, la biblioteca de los oficios y de los Padres, y la regla de oración de cada
+            uno, con su avance.
           </p>
           <p>
             Está pensada para abrirse cada mañana y cada noche, y para funcionar igual con o sin
@@ -58,6 +78,37 @@ export function AboutPage() {
             </Panel>
           ))}
         </div>
+        <p className="text-sm" style={{ marginTop: 'var(--sp-3)' }}>
+          <Link to="/configuracion/privacidad">{es.about.privacyPolicy}</Link>
+        </p>
+      </Section>
+
+      <Section title={es.about.contact}>
+        <Panel variant="quiet">
+          <ul className="about-links">
+            <li>
+              <a href={reportIssueUrl(pathname)} target="_blank" rel="noreferrer noopener">
+                {es.about.reportError}
+              </a>
+              <span className="muted text-sm"> — {es.about.reportErrorHint}</span>
+            </li>
+            <li>
+              <a href={ISSUES_URL} target="_blank" rel="noreferrer noopener">
+                {es.about.openIssues}
+              </a>
+            </li>
+            <li>
+              <a href={REPO_URL} target="_blank" rel="noreferrer noopener">
+                {es.about.sourceCode}
+              </a>
+            </li>
+            {CONTACT_EMAIL ? (
+              <li>
+                {es.about.email}: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+              </li>
+            ) : null}
+          </ul>
+        </Panel>
       </Section>
 
       <Section title="Honestidad sobre el contenido">
@@ -74,8 +125,8 @@ export function AboutPage() {
       <Section title="Proyecto abierto">
         <Panel variant="quiet">
           <p className="text-sm">
-            El código se publica bajo AGPL-3.0-or-later. Las aportaciones —traducciones, textos con
-            licencia comprobada, correcciones del calendario— son bienvenidas. El contenido
+            El código se publica bajo AGPL-3.0-or-later. Las aportaciones —textos con licencia
+            comprobada, correcciones del calendario y del ayuno, errores— son bienvenidas. El contenido
             religioso se mantiene separado del código, con su propia procedencia.
           </p>
         </Panel>

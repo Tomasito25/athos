@@ -168,6 +168,22 @@ describe.skipIf(!built)('index.html', () => {
     expect(html).toMatch(/rel="apple-touch-icon"/);
   });
 
+  it('los iconos y las pantallas de arranque no dependen de la página abierta', () => {
+    // Eran relativos: en /athos/leer/biblia el navegador pedía
+    // /athos/leer/biblia/icons/apple-touch-icon.png y recibía un 404. Lo
+    // comprobado en la web publicada: favicon, icono de iPhone y pantallas de
+    // arranque fallaban en cualquier página que no fuera la portada.
+    const rutas = [
+      ...html.matchAll(/<link[^>]*rel="(?:icon|apple-touch-icon|apple-touch-startup-image)"[^>]*href="([^"]+)"/g),
+    ].map((m) => m[1]);
+    expect(rutas.length).toBeGreaterThan(10);
+    const manifest = JSON.parse(read('manifest.webmanifest')) as { scope: string };
+    for (const ruta of rutas) {
+      expect(ruta.startsWith(manifest.scope), `${ruta} no cuelga de ${manifest.scope}`).toBe(true);
+      expect(existsSync(resolve(dist, ruta.slice(manifest.scope.length))), `falta ${ruta}`).toBe(true);
+    }
+  });
+
   it('declara el color de tema para los dos esquemas', () => {
     expect(html).toMatch(/name="theme-color"[^>]*prefers-color-scheme: light/);
     expect(html).toMatch(/name="theme-color"[^>]*prefers-color-scheme: dark/);
@@ -237,6 +253,7 @@ describe.skipIf(!built)('service worker', () => {
   it('declara cachés en tiempo de ejecución para las fuentes y el corpus', () => {
     expect(sw).toContain('athos-fonts-v1');
     expect(sw).toContain('athos-content-v2');
+    expect(sw).toContain('athos-corpus-v1');
   });
 });
 
@@ -287,6 +304,37 @@ describe.skipIf(!built)('precaché', () => {
     expect(entries.some((url) => url.endsWith('index.html'))).toBe(true);
   });
 
+  it('deja fuera el corpus que no hace falta para arrancar, y dice cuál es', () => {
+    // Le quedaban 85 KB al límite de 5 MB. El corpus —oraciones, oficios,
+    // vidas, catecismo— va ahora en trozos por sección que se descargan
+    // después de arrancar (src/lib/corpus.ts), con la lista en corpus.json.
+    const diferido = JSON.parse(read('corpus.json')) as string[];
+    expect(diferido.length, 'no se difiere nada').toBeGreaterThan(5);
+    for (const archivo of diferido) {
+      expect(existsSync(resolve(dist, archivo)), `falta ${archivo}`).toBe(true);
+      expect(entries, `${archivo} sigue en el precaché`).not.toContain(archivo);
+    }
+    // Y nada de lo que se carga al arrancar está entre lo diferido: sin red y
+    // antes de la descarga, la aplicación tiene que poder abrirse.
+    const html = read('index.html');
+    const arranque = [...html.matchAll(/(?:modulepreload|type="module")[^>]*(?:href|src)="[^"]*\/(assets\/[^"]+\.js)"/g)].map(
+      (m) => m[1],
+    );
+    expect(arranque.length).toBeGreaterThan(3);
+    for (const archivo of arranque) expect(diferido, archivo).not.toContain(archivo);
+    expect(entries).toContain('corpus.json');
+  });
+
+  it('las reglas de caché no dependen de variables que el Service Worker no tiene', () => {
+    // Las reglas eran funciones con `${base}` dentro, y Workbox las copia tal
+    // cual en sw.js, donde `base` no existe: ni las fuentes, ni los iconos
+    // grandes, ni los libros se guardaban nunca.
+    expect(sw).not.toMatch(/\$\{base\}/);
+    for (const cache of ['athos-fonts-v1', 'athos-content-v2', 'athos-corpus-v1']) {
+      expect(sw, cache).toMatch(new RegExp(`registerRoute\\(/[^,]+,new \\w+\\.CacheFirst\\(\\{cacheName:"${cache}"`));
+    }
+  });
+
   it('cada entrada lleva revisión o huella en el nombre', () => {
     // Sin una de las dos cosas, una actualización dejaría servido el archivo viejo.
     const sinRevision = [...sw.matchAll(/\{url:"([^"]+)",revision:(null|"[^"]*")\}/g)].filter(
@@ -300,6 +348,17 @@ describe.skipIf(!built)('salida de la compilación', () => {
   it('no repite entradas en el precaché', () => {
     const urls = [...read('sw.js').matchAll(/\burl:"([^"]+)"/g)].map((m) => m[1]);
     expect(urls.length).toBe(new Set(urls).size);
+  });
+
+  it('publica la política de privacidad con dirección fija y sin JavaScript', () => {
+    // Las tiendas de aplicaciones piden una dirección que se lea sin la
+    // aplicación. Se genera del mismo texto que enseña la pantalla.
+    const html = read('privacidad.html');
+    expect(html).toContain('<h1>Privacidad</h1>');
+    expect(html).not.toContain('<script');
+    expect(html).toMatch(/github\.com\/Tomasito25\/athos\/issues/);
+    // Y está en el precaché, para que se abra también sin conexión.
+    expect([...read('sw.js').matchAll(/\burl:"([^"]+)"/g)].map((m) => m[1])).toContain('privacidad.html');
   });
 
   it('deja los archivos imprescindibles en dist/', () => {

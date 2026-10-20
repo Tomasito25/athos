@@ -11,11 +11,14 @@ import { AKATHISTS, CANONS } from './hymns';
 import { ATHOS_ARTICLES, MONASTERIES } from './athos';
 import { CATECHISM_INDEX } from './catechism-parts';
 import { CHURCH_FATHERS } from './fathers';
-import { COUNCILS, HISTORY_PERIODS } from './history-all';
+import { COUNCILS } from './history-all';
 import { ICONS } from './icons';
 import { OFFICES } from './offices';
 import { STUDY_COURSES, STUDY_WORKS } from './study';
 import { GLOSSARY } from './glossary';
+import { ORTHODOX_CHURCHES } from './iglesias-hoy';
+import { APOPHTHEGMS } from './apotegmas';
+import { ASIA_PLACES, HOLY_LAND, PAUL_JOURNEYS } from './mapas-biblicos';
 import { TEMPLE_PARTS } from './temple';
 import es from '@/locales/es';
 
@@ -31,6 +34,7 @@ export interface LibrarySection {
     | 'candle'
     | 'chalice'
     | 'lamp'
+    | 'map'
     | 'note'
     | 'journal'
     | 'people'
@@ -165,6 +169,33 @@ export const LIBRARY_GROUPS: LibraryGroup[] = [
         unit: 'obras con ficha',
       },
       {
+        id: 'apotegmas',
+        to: '/biblioteca/apotegmas',
+        icon: 'lamp',
+        title: es.apophthegms.title,
+        text: 'Lo que los monjes de Egipto, Palestina y Siria contestaban a quien les pedía «una palabra». Traducidos del griego, por temas: la humildad, la oración, el silencio, no juzgar. Uno cada día en la portada.',
+        count: APOPHTHEGMS.length,
+        unit: 'dichos',
+      },
+      {
+        id: 'iglesias',
+        to: '/biblioteca/iglesias',
+        icon: 'cross',
+        title: 'Las Iglesias ortodoxas hoy',
+        text: 'Una ficha por Iglesia: quién la preside, su sede, desde cuándo es autocéfala, cuántos fieles tiene, su calendario, sus lenguas y sus diócesis en España y América Latina. Y las disputas abiertas, contadas como disputas.',
+        count: ORTHODOX_CHURCHES.length,
+        unit: 'Iglesias',
+      },
+      {
+        id: 'mapas',
+        to: '/biblioteca/mapas',
+        icon: 'map',
+        title: es.bible.maps,
+        text: 'Tierra Santa con los lugares del Evangelio, los cuatro viajes de san Pablo y las siete Iglesias del Apocalipsis con los concilios, sobre la costa de verdad. Cada lugar lleva a sus pasajes.',
+        count: HOLY_LAND.length + PAUL_JOURNEYS.length + ASIA_PLACES.length,
+        unit: 'lugares y viajes',
+      },
+      {
         id: 'athos',
         to: '/biblioteca/athos',
         icon: 'monastery',
@@ -188,6 +219,3 @@ export const LIBRARY_GROUPS: LibraryGroup[] = [
 
 /** Todas las secciones, sueltas. */
 export const LIBRARY_SECTIONS = LIBRARY_GROUPS.flatMap((g) => g.sections);
-
-/** Cuántas épocas de la historia hay escritas; se usa en la portada. */
-export const LIBRARY_PERIODS = HISTORY_PERIODS.length;

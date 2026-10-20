@@ -72,18 +72,32 @@ oración, y se pinta distinto.
 
 ---
 
-## Aportar traducciones de la interfaz
+## Idiomas
 
-La internacionalización ya está montada y **ningún texto de interfaz está escrito
-en un componente**. Para añadir un idioma:
+ATHOS está en español, interfaz y contenido. Hubo un selector con siete idiomas
+«pendientes de traducir», pero las pantallas leían el español directamente y
+una traducción nueva no se habría usado nunca; se quitó, con la librería de
+traducción que nadie usaba.
 
-1. Copia `src/locales/es.ts` a `src/locales/<código>.ts` y traduce los valores.
-2. Regístralo en `src/lib/i18n.ts` (`resources` y `SUPPORTED_LANGUAGES`).
-3. Marca `ready: true` sólo cuando la traducción esté **completa**.
+Si algún día se traduce, lo difícil no es la interfaz sino el contenido: cada
+oración, cada vida de santo y cada texto del catecismo. Antes de traducir una
+sola cadena hay que decidir eso.
 
-Están previstos: español, inglés, griego, ruso, rumano, serbio, georgiano y
-árabe. Para el árabe, comprueba también la disposición de derecha a izquierda:
-`RTL_LANGUAGES` ya la contempla.
+---
+
+## Revisar la procedencia de los textos
+
+`docs/PROCEDENCIA.md` lista, texto por texto, de dónde dice venir cada versión
+española y en qué estado está su revisión. Se regenera con:
+
+```bash
+npm run procedencia
+```
+
+Lo más urgente son las fichas marcadas como **versión tradicional sin
+verificar**: hay que averiguar si son traducción hecha para ATHOS desde el
+griego o el eslavo, o si se tomaron de un libro parroquial, que puede tener
+derechos. Si es lo segundo y no hay permiso, se retiran.
 
 ---
 
@@ -102,10 +116,26 @@ npm run check   # lint + typecheck + test + build
 - **TypeScript estricto.** Nada de `any` fuera de las pruebas.
 - **Comentarios en español**, y sólo donde expliquen un *porqué* que el código no
   puede expresar. No narres lo que ya se lee.
-- **Ningún texto visible dentro de un componente**: todo pasa por `src/locales`.
+- **Los textos de la interfaz, en `src/locales/es.ts`** mejor que sueltos en un
+  componente: así se revisan juntos y no se repiten.
 - **Detección por capacidades**, nunca por navegador.
 - **Los datos del usuario son sagrados.** Ninguna migración, siembra o
   actualización puede sobrescribirlos. Hay pruebas que lo verifican.
+
+### Rendimiento
+
+ATHOS arranca con lo justo: el precaché lleva lo necesario para abrir y rezar,
+y el resto del corpus va en trozos por sección que se descargan después, en
+segundo plano. Para que siga así:
+
+- **Un santo nuevo va en dos sitios**: su ficha (nombre, día, rango) en un
+  `saints*.ts` y su vida en `src/content/vidas/`. El calendario y la portada
+  sólo cargan lo primero; una prueba comprueba que no se descuelgan.
+- **No importes un módulo pesado del corpus desde algo que se carga al
+  arrancar** (el calendario, la portada, el armazón). Si hace falta sólo un
+  nombre o una fecha, sácalo a un índice ligero.
+- `node scripts/pwa-audit.mjs` comprueba con un navegador de verdad que todo
+  se abre sin conexión, también lo que no va en el precaché.
 
 ### El calendario litúrgico
 
@@ -122,6 +152,7 @@ npm run check   # lint + typecheck + test + build
 
 ```
 src/content/    corpus religioso, separado del código
+src/content/vidas/  las vidas de los santos, por id (el índice va en saints*.ts)
 src/db/         IndexedDB: esquema, siembra, repositorios
 src/lib/        calendario, cifrado, texto, formato, PWA
 src/features/   una carpeta por sección de la aplicación

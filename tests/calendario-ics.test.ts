@@ -107,9 +107,10 @@ describe('los avisos', () => {
     const eventos = await reminderEvents(conApotegma, '2026-10-19', 40);
     expect(eventos).toHaveLength(40);
     for (const e of eventos) {
-      const [y, m, d] = e.inicio.iso.split('-').map(Number);
+      const inicio = e.inicio!;
+      const [y, m, d] = inicio.iso.split('-').map(Number);
       expect(e.descripcion).toBe(apophthegmFor(new Date(y!, m! - 1, d!)).text);
-      expect(e.inicio.hora).toBe('07:45');
+      expect(inicio.hora).toBe('07:45');
     }
     // Entre cuarenta días, alguno pasa del límite del aviso y no por eso se corta.
     expect(eventos.some((e) => (e.descripcion ?? '').length > 300)).toBe(true);

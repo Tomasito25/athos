@@ -21,6 +21,7 @@
  *    un tropario o un canon. Un texto litúrgico no se decora.
  */
 import { ATHOS_ARTICLES, MONASTERIES } from './athos';
+import { WORLD_MONASTERIES } from './monasterios-mundo';
 import { CHURCH_FATHERS } from './fathers';
 import { HISTORY_PERIODS } from './history-all';
 import { ICONS } from './icons';
@@ -161,6 +162,11 @@ function reunir(): LinkTarget[] {
     ...MONASTERIES.map((m) => ({
       name: `monasterio de ${m.name}`,
       path: `/biblioteca/athos/monasterio/${m.id}`,
+      kind: 'monasterio' as const,
+    })),
+    ...WORLD_MONASTERIES.map((m) => ({
+      name: m.name,
+      path: `/biblioteca/monasterios/${m.id}`,
       kind: 'monasterio' as const,
     })),
     ...ATHOS_ARTICLES.map((a) => ({

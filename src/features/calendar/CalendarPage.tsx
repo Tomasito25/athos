@@ -12,6 +12,7 @@ import {
   CALENDAR_STYLE_LABELS,
   CALENDAR_STYLE_NOTE,
   SEASON_LABELS,
+  weekLabel,
 } from '@/lib/calendar/liturgical';
 import { isoToCivil, monthDay } from '@/lib/calendar/jdn';
 import { useSettings } from '@/stores/settings';
@@ -71,7 +72,7 @@ export function CalendarPage() {
       <HubHero
         icon={IconCalendar}
         title={es.calendar.title}
-        subtitle={`${formatLongDate(today)} · ${SEASON_LABELS[hoy.season]}`}
+        subtitle={`${formatLongDate(today)} · ${weekLabel(hoy) ?? SEASON_LABELS[hoy.season]}`}
       />
 
       {/* Los destinos hermanos, arriba y a mano. Antes eran cuatro botones al
@@ -88,6 +89,9 @@ export function CalendarPage() {
         </Link>
         <Link className="shortcut" to="/calendario/ayuno">
           <IconFast size={16} /> {es.fasting.title}
+        </Link>
+        <Link className="shortcut" to="/calendario/pascualia">
+          <IconCalendar size={16} /> {es.paschalion.title}
         </Link>
         <Link className="shortcut" to="/leer/lecturas">
           <IconBook size={16} /> {es.calendar.readings}
@@ -176,7 +180,7 @@ export function CalendarPage() {
           <Section title={formatLongDate(selectedDay.date)}>
             <Panel>
               <div className="tag-row" style={{ marginBottom: 'var(--sp-3)' }}>
-                <Tag tone="gold">{SEASON_LABELS[selectedDay.season]}</Tag>
+                <Tag tone="gold">{weekLabel(selectedDay) ?? SEASON_LABELS[selectedDay.season]}</Tag>
                 {selectedDay.tone ? <Tag>Tono {selectedDay.tone}</Tag> : null}
                 <Tag tone={fastTone(selectedDay)}>{selectedDay.fasting.label}</Tag>
               </div>

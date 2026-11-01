@@ -185,7 +185,7 @@ export function applySettingsToDocument(state: SettingsState): void {
 
   // El color de la barra del sistema sigue al tema.
   const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]:not([media])');
-  const color = dark ? '#100d0a' : '#f2e9d8';
+  const color = dark ? '#0b0d12' : '#f5f0e6';
   if (meta) meta.content = color;
   else {
     const created = document.createElement('meta');

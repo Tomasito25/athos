@@ -222,7 +222,11 @@ const PANTALLAS = [
   '/calendario/santos',
   '/calendario/ayuno',
   '/calendario/fiestas',
+  '/calendario/pascualia',
   '/biblioteca',
+  '/biblioteca/athos',
+  '/biblioteca/monasterios',
+  '/biblioteca/monasterios/sinai',
   '/biblioteca/estudio',
   '/biblioteca/iconos',
   '/biblioteca/padres',
@@ -248,6 +252,7 @@ const INEXISTENTES = [
   '/biblioteca/padres/no-existe',
   '/biblioteca/iconos/no-existe',
   '/biblioteca/athos/monasterio/no-existe',
+  '/biblioteca/monasterios/no-existe',
   '/ruta/que/no/existe',
 ];
 

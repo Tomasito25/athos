@@ -63,7 +63,7 @@ export function TopBar({ title }: { title?: string }) {
   return (
     <header className="app-topbar">
       {isRoot ? (
-        <span className="icon-btn" aria-hidden="true" style={{ color: 'var(--gold)' }}>
+        <span className="icon-btn app-topbar__cross" aria-hidden="true">
           <OrthodoxCross size={22} />
         </span>
       ) : (

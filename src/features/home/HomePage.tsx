@@ -7,10 +7,12 @@
  *
  * Ahora va por este orden, que es el de las preguntas de quien la abre:
  *
- * 1. **¿Qué día es?** La oración de Jesús como lema, la fecha, el tiempo
- *    litúrgico, el tono, el ayuno y la fiesta, todo junto arriba.
+ * 1. **¿Qué día es?** La oración de Jesús como lema, la fecha, el nombre
+ *    que el calendario da a la semana —«22.º domingo después de
+ *    Pentecostés»—, el tono, el ayuno y la fiesta, todo junto arriba.
  * 2. **¿Qué toca rezar?** El oficio de la hora, con su botón.
- * 3. **¿Qué celebra hoy la Iglesia?** El santo, el ayuno y el Evangelio.
+ * 3. **¿Qué celebra hoy la Iglesia?** El santo, el ayuno, la fiesta que se
+ *    acerca, la del Monte Athos si la hay, y el Evangelio.
  * 4. **¿Cómo voy?** Los tres oficios, cada uno con su avance.
  * 5. **¿A dónde voy ahora?** Los atajos, en teselas, y lo último que se leyó.
  *
@@ -22,9 +24,20 @@ import { useLiturgicalDay, useToday } from '@/hooks/useLiturgicalDay';
 import { useAsync } from '@/hooks/useAsync';
 import { useSaintLives } from '@/hooks/useSaintLives';
 import { listHistory } from '@/db/user';
-import { SEASON_LABELS } from '@/lib/calendar/liturgical';
+import { db } from '@/db/db';
+import { SEASON_LABELS, weekLabel } from '@/lib/calendar/liturgical';
 import { isoToCivil } from '@/lib/calendar/jdn';
-import { fastTone, formatDayMonth, formatLongDate, greeting, toneLabel, WEEKDAYS } from '@/lib/format';
+import { athosFeastCalendar } from '@/lib/athos-feasts';
+import {
+  fastTone,
+  formatChurchDate,
+  formatDayMonth,
+  formatLongDate,
+  greeting,
+  MONTHS,
+  toneLabel,
+  WEEKDAYS,
+} from '@/lib/format';
 import { isFastDay } from '@/lib/calendar/fasting';
 import { officeNow } from '@/lib/office-time';
 import { nextGreatFeast } from '@/lib/calendar/next-feast';
@@ -75,6 +88,19 @@ export function HomePage() {
   const epistle = day.readings?.readings.find((r) => r.kind === 'epistola');
   const tono = fastTone(day);
   const proxima = useMemo(() => nextGreatFeast(today, day.calendarStyle), [today, day.calendarStyle]);
+  const semana = weekLabel(day);
+  const civil = isoToCivil(today);
+  // El tiempo ya va dicho en la semana cuando es el de después de Pentecostés;
+  // los ayunos y los periodos con nombre propio sí se enseñan aparte.
+  const tiempo = day.season === 'despues-de-pentecostes' && semana ? null : SEASON_LABELS[day.season];
+
+  // La fiesta de la Montaña, de hoy o de mañana. Los monasterios ya están en la
+  // base de datos: no hace falta cargar sus textos para saber sus fechas.
+  const montes = useAsync(() => db.monasteries.toArray(), []);
+  const fiestaAthos = useMemo(
+    () => athosFeastCalendar(montes.data ?? [], today).find((f) => f.days <= 1) ?? null,
+    [montes.data, today],
+  );
 
   return (
     <div className="page page--home">
@@ -85,35 +111,48 @@ export function HomePage() {
       <div className="home-top">
         {/* ---------- El día ---------- */}
         <section className="today-hero" aria-labelledby="hoy">
-          <p className="today-hero__prayer">
+          <p className="today-hero__motto">
             <span className="home-hero__halo" aria-hidden="true">
-              <OrthodoxCross size={22} style={{ color: 'var(--gold)' }} />
+              <OrthodoxCross size={20} />
             </span>
-            <span className="home-hero__prayer">
-              Señor Jesucristo, Hijo de Dios, ten misericordia de mí, pecador.
-            </span>
+            <span>Señor Jesucristo, Hijo de Dios, ten misericordia de mí, pecador.</span>
           </p>
-          <div className="today-hero__divider" aria-hidden="true" />
-          <p className="eyebrow">
-            {greeting()} · {WEEKDAYS[day.weekday]}
-          </p>
-          <h2 id="hoy" className="today-hero__date display">
-            {formatDayMonth(today)}
-          </h2>
-          <p className="today-hero__year">{isoToCivil(today).year}</p>
 
-          <div className="tag-row">
-            <Tag tone="gold">{SEASON_LABELS[day.season]}</Tag>
-            <Tag>{toneLabel(day.tone)}</Tag>
-            <Tag tone={tono}>{day.fasting.label}</Tag>
-            {day.calendarStyle === 'juliano' ? <Tag tone="blue">{es.calendar.styleOld}</Tag> : null}
+          <div className="today-hero__body">
+            {/* La hoja del calendario: lo que se ve de un vistazo. */}
+            <div className="today-hero__leaf" aria-hidden="true">
+              <span className="today-hero__weekday">{WEEKDAYS[day.weekday]}</span>
+              <span className="today-hero__daynum">{civil.day}</span>
+              <span className="today-hero__month">{MONTHS[civil.month - 1]}</span>
+            </div>
+
+            <div className="today-hero__info">
+              <p className="eyebrow">{greeting()}</p>
+              <h2 id="hoy" className="today-hero__date">
+                <span className="sr-only">{formatLongDate(today)}. </span>
+                {semana ?? SEASON_LABELS[day.season]}
+              </h2>
+              {lead ? (
+                <Link to={`/calendario/dia/${today}`} className="today-hero__feast">
+                  {lead.name}
+                </Link>
+              ) : saint ? (
+                <Link to={`/calendario/santos/${saint.id}`} className="today-hero__feast">
+                  {saint.name}
+                </Link>
+              ) : null}
+              <div className="tag-row">
+                {tiempo && semana ? <Tag tone="gold">{tiempo}</Tag> : null}
+                <Tag>{toneLabel(day.tone)}</Tag>
+                <Tag tone={tono}>{day.fasting.label}</Tag>
+                {day.calendarStyle === 'juliano' ? (
+                  <Tag tone="blue">
+                    {es.calendar.styleOld} · {formatChurchDate(day.church).replace(/ de \d+$/, '')}
+                  </Tag>
+                ) : null}
+              </div>
+            </div>
           </div>
-
-          {lead ? (
-            <Link to={`/calendario/dia/${today}`} className="today-hero__feast">
-              {lead.name}
-            </Link>
-          ) : null}
         </section>
 
         {/* ---------- Lo que toca rezar ---------- */}
@@ -163,6 +202,22 @@ export function HomePage() {
                   <span className="day-card__text">{day.fasting.reason}</span>
                 )}
               </Link>
+
+              {fiestaAthos ? (
+                <Link
+                  to={
+                    fiestaAthos.monasteryId
+                      ? `/biblioteca/athos/monasterio/${fiestaAthos.monasteryId}`
+                      : '/biblioteca/athos/karyes'
+                  }
+                  className="day-card"
+                  data-tone="gold"
+                >
+                  <span className="eyebrow">{fiestaAthos.days === 0 ? es.home.athosToday : es.home.athosTomorrow}</span>
+                  <span className="day-card__title">{fiestaAthos.place}</span>
+                  <span className="day-card__text">{fiestaAthos.name}</span>
+                </Link>
+              ) : null}
 
               {proxima ? (
                 <Link to={`/calendario/dia/${proxima.date}`} className="day-card" data-tone="gold">

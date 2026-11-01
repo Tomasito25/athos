@@ -27,6 +27,8 @@ export interface MapPoint {
   look?: Aspecto;
   /** Fuera del recuadro: se pinta en esas unidades del dibujo, con una flecha hacia donde está. */
   fuera?: { x: number; y: number };
+  /** Sin rótulo en el dibujo: el nombre queda para el lector de pantalla y para la ficha. */
+  quiet?: boolean;
 }
 
 /** El nombre de un mar, un lago o un río, en cursiva y sin punto. */
@@ -77,6 +79,7 @@ export function RealMap({
   routes = [],
   waters = [],
   encuadre,
+  recorte,
   title,
   description,
   onSelect,
@@ -89,6 +92,11 @@ export function RealMap({
   waters?: MapWater[];
   /** Oeste, sur, este, norte: la parte del mapa que se enseña. Sin él, entero. */
   encuadre?: Encuadre;
+  /**
+   * La parte que se enseña, en unidades del dibujo, para los mapas girados,
+   * donde un recuadro en grados no es un rectángulo.
+   */
+  recorte?: { x: number; y: number; ancho: number; alto: number };
   title: string;
   description: string;
   onSelect?: (id: string) => void;
@@ -96,7 +104,7 @@ export function RealMap({
   children?: ReactNode;
 }) {
   const id = `mapa-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
-  const v = vista(mapa, encuadre);
+  const v = recorte ? { ...recorte, f: recorte.ancho / mapa.ancho } : vista(mapa, encuadre);
   const letra = LETRA * v.f;
   return (
     <svg
@@ -111,6 +119,10 @@ export function RealMap({
 
       <rect x={v.x} y={v.y} width={v.ancho} height={v.alto} className="mapa-real__mar" />
       <path d={mapa.tierra} className="mapa-real__tierra" fillRule="evenodd" />
+      {/* Las curvas de nivel, una sobre otra: cuanto más alto, más tinta. */}
+      {mapa.relieve?.map((curva, i) => (
+        <path key={mapa.niveles?.[i] ?? i} d={curva} className="mapa-real__relieve" fillRule="evenodd" />
+      ))}
       {/* El río antes que los lagos: el Jordán no se dibuja cruzando el mar de Galilea. */}
       {mapa.rios ? <path d={mapa.rios} className="mapa-real__rio" /> : null}
       {mapa.lagos ? <path d={mapa.lagos} className="mapa-real__mar mapa-real__lago" /> : null}
@@ -139,6 +151,8 @@ export function RealMap({
 
       {children}
 
+      {mapa.giro ? <RosaDelNorte giro={mapa.giro} x={v.x + 70 * v.f} y={v.y + 80 * v.f} f={v.f} /> : null}
+
       {points.map((p) => {
         const [x, y] = p.fuera ? [p.fuera.x, p.fuera.y] : proyectar(mapa, p.lon, p.lat);
         const aspecto = p.look ?? 'lleno';
@@ -160,13 +174,15 @@ export function RealMap({
             {p.look === 'tachado' ? (
               <line x1={x - r} y1={y + r} x2={x + r} y2={y - r} stroke={estilo.stroke} strokeWidth={3 * v.f} />
             ) : null}
-            <text x={t.x} y={t.y} textAnchor={t.anchor} className="mapa-real__rotulo">
-              {t.lineas.map((linea, i) => (
-                <tspan key={linea} x={t.x} dy={i === 0 ? 0 : t.salto}>
-                  {linea}
-                </tspan>
-              ))}
-            </text>
+            {p.quiet && !elegido ? null : (
+              <text x={t.x} y={t.y} textAnchor={t.anchor} className="mapa-real__rotulo">
+                {t.lineas.map((linea, i) => (
+                  <tspan key={linea} x={t.x} dy={i === 0 ? 0 : t.salto}>
+                    {linea}
+                  </tspan>
+                ))}
+              </text>
+            )}
           </g>
         );
         if (onSelect) {
@@ -193,5 +209,28 @@ export function RealMap({
         return <g key={p.id}>{contenido}</g>;
       })}
     </svg>
+  );
+}
+
+/**
+ * El norte de un mapa girado: una aguja con su «N», girada lo mismo que el
+ * dibujo. Sin ella, quien conoce la costa no entiende por qué está de lado.
+ */
+function RosaDelNorte({ giro, x, y, f }: { giro: number; x: number; y: number; f: number }) {
+  const r = 34 * f;
+  // La letra, en la punta de la aguja pero derecha, para que se lea.
+  const g = (giro * Math.PI) / 180;
+  const d = r + 22 * f;
+  return (
+    <g className="mapa-real__norte" transform={`translate(${x} ${y})`} aria-hidden="true">
+      <g transform={`rotate(${giro})`}>
+        <circle r={r} className="mapa-real__norte-disco" />
+        <path d={`M0 ${-r * 0.8} L${r * 0.26} 0 L0 ${r * 0.16} L${-r * 0.26} 0 Z`} className="mapa-real__norte-aguja" />
+        <path d={`M0 ${r * 0.8} L${r * 0.2} 0 L${-r * 0.2} 0 Z`} className="mapa-real__norte-cola" />
+      </g>
+      <text x={d * Math.sin(g)} y={-d * Math.cos(g) + 9 * f} textAnchor="middle" className="mapa-real__norte-letra">
+        N
+      </text>
+    </g>
   );
 }

@@ -514,6 +514,25 @@ export interface FatherWork {
    Monte Athos e iconografía
    ============================================================ */
 
+/** Un punto del mapa: longitud y latitud, de Wikidata (CC0). */
+export interface GeoPoint {
+  lat: number;
+  lon: number;
+}
+
+/**
+ * La fiesta de un monasterio, el día de su panigyri.
+ *
+ * La Montaña sigue el calendario juliano: `day` es la fecha de la Iglesia
+ * (`MM-DD`), que en el civil cae trece días después. Si la fiesta es móvil
+ * —Esfigmenu celebra la Ascensión—, va `paschaOffset` en su lugar.
+ */
+export interface MonasteryFeast {
+  name: string;
+  day?: string;
+  paschaOffset?: number;
+}
+
 export interface Monastery {
   id: string;
   name: string;
@@ -522,13 +541,18 @@ export interface Monastery {
   rank: number;
   founded: string;
   tradition: string;
-  dedication: string;
+  feast: MonasteryFeast;
   description: string;
-  /**
-   * Posición esquemática sobre la península para el mapa de la sección Athos.
-   * `along` va de 0 (istmo) a 1 (punta del monte). No son coordenadas topográficas.
-   */
-  location: { side: 'este' | 'oeste' | 'sur'; along: number };
+  /** Dónde está: las coordenadas del monasterio en Wikidata. */
+  coords: GeoPoint;
+  /** La vertiente de la península, o el centro, en Karyés. */
+  side: 'este' | 'oeste' | 'centro';
+  /** A la orilla del mar, o tierra adentro. */
+  shore: boolean;
+  /** El elemento de Wikidata del que salen las coordenadas. */
+  wikidata: string;
+  /** Cuándo volvió o pasó a la vida cenobítica, si se sabe. */
+  renewal?: string;
   monks?: string;
   treasures?: string[];
   /**
@@ -538,7 +562,7 @@ export interface Monastery {
   today?: string;
   /** Quién vivió allí. Es lo que hace que un monasterio no sea un edificio. */
   saints?: string[];
-  /** Sketes y dependencias que le pertenecen. */
+  /** Sketes y dependencias que le pertenecen, además de los sketes con ficha. */
   dependencies?: string[];
   status: ContentStatus;
   meta: SourceMeta;
@@ -560,7 +584,8 @@ export interface AthosArticle {
     | 'sketes'
     | 'iconos'
     | 'canto'
-    | 'visita';
+    | 'visita'
+    | 'karyes';
   blocks: TextBlock[];
   status: ContentStatus;
   meta: SourceMeta;
@@ -818,12 +843,21 @@ export interface LiturgicalDay {
   readings: LiturgicalReading | null;
 }
 
+/**
+ * El tiempo del año litúrgico.
+ *
+ * Fuera del Triodio y del Pentecostario no hay un «tiempo ordinario», que es
+ * una noción del rito latino: el año sigue el Octoecos y los domingos se
+ * cuentan después de Pentecostés hasta que empieza el Triodio siguiente.
+ */
 export type LiturgicalSeason =
   | 'triodio'
   | 'gran-cuaresma'
   | 'semana-santa'
+  | 'semana-luminosa'
   | 'pentecostario'
-  | 'tiempo-ordinario'
+  | 'despues-de-pentecostes'
+  | 'dodecaemeron'
   | 'ayuno-natividad'
   | 'ayuno-apostoles'
   | 'ayuno-dormicion';

@@ -9,6 +9,7 @@
  */
 import { AKATHISTS, CANONS } from './hymns';
 import { ATHOS_ARTICLES, MONASTERIES } from './athos';
+import { WORLD_MONASTERIES } from './monasterios-mundo';
 import { CATECHISM_INDEX } from './catechism-parts';
 import { CHURCH_FATHERS } from './fathers';
 import { COUNCILS } from './history-all';
@@ -31,6 +32,7 @@ export interface LibrarySection {
     | 'scroll'
     | 'book'
     | 'monastery'
+    | 'domes'
     | 'candle'
     | 'chalice'
     | 'lamp'
@@ -200,9 +202,18 @@ export const LIBRARY_GROUPS: LibraryGroup[] = [
         to: '/biblioteca/athos',
         icon: 'monastery',
         title: es.library.athos,
-        text: 'Los veinte monasterios con lo que son hoy y quién vivió en ellos, y doce artículos: la historia, el gobierno, el ávaton, los sketes, el canto y cómo se llega.',
+        text: 'Los veinte monasterios y los doce sketes sobre un mapa de verdad, lo que es hoy cada uno y quién vivió en él, el año de sus fiestas y trece artículos: la historia, el gobierno, Karyés, el ávaton, el canto y cómo se llega.',
         count: MONASTERIES.length + ATHOS_ARTICLES.length,
         unit: 'monasterios y artículos',
+      },
+      {
+        id: 'monasterios',
+        to: '/biblioteca/monasterios',
+        icon: 'domes',
+        title: 'Monasterios del mundo ortodoxo',
+        text: 'Del Sinaí a las Solovkí: Mar Saba, Patmos, Metéora, Rila, Studenica, las Lauras de Kiev y de San Sergio, Óptina, Valaam y los demás, en su mapa, con lo que son hoy y los santos que salieron de ellos.',
+        count: WORLD_MONASTERIES.length,
+        unit: 'monasterios',
       },
       {
         id: 'iconos',

@@ -47,23 +47,73 @@ function seasonFor(o: number, n: number, md: string): LiturgicalSeason {
   if (n >= -6 && n <= -1) return 'semana-santa';
   if (n >= -48 && n <= -7) return 'gran-cuaresma';
   if (n >= -70 && n <= -49) return 'triodio';
-  if (o >= 0 && o <= 56) return 'pentecostario';
+  if (o >= 0 && o <= 6) return 'semana-luminosa';
+  if (o >= 7 && o <= 56) return 'pentecostario';
   if (o >= 57 && md >= '05-01' && md < '06-29') return 'ayuno-apostoles';
   if (md >= '08-01' && md <= '08-14') return 'ayuno-dormicion';
   if (md >= '11-15' && md <= '12-24') return 'ayuno-natividad';
-  return 'tiempo-ordinario';
+  // Del 25 de diciembre a la víspera de la Teofanía: los doce días santos.
+  if (md >= '12-25' || md <= '01-04') return 'dodecaemeron';
+  return 'despues-de-pentecostes';
 }
 
 export const SEASON_LABELS: Record<LiturgicalSeason, string> = {
   triodio: 'Triodio',
   'gran-cuaresma': 'Gran Cuaresma',
-  'semana-santa': 'Semana Santa',
+  'semana-santa': 'Gran y Santa Semana',
+  'semana-luminosa': 'Semana Luminosa',
   pentecostario: 'Pentecostario',
-  'tiempo-ordinario': 'Tiempo ordinario',
+  'despues-de-pentecostes': 'Tiempo después de Pentecostés',
+  dodecaemeron: 'Santos Días de la Natividad',
   'ayuno-natividad': 'Ayuno de la Natividad',
   'ayuno-apostoles': 'Ayuno de los Apóstoles',
   'ayuno-dormicion': 'Ayuno de la Dormición',
 };
+
+/**
+ * El ordinal abreviado, concordado: «1.er domingo», «22.º domingo», «3.ª
+ * semana». Primer y tercer se apocopan delante del masculino, también en
+ * vigésimo primer o decimotercer; undécimo no.
+ */
+export function ordinal(n: number, genero: 'm' | 'f'): string {
+  if (genero === 'f') return `${n}.ª`;
+  const apocope = n % 10 === 3 || (n % 10 === 1 && n % 100 !== 11);
+  return `${n}${apocope ? '.er' : '.º'}`;
+}
+
+/**
+ * La semana del año litúrgico, como la nombran los calendarios ortodoxos.
+ *
+ * Los domingos del Pentecostario se cuentan desde la Pascua (el de Tomás es
+ * el segundo) y, desde Pentecostés, después de Pentecostés, hasta que empieza
+ * el Triodio siguiente; los de la Cuaresma, desde el lunes puro. La semana
+ * que sigue a un domingo lleva el número siguiente: tras el primer domingo
+ * después de Pentecostés, el de Todos los Santos, viene la segunda semana.
+ * Devuelve `null` en el Triodio y en la Semana Santa y la Luminosa, que ya
+ * tienen nombre propio.
+ */
+export function weekLabel(day: Pick<LiturgicalDay, 'paschaOffset' | 'nextPaschaOffset' | 'weekday'>): string | null {
+  const o = day.paschaOffset;
+  const n = day.nextPaschaOffset;
+  const domingo = day.weekday === 0;
+  if (n >= -48 && n <= -8) {
+    const semana = Math.floor((n + 48) / 7) + 1;
+    return domingo
+      ? `${ordinal(Math.round((n + 49) / 7), 'm')} domingo de la Gran Cuaresma`
+      : `${ordinal(semana, 'f')} semana de la Gran Cuaresma`;
+  }
+  if (n >= -70) return null;
+  if (o >= 7 && o <= 48) {
+    const semana = Math.floor(o / 7) + 1;
+    return domingo ? `${ordinal(semana, 'm')} domingo de Pascua` : `${ordinal(semana, 'f')} semana de Pascua`;
+  }
+  if (o >= 50) {
+    return domingo
+      ? `${ordinal(Math.round((o - 49) / 7), 'm')} domingo después de Pentecostés`
+      : `${ordinal(Math.floor((o - 50) / 7) + 1, 'f')} semana después de Pentecostés`;
+  }
+  return null;
+}
 
 /** Orden de importancia para elegir la fiesta que encabeza el día. */
 const RANK_WEIGHT: Record<Feast['rank'], number> = {

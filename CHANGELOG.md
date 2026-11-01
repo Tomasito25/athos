@@ -2,6 +2,72 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [2.0.0]
+
+### Cambiado
+
+- **Una interfaz nueva entera.** Dos temas que salen de los libros de la
+  Iglesia: el pergamino, con la tinta y el cinabrio de un libro litúrgico
+  impreso —el rojo de las rúbricas es ahora el color de lo que se pulsa—, y la
+  vigilia, en azul de noche y oro de lámpara. Tarjetas planas con sombras
+  suaves, botones redondeados, una barra inferior con la píldora del activo
+  detrás del icono y una barra lateral más limpia.
+- **Las páginas ya no se quedan en blanco al abrirse.** Las animaciones de
+  entrada, las listas que aparecían fila a fila y las secciones que esperaban
+  al desplazamiento escondían el contenido medio segundo en cada pantalla; se
+  han quitado, con los destellos que barrían las tarjetas y las velas que
+  temblaban.
+- **Inicio cabe en una pantalla**: la hoja del calendario, el nombre de la
+  semana, la fiesta, el tono y el ayuno arriba, y debajo, sin bajar, el oficio
+  de la hora con su botón. Antes la cabecera ocupaba el teléfono entero con un
+  hueco vacío en medio.
+- **El nombre ortodoxo de cada semana.** Donde ponía «Tiempo ordinario» —una
+  noción del rito latino— ahora dice «22.º domingo después de Pentecostés»,
+  «3.ª semana de la Gran Cuaresma» o «2.º domingo de Pascua», como los
+  calendarios ortodoxos; y hay Semana Luminosa y Santos Días de la Natividad.
+- **Monte Athos, rehecho.** El mapa deja de ser un esquema: la costa y el
+  relieve de la península salen del modelo de elevación de la NASA, va girado
+  para que la península quepa en vertical en el teléfono, y cada monasterio,
+  skete y lugar está en sus coordenadas. Se toca y enseña su ficha. Los veinte
+  se filtran por tradición y por vertiente.
+- La ficha de cada monasterio dice su fiesta y el día civil en que cae
+  —la Montaña sigue el calendario juliano—, dónde está, cuándo volvió a la
+  vida común, sus sketes con lo que son, el trozo del mapa donde está y el
+  paso al anterior y al siguiente en la jerarquía.
+
+### Añadido
+
+- **Los doce sketes**, cada uno con el monasterio del que depende, si es
+  cenobítico o una aldea de kalyvas, y su tradición.
+- **El año de la Montaña**: las fiestas de los veinte y de sus iconos, por
+  orden, con el día civil y el de la Montaña. San Jorge, cuando cae en
+  Cuaresma, pasa al lunes de Pascua. Y en Inicio, el aviso cuando la Montaña
+  celebra hoy o mañana.
+- **Karyés y el Protaton**, un artículo nuevo, y el Axion Estin entre los
+  iconos de la Montaña.
+- **Monasterios del mundo ortodoxo**: diecinueve casas del Sinaí a las
+  Solovkí, en su mapa, con lo que son hoy y sus santos. Sólo de la Iglesia
+  ortodoxa: las Iglesias no calcedonianas no se mezclan con ella.
+- **Pascualia**: las Pascuas de los próximos años con el Triodio, el Lunes
+  Puro, la Ascensión, Pentecostés y los días del ayuno de los Apóstoles en
+  cada calendario, y los años en que coincide con la occidental.
+
+### Corregido
+
+- En la Montaña había errores de hecho: el skete de Kavsokalyvia y san
+  Porfirio se atribuían a Pantokrátoros, y son de la Gran Laura; el del Profeta
+  Elías y el de San Andrés, al monasterio ruso, y son de Pantokrátoros y de
+  Vatopedi; la Gran Laura pasaba por la última en volver a la vida cenobítica,
+  que fue Pantokrátoros, en 1992; se llamaba santos al anciano Efrén de Filoteu
+  y al padre Cosme de Grigoriu, que no están canonizados; la torre de Karakalu
+  la costeó un príncipe de Moldavia, no de Valaquia; y el presidente de la
+  Epistasía es el protepistátis, no el Protos.
+- La cruz de ocho puntas de la pantalla de arranque tenía el supedáneo al
+  revés: subía hacia la derecha de quien mira, y debe subir hacia la
+  izquierda, hacia el buen ladrón. La del iconostasio, en El templo, era una
+  cruz latina de un solo travesaño.
+- En el tema oscuro, el mar de los mapas salía más claro que la tierra.
+
 ## [1.32.0]
 
 ### Añadido

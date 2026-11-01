@@ -65,7 +65,14 @@ puede borrar los datos de una web que no se abre en semanas, y la copia es lo
 - **Las lecturas de cada día** del leccionario bizantino, recortadas al
   versículo exacto: no el capítulo entero, sino la perícopa que se lee.
 - **Calendario litúrgico** con la Pascua ortodoxa calculada de verdad, el tono
-  del Octoecos, las fiestas y el ayuno de cada día.
+  del Octoecos, las fiestas y el ayuno de cada día, y cada semana con el nombre
+  que le dan los calendarios ortodoxos: «22.º domingo después de Pentecostés»,
+  «3.ª semana de la Gran Cuaresma». Sin «tiempo ordinario», que es del rito
+  latino.
+- **Pascualia**: las Pascuas de los próximos años, con el comienzo del
+  Triodio y de la Cuaresma, la Ascensión, Pentecostés, los días del ayuno de
+  los Apóstoles en cada calendario y los años en que coincide con la Pascua
+  occidental.
 - **Santoral completo**: no queda ningún día del año sin conmemoración, con la
   vida escrita de cada una.
 - **Catecismo** de 108 preguntas con las tres partes clásicas —la fe sobre el
@@ -82,9 +89,18 @@ puede borrar los datos de una web que no se abre en semanas, y la copia es lo
 - **Padres de la Iglesia** por épocas, de san Ignacio de Antioquía a san
   Sofronio de Essex: qué enseñó cada uno, de qué trata cada obra suya, por dónde
   empezar a leerlo y qué conviene saber antes.
-- **Monte Athos**: los veinte monasterios con lo que son hoy y quién vivió en
-  ellos, y artículos sobre el gobierno, el ávaton, los sketes, el canto y cómo
-  se llega.
+- **Monte Athos, sobre un mapa de verdad**: la costa y el relieve de la
+  península trazados del modelo de elevación de la NASA, y en él los veinte
+  monasterios, los doce sketes, Karyés, Dafni y la cumbre, cada uno en sus
+  coordenadas. De cada monasterio, lo que es hoy, quién vivió en él, qué
+  custodia, sus sketes y su fiesta, con el día civil en que cae —la Montaña
+  sigue el calendario juliano—. El año entero de sus fiestas y las de sus
+  iconos, y trece artículos: el gobierno, Karyés, el ávaton, los sketes, el
+  canto y cómo se llega.
+- **Monasterios del mundo ortodoxo**: diecinueve casas del Sinaí a las
+  Solovkí —Mar Saba, Patmos, Metéora, Rila, Studenica, Dečani, las Lauras de
+  Kiev y de San Sergio, Óptina, Valaam…—, en su mapa, con lo que son hoy y los
+  santos que salieron de ellas.
 - **El versículo y el apotegma del día**, uno al lado del otro en Inicio: un
   versículo de la Escritura y un dicho de los Padres del desierto, traducido
   del griego. Si se quiere, llegan como avisos aparte: el apotegma por la
@@ -105,8 +121,11 @@ puede borrar los datos de una web que no se abre en semanas, y la copia es lo
   santo, con la voz del propio dispositivo; y la pantalla encendida mientras
   se reza un oficio.
 - **Oración de Jesús y komboskini**, con contador, temporizador e historial.
-- **Ornamentos bizantinos** dibujados con trazo —cabeceras de entrelazo,
-  capitulares iluminadas, filete de tabla de icono—, que se pueden apagar.
+- **Dos temas que salen de los libros de la Iglesia**: el pergamino, en tinta y
+  cinabrio como un libro litúrgico impreso, y la vigilia, en azul de noche y
+  oro de lámpara. Con ornamentos bizantinos dibujados con trazo —cabeceras de
+  entrelazo, capitulares iluminadas, la banda de mosaico—, que se pueden
+  apagar.
 
 ---
 ## Contribuir

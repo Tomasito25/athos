@@ -16,7 +16,7 @@ export function BootScreen() {
             <path d="M32 6v84" />
             <path d="M16 20h32" />
             <path d="M8 38h48" />
-            <path d="M14 66l36-16" />
+            <path d="M14 50l36 16" />
           </g>
         </svg>
       </div>

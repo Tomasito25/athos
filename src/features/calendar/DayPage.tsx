@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { useLiturgicalDay, useToday } from '@/hooks/useLiturgicalDay';
-import { SEASON_LABELS } from '@/lib/calendar/liturgical';
+import { SEASON_LABELS, weekLabel } from '@/lib/calendar/liturgical';
 import { ALLOWANCE_LABELS, FASTING_DISCLAIMER } from '@/lib/calendar/fasting';
 import { addDaysIso } from '@/lib/calendar/jdn';
 import { formatChurchDate, formatLongDate, fastTone, relativeDayLabel, toneLabel } from '@/lib/format';
@@ -17,6 +17,7 @@ export function DayPage() {
   const day = useLiturgicalDay(date);
   const vidas = useSaintLives(day.saints.map((s) => s.id));
   const relative = relativeDayLabel(date, today);
+  const semana = weekLabel(day);
 
   return (
     <div className="page page--reading">
@@ -29,7 +30,8 @@ export function DayPage() {
       />
 
       <div className="tag-row">
-        <Tag tone="gold">{SEASON_LABELS[day.season]}</Tag>
+        {semana ? <Tag tone="gold">{semana}</Tag> : null}
+        <Tag tone={semana ? undefined : 'gold'}>{SEASON_LABELS[day.season]}</Tag>
         <Tag>{toneLabel(day.tone)}</Tag>
         <Tag tone={fastTone(day)}>{day.fasting.label}</Tag>
       </div>

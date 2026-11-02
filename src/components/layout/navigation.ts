@@ -110,6 +110,7 @@ export const APP_MAP: MapGroup[] = [
       { to: '/calendario/santos', label: es.saints.title, icon: IconCandle },
       { to: '/calendario/fiestas', label: es.calendar.feasts, icon: OrthodoxCross },
       { to: '/calendario/ayuno', label: es.fasting.title, icon: IconFast },
+      { to: '/calendario/pascualia', label: es.paschalion.title, hint: 'Las Pascuas de los próximos años', icon: IconCalendar },
     ],
   },
 ];

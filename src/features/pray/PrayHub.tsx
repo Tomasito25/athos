@@ -80,7 +80,9 @@ export function PrayHub() {
                   <span>{LENGTH_INFO.get(medida)?.label}</span> ·{' '}
                   {es.office.minutes.replace('{{n}}', String(minutesFor(oficio.time, medida)))}
                 </p>
-                {estado && estado.total > 0 ? (
+                {/* El avance sólo cuando hay algo empezado: diez casillas vacías y
+                    un «0 %» en cada oficio no dicen nada. */}
+                {estado && estado.total > 0 && estado.ratio > 0 ? (
                   <div className="office-card__progress">
                     <ProgressBlocks value={estado.ratio} />
                   </div>

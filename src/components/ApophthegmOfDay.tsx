@@ -14,12 +14,11 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { apophthegmFor } from '@/content/apotegmas';
 import { IconShare } from '@/components/icons';
-import { shareText } from '@/lib/lectura';
-import { useUi } from '@/stores/ui';
+import { absoluteUrl, useShare } from '@/hooks/useShare';
 import es from '@/locales/es';
 
 export function ApophthegmOfDay({ prominent = false }: { prominent?: boolean }) {
-  const toast = useUi((s) => s.toast);
+  const compartir = useShare();
   const dicho = useMemo(() => apophthegmFor(new Date()), []);
   const ruta = `/biblioteca/apotegmas#${dicho.id}`;
   // Un suceso de cinco líneas centrado se lee mal: los largos van alineados a
@@ -49,11 +48,7 @@ export function ApophthegmOfDay({ prominent = false }: { prominent?: boolean }) 
         className="icon-btn verse-day__share"
         aria-label={`${es.reader.share}: ${es.home.apophthegmOfDay.toLowerCase()}`}
         title={es.reader.share}
-        onClick={async () => {
-          const url = new URL(`${import.meta.env.BASE_URL}${ruta.slice(1)}`, window.location.href).href;
-          const resultado = await shareText(dicho.abba, dicho.text, url);
-          if (resultado === 'copied') toast(es.reader.copied);
-        }}
+        onClick={() => void compartir(dicho.abba, dicho.text, absoluteUrl(ruta))}
       >
         <IconShare size={18} />
       </button>

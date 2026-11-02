@@ -13,6 +13,7 @@ import { BOOKS_BY_ID } from '@/content/bible';
 import { STUDY_COURSES, STUDY_WORKS } from '@/content/study';
 import { PRAYER_ORDERS } from '@/content/prayer-orders';
 import { APOPHTHEGMS } from '@/content/apotegmas';
+import { WORLD_MONASTERIES } from '@/content/monasterios-mundo';
 import { citationFor } from '@/lib/citation';
 
 export const KIND_LABELS: Record<SearchKind, string> = {
@@ -261,6 +262,23 @@ export async function searchAll(query: string, options: SearchOptions = {}): Pro
           subtitle: `${m.rank}.º · ${m.tradition}`,
           snippet: snippet(m.description, tokens),
           path: `/biblioteca/athos/monasterio/${m.id}`,
+          score: s,
+        });
+      }
+    }
+    // Y los de fuera de la Montaña, que no viven en la base de datos: son
+    // diecinueve fichas y se buscan sobre el propio módulo.
+    for (const m of WORLD_MONASTERIES) {
+      const texto = `${m.name} ${m.localName} ${m.country} ${m.church} ${m.description} ${m.today} ${m.saints.join(' ')}`;
+      const s = score(tokens, texto, m.name);
+      if (s > 0) {
+        push('monastery', {
+          id: `mundo-${m.id}`,
+          kind: 'monastery',
+          title: m.name,
+          subtitle: `${m.country} · ${m.church}`,
+          snippet: snippet(m.description, tokens),
+          path: `/biblioteca/monasterios/${m.id}`,
           score: s,
         });
       }

@@ -235,6 +235,22 @@ export const IconMonastery = (props: IconProps) => (
   </Svg>
 );
 
+/**
+ * Tres cúpulas con su cruz: una laura vista de lejos. La del centro, mayor,
+ * es el katholikón; para los monasterios de fuera de la Montaña.
+ */
+export const IconDomes = (props: IconProps) => (
+  <Svg {...props}>
+    <path d="M12 2v3M10.6 3.3h2.8" />
+    <path d="M8.5 11a3.5 3.5 0 017 0" />
+    <path d="M8.5 11v9.5M15.5 11v9.5" />
+    <path d="M3.5 20.5v-6.2a2.5 2.5 0 015 0" />
+    <path d="M15.5 14.3a2.5 2.5 0 015 0v6.2" />
+    <path d="M2.5 20.5h19" />
+    <path d="M11 20.5v-3.2a1 1 0 012 0v3.2" />
+  </Svg>
+);
+
 export const IconFast = (props: IconProps) => (
   <Svg {...props}>
     <path d="M6 3v7a2.5 2.5 0 005 0V3" />

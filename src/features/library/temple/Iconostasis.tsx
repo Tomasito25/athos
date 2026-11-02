@@ -21,8 +21,12 @@ export function Iconostasis({ selected, onSelect }: { selected: string; onSelect
     <svg className="temple-svg" viewBox="0 0 360 300" role="group" aria-label="El iconostasio visto de frente">
       <Zone id="iconostasio" {...z}>
         <rect className="temple-shape temple-shape--wall" x="6" y="40" width="348" height="254" rx="4" />
-        {/* La cruz de arriba */}
-        <path className="temple-shape temple-shape--gold" d="M176 4 h8 v8 h10 v6 h-10 v16 h-8 v-16 h-10 v-6 h10 z" />
+        {/* La cruz de arriba, la de ocho puntas: el supedáneo sube a la
+            izquierda de quien mira, hacia el buen ladrón. */}
+        <path
+          className="temple-shape temple-shape--gold"
+          d="M178.4 2h3.2v34h-3.2z M174.5 6.5h11v2.6h-11z M170 12h20v3.2h-20z M171.6 23.4 L188.6 28.6 L187.7 31.4 L170.7 26.2 Z"
+        />
       </Zone>
 
       <Zone id="filas" {...z}>

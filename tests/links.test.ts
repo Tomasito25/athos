@@ -12,6 +12,7 @@ import { resolve } from 'node:path';
 import { SAINTS } from '@/content/santoral';
 import { CHURCH_FATHERS } from '@/content/fathers';
 import { MONASTERIES, ATHOS_ARTICLES } from '@/content/athos';
+import { WORLD_MONASTERIES } from '@/content/monasterios-mundo';
 import { PRAYERS, PRAYER_CATEGORIES } from '@/content/prayers';
 import { OFFICES } from '@/content/offices';
 import { ICONS } from '@/content/icons';
@@ -42,6 +43,7 @@ const EXISTE: Record<string, Set<string>> = {
   '/calendario/santos/': new Set(SAINTS.map((s) => s.id)),
   '/biblioteca/padres/': new Set(CHURCH_FATHERS.map((f) => f.id)),
   '/biblioteca/athos/monasterio/': new Set(MONASTERIES.map((m) => m.id)),
+  '/biblioteca/monasterios/': new Set(WORLD_MONASTERIES.map((m) => m.id)),
   '/biblioteca/athos/': new Set(ATHOS_ARTICLES.map((a) => a.id)),
   '/orar/oraciones/categoria/': new Set(PRAYER_CATEGORIES.map((c) => c.id)),
   '/orar/oraciones/': new Set([...PRAYERS.map((p) => p.id), 'todas']),
@@ -72,12 +74,14 @@ const FIJAS = new Set([
   '/calendario/santos',
   '/calendario/ayuno',
   '/calendario/fiestas',
+  '/calendario/pascualia',
   '/biblioteca',
   '/biblioteca/liturgia',
   '/biblioteca/akathistos',
   '/biblioteca/canones',
   '/biblioteca/padres',
   '/biblioteca/athos',
+  '/biblioteca/monasterios',
   '/biblioteca/iconos',
   '/biblioteca/historia',
   '/biblioteca/catecismo',

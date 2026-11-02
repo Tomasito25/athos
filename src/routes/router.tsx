@@ -8,6 +8,7 @@ import { createBrowserRouter, type RouteObject } from 'react-router-dom';
 import { AppShell } from '@/components/layout/AppShell';
 import { StartRedirect } from '@/features/home/StartRedirect';
 import { ErrorPage } from '@/features/error/ErrorPage';
+import { BootScreen } from '@/components/layout/BootScreen';
 
 const page = (loader: () => Promise<Record<string, unknown>>, name: string) => async () => {
   const module = await loader();
@@ -20,6 +21,8 @@ export const routes: RouteObject[] = [
     path: '/',
     element: <AppShell />,
     errorElement: <ErrorPage />,
+    // Lo que se ve mientras llega el código de la primera pantalla.
+    HydrateFallback: BootScreen,
     children: [
       { index: true, element: <StartRedirect /> },
 
@@ -81,6 +84,9 @@ export const routes: RouteObject[] = [
       { path: 'biblioteca/athos', lazy: page(() => import('@/features/athos/AthosPage'), 'AthosPage') },
       { path: 'biblioteca/athos/monasterio/:monasteryId', lazy: page(() => import('@/features/athos/MonasteryPage'), 'MonasteryPage') },
       { path: 'biblioteca/athos/:articleId', lazy: page(() => import('@/features/athos/AthosArticlePage'), 'AthosArticlePage') },
+      { path: 'biblioteca/monasterios', lazy: page(() => import('@/features/monasteries/WorldMonasteriesPage'), 'WorldMonasteriesPage') },
+      { path: 'biblioteca/monasterios/:monasteryId', lazy: page(() => import('@/features/monasteries/WorldMonasteryPage'), 'WorldMonasteryPage') },
+      { path: 'calendario/pascualia', lazy: page(() => import('@/features/calendar/PaschalionPage'), 'PaschalionPage') },
       { path: 'biblioteca/historia', lazy: page(() => import('@/features/history/HistoryPage'), 'HistoryPage') },
       { path: 'biblioteca/mapas', lazy: page(() => import('@/features/library/BibleMapsPage'), 'BibleMapsPage') },
       { path: 'biblioteca/iglesias', lazy: page(() => import('@/features/history/ChurchesTodayPage'), 'ChurchesTodayPage') },

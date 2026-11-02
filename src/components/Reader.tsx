@@ -6,7 +6,8 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Button, Dialog, FavoriteButton, Panel } from '@/components/ui';
 import { IconNote, IconShare, IconSpeaker, IconStop } from '@/components/icons';
-import { pageParagraphs, readAloud, shareText, speechSupported, type Reading } from '@/lib/lectura';
+import { pageParagraphs, readAloud, speechSupported, type Reading } from '@/lib/lectura';
+import { useShare } from '@/hooks/useShare';
 import { releaseWakeLock, requestWakeLock } from '@/lib/wakelock';
 import { useFavorite } from '@/hooks/useFavorite';
 import { useAsync } from '@/hooks/useAsync';
@@ -31,7 +32,7 @@ export function ReaderToolbar({ favorite, note, extraActions }: Omit<ReaderProps
   const prayerMode = useUi((s) => s.prayerMode);
   const { active, toggle } = useFavorite(favorite ?? null);
   const [notesOpen, setNotesOpen] = useState(false);
-  const toast = useUi((s) => s.toast);
+  const share = useShare();
   const barra = useRef<HTMLDivElement>(null);
   const lectura = useRef<Reading | null>(null);
   const [voz, setVoz] = useState<'parada' | 'leyendo' | 'pausa'>('parada');
@@ -45,9 +46,7 @@ export function ReaderToolbar({ favorite, note, extraActions }: Omit<ReaderProps
     const parrafos = raiz ? pageParagraphs(raiz) : [];
     const titulo = favorite?.title ?? parrafos[0] ?? document.title;
     const cuerpo = parrafos.slice(parrafos[0] === titulo ? 1 : 0).join('\n\n');
-    const resultado = await shareText(titulo, cuerpo, window.location.href);
-    if (resultado === 'copied') toast(es.reader.copied);
-    if (resultado === 'failed') toast(es.reader.shareFailed);
+    await share(titulo, cuerpo, window.location.href);
   };
 
   const leer = () => {

@@ -119,7 +119,15 @@ describe('búsqueda global', () => {
 
   it('encuentra monasterios del Athos', async () => {
     const resultado = await searchAll('simonopetra');
-    expect(resultado.groups.find((g) => g.kind === 'monastery')?.total).toBe(1);
+    const grupo = resultado.groups.find((g) => g.kind === 'monastery');
+    // Primero el monasterio; después, Metéora, de donde salió su comunidad.
+    expect(grupo?.results[0]?.path).toBe('/biblioteca/athos/monasterio/simonopetra');
+  });
+
+  it('encuentra también los monasterios de fuera del Athos', async () => {
+    const { groups } = await searchAll('solovki');
+    const monasterios = groups.find((g) => g.kind === 'monastery');
+    expect(monasterios?.results.some((r) => r.path === '/biblioteca/monasterios/solovki')).toBe(true);
   });
 
   it('funciona sin acentos', async () => {

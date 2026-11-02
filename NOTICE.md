@@ -158,21 +158,27 @@ pendiente la revisión de una persona con el original delante.
 ## Mapas
 
 La costa, los lagos y los ríos de los mapas —las sedes de la Iglesia por
-épocas, las Iglesias de hoy, Tierra Santa, los viajes de san Pablo y las siete
-Iglesias del Apocalipsis— salen de [Natural Earth](https://www.naturalearthdata.com),
-de **dominio público**. `scripts/build-mapas.mjs` los recorta y simplifica una
-vez y los guarda en el código: los mapas no descargan nada. Las coordenadas de
-cada lugar y sus notas son de ATHOS, bajo CC BY-SA 4.0; donde se discute dónde
-estaba un sitio, su nota lo dice. Los mapas no dibujan fronteras.
+épocas, las Iglesias de hoy, Tierra Santa, los viajes de san Pablo, las siete
+Iglesias del Apocalipsis y los monasterios del mundo ortodoxo— salen de
+[Natural Earth](https://www.naturalearthdata.com), de **dominio público**.
+`scripts/build-mapas.mjs` los recorta y simplifica una vez y los guarda en el
+código: los mapas no descargan nada. Las coordenadas de cada lugar y sus notas
+son de ATHOS, bajo CC BY-SA 4.0; donde se discute dónde estaba un sitio, su nota
+lo dice. Los mapas no dibujan fronteras.
 
-## Monte Athos
+## Monte Athos y monasterios del mundo ortodoxo
 
 Reseñas redactadas para ATHOS a partir de la historia documentada de la
-Comunidad Monástica, bajo CC BY-SA 4.0.
+Comunidad Monástica y de cada monasterio, bajo CC BY-SA 4.0.
 
-El mapa de la península es **esquemático**: sitúa cada monasterio en su costa y a
-lo largo de la península para orientarse, pero **no son coordenadas
-topográficas**, y así se indica al pie del mapa.
+El mapa de la península es un **mapa de verdad**: la costa y las curvas de
+nivel salen de **SRTM3** (Shuttle Radar Topography Mission, NASA, 2000), un
+modelo de elevación de **dominio público** con un punto cada tres segundos de
+arco; el script toma la copia que conserva srtm.kurviger.de de la que publicaba
+el USGS. Las coordenadas de los veinte monasterios, los doce sketes, los
+lugares de la Montaña y los diecinueve monasterios de fuera de ella son las de
+[Wikidata](https://www.wikidata.org), cuyos datos están bajo **CC0**; cada
+ficha guarda el identificador del elemento del que salen.
 
 ## Iconografía: textos de las fichas
 

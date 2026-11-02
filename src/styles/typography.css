@@ -47,9 +47,12 @@
    reconstruye con `float` y `::first-letter`, que es lo más cerca que llega
    el navegador sin partir el texto en dos elementos.
 
+   Va en el primer párrafo que se reza, no en la rúbrica: en el libro, la
+   indicación en rojo va antes y la letra grande abre la oración.
+
    Se puede apagar: hay quien lee mejor sin ella, y en pantallas muy
    estrechas una capitular de tres líneas se come el ancho. */
-.prose--illuminated > p:first-of-type::first-letter {
+.prose--illuminated > p:nth-child(1 of p:not(.rubric))::first-letter {
   float: left;
   font-family: var(--font-serif);
   font-size: 3.1em;
@@ -58,7 +61,7 @@
   color: var(--red);
 }
 
-:root[data-dropcaps='si'] .prose--illuminated > p:first-of-type::first-letter {
+:root[data-dropcaps='si'] .prose--illuminated > p:nth-child(1 of p:not(.rubric))::first-letter {
   margin-inline-end: 0.12em;
   padding: 0.1em 0.14em 0.04em 0.1em;
   border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent);
@@ -70,7 +73,7 @@
 /* Por debajo de 24rem la capitular deja el párrafo en una columna de dos
    palabras. Se queda grande, pero sin caja ni flotado. */
 @media (max-width: 24rem) {
-  :root[data-dropcaps='si'] .prose--illuminated > p:first-of-type::first-letter {
+  :root[data-dropcaps='si'] .prose--illuminated > p:nth-child(1 of p:not(.rubric))::first-letter {
     border: none;
     background: none;
     box-shadow: none;

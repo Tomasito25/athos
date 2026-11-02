@@ -382,20 +382,36 @@ async function registrarFondo(hayAlgo: boolean): Promise<BackgroundState> {
   }
 }
 
+/**
+ * Cuál es la última vez que se pidió programar.
+ *
+ * Preparar la cola tarda —diez días de avisos, y el versículo puede tener que
+ * descargar un libro—, así que dos peticiones seguidas se solapan: encender
+ * el apotegma y cambiarle la hora enseguida. Antes, las dos dejaban su
+ * temporizador puesto, y el de la primera, con la hora vieja, avisaba a la
+ * hora que ya no era y daba por visto el aviso de la hora nueva. Ahora sólo
+ * programa la última.
+ */
+let vuelta = 0;
+
 /** Avisa de lo que toque ahora y programa el siguiente. */
 async function programar(): Promise<void> {
+  const esta = ++vuelta;
   window.clearTimeout(temporizador);
   const ajustes = useSettings.getState();
   const activos = REMINDERS.filter((r) => ajustes.notifications[r.id]);
 
   const cola = await buildQueue();
+  if (esta !== vuelta) return;
   await setSetting(QUEUE_KEY, cola);
   estadoFondo = await registrarFondo(activos.length > 0 && notificationPermission() === 'granted');
+  if (esta !== vuelta) return;
 
   const siguiente = cola[0];
   if (!siguiente) return;
   // setTimeout no admite esperas de más de 24 días; con la cola de diez, sobra.
   const espera = Math.max(0, new Date(siguiente.at).getTime() - Date.now());
+  window.clearTimeout(temporizador);
   temporizador = window.setTimeout(async () => {
     await avisarVencidos(cola);
     void programar();

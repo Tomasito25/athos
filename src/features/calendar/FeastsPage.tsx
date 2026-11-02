@@ -47,7 +47,7 @@ export function FeastsPage() {
         </div>
       </Section>
 
-      <Section title="Ciclo móvil de este año">
+      <Section title="Ciclo móvil de este año" action={{ label: es.paschalion.title, to: '/calendario/pascualia' }}>
         <div className="list">
           {movable.map(({ feast, date }) => (
             <ListRow

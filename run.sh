@@ -25,6 +25,7 @@ for arg in "$@"; do
     --stop)    ACTION="stop" ;;
     --status)  ACTION="status" ;;
     --rebuild) ACTION="rebuild" ;;
+    --al-dia)  ACTION="al-dia" ;;
     --movil|--móvil|--lan)
       # Accesible desde el teléfono, en la misma red.
       BIND_HOST="0.0.0.0"; SHOW_QR=1; OPEN_BROWSER=0 ;;
@@ -39,6 +40,7 @@ Uso: run.sh [opciones]
   --movil          Accesible desde el teléfono en tu misma red, con código QR
   --tunel          Dirección HTTPS pública temporal: permite INSTALARLA en el móvil
   --rebuild        Vuelve a compilar antes de arrancar
+  --al-dia         Dice si lo compilado está al día con el código
   --status         Indica si ATHOS está corriendo
   --stop           Detiene el servidor
   --help           Muestra esta ayuda
@@ -181,7 +183,82 @@ MSG
   echo "$dest"
 }
 
+# ---------------------------------------------------------------------------
+# Compilación, sólo si hace falta
+# ---------------------------------------------------------------------------
+# Lo que se compila: si algo de esto es más nuevo que dist/, lo compilado
+# está viejo.
+FUENTES=(src public scripts index.html package.json package-lock.json vite.config.ts CHANGELOG.md)
+
+# El primer archivo del código más nuevo que lo compilado, o nada si está al
+# día. Antes sólo se miraba si dist/ existía, y al traer cambios con git
+# ATHOS seguía abriendo la versión anterior sin avisar: dist/ ya estaba.
+# `git pull` deja con la fecha de ahora cada archivo que cambia, así que
+# comparar fechas basta y no hace falta llevar la cuenta de versiones.
+cambio_sin_compilar() {
+  local rutas=() f
+  for f in "${FUENTES[@]}"; do
+    [[ -e "$APP_DIR/$f" ]] && rutas+=("$APP_DIR/$f")
+  done
+  [[ ${#rutas[@]} -gt 0 ]] || return 0
+  # Primero un archivo, que dice más; si no, una carpeta: borrar un archivo
+  # sólo cambia la fecha de la carpeta que lo tenía.
+  local cambio
+  cambio="$(find "${rutas[@]}" -type f -newer "$APP_DIR/dist/index.html" -not -path '*/node_modules/*' -print -quit 2>/dev/null)"
+  [[ -n "$cambio" ]] || cambio="$(find "${rutas[@]}" -type d -newer "$APP_DIR/dist/index.html" -not -path '*/node_modules/*' -print -quit 2>/dev/null)"
+  echo "$cambio"
+}
+
+compilacion_vieja() {
+  [[ -f "$APP_DIR/dist/index.html" ]] || return 0
+  [[ -n "$(cambio_sin_compilar)" ]]
+}
+
+find_node() {
+  if command -v npm >/dev/null 2>&1; then echo ""; return 0; fi
+  # Node no siempre está en el PATH del sistema; se busca la instalación local.
+  for dir in "$HOME/.local/node/bin" "$HOME/.nvm/versions/node"/*/bin; do
+    [[ -x "$dir/npm" ]] && { echo "$dir"; return 0; }
+  done
+  return 1
+}
+
+build() {
+  local extra_path
+  if ! extra_path="$(find_node)"; then
+    fail "ATHOS no está compilada y no encuentro Node para compilarla.
+
+Instálalo sin tocar el sistema:
+  curl -o /tmp/node.tar.xz https://nodejs.org/dist/v24.19.0/node-v24.19.0-linux-x64.tar.xz
+  mkdir -p ~/.local && tar -xf /tmp/node.tar.xz -C ~/.local
+  mv ~/.local/node-v24.19.0-linux-x64 ~/.local/node
+
+Y vuelve a abrir ATHOS."
+  fi
+  [[ -n "$extra_path" ]] && export PATH="$extra_path:$PATH"
+
+  if [[ -f "$APP_DIR/dist/index.html" ]]; then
+    notice "Compilando la versión nueva de ATHOS… (tarda un minuto)"
+  else
+    notice "Compilando ATHOS… (sólo la primera vez, tarda un minuto)"
+  fi
+  cd "$APP_DIR"
+  [[ -d node_modules ]] || npm install --no-audit --no-fund || fail "Falló la instalación de dependencias."
+  npm run build || fail "Falló la compilación. Ejecuta ./run.sh desde una terminal para ver el detalle."
+  cd - >/dev/null
+}
+
 case "$ACTION" in
+  al-dia)
+    if [[ ! -f "$APP_DIR/dist/index.html" ]]; then
+      echo "ATHOS no está compilada."
+      exit 1
+    elif compilacion_vieja; then
+      echo "Hay cambios sin compilar; por ejemplo, $(realpath --relative-to="$APP_DIR" "$(cambio_sin_compilar)")."
+      exit 1
+    fi
+    echo "Lo compilado está al día."
+    exit 0 ;;
   stop)
     if stop_running; then echo "ATHOS detenido."; else echo "No había ningún servidor de ATHOS en marcha."; fi
     exit 0 ;;
@@ -192,7 +269,10 @@ esac
 
 if [[ "$ACTION" == "tunel" ]]; then
   command -v python3 >/dev/null 2>&1 || fail "Falta python3."
-  [[ -f "$APP_DIR/dist/index.html" ]] || fail "ATHOS no está compilada. Ejecuta ./run.sh primero."
+  if compilacion_vieja; then
+    stop_running >/dev/null || true
+    build
+  fi
 
   CF="$(cloudflared_bin || true)"
   if [[ -z "$CF" ]]; then
@@ -248,43 +328,13 @@ fi
 
 command -v python3 >/dev/null 2>&1 || fail "Falta python3. Instálalo con: sudo apt install python3"
 
-# ---------------------------------------------------------------------------
-# Compilación, sólo si hace falta
-# ---------------------------------------------------------------------------
-find_node() {
-  if command -v npm >/dev/null 2>&1; then echo ""; return 0; fi
-  # Node no siempre está en el PATH del sistema; se busca la instalación local.
-  for dir in "$HOME/.local/node/bin" "$HOME/.nvm/versions/node"/*/bin; do
-    [[ -x "$dir/npm" ]] && { echo "$dir"; return 0; }
-  done
-  return 1
-}
-
-build() {
-  local extra_path
-  if ! extra_path="$(find_node)"; then
-    fail "ATHOS no está compilada y no encuentro Node para compilarla.
-
-Instálalo sin tocar el sistema:
-  curl -o /tmp/node.tar.xz https://nodejs.org/dist/v24.19.0/node-v24.19.0-linux-x64.tar.xz
-  mkdir -p ~/.local && tar -xf /tmp/node.tar.xz -C ~/.local
-  mv ~/.local/node-v24.19.0-linux-x64 ~/.local/node
-
-Y vuelve a abrir ATHOS."
-  fi
-  [[ -n "$extra_path" ]] && export PATH="$extra_path:$PATH"
-
-  notice "Compilando ATHOS… (sólo la primera vez, tarda un minuto)"
-  cd "$APP_DIR"
-  [[ -d node_modules ]] || npm install --no-audit --no-fund || fail "Falló la instalación de dependencias."
-  npm run build || fail "Falló la compilación. Ejecuta ./run.sh desde una terminal para ver el detalle."
-  cd - >/dev/null
-}
-
 if [[ "$ACTION" == "rebuild" ]]; then
   stop_running >/dev/null || true
   build
-elif [[ ! -f "$APP_DIR/dist/index.html" ]]; then
+elif compilacion_vieja; then
+  # Vite vacía dist/ al compilar: un servidor en marcha serviría archivos a
+  # medias. Se para y se vuelve a arrancar más abajo.
+  stop_running >/dev/null || true
   build
 fi
 

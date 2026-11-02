@@ -31,21 +31,24 @@ body {
   overscroll-behavior-y: none;
 }
 
-/* Textura sutil de pergamino: un grano casi imperceptible, no un adorno. */
+/* La luz del fondo: en el claro, el reflejo cálido de una ventana sobre el
+   pergamino; en el oscuro, el azul de la cúpula de noche. Muy tenue: es
+   atmósfera, no adorno. */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.5;
   background-image:
-    radial-gradient(circle at 12% 8%, var(--gold-wash), transparent 42%),
-    radial-gradient(circle at 88% 92%, var(--red-wash), transparent 46%);
+    radial-gradient(120% 60% at 50% -10%, color-mix(in srgb, var(--gold) 7%, transparent), transparent 60%),
+    radial-gradient(80% 50% at 100% 100%, color-mix(in srgb, var(--accent) 4%, transparent), transparent 60%);
 }
 
 :root[data-theme='dark'] body::before {
-  opacity: 0.75;
+  background-image:
+    radial-gradient(120% 55% at 50% -12%, rgba(80, 110, 170, 0.12), transparent 62%),
+    radial-gradient(70% 45% at 50% 0%, color-mix(in srgb, var(--gold) 6%, transparent), transparent 70%);
 }
 
 #root {
@@ -115,13 +118,13 @@ hr {
 }
 
 :focus-visible {
-  outline: 2px solid var(--gold);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
 }
 
 ::selection {
-  background: var(--gold-wash);
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
   color: var(--ink-strong);
 }
 
@@ -154,7 +157,7 @@ hr {
   z-index: 999;
   padding: var(--sp-3) var(--sp-4);
   background: var(--surface);
-  border: 1px solid var(--gold);
+  border: 1px solid var(--accent);
   border-radius: var(--radius);
 }
 
@@ -186,6 +189,12 @@ hr {
   background: var(--bg);
   color: var(--gold);
   animation: boot-in var(--dur-slow) var(--ease);
+}
+
+/* La misma pantalla, repetida por React mientras llega la primera página:
+   ya se estaba viendo, así que no vuelve a entrar. */
+.boot-screen--seguida {
+  animation: none;
 }
 
 .boot-word {

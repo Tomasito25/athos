@@ -9,13 +9,22 @@
 import type { MapaBase } from '@/content/generated/mapas';
 
 export function proyectar(mapa: MapaBase, lon: number, lat: number): [number, number] {
+  if (mapa.centro && mapa.giro) {
+    // El mapa girado: centrado en su sitio y girado en el sentido del reloj,
+    // igual que lo dibujó el script.
+    const [lon0, lat0] = mapa.centro;
+    const dx = (lon - lon0) * mapa.cos * mapa.escala;
+    const dy = (lat0 - lat) * mapa.escala;
+    const g = (mapa.giro * Math.PI) / 180;
+    return [dx * Math.cos(g) - dy * Math.sin(g) + mapa.ancho / 2, dx * Math.sin(g) + dy * Math.cos(g) + mapa.alto / 2];
+  }
   const [oeste, , , norte] = mapa.caja;
   return [(lon - oeste) * mapa.cos * mapa.escala, (norte - lat) * mapa.escala];
 }
 
 export function dentroDelMapa(mapa: MapaBase, lon: number, lat: number): boolean {
-  const [oeste, sur, este, norte] = mapa.caja;
-  return lon >= oeste && lon <= este && lat >= sur && lat <= norte;
+  const [x, y] = proyectar(mapa, lon, lat);
+  return x >= 0 && x <= mapa.ancho && y >= 0 && y <= mapa.alto;
 }
 
 /** Oeste, sur, este, norte, en grados. */

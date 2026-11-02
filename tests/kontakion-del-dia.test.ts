@@ -117,11 +117,11 @@ describe('qué kontakion toca cada día', () => {
   });
 
   it('cuando ningún santo del día tiene kontakion, se dice el del día de la semana y se avisa', () => {
-    // Se busca un martes del tiempo ordinario sin kontakion propio.
+    // Se busca un martes después de Pentecostés sin kontakion propio.
     let hallado = false;
     for (let off = 60; off < 300 && !hallado; off++) {
       const d = dia(off);
-      if (d.weekday !== 2 || d.season !== 'tiempo-ordinario' || d.feasts.length > 0) continue;
+      if (d.weekday !== 2 || d.season !== 'despues-de-pentecostes' || d.feasts.length > 0) continue;
       if (d.saints.length === 0 || d.saints.some((s) => SAINT_KONTAKIA[s.id])) continue;
       const r = kontakiaForDay(d);
       if (r.kind !== 'kontakia') throw new Error(r.kind);

@@ -466,7 +466,7 @@ export const THIRD_PRAYERS: ThirdPrayerSeed[] = [
     id: 'digno-es-en-verdad',
     title: 'Digno es en verdad',
     subtitle: 'Ἄξιόν ἐστιν',
-    category: 'otras',
+    category: 'theotokos',
     blocks: [
       t('Digno es en verdad bendecirte, oh Theotokos, siempre bienaventurada y toda inmaculada, y Madre de nuestro Dios.'),
       t('A la más honorable que los querubines e incomparablemente más gloriosa que los serafines, que sin mancha diste a luz al Verbo de Dios, a la verdadera Theotokos, te engrandecemos.'),

@@ -1,9 +1,9 @@
 /**
  * Portada de la biblioteca.
  *
- * Van en tres bloques —para entender la fe, lo que se reza, quiénes lo
- * dijeron— y cada tarjeta lleva su cuenta, sacada del contenido y no escrita
- * a mano.
+ * Van en cuatro bloques —para entender la fe, para vivirla, lo que se reza,
+ * quiénes lo dijeron— y cada tarjeta lleva su cuenta, sacada del contenido y no
+ * escrita a mano.
  *
  * Cada sección es una tesela, dos por fila en el móvil: el icono, el título,
  * la cuenta en la esquina y dos renglones de descripción, lo que hace falta

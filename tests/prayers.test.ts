@@ -245,9 +245,10 @@ describe('procedencia: lo que ATHOS escribe no se disfraza de texto litúrgico',
     // completo, y lo parcial tiene que tener texto de verdad, no sólo el aviso.
     for (const prayer of PRAYERS) {
       const tienePendiente = prayer.blocks.some((b) => b.kind === 'pending');
-      // Un salmo en línea es texto que se reza: se trae entero del Salterio.
-      const tieneTexto = prayer.blocks.some(
-        (b) => b.kind === 'text' || b.kind === 'verse' || b.kind === 'psalm',
+      // Un salmo o una lectura en línea son texto que se reza: se traen enteros
+      // del Salterio y de la Biblia. Lo mismo un canon plegado o el tropario del día.
+      const tieneTexto = prayer.blocks.some((b) =>
+        ['text', 'verse', 'psalm', 'reading', 'embed', 'day-troparion'].includes(b.kind),
       );
       if (tienePendiente) {
         expect(['pending', 'partial'], prayer.id).toContain(prayer.status);
@@ -269,9 +270,10 @@ describe('procedencia: lo que ATHOS escribe no se disfraza de texto litúrgico',
       if (prayer.status !== 'complete') continue;
       const esGuia = /Guía redactada para ATHOS/i.test(prayer.meta.source);
       if (esGuia) continue;
-      // Un salmo en línea es texto que se reza: se trae entero del Salterio.
-      const tieneTexto = prayer.blocks.some(
-        (b) => b.kind === 'text' || b.kind === 'verse' || b.kind === 'psalm',
+      // Un salmo o una lectura en línea son texto que se reza: se traen enteros
+      // del Salterio y de la Biblia. Lo mismo un canon plegado o el tropario del día.
+      const tieneTexto = prayer.blocks.some((b) =>
+        ['text', 'verse', 'psalm', 'reading', 'embed', 'day-troparion'].includes(b.kind),
       );
       expect(tieneTexto, `${prayer.id} no tiene ni una línea que rezar`).toBe(true);
     }

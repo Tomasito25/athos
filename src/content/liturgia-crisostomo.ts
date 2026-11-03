@@ -65,6 +65,12 @@ const PETICIONES: TextBlock[] = [
   ref('Concédelo, Señor.'),
 ];
 
+/** La oración antes del Evangelio se reza también suelta: pide luz para entender. */
+export const ANTES_DEL_EVANGELIO = `Haz brillar en nuestros corazones, Soberano amigo de los hombres, la luz pura del conocimiento de tu divinidad, y abre los ojos de nuestra mente para comprender la predicación de tu Evangelio. Pon en nosotros también el temor de tus bienaventurados mandamientos, para que, pisoteando todos los deseos de la carne, llevemos una vida espiritual, pensando y haciendo todo lo que te agrada. Porque Tú eres la iluminación de nuestras almas y de nuestros cuerpos, Cristo Dios, y a Ti te damos gloria, junto con tu Padre sin principio y tu santísimo, bueno y vivificante Espíritu, ${POR_LOS_SIGLOS} Amén.`;
+
+/** La oración detrás del ambón se reza también suelta, en el libro de oraciones. */
+export const DETRAS_DEL_AMBON = `Señor, que bendices a los que te bendicen y santificas a los que confían en Ti: salva a tu pueblo y bendice tu heredad. Guarda la plenitud de tu Iglesia; santifica a los que aman el esplendor de tu casa; glorifícalos Tú a cambio con tu poder divino, y no nos abandones a los que esperamos en Ti. Da la paz a tu mundo, a tus Iglesias, a los sacerdotes, a los que nos gobiernan, a los que nos protegen y a todo tu pueblo. Porque todo buen don y todo don perfecto viene de lo alto y baja de Ti, Padre de las luces, y a Ti te damos gloria, acción de gracias y adoración, al Padre, y al Hijo, y al Espíritu Santo, ${POR_LOS_SIGLOS}`;
+
 export const LITURGIA_CRISOSTOMO: OfficeSection[] = [
   section('antes-de-empezar', 'Antes de empezar', [
     rub('Terminada la proscomidia, el sacerdote inciensa el altar y el templo. Después, ante el altar, el sacerdote y el diácono dicen en voz baja:'),
@@ -199,7 +205,7 @@ export const LITURGIA_CRISOSTOMO: OfficeSection[] = [
     rub('Sacerdote, al terminar: «Paz a ti, que has leído». Se canta el Aleluya con sus versículos, y mientras tanto el diácono inciensa. Al incienso, el sacerdote dice:'),
     t('Te ofrecemos el incienso, Cristo Dios nuestro, en olor de fragancia espiritual: Tú, que lo recibes en tu altar sobre los cielos, envíanos a cambio la gracia de tu Espíritu santísimo.'),
     rub('Sacerdote, en voz baja, la oración antes del Evangelio:'),
-    t(`Haz brillar en nuestros corazones, Soberano amigo de los hombres, la luz pura del conocimiento de tu divinidad, y abre los ojos de nuestra mente para comprender la predicación de tu Evangelio. Pon en nosotros también el temor de tus bienaventurados mandamientos, para que, pisoteando todos los deseos de la carne, llevemos una vida espiritual, pensando y haciendo todo lo que te agrada. Porque Tú eres la iluminación de nuestras almas y de nuestros cuerpos, Cristo Dios, y a Ti te damos gloria, junto con tu Padre sin principio y tu santísimo, bueno y vivificante Espíritu, ${POR_LOS_SIGLOS} Amén.`),
+    t(ANTES_DEL_EVANGELIO),
     rub('El diácono, inclinándose ante el sacerdote: «Bendice, señor, al que anuncia el Evangelio del santo y glorioso apóstol y evangelista N.». Sacerdote:'),
     t('Que Dios, por la intercesión del santo, glorioso apóstol y evangelista N., te dé la palabra para anunciar el Evangelio con gran poder, para cumplimiento del Evangelio de su Hijo amado, nuestro Señor Jesucristo.'),
     rub('Diácono: «Amén». Sacerdote, en voz alta:'),
@@ -470,7 +476,7 @@ export const LITURGIA_CRISOSTOMO: OfficeSection[] = [
     t('Oremos al Señor.'),
     SENOR,
     rub('El sacerdote sale del santuario y, ante el pueblo, dice la oración detrás del ambón:'),
-    t(`Señor, que bendices a los que te bendicen y santificas a los que confían en Ti: salva a tu pueblo y bendice tu heredad. Guarda la plenitud de tu Iglesia; santifica a los que aman el esplendor de tu casa; glorifícalos Tú a cambio con tu poder divino, y no nos abandones a los que esperamos en Ti. Da la paz a tu mundo, a tus Iglesias, a los sacerdotes, a los que nos gobiernan, a los que nos protegen y a todo tu pueblo. Porque todo buen don y todo don perfecto viene de lo alto y baja de Ti, Padre de las luces, y a Ti te damos gloria, acción de gracias y adoración, al Padre, y al Hijo, y al Espíritu Santo, ${POR_LOS_SIGLOS}`),
+    t(DETRAS_DEL_AMBON),
     AMEN,
     ref('Bendito sea el nombre del Señor, desde ahora y para siempre. <em>(tres veces)</em>'),
     rub('Mientras se canta, el sacerdote dice en voz baja ante la prótesis, donde se consumirán los dones: «Tú, Cristo Dios nuestro, que eres la plenitud de la Ley y de los profetas, que cumpliste toda la economía del Padre: llena de gozo y de alegría nuestros corazones, siempre, ahora y siempre, y por los siglos de los siglos. Amén».'),

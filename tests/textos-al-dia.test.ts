@@ -38,7 +38,7 @@ describe('Acerca de', () => {
 
 describe('README', () => {
   const readme = leer('README.md');
-  const numeros: Record<number, string> = { 31: 'treinta y un', 32: 'treinta y dos', 33: 'treinta y tres', 34: 'treinta y cuatro' };
+  const numeros: Record<number, string> = { 31: 'treinta y un', 32: 'treinta y dos', 33: 'treinta y tres', 34: 'treinta y cuatro', 67: 'sesenta y siete' };
 
   it('cuenta los momentos que hay', () => {
     const total = MOMENT_GROUPS.reduce((n, g) => n + g.moments.length, 0);

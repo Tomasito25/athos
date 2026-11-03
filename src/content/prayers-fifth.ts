@@ -72,7 +72,7 @@ export const FIFTH_PRAYERS: ThirdPrayerSeed[] = [
     id: 'agni-parthene',
     title: 'Virgen pura, Soberana',
     subtitle: 'Ἁγνὴ Παρθένε, himno de san Nectario de Egina',
-    category: 'santos',
+    category: 'theotokos',
     blocks: [
       rub('Lo compuso san Nectario de Egina († 1920) para su Theotokarion, un libro de himnos a la Theotokos. Se canta en el tono plagal primero, con el saludo «Alégrate, Esposa no desposada» después de cada verso. Va con su griego, porque es como más se canta.'),
       verso('Virgen pura, Soberana, Theotokos inmaculada;', 'Ἁγνὴ Παρθένε Δέσποινα, ἄχραντε Θεοτόκε,'),
@@ -110,7 +110,7 @@ export const FIFTH_PRAYERS: ThirdPrayerSeed[] = [
     id: 'reina-mia',
     title: 'Reina mía buenísima',
     subtitle: 'A la Theotokos, en la tribulación',
-    category: 'santos',
+    category: 'theotokos',
     blocks: [
       t('Reina mía buenísima, esperanza mía, Theotokos, refugio de los huérfanos y protectora de los peregrinos, alegría de los afligidos, amparo de los ofendidos: ves mi desgracia, ves mi aflicción. Ayúdame, porque soy débil; guíame, porque soy peregrino.'),
       t('Tú conoces el agravio que padezco: resuélvelo como quieras. Porque no tengo otra ayuda fuera de ti, ni otra protectora, ni buena consoladora, sino sólo tú, oh Madre de Dios: guárdame y cúbreme por los siglos de los siglos. Amén.'),

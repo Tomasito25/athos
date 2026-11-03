@@ -24,6 +24,10 @@ const t = (content: string): TextBlock => ({ kind: 'text', content });
 const rub = (content: string): TextBlock => ({ kind: 'rubric', content });
 const ref = (content: string): TextBlock => ({ kind: 'refrain', content });
 const head = (content: string): TextBlock => ({ kind: 'heading', content });
+
+/** El himno se reza también suelto, en el libro de oraciones. */
+export const LUZ_ALEGRE =
+  'Luz alegre de la santa gloria del Padre inmortal, celestial, santo, bienaventurado: ¡oh Jesucristo! Llegados a la puesta del sol y viendo la luz de la tarde, cantamos al Padre, al Hijo y al Espíritu Santo, Dios. Digno eres de ser cantado en todo tiempo con voces santas, oh Hijo de Dios, que das la vida; por eso el mundo te glorifica.';
 const psalm = (n: number): TextBlock => ({ kind: 'psalm', content: `Salmo ${n}`, ref: String(n) });
 const section = (
   id: string,
@@ -116,7 +120,7 @@ export const VISPERAS: OfficeSection[] = [
   section('luz-alegre', 'La entrada y el «Luz alegre»', [
     rub('En las Vísperas de víspera de domingo y de fiesta el sacerdote sale con el incensario por las puertas del norte y vuelve a entrar por las santas. El diácono:'),
     t('¡Sabiduría! ¡De pie!'),
-    t('Luz alegre de la santa gloria del Padre inmortal, celestial, santo, bienaventurado: ¡oh Jesucristo! Llegados a la puesta del sol y viendo la luz de la tarde, cantamos al Padre, al Hijo y al Espíritu Santo, Dios. Digno eres de ser cantado en todo tiempo con voces santas, oh Hijo de Dios, que das la vida; por eso el mundo te glorifica.'),
+    t(LUZ_ALEGRE),
     rub('Es uno de los himnos cristianos más antiguos que se siguen cantando; ya san Basilio lo cita en el siglo IV como venerable y de autor desconocido.'),
   ]),
 

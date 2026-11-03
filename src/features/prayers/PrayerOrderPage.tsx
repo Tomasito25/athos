@@ -14,7 +14,7 @@ import { useVisitLog } from '@/hooks/useVisitLog';
 import { useHashScroll } from '@/hooks/useHashScroll';
 import { useKeepAwake } from '@/hooks/useKeepAwake';
 import { PRAYER_ORDERS, orderById } from '@/content/prayer-orders';
-import { PRAYER_CATEGORIES } from '@/content/prayers';
+import { PRAYER_CATEGORIES } from '@/content/prayer-categories';
 import es from '@/locales/es';
 
 export function PrayerOrderPage() {

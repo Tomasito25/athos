@@ -75,13 +75,13 @@ const CIERRE_DE_PARTE: TextBlock[] = [
   ref('Amén.'),
 ];
 
-const PABLO_EVERGETINO: TextBlock[] = [
+export const PABLO_EVERGETINO: TextBlock[] = [
   t('Inmaculada, incontaminada, incorrupta, purísima y casta Virgen, Esposa de Dios y Soberana, que por tu admirable alumbramiento uniste a Dios Verbo con los hombres y juntaste con las cosas del cielo la naturaleza caída de nuestro linaje; única esperanza de los desesperados y auxilio de los combatidos, pronta protección de los que acuden a ti y refugio de todos los cristianos: no me desprecies a mí, pecador y manchado, que con pensamientos, palabras y obras vergonzosas me he hecho inútil del todo y, por pereza de la mente, me he vuelto esclavo de los placeres de la vida.'),
   t('Antes bien, como Madre del Dios que ama a los hombres, ten compasión de mí, pecador y pródigo, y acoge esta súplica que te ofrezco con labios impuros. Usando de tu confianza de madre, pide a tu Hijo, Soberano y Señor nuestro, que me abra las entrañas compasivas de su bondad, que pase por alto mis faltas incontables y me convierta al arrepentimiento, y me haga cumplidor probado de sus mandamientos. Y quédate siempre a mi lado, como misericordiosa, compasiva y amante del bien; sé en esta vida mi defensora ardiente y auxiliadora, apartando los asaltos de los enemigos y guiándome hacia la salvación; y en la hora de mi muerte abraza mi alma desdichada y aleja de ella las tenebrosas apariencias de los espíritus malignos.'),
   t('Y en el día terrible del juicio líbrame del castigo eterno, y muéstrame heredero de la gloria inefable de tu Hijo y Dios nuestro; alcánzalo, Señora mía, santísima Theotokos, por tu intercesión y tu amparo, por la gracia y el amor a los hombres de tu Hijo unigénito, Señor y Dios y Salvador nuestro Jesucristo, a quien corresponde toda gloria, honor y adoración, con su Padre sin principio y su santísimo, bueno y vivificador Espíritu, ahora y siempre, y por los siglos de los siglos. Amén.'),
 ];
 
-const ANTIOCO: TextBlock[] = [
+export const ANTIOCO: TextBlock[] = [
   t('Y danos, Soberano, al ir a dormir, descanso de cuerpo y alma; y guárdanos del sombrío sueño del pecado y de todo placer oscuro de la noche. Aplaca los ímpetus de las pasiones, apaga los dardos encendidos del maligno que vienen contra nosotros con engaño. Calma las rebeliones de nuestra carne y adormece todo pensamiento nuestro terreno y material.'),
   t('Y concédenos, oh Dios, mente vigilante, pensamiento casto, corazón sobrio, y un sueño ligero y libre de toda fantasía del enemigo. Levántanos a la hora de la oración afianzados en tus mandamientos y guardando firme dentro de nosotros el recuerdo de tus juicios. Concédenos glorificarte toda la noche, para que cantemos, bendigamos y glorifiquemos tu nombre honorabilísimo y magnífico, del Padre, y del Hijo, y del Espíritu Santo, ahora y siempre, y por los siglos de los siglos. Amén.'),
 ];

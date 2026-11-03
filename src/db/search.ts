@@ -14,6 +14,8 @@ import { STUDY_COURSES, STUDY_WORKS } from '@/content/study';
 import { PRAYER_ORDERS } from '@/content/prayer-orders';
 import { APOPHTHEGMS } from '@/content/apotegmas';
 import { WORLD_MONASTERIES } from '@/content/monasterios-mundo';
+import { VIRTUES } from '@/content/virtudes';
+import { momentById } from '@/content/moments';
 import { citationFor } from '@/lib/citation';
 
 export const KIND_LABELS: Record<SearchKind, string> = {
@@ -320,6 +322,24 @@ export async function searchAll(query: string, options: SearchOptions = {}): Pro
 
   /* ---- Estudio ---- */
   if (wanted.has('study')) {
+    // Las virtudes no viven en la base de datos: se buscan sobre el módulo, y van
+    // con el estudio porque es lo que son, una lectura.
+    for (const v of VIRTUES) {
+      const nombre = momentById(v.id)?.name ?? v.id;
+      const texto = `${nombre} ${v.what.join(' ')} ${v.against} ${v.quotes.map((c) => c.text).join(' ')}`;
+      const s = score(tokens, texto, nombre);
+      if (s > 0) {
+        push('study', {
+          id: `virtud-${v.id}`,
+          kind: 'study',
+          title: nombre,
+          subtitle: 'Las virtudes',
+          snippet: snippet(v.what.join(' '), tokens),
+          path: `/biblioteca/virtudes/${v.id}`,
+          score: s,
+        });
+      }
+    }
     for (const curso of STUDY_COURSES) {
       const cuerpo = `${curso.subtitle} ${curso.lessons
         .map((l) => `${l.title} ${l.body.join(' ')}`)

@@ -34,15 +34,15 @@ sin tocar nada más.
 
 ## 2. De dónde sale cada texto español
 
-**Es el mayor riesgo legal.** `docs/PROCEDENCIA.md` lista los 197 textos
+**Es el mayor riesgo legal.** `docs/PROCEDENCIA.md` lista los 366 textos
 litúrgicos con la clase de su versión española, tal como la declara su ficha:
 
 | Clase | Qué hay que hacer |
 | --- | --- |
 | **Tradicional sin verificar** (36) | Averiguar si es traducción propia o se tomó de un libro parroquial. Si es lo segundo y no hay permiso, retirarlo o volver a traducirlo del original. |
-| Traducción de ATHOS (104) | Comprobar que la traducción está bien hecha, a ser posible cotejándola con el original. |
+| Traducción de ATHOS (141) | Comprobar que la traducción está bien hecha, a ser posible cotejándola con el original. |
 | Redactada para ATHOS (36) | Revisión teológica (punto 3). |
-| Dominio público (21) | Nada, salvo confirmar la fuente. |
+| Dominio público (153) | Nada, salvo confirmar la fuente. |
 
 Lo revisado se anota en `docs/procedencia-revisada.json` y la tabla se
 regenera con `npm run procedencia`, sin perder lo anotado.

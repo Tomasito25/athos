@@ -30,6 +30,7 @@ export const SEGMENTOS_PUENTE = new Set([
   'obra',
   'oficio',
   'orden',
+  'seccion',
 ]);
 
 /** La pantalla de la que cuelga `pathname`. Nunca sale de la aplicación. */

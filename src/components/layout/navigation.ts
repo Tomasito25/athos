@@ -87,7 +87,8 @@ export const APP_MAP: MapGroup[] = [
     title: es.nav.pray,
     entries: [
       { to: '/orar', label: es.nav.pray, hint: 'Los tres momentos del día', icon: IconPray },
-      { to: '/orar/oraciones', label: es.prayers.title, hint: 'Por momento del día y por necesidad', icon: IconPray },
+      { to: '/orar/oficios', label: es.office.title, hint: 'La medida de cada uno y tu semana', icon: IconPray },
+      { to: '/orar/oraciones', label: es.prayers.title, hint: 'Por momento, por necesidad y por virtud', icon: IconPray },
       { to: '/orar/regla', label: es.rule.title, hint: 'La tuya, editable paso a paso', icon: IconScroll },
       { to: '/orar/oracion-de-jesus', label: es.jesusPrayer.title, hint: 'Con contador o con el komboskini', icon: IconChotki },
       { to: '/orar/mis-oraciones', label: 'Mis oraciones', icon: IconEdit },

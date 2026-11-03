@@ -96,6 +96,16 @@ ATHOS incorpora únicamente pasajes breves de uso común y verificables —entre
 ellos la Homilía catequética pascual de san Juan Crisóstomo, que se lee en todas
 las iglesias ortodoxas en la noche de Pascua— y mantiene la ficha del resto.
 
+Las **oraciones y citas añadidas en la 2.1** se tradujeron para ATHOS de ediciones
+rusas de dominio público, en la edición digital de
+[RussPortal](https://russportal.ru) y en [Wikisource](https://ru.wikisource.org):
+san Efrén el Sirio (Sérgiev Posad, 1900), san Juan Clímaco (5.ª ed. de Óptina,
+1898), san Doroteo de Gaza (8.ª ed. de Óptina), san Basilio el Grande (Moscú, 1846),
+san Isaac el Sirio (Moscú, 1854), san Gregorio Nacianceno (Academia de Moscú,
+1843-1848) y Partenio de Kiev (Moscú, 1913). Los textos griegos que están detrás
+son de dominio público, y la versión española va bajo CC BY-SA 4.0. Son traducción
+de una traducción y la ficha de cada texto lo dice: falta cotejarlos con el griego.
+
 ## Lecturas del día
 
 El leccionario diario procede de

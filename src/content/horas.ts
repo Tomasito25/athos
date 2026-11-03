@@ -432,6 +432,9 @@ export const HORAS_OFFICES: Office[] = HORAS.map((hora, i) => ({
 }));
 
 /** Los datos sueltos de cada Hora, para la ficha que las presenta juntas. */
+/** La oración final de cada Hora, que también se reza suelta. */
+export const ORACION_FINAL_DE_LA_HORA = new Map(HORAS.map((h) => [h.id, h.oracionFinal]));
+
 export const HORAS_RESUMEN = HORAS.map((h) => ({
   id: h.id,
   title: h.title,

@@ -96,7 +96,40 @@ export interface TextBlock {
    Oraciones
    ============================================================ */
 
+/**
+ * Las virtudes.
+ *
+ * Cada una es a la vez un momento del menú de oraciones —las que la piden— y
+ * una ficha de la biblioteca —qué es y qué dicen de ella la Escritura y los
+ * Padres—, así que se identifican igual en los dos sitios.
+ */
+export type VirtueId =
+  | 'fe'
+  | 'esperanza'
+  | 'amor'
+  | 'sabiduria'
+  | 'discernimiento'
+  | 'temor-de-dios'
+  | 'templanza'
+  | 'justicia'
+  | 'fortaleza'
+  | 'castidad'
+  | 'humildad'
+  | 'paciencia'
+  | 'mansedumbre'
+  | 'obediencia'
+  | 'silencio'
+  | 'vigilancia'
+  | 'desprendimiento'
+  | 'perdon'
+  | 'misericordia'
+  | 'compuncion'
+  | 'gratitud'
+  | 'paz-interior'
+  | 'oracion';
+
 export type PrayerCategoryId =
+  | VirtueId
   | 'manana'
   | 'salir-de-casa'
   | 'noche'
@@ -128,7 +161,19 @@ export type PrayerCategoryId =
   | 'confesion'
   | 'comunion'
   | 'santos'
-  | 'otras';
+  | 'otras'
+  | 'ira'
+  | 'miedo'
+  | 'decision'
+  | 'a-la-trinidad'
+  | 'a-cristo'
+  | 'al-espiritu-santo'
+  | 'theotokos'
+  | 'angeles'
+  | 'ayuno'
+  | 'odas'
+  | 'oraciones-biblicas'
+  | 'salmos-necesidad';
 
 export interface PrayerCategory {
   id: PrayerCategoryId;

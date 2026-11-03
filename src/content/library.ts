@@ -21,6 +21,7 @@ import { ORTHODOX_CHURCHES } from './iglesias-hoy';
 import { APOPHTHEGMS } from './apotegmas';
 import { ASIA_PLACES, HOLY_LAND, PAUL_JOURNEYS } from './mapas-biblicos';
 import { TEMPLE_PARTS } from './temple';
+import { VIRTUES } from './virtudes';
 import es from '@/locales/es';
 
 export interface LibrarySection {
@@ -114,6 +115,31 @@ export const LIBRARY_GROUPS: LibraryGroup[] = [
     ],
   },
   {
+    id: 'vivir',
+    title: 'Para vivir la fe',
+    note: 'Lo que los Padres enseñaron sobre cómo se vive esto, virtud por virtud.',
+    sections: [
+      {
+        id: 'virtudes',
+        to: '/biblioteca/virtudes',
+        icon: 'candle',
+        title: es.virtues.title,
+        text: 'La fe, la humildad, la paciencia, la sabiduría, el discernimiento y las demás, cada una en su ficha: qué es, lo que se le opone, cómo se empieza, qué dicen la Escritura y los Padres, en qué santos se ve y con qué oraciones se pide.',
+        count: VIRTUES.length,
+        unit: 'virtudes',
+      },
+      {
+        id: 'apotegmas',
+        to: '/biblioteca/apotegmas',
+        icon: 'lamp',
+        title: es.apophthegms.title,
+        text: 'Lo que los monjes de Egipto, Palestina y Siria contestaban a quien les pedía «una palabra». Traducidos del griego, por temas: la humildad, la oración, el silencio, no juzgar. Uno cada día en la portada.',
+        count: APOPHTHEGMS.length,
+        unit: 'dichos',
+      },
+    ],
+  },
+  {
     id: 'rezar',
     title: 'Lo que se reza',
     note: 'Los libros de la Iglesia. Aquí está lo que se canta y lo que se lee en voz alta.',
@@ -169,15 +195,6 @@ export const LIBRARY_GROUPS: LibraryGroup[] = [
         text: 'Cada obra dice de qué trata y cuándo se escribió, tenga texto incorporado o no. Donde falta la traducción, al menos se sabe qué se está echando de menos.',
         count: OBRAS_PATRISTICAS,
         unit: 'obras con ficha',
-      },
-      {
-        id: 'apotegmas',
-        to: '/biblioteca/apotegmas',
-        icon: 'lamp',
-        title: es.apophthegms.title,
-        text: 'Lo que los monjes de Egipto, Palestina y Siria contestaban a quien les pedía «una palabra». Traducidos del griego, por temas: la humildad, la oración, el silencio, no juzgar. Uno cada día en la portada.',
-        count: APOPHTHEGMS.length,
-        unit: 'dichos',
       },
       {
         id: 'iglesias',

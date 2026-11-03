@@ -2,6 +2,54 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [2.1.0]
+
+### Cambiado
+
+- **El menú de oración, rehecho desde cero.** La portada de Orar tenía ocho
+  pantallas con todo a la vez, y había que recorrerla entera para saber qué
+  había. Ahora dice una cosa en cada sitio: el oficio de esta hora, con un botón;
+  un buscador; seis puertas, una por cada pregunta que trae al que abre esto —a
+  qué hora, qué te pasa, por quién, qué quieres pedir, a quién rezas, con qué—; lo
+  propio de hoy; los órdenes del libro, y tu práctica. La medida, la semana y los
+  consejos para empezar pasaron a una página propia, «Los oficios del día».
+- **Cada lista separa las oraciones de la Escritura**, y ofrece también las de
+  otros momentos que sirven para ése: la de san Efrén aparece en la humildad, en
+  la paciencia y en el amor. Desde la oración se ve para qué más se reza.
+- **El buscador de oraciones encuentra también por el momento**: quien escribe
+  «humildad» recibe las de la humildad, aunque la palabra no esté en el título.
+
+### Añadido
+
+- **El doble de oraciones: de 170 a 339.** Ninguna inventada:
+  - De san Efrén el Sirio, nueve; de san Gregorio Nacianceno, seis, entre ellas la
+    de la mañana, la de la tarde y la del que se pone en camino; la oración diaria
+    de Partenio de Kiev; las oraciones del akáthistos a la Trinidad, con la que
+    pide al Espíritu Santo las virtudes una por una, y la oración alfabética, del
+    siglo IX.
+  - De los oficios, ahora también sueltas: «Luz alegre», «Rey celestial», la
+    oración de san Antíoco, las de las Horas, la de antes del Evangelio y la de
+    detrás del ambón, y los troparios de Pentecostés, de los arcángeles y de los
+    Tres Jerarcas.
+  - De la Escritura, por referencia y traídas de la Biblia de ATHOS: las nueve odas
+    de los cánones, las oraciones de la Biblia (la de Salomón por la sabiduría, la
+    de Daniel, la de Judit, la del Señor en la Última Cena) y los salmos de cada
+    virtud, con los seis salmos de Maitines y los cánticos de las subidas.
+- **Oraciones por las virtudes.** Veintitrés virtudes, cada una con sus oraciones
+  y una línea para repetir durante el día: la fe, la esperanza y el amor; la
+  sabiduría, el discernimiento y el temor de Dios; la templanza, la justicia y la
+  fortaleza; la castidad, la humildad y la paciencia; y la mansedumbre, la
+  obediencia, el silencio, la vigilancia, el desprendimiento, el perdón, la
+  misericordia, la compunción, la gratitud, la paz del alma y la oración.
+- **Una ficha de cada virtud en la biblioteca**: qué es, lo que se le opone, cómo
+  se empieza, qué dicen la Escritura, los Padres y los apotegmas, en qué santos se
+  ve y con qué oraciones se pide. Las citas de san Juan Clímaco, san Doroteo de
+  Gaza, san Basilio y san Isaac el Sirio se buscaron en el texto antes de ponerlas,
+  y cada una dice de dónde sale. Se abren con la casa del alma de san Doroteo, que
+  se puede tocar: la fe de cimiento, la humildad de argamasa, el amor de techo.
+- **Nuevos momentos**: cuando te enfadas, cuando tienes miedo, ante una decisión,
+  en el ayuno, y uno para cada persona de la Trinidad, la Theotokos y los ángeles.
+
 ## [2.0.0]
 
 ### Cambiado

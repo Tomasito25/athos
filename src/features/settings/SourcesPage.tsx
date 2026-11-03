@@ -8,7 +8,7 @@
 import { useAsync } from '@/hooks/useAsync';
 import { db } from '@/db/db';
 import { BIBLE_VERSIONS_NOTE, BLM, DEUTEROCANON_NOTE, GRC_NT, LXX, RV1909 } from '@/content/bible';
-import { PRAYER_LICENSE_NOTE } from '@/content/prayers';
+import { PRAYER_LICENSE_NOTE } from '@/content/prayer-note';
 import { FATHERS_NOTE } from '@/content/fathers';
 import { ICONS_NOTE } from '@/content/icons';
 import { HYMNS_NOTE } from '@/content/hymns';

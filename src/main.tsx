@@ -14,6 +14,7 @@ import '@/styles/shell.css';
 import '@/styles/components.css';
 import '@/styles/byzantine.css';
 import '@/styles/hubs.css';
+import '@/styles/pray.css';
 
 // Vite avisa así cuando no puede descargar el código o el estilo de una
 // pantalla: otra ventana aplicó una versión nueva y estos archivos ya no

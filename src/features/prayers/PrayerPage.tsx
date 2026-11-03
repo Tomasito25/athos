@@ -5,7 +5,7 @@ import { Blocks, SourceNote, Tag, Skeleton, NotFound } from '@/components/ui';
 import { ReaderToolbar } from '@/components/Reader';
 import { Headpiece, Tailpiece } from '@/components/Ornament';
 import { useVisitLog } from '@/hooks/useVisitLog';
-import { PRAYER_CATEGORIES } from '@/content/prayers';
+import { PRAYERS_ALSO, PRAYER_CATEGORIES, isVirtue } from '@/content/prayer-categories';
 import { PRAYER_ORDERS } from '@/content/prayer-orders';
 import es from '@/locales/es';
 
@@ -47,6 +47,8 @@ export function PrayerPage() {
   const enOrden = PRAYER_ORDERS.flatMap((o) =>
     o.sections.filter((s) => s.prayerId === item.id).map((s) => ({ orden: o, seccion: s })),
   );
+  // Los otros momentos en que el menú la ofrece.
+  const tambien = PRAYER_CATEGORIES.filter((c) => PRAYERS_ALSO[c.id]?.includes(item.id));
 
   return (
     <article className="page page--reading">
@@ -102,6 +104,18 @@ export function PrayerPage() {
         </p>
       ) : null}
 
+      {tambien.length > 0 ? (
+        <p className="muted text-sm" style={{ marginTop: 'var(--sp-3)' }}>
+          {es.prayers.alsoFor}{' '}
+          {tambien.map((c, i) => (
+            <span key={c.id}>
+              {i > 0 ? ' · ' : ''}
+              <Link to={`/orar/oraciones/categoria/${c.id}`}>{c.name}</Link>
+            </span>
+          ))}
+        </p>
+      ) : null}
+
       {anterior || siguiente ? (
         <nav className="prayer-nav" aria-label={category?.name}>
           {anterior ? (
@@ -124,6 +138,14 @@ export function PrayerPage() {
           <Link to={`/orar/oraciones/categoria/${category.id}`}>
             {es.prayers.backToMoment.replace('{{name}}', category.name)}
           </Link>
+          {isVirtue(category.id) ? (
+            <>
+              {' · '}
+              <Link to={`/biblioteca/virtudes/${category.id}`}>
+                {es.prayers.readAbout.replace('{{name}}', category.name.toLowerCase())}
+              </Link>
+            </>
+          ) : null}
         </p>
       ) : null}
 

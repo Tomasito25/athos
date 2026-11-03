@@ -70,7 +70,9 @@ export function AppShell() {
       <SearchDialog />
       <RouteAnnouncer />
       <Toasts />
-      <ScrollRestoration />
+      {/* Toda entrada directa —un aviso, un atajo, un enlace— se llama «default»:
+          sin esto, abrir una página heredaba lo que se había bajado en la anterior. */}
+      <ScrollRestoration getKey={(l) => (l.key === 'default' ? l.pathname : l.key)} />
     </div>
   );
 }

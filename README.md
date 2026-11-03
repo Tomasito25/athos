@@ -45,10 +45,16 @@ puede borrar los datos de una web que no se abre en semanas, y la copia es lo
 
 ## Qué trae
 
-- **Oraciones por el momento, no por el título.** Treinta y dos momentos —al
-  despertar, al salir de casa, antes y después de comer, al caer en el pecado,
-  en la angustia, junto a un moribundo, en el duelo, en la espera de un hijo,
-  cuando falla la fe—, con el que corresponde a la hora destacado al abrir.
+- **Oraciones por lo que hace falta, no por el título.** Más de trescientas, en
+  sesenta y siete momentos y seis puertas: a qué hora (al despertar, antes de
+  comer), qué te pasa (la tentación, la ira, el miedo), por quién (los hijos, los
+  enfermos, los difuntos), qué quieres pedir (la humildad, la paciencia, la
+  sabiduría), a quién rezas y con qué: los sacramentos, el ayuno, las nueve odas y
+  las oraciones de la propia Biblia.
+- **Las virtudes, una por una.** Veintitrés fichas en la biblioteca: qué es cada
+  una, lo que se le opone, cómo se empieza, qué dicen la Escritura y los Padres, en
+  qué santos se ve y con qué oraciones se pide, ordenadas por la casa del alma de
+  san Doroteo de Gaza.
 - **Tres oficios diarios** con la estructura del Horologion: mañana, Hora Sexta
   y Pequeñas Completas, con sus salmos y las fórmulas en griego.
 - **La Biblia entera, con los libros de los Setenta**: la Reina-Valera de 1909

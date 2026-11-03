@@ -330,7 +330,7 @@ const BASE_PARTS: CatechismPart[] = [
           'Se reza con palabras dadas antes que con las propias. No porque las propias no valgan, sino porque cuando uno está seco, distraído o enfadado, las palabras de la Iglesia sostienen lo que la voluntad no sostiene. Después se puede añadir lo que a uno le salga.',
           'Y se reza con el cuerpo: de pie, con la señal de la cruz, con inclinaciones. El cuerpo no es un estorbo para el espíritu; también él será resucitado.',
         ],
-        seeAlso: [{ label: 'Los oficios del día', path: '/orar' }],
+        seeAlso: [{ label: 'Los oficios del día', path: '/orar/oficios' }],
       },
       {
         id: 'oracion-jesus',

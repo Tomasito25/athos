@@ -66,6 +66,12 @@ const ICONOS = {
   home: IconHome,
 } as const;
 
+/** Un signo por su nombre: los grupos del menú también tienen el suyo. */
+export function SignIcon({ name, size = 22 }: { name: string; size?: number }) {
+  const Icono = ICONOS[name as keyof typeof ICONOS] ?? IconPray;
+  return <Icono size={size} />;
+}
+
 export function MomentIcon({ id, size = 22 }: { id: PrayerCategoryId; size?: number }) {
   const Icono = ICONOS[MOMENT_ICONS[id] as keyof typeof ICONOS] ?? IconPray;
   return <Icono size={size} />;

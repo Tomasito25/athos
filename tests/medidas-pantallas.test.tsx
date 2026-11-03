@@ -2,7 +2,7 @@
  * Las medidas en pantalla.
  *
  * Elegir la breve cambia de verdad los pasos del oficio, y rezarla deja el
- * oficio rezado con su medida apuntada; en Orar se elige para los tres de
+ * oficio rezado con su medida apuntada; en los oficios se elige para los tres de
  * una vez; la semana cuenta lo rezado; y el editor ya deja elegir qué oficio,
  * akathistos o canon se enlaza, y su texto entra en el oficio.
  */
@@ -76,10 +76,10 @@ describe('dentro del oficio', () => {
   });
 });
 
-describe('en Orar', () => {
+describe('en los oficios del día', () => {
   it('la medida se elige para los tres oficios de una vez', async () => {
     const user = userEvent.setup();
-    montar('/orar');
+    montar('/orar/oficios');
     const breve = await screen.findByRole('radio', { name: /^Breve/ }, { timeout: 8000 });
     await user.click(breve);
     expect(useSettings.getState().officeLength).toEqual({ manana: 'breve', mediodia: 'breve', noche: 'breve' });

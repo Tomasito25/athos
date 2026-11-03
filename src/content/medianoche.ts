@@ -62,6 +62,10 @@ const DIFUNTOS: OfficeSection[] = [
   ]),
 ];
 
+/** El tropario se reza también suelto, en el libro de oraciones. */
+export const HE_AQUI_EL_ESPOSO =
+  'He aquí que el Esposo viene a medianoche, y bienaventurado el siervo a quien encuentre velando; pero indigno aquel a quien halle negligente. Mira, pues, alma mía, no te dejes vencer por el sueño, no sea que seas entregada a la muerte y quedes fuera del Reino; antes bien, despierta clamando: Santo, Santo, Santo eres, oh Dios; por la intercesión de la Theotokos, ten piedad de nosotros.';
+
 export const MEDIANOCHE: OfficeSection[] = [
   s('sentido', 'Por qué a medianoche', [
     rub('Se reza al levantarse de noche, esperando al Esposo que llega a medianoche (Mateo 25). En los monasterios abre el ciclo diario: es el primer oficio, antes de los Maitines. Tiene tres formas: la de los días de diario, la del sábado y la del domingo.'),
@@ -80,7 +84,7 @@ export const MEDIANOCHE: OfficeSection[] = [
     embed('prayer:simbolo-de-la-fe', 'Símbolo de la Fe'),
     ...TRISAGIO_PADRE_NUESTRO,
     rub('Troparios, en el tono octavo:'),
-    t('He aquí que el Esposo viene a medianoche, y bienaventurado el siervo a quien encuentre velando; pero indigno aquel a quien halle negligente. Mira, pues, alma mía, no te dejes vencer por el sueño, no sea que seas entregada a la muerte y quedes fuera del Reino; antes bien, despierta clamando: Santo, Santo, Santo eres, oh Dios; por la intercesión de la Theotokos, ten piedad de nosotros.'),
+    t(HE_AQUI_EL_ESPOSO),
     rub('Gloria al Padre, y al Hijo, y al Espíritu Santo.'),
     t('Pensando en aquel día terrible, alma mía, vela, enciende tu lámpara y hazla brillar con aceite; porque no sabes cuándo vendrá a ti la voz que dice: He aquí el Esposo. Mira, pues, alma mía, no te duermas, no sea que te quedes fuera llamando, como las cinco vírgenes; vela, en cambio, sin descanso, para salir con aceite abundante al encuentro de Cristo Dios, y que Él te dé la cámara nupcial divina de su gloria.'),
     rub('Ahora y siempre, y por los siglos de los siglos. Amén.'),

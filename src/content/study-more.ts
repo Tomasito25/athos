@@ -110,7 +110,7 @@ export const MORE_COURSES: StudyCourse[] = [
           'Cada cristiano tiene su regla: lo que reza cada mañana y cada noche. Puede ser muy breve —la de san Serafín de Sarov son tres oraciones— o muy larga; lo que la hace buena es que se cumpla cada día.',
           'ATHOS ofrece cada oficio en tres medidas para empezar por la breve e ir alargando. La regla de cada uno conviene hablarla con el padre espiritual.',
         ],
-        readings: [{ label: 'Los tres oficios del día', path: '/orar' }],
+        readings: [{ label: 'Los tres oficios del día', path: '/orar/oficios' }],
         question: '¿Qué regla podrías cumplir todos los días durante un mes, aunque estuvieras cansado?',
       },
       {

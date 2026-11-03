@@ -8,13 +8,15 @@
  * procedencia se está comprobando texto por texto. ATHOS nunca redacta un
  * texto propio haciéndolo pasar por litúrgico.
  */
-import type { Prayer, PrayerCategory, PrayerCategoryId, SourceMeta, TextBlock } from '@/types';
+import type { Prayer, PrayerCategoryId, SourceMeta, TextBlock } from '@/types';
+import { PRAYER_CATEGORIES } from './prayer-categories';
 import { MORE_PRAYERS } from './prayers-more';
 import { THIRD_PRAYERS } from './prayers-third';
 import { FOURTH_PRAYERS } from './prayers-fourth';
 import { CANON_COMUNION_BLOCKS } from './canon-comunion';
 import { MOLITVOSLOV_PRAYERS } from './prayers-molitvoslov';
 import { FIFTH_PRAYERS } from './prayers-fifth';
+import { VIRTUE_PRAYERS } from './prayers-virtudes';
 import { embed } from './comun';
 import {
   ENFERMOS_KONTAKION,
@@ -24,50 +26,6 @@ import {
   VIAJEROS_ORACION,
   VIAJEROS_TROPARIO,
 } from './moleben';
-
-export const PRAYER_CATEGORIES: PrayerCategory[] = [
-  /* ---- El día ---- */
-  { id: 'manana', name: 'Al despertar', description: 'Lo primero, antes que el día empiece a tirar de ti.', order: 1 },
-  { id: 'salir-de-casa', name: 'Al salir de casa', description: 'En el umbral, antes de echarse a la calle.', order: 2 },
-  { id: 'antes-trabajar', name: 'Antes de trabajar', description: 'Para ofrecer la obra de las manos, y para darla por acabada.', order: 3 },
-  { id: 'antes-estudiar', name: 'Antes de estudiar', description: 'Para pedir luz al entendimiento.', order: 4 },
-  { id: 'antes-comer', name: 'Antes de comer', description: 'Bendición de la mesa.', order: 5 },
-  { id: 'despues-comer', name: 'Después de comer', description: 'Acción de gracias por el alimento.', order: 6 },
-  { id: 'antes-viajar', name: 'Antes de viajar', description: 'Antes de coger el coche, el tren o el avión.', order: 7 },
-  { id: 'noche', name: 'Al acostarse', description: 'Antes del descanso, al cerrar la jornada.', order: 8 },
-
-  /* ---- El alma ---- */
-  { id: 'al-pecar', name: 'Al caer en el pecado', description: 'En el momento mismo de la caída, sin dejarlo para luego.', order: 9 },
-  { id: 'arrepentimiento', name: 'Arrepentimiento', description: 'Cuando el alma reconoce su pecado y quiere volver.', order: 10 },
-  { id: 'tentacion', name: 'En la tentación', description: 'En la hora de la prueba.', order: 11 },
-  { id: 'angustia', name: 'En la angustia y la tristeza', description: 'Cuando aprieta la pena, el miedo o el desaliento.', order: 12 },
-  { id: 'accion-de-gracias', name: 'Al recibir un bien', description: 'Acción de gracias por los beneficios recibidos.', order: 13 },
-
-  /* ---- Los demás ---- */
-  { id: 'familia', name: 'Por la familia', description: 'Por los padres, el cónyuge y los hijos.', order: 14 },
-  { id: 'amigos', name: 'Por los amigos', description: 'Por quienes caminan a nuestro lado.', order: 15 },
-  { id: 'enemigos', name: 'Por los enemigos', description: 'Por quienes nos hacen daño.', order: 16 },
-  { id: 'enfermedad', name: 'En la enfermedad', description: 'Por los enfermos y en la propia dolencia.', order: 17 },
-  { id: 'padre-espiritual', name: 'Por el padre espiritual', description: 'Por quien te confiesa y te guía.', order: 18 },
-  { id: 'difuntos', name: 'Por los difuntos', description: 'Por los que se han dormido en el Señor.', order: 19 },
-  { id: 'agonia', name: 'Junto a un moribundo', description: 'Las horas últimas, y qué se hace en ellas.', order: 20 },
-  { id: 'duelo', name: 'En el duelo', description: 'Cuando el muerto es tuyo y el que queda eres tú.', order: 21 },
-
-  /* ---- La casa ---- */
-  { id: 'matrimonio', name: 'Por el matrimonio', description: 'Antes de casarse y en los años que vienen después.', order: 22 },
-  { id: 'embarazo', name: 'En la espera de un hijo', description: 'Por la mujer encinta, por el parto y por lo que no llega.', order: 23 },
-  { id: 'casa', name: 'Por la casa', description: 'El hogar, la mesa y quien entra por la puerta.', order: 24 },
-
-  /* ---- Ante Dios ---- */
-  { id: 'templo', name: 'Al entrar en el templo', description: 'En la puerta de la iglesia y ante los iconos.', order: 25 },
-  { id: 'escritura', name: 'Antes de leer la Escritura', description: 'Para que la palabra no pase de largo.', order: 26 },
-  { id: 'confesion', name: 'Antes de confesar', description: 'Preparación para el sacramento del arrepentimiento.', order: 27 },
-  { id: 'comunion', name: 'Antes de comulgar', description: 'Antes y después de los Santos Misterios.', order: 28 },
-  { id: 'dudas', name: 'Cuando falla la fe', description: 'Cuando no sale, no se siente nada o se ha dejado de creer.', order: 29 },
-  { id: 'paz', name: 'En tiempo de guerra', description: 'Por la paz, por las víctimas y por los que combaten.', order: 30 },
-  { id: 'santos', name: 'A la Theotokos y a los santos', description: 'Para pedir su intercesión: la Madre de Dios, san Nicolás, los que nos acompañan.', order: 31 },
-  { id: 'otras', name: 'Otras oraciones', description: 'Oraciones para diversas circunstancias.', order: 32 },
-];
 
 const TRAD: SourceMeta = {
   source: 'Libro de oraciones ortodoxo (Horologion y Molitvoslov), uso tradicional',
@@ -770,7 +728,7 @@ const seeds: Seed[] = [
     id: 'akathistos-ref',
     title: 'Himno Akáthistos a la Theotokos',
     subtitle: 'El proimion, que se reza suelto',
-    category: 'otras',
+    category: 'theotokos',
     blocks: [
       rub('El himno entero —veinticuatro estrofas— va al final, plegado. Lo que se reza suelto, y se canta también fuera de Cuaresma, es su proimion:'),
       t('A ti, caudilla defensora, los cantos de victoria; a ti, que me libraste de lo terrible, las acciones de gracias te dedico yo, tu ciudad, oh Theotokos. Y tú, que tienes un poder invencible, líbrame de toda clase de peligros, para que te aclame: Alégrate, Esposa no desposada.'),
@@ -834,7 +792,7 @@ const ORDEN_DEL_LIBRO = [
 ];
 const PUESTO_EN_EL_LIBRO = new Map(ORDEN_DEL_LIBRO.map((id, i) => [id, i]));
 
-const allSeeds: Seed[] = [...seeds, ...MORE_PRAYERS, ...THIRD_PRAYERS, ...FOURTH_PRAYERS, ...MOLITVOSLOV_PRAYERS, ...FIFTH_PRAYERS]
+const allSeeds: Seed[] = [...seeds, ...MORE_PRAYERS, ...THIRD_PRAYERS, ...FOURTH_PRAYERS, ...MOLITVOSLOV_PRAYERS, ...FIFTH_PRAYERS, ...VIRTUE_PRAYERS]
   .map((seed, escrita) => ({ seed, puesto: PUESTO_EN_EL_LIBRO.get(seed.id) ?? 1000 + escrita }))
   .sort(
     (a, b) =>
@@ -855,6 +813,8 @@ export const PRAYERS: Prayer[] = allSeeds.map((s, i) => ({
   searchText: `${s.title} ${s.subtitle ?? ''} ${plain(s.blocks)}`.toLowerCase(),
 }));
 
+export { PRAYER_CATEGORIES };
+
 export const PRAYERS_BY_CATEGORY = new Map<PrayerCategoryId, Prayer[]>();
 for (const category of PRAYER_CATEGORIES) {
   PRAYERS_BY_CATEGORY.set(
@@ -862,9 +822,3 @@ for (const category of PRAYER_CATEGORIES) {
     PRAYERS.filter((p) => p.category === category.id),
   );
 }
-
-export const PRAYER_LICENSE_NOTE =
-  'Las oraciones de ATHOS son textos litúrgicos tradicionales, de dominio público en su ' +
-  'original. Cuando una versión española concreta esté protegida por derechos de autor y su ' +
-  'titular lo comunique, será sustituida. Los textos redactados expresamente para ATHOS se ' +
-  'identifican como tales en su ficha.';

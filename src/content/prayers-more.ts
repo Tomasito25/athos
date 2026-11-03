@@ -616,7 +616,7 @@ export const MORE_PRAYERS: MorePrayerSeed[] = [
     id: 'bajo-tu-proteccion',
     title: 'Bajo tu compasión',
     subtitle: 'La oración más antigua a la Madre de Dios que se conserva',
-    category: 'otras',
+    category: 'theotokos',
     blocks: [
       t('Bajo tu compasión nos refugiamos, Theotokos: no desprecies nuestras súplicas en la necesidad, sino líbranos del peligro, tú, la única pura, la única bendita.'),
       rub('Se conserva en un papiro egipcio del siglo III. Es el testimonio más antiguo que existe de una oración dirigida a la Theotokos, y sigue rezándose sin cambios.'),
@@ -629,7 +629,7 @@ export const MORE_PRAYERS: MorePrayerSeed[] = [
   {
     id: 'ante-una-decision',
     title: 'Antes de una decisión',
-    category: 'otras',
+    category: 'decision',
     blocks: [
       rub('No para que Dios firme lo que ya has decidido, sino para llegar a la decisión sin ruido.'),
       t('Hazme oír por la mañana tu misericordia, porque en Ti he confiado; hazme saber el camino por donde ande, porque a Ti he elevado mi alma.'),

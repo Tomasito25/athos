@@ -1,30 +1,22 @@
 /**
  * La bienvenida.
  *
- * Quien abre ATHOS por primera vez ve cinco palabras en la barra de abajo y
- * tiene que adivinar qué hay detrás de cada una. Esta tarjeta lo dice en
- * cuatro renglones, con un enlace a cada sitio, y desaparece en cuanto se
- * cierra: no vuelve a salir.
+ * Tres preguntas, y desaparece en cuanto se cierra: no vuelve a salir. La del
+ * calendario lo cambia todo —en qué día cae cada fiesta, qué lecturas tocan— y
+ * estaba escondida en Configuración: quien sigue el juliano veía durante semanas
+ * las fiestas trece días antes sin saber por qué.
  *
- * Antes, tres preguntas. La del calendario lo cambia todo —en qué día cae
- * cada fiesta, qué lecturas tocan— y estaba escondida en Configuración: quien
- * sigue el juliano veía durante semanas las fiestas trece días antes sin
- * saber por qué.
+ * Llevaba además una explicación de cada pestaña y una nota bajo cada pregunta,
+ * y ocupaba más que la pantalla entera del teléfono: lo primero que veía quien
+ * llegaba era una tarjeta que no se acababa. Las pestañas ya dicen qué tienen.
  */
 import { Link } from 'react-router-dom';
 import { Segmented } from '@/components/ui';
 import { OFFICE_LENGTHS } from '@/content/office-lengths';
 import { useSettings, type GreekMode } from '@/stores/settings';
 import type { CalendarStyle, OfficeLength } from '@/types';
-import { IconBook, IconCalendar, IconClose, IconLibrary, IconPray } from '@/components/icons';
+import { IconClose } from '@/components/icons';
 import es from '@/locales/es';
-
-const SECCIONES = [
-  { to: '/orar', icon: IconPray, title: es.nav.pray, text: es.welcome.pray },
-  { to: '/leer', icon: IconBook, title: es.nav.read, text: es.welcome.read },
-  { to: '/calendario', icon: IconCalendar, title: es.nav.calendar, text: es.welcome.calendar },
-  { to: '/biblioteca', icon: IconLibrary, title: es.nav.library, text: es.welcome.library },
-];
 
 type Tradicion = 'griega' | 'eslava';
 
@@ -82,7 +74,6 @@ export function WelcomeCard() {
           ]}
           onChange={(v) => set('greekMode', GRIEGO_DE[v])}
         />
-        <p className="welcome__hint">{es.welcome.traditionHint}</p>
 
         <p className="welcome__question">{es.welcome.measureQ}</p>
         <Segmented<OfficeLength>
@@ -91,24 +82,8 @@ export function WelcomeCard() {
           options={OFFICE_LENGTHS.map((l) => ({ value: l.id, label: l.label }))}
           onChange={(v) => set('officeLength', { manana: v, mediodia: v, noche: v })}
         />
-        <p className="welcome__hint">{es.welcome.measureHint}</p>
       </div>
 
-      <h3 className="welcome__subtitle">{es.welcome.whereTitle}</h3>
-      <ul className="welcome__list">
-        {SECCIONES.map(({ to, icon: Icon, title, text }) => (
-          <li key={to}>
-            <Link to={to} className="welcome__item">
-              <span className="welcome__icon" aria-hidden="true">
-                <Icon size={18} />
-              </span>
-              <span>
-                <b>{title}</b> · {text}
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
       <div className="btn-row" style={{ marginTop: 'var(--sp-4)' }}>
         <button type="button" className="btn btn--primary btn--sm" onClick={() => set('welcomeDismissed', true)}>
           {es.welcome.ok}

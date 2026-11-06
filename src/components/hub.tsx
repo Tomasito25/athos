@@ -6,9 +6,8 @@
  * otras con tarjetas, otras con botones al pie de la página. Aquí están las
  * dos piezas que ahora comparten todas:
  *
- * - **La cabecera**, con el signo de la sección en un medallón, el título en
- *   oro y una línea que dice qué hay dentro. Es lo que hace que cada portada
- *   se reconozca de un vistazo.
+ * - **La cabecera**: el signo de la sección, el título y una línea que dice
+ *   qué hay dentro. Corta, para que lo primero que se vea sea el contenido.
  * - **Las teselas**, para los destinos: un icono, un nombre y una pista, en
  *   rejilla. Se abarcan de un golpe de vista y se tocan con el pulgar sin
  *   apuntar, que es lo que no tenía una lista de diez filas.
@@ -34,7 +33,7 @@ export function HubHero({
   return (
     <header className="hub-hero">
       <span className="hub-hero__medal" aria-hidden="true">
-        <Icon size={26} />
+        <Icon size={20} />
       </span>
       <div className="hub-hero__text">
         {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}

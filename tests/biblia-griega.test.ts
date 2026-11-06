@@ -44,10 +44,17 @@ describe('dónde cae cada capítulo en la Biblia griega', () => {
   });
 
   it('y el capítulo existe en el archivo griego', () => {
+    // Cada libro se lee una vez: releerlo en cada capítulo hacía que la prueba
+    // pasara de los quince segundos con el resto de la batería en marcha.
+    const leidos = new Map<string, { chapters: Record<string, unknown> }>();
+    const leer = (ruta: string) => {
+      if (!leidos.has(ruta)) leidos.set(ruta, JSON.parse(readFileSync(ruta, 'utf-8')));
+      return leidos.get(ruta)!;
+    };
     for (const libro of BIBLE_BOOKS) {
       for (let c = 1; c <= libro.chapters; c += 1) {
         for (const l of greekPlaces(libro.id, c)) {
-          const archivo = JSON.parse(readFileSync(resolve(dir(l.translationId), `${l.bookId}.json`), 'utf-8'));
+          const archivo = leer(resolve(dir(l.translationId), `${l.bookId}.json`));
           expect(archivo.chapters[String(l.chapter)], `${libro.id} ${c} → ${l.bookId} ${l.chapter}`).toBeTruthy();
         }
       }

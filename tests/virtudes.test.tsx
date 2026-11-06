@@ -109,7 +109,11 @@ describe('el libro de oraciones', () => {
 describe('las pantallas', () => {
   it('la portada de Orar enseña las seis puertas y el oficio de ahora', async () => {
     montar('/orar');
-    for (const grupo of MOMENT_GROUPS) await espera(new RegExp(grupo.question.replace(/[¿?]/g, '')));
+    // Las puertas salen todas a la vez: basta esperar a la primera.
+    await espera(new RegExp(MOMENT_GROUPS[0]!.question.replace(/[¿?]/g, '')));
+    for (const grupo of MOMENT_GROUPS) {
+      expect(screen.getAllByText(new RegExp(grupo.question.replace(/[¿?]/g, ''))).length, grupo.id).toBeGreaterThan(0);
+    }
     expect(screen.getByRole('search')).toBeInTheDocument();
     expect(screen.getAllByRole('link').some((a) => a.getAttribute('href') === '/orar/oraciones/seccion/virtudes')).toBe(true);
   });

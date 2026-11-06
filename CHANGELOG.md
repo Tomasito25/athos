@@ -2,6 +2,28 @@
 
 Este proyecto sigue [Versionado Semántico](https://semver.org/lang/es/).
 
+## [2.2.0]
+
+### Cambiado
+
+- **Inicio, de cinco pantallas a menos de dos.** Repetía lo que ya tienen las
+  otras pestañas: seis atajos que eran la barra de abajo, el Evangelio entero y
+  la regla en tres filas. Ahora dice qué día es, qué oficio toca —y cómo van los
+  tres, en una fila debajo—, qué celebra hoy la Iglesia en una lista de tres
+  renglones (el santo, el Evangelio, la próxima fiesta), el versículo y el
+  apotegma del día, y por dónde ibas.
+- **La bienvenida cabe en la pantalla.** Se queda con sus tres preguntas
+  —calendario, tradición y medida— y suelta la explicación de cada pestaña y las
+  notas, que la alargaban más allá del teléfono.
+- **Las cabeceras de sección ya no son una caja.** Orar, Leer, Calendario,
+  Biblioteca y las virtudes abren con un signo pequeño, el título y una línea, y lo
+  primero que se ve es el contenido.
+- **La Biblioteca, en una ojeada.** Cada sección es una tesela baja con su nombre
+  y su cuenta, sin las descripciones que salían cortadas a la mitad: el índice
+  pasa de tres pantallas a menos de dos.
+- **En Orar, lo propio de hoy va plegado** en una sola fila, con el día y su
+  dedicación a la vista: abierto ocupaba más que las seis puertas.
+
 ## [2.1.0]
 
 ### Cambiado

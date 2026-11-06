@@ -5,10 +5,11 @@
  * quiénes lo dijeron— y cada tarjeta lleva su cuenta, sacada del contenido y no
  * escrita a mano.
  *
- * Cada sección es una tesela, dos por fila en el móvil: el icono, el título,
- * la cuenta en la esquina y dos renglones de descripción, lo que hace falta
- * para elegir. Así el índice entero cabe en poco más de una pantalla, y un
- * índice que no se abarca de un vistazo no es un índice.
+ * Cada sección es una tesela baja, dos por fila en el móvil: el icono, el
+ * título y la cuenta. Llevaban también dos renglones de descripción que casi
+ * siempre salían cortados a la mitad, y alargaban el índice a tres pantallas;
+ * la descripción sigue en el mapa de la aplicación, y la nota de cada bloque
+ * dice para quién es. Un índice que no se abarca de un vistazo no es un índice.
  */
 import { ListRow, Section } from '@/components/ui';
 import { HubHero, Tile, TileGrid } from '@/components/hub';
@@ -60,7 +61,7 @@ export function LibraryHub() {
           <p className="muted text-sm" style={{ marginBottom: 'var(--sp-3)' }}>
             {grupo.note}
           </p>
-          <TileGrid>
+          <TileGrid compact>
             {grupo.sections.map((section) => (
               <Tile
                 key={section.id}

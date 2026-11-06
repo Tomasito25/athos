@@ -1,28 +1,22 @@
 /**
  * Inicio — el día de hoy.
  *
- * Es la pantalla que se ve cada mañana. Antes era una columna larga en la que
- * la fecha aparecía a media pantalla, había dos botones que repetían la barra
- * de abajo y la regla se resumía en un «0 de 44» que no decía qué faltaba.
+ * Una pantalla, y no cinco. Repetía lo que ya tienen las otras pestañas: seis
+ * atajos que eran la barra de abajo, el Evangelio entero, la regla en tres filas
+ * con su barra. Ahora contesta sólo a lo que se pregunta al abrirla:
  *
- * Ahora va por este orden, que es el de las preguntas de quien la abre:
- *
- * 1. **¿Qué día es?** La oración de Jesús como lema, la fecha, el nombre
- *    que el calendario da a la semana —«22.º domingo después de
- *    Pentecostés»—, el tono, el ayuno y la fiesta, todo junto arriba.
- * 2. **¿Qué toca rezar?** El oficio de la hora, con su botón.
- * 3. **¿Qué celebra hoy la Iglesia?** El santo, el ayuno, la fiesta que se
- *    acerca, la del Monte Athos si la hay, y el Evangelio.
- * 4. **¿Cómo voy?** Los tres oficios, cada uno con su avance.
- * 5. **¿A dónde voy ahora?** Los atajos, en teselas, y lo último que se leyó.
- *
- * En escritorio, lo de la Iglesia y lo personal van en dos columnas.
+ * 1. **¿Qué día es?** La fecha, la semana, la fiesta, el tono y el ayuno.
+ * 2. **¿Qué toca rezar?** El oficio de la hora, con su botón, y debajo cómo van
+ *    los tres, en una fila.
+ * 3. **¿Qué celebra hoy la Iglesia?** El santo, el Evangelio y la próxima fiesta,
+ *    en una lista que lleva a cada cosa.
+ * 4. **Una palabra para el día**: el versículo y el apotegma.
+ * 5. **Por dónde ibas.**
  */
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useLiturgicalDay, useToday } from '@/hooks/useLiturgicalDay';
 import { useAsync } from '@/hooks/useAsync';
-import { useSaintLives } from '@/hooks/useSaintLives';
 import { listHistory } from '@/db/user';
 import { db } from '@/db/db';
 import { SEASON_LABELS, weekLabel } from '@/lib/calendar/liturgical';
@@ -38,33 +32,18 @@ import {
   toneLabel,
   WEEKDAYS,
 } from '@/lib/format';
-import { isFastDay } from '@/lib/calendar/fasting';
 import { officeNow } from '@/lib/office-time';
 import { nextGreatFeast } from '@/lib/calendar/next-feast';
-import { readingNote, readingTitle } from '@/lib/readings';
-import { ListRow, Panel, Section, Tag } from '@/components/ui';
-import { Tile, TileGrid } from '@/components/hub';
+import { readingTitle } from '@/lib/readings';
+import { ListRow, Section, Tag } from '@/components/ui';
 import { OfficeInvitation } from '@/features/office/OfficeInvitation';
 import { useOfficeProgress } from '@/features/office/useOfficeProgress';
 import { WelcomeCard } from './WelcomeCard';
 import { BackupReminder } from './BackupReminder';
-import { PericopeText } from '@/components/PericopeText';
 import { VerseOfDay } from '@/components/VerseOfDay';
 import { ApophthegmOfDay } from '@/components/ApophthegmOfDay';
-import {
-  IconBook,
-  IconCandle,
-  IconChotki,
-  IconCross,
-  IconMoon,
-  IconPray,
-  IconScroll,
-  IconStar,
-  IconSun,
-  OrthodoxCross,
-} from '@/components/icons';
+import { IconCross, IconMoon, IconSun, OrthodoxCross } from '@/components/icons';
 import { DAILY_OFFICES } from '@/content/hours';
-import { LENGTH_INFO } from '@/content/office-lengths';
 import { PlanToday } from '@/features/read/PlanToday';
 import { useSettings } from '@/stores/settings';
 import type { RuleTime } from '@/types';
@@ -83,7 +62,6 @@ export function HomePage() {
 
   const lead = day.feasts[0];
   const saint = day.saints[0];
-  const vidas = useSaintLives(saint ? [saint.id] : []);
   const gospel = day.readings?.readings.find((r) => r.kind === 'evangelio');
   const epistle = day.readings?.readings.find((r) => r.kind === 'epistola');
   const tono = fastTone(day);
@@ -156,146 +134,81 @@ export function HomePage() {
         </section>
 
         {/* ---------- Lo que toca rezar ---------- */}
-        <OfficeInvitation />
-      </div>
-
-      {/* Lo que uno se lleva puesto el resto del día: el versículo y, a su
-          lado, un dicho de los Padres del desierto. Iban al pie de la segunda
-          columna y casi nadie llegaba a verlos: ahora van justo debajo del
-          día. En el teléfono, uno debajo del otro. */}
-      <div className="home-sayings">
-        <VerseOfDay prominent />
-        <ApophthegmOfDay prominent />
+        <div className="home-pray">
+          <OfficeInvitation />
+          <TodayOffices today={today} />
+        </div>
       </div>
 
       <WelcomeCard />
       <BackupReminder />
+      <PlanToday />
 
       <div className="home-grid">
         {/* ---------- La Iglesia, hoy ---------- */}
-        <div className="home-col">
-          <Section title={es.home.today} action={{ label: es.home.seeDay, to: `/calendario/dia/${today}` }} id="hoy-iglesia">
-            <div className="day-cards">
-              <Link
-                to={saint ? `/calendario/santos/${saint.id}` : '/calendario/santos'}
-                className="day-card day-card--wide"
-                data-tone="gold"
-              >
-                <span className="eyebrow">{es.home.saintOfDay}</span>
-                <span className="day-card__title">{saint ? saint.name : es.home.noSaint}</span>
-                {saint && vidas[saint.id] ? <span className="day-card__text">{vidas[saint.id]}</span> : null}
-                {day.saints.length > 1 ? (
-                  <span className="muted text-sm">
-                    {day.saints.length === 2
-                      ? es.home.oneMoreSaint
-                      : es.home.moreSaints.replace('{{count}}', String(day.saints.length - 1))}
-                  </span>
-                ) : null}
-              </Link>
-
-              <Link to="/calendario/ayuno" className="day-card" data-tone={tono}>
-                <span className="eyebrow">{es.home.fasting}</span>
-                <span className="day-card__title">{day.fasting.label}</span>
-                {day.fasting.period && isFastDay(day.fasting) ? (
-                  <span className="day-card__text">{day.fasting.period}</span>
-                ) : (
-                  <span className="day-card__text">{day.fasting.reason}</span>
-                )}
-              </Link>
-
-              {fiestaAthos ? (
-                <Link
-                  to={
-                    fiestaAthos.monasteryId
-                      ? `/biblioteca/athos/monasterio/${fiestaAthos.monasteryId}`
-                      : '/biblioteca/athos/karyes'
-                  }
-                  className="day-card"
-                  data-tone="gold"
-                >
-                  <span className="eyebrow">{fiestaAthos.days === 0 ? es.home.athosToday : es.home.athosTomorrow}</span>
-                  <span className="day-card__title">{fiestaAthos.place}</span>
-                  <span className="day-card__text">{fiestaAthos.name}</span>
-                </Link>
-              ) : null}
-
-              {proxima ? (
-                <Link to={`/calendario/dia/${proxima.date}`} className="day-card" data-tone="gold">
-                  <span className="eyebrow">{es.home.nextFeast}</span>
-                  <span className="day-card__title">{proxima.name}</span>
-                  <span className="day-card__text">
-                    {proxima.days === 1
-                      ? es.home.tomorrow
-                      : es.home.inDays.replace('{{count}}', String(proxima.days))}{' '}
-                    · {formatDayMonth(proxima.date)}
-                  </span>
-                </Link>
-              ) : null}
-            </div>
-          </Section>
-
-          {/* ---------- El Evangelio del día ---------- */}
-          <Section title={es.home.gospel} action={{ label: es.home.allReadings, to: '/leer/lecturas' }} id="evangelio">
+        <Section title={es.home.today} action={{ label: es.home.seeDay, to: `/calendario/dia/${today}` }} id="hoy-iglesia">
+          <div className="list">
+            <ListRow
+              to={saint ? `/calendario/santos/${saint.id}` : '/calendario/santos'}
+              title={saint ? saint.name : es.home.noSaint}
+              meta={
+                day.saints.length > 2
+                  ? `${es.home.saintOfDay} · ${es.home.moreSaints.replace('{{count}}', String(day.saints.length - 1))}`
+                  : day.saints.length === 2
+                    ? `${es.home.saintOfDay} · ${es.home.oneMoreSaint}`
+                    : es.home.saintOfDay
+              }
+            />
             {gospel ? (
-              <Link to="/leer/lecturas" className="panel" style={{ display: 'block', textDecoration: 'none' }}>
-                <p className="display" style={{ fontSize: 'var(--text-lg)' }}>
-                  {readingTitle(gospel.reference)}
-                </p>
-                {gospel.note ? <p className="rubric">{readingNote(gospel.note)}</p> : null}
-                <div style={{ marginTop: 'var(--sp-3)' }}>
-                  <PericopeText reference={gospel.reference} compact maxVerses={4} />
-                </div>
-                <p className="section__action" style={{ marginTop: 'var(--sp-2)', paddingInline: 0 }}>
-                  {es.home.readWhole}
-                </p>
-              </Link>
-            ) : (
-              <Panel variant="quiet">
-                <p className="muted text-sm">{es.app.pending}</p>
-              </Panel>
-            )}
-
-            {epistle ? (
-              <Link to="/leer/lecturas" className="reading-card" style={{ marginTop: 'var(--sp-3)' }}>
-                <span className="reading-card__icon" aria-hidden="true">
-                  <IconScroll size={18} />
-                </span>
-                <span className="reading-card__body">
-                  <span className="eyebrow">{es.home.epistle}</span>
-                  <span className="reading-card__ref">{readingTitle(epistle.reference)}</span>
-                </span>
-              </Link>
+              <ListRow
+                to="/leer/lecturas"
+                title={readingTitle(gospel.reference)}
+                meta={
+                  epistle
+                    ? `${es.home.gospel} · ${es.home.epistle}: ${readingTitle(epistle.reference)}`
+                    : es.home.gospel
+                }
+              />
             ) : null}
-          </Section>
-        </div>
+            {fiestaAthos ? (
+              <ListRow
+                to={
+                  fiestaAthos.monasteryId
+                    ? `/biblioteca/athos/monasterio/${fiestaAthos.monasteryId}`
+                    : '/biblioteca/athos/karyes'
+                }
+                title={fiestaAthos.place}
+                meta={`${fiestaAthos.days === 0 ? es.home.athosToday : es.home.athosTomorrow} · ${fiestaAthos.name}`}
+              />
+            ) : null}
+            {proxima ? (
+              <ListRow
+                to={`/calendario/dia/${proxima.date}`}
+                title={proxima.name}
+                meta={`${es.home.nextFeast} · ${
+                  proxima.days === 1 ? es.home.tomorrow : es.home.inDays.replace('{{count}}', String(proxima.days))
+                } · ${formatDayMonth(proxima.date)}`}
+              />
+            ) : null}
+          </div>
+        </Section>
 
-        {/* ---------- Lo tuyo ---------- */}
-        <div className="home-col">
-          <TodayOffices today={today} />
-          <PlanToday />
-
-          <Section title={es.home.quickActions} id="accesos">
-            <TileGrid>
-              <Tile to="/orar/oraciones" icon={IconPray} title={es.prayers.title} hint={es.home.quickPrayers} />
-              <Tile to="/orar/oracion-de-jesus" icon={IconChotki} title={es.home.jesusPrayer} hint={es.home.quickJesus} />
-              <Tile to="/leer/salterio" icon={IconScroll} title={es.psalter.title} hint={es.home.quickPsalter} />
-              <Tile to="/leer/biblia" icon={IconBook} title={es.bible.title} hint={es.home.quickBible} />
-              <Tile to="/calendario/santos" icon={IconCandle} title={es.saints.title} hint={es.home.quickSaints} />
-              <Tile to="/favoritos" icon={IconStar} title={es.favorites.title} hint={es.home.quickFavorites} />
-            </TileGrid>
-          </Section>
-
-          {history.data && history.data.length > 0 ? (
-            <Section title={es.home.continueReading} id="historial">
-              <div className="list">
-                {history.data.map((entry) => (
-                  <ListRow key={entry.id} to={entry.path} title={entry.title} meta={entry.kind} />
-                ))}
-              </div>
-            </Section>
-          ) : null}
+        {/* ---------- Una palabra para el día ---------- */}
+        <div className="home-sayings">
+          <VerseOfDay />
+          <ApophthegmOfDay />
         </div>
       </div>
+
+      {history.data && history.data.length > 0 ? (
+        <Section title={es.home.continueReading} id="historial">
+          <div className="list">
+            {history.data.slice(0, 3).map((entry) => (
+              <ListRow key={entry.id} to={entry.path} title={entry.title} meta={entry.kind} />
+            ))}
+          </div>
+        </Section>
+      ) : null}
 
       <p className="muted text-sm text-center" style={{ marginTop: 'var(--sp-6)' }}>
         {es.home.pascha.replace('{{date}}', formatLongDate(day.paschaDate))}
@@ -304,52 +217,40 @@ export function HomePage() {
   );
 }
 
-/** Los tres oficios del día, cada uno con su avance y su enlace. */
+/** Los tres oficios del día en una fila: cuál toca y cuál está hecho. */
 function TodayOffices({ today }: { today: string }) {
   const progreso = useOfficeProgress(today);
   const horas = useSettings((s) => s.officeHours);
-  const medidas = useSettings((s) => s.officeLength);
   const ahora = officeNow(new Date().getHours(), horas);
+  const corto: Record<RuleTime, string> = { manana: es.rule.morning, mediodia: es.rule.midday, noche: es.rule.evening };
 
   return (
-    <Section title={es.home.rule} action={{ label: es.home.editRule, to: '/orar/regla' }} id="regla">
-      <div className="office-rows">
-        {DAILY_OFFICES.map((oficio) => {
-          const p = progreso.data?.get(oficio.time);
-          const ratio = p?.ratio ?? 0;
-          const hecho = ratio >= 1;
-          const esAhora = oficio.time === ahora;
-          const Icono = ICONO_DEL_OFICIO[oficio.time];
-          // La medida en que se rezó, si ya está; si no, la que tiene elegida.
-          const medida = (hecho ? p?.length : undefined) ?? medidas?.[oficio.time] ?? 'habitual';
-          const estado = hecho
-            ? es.home.officeDone
-            : ratio > 0
-              ? `${Math.round(ratio * 100)} %`
-              : esAhora
-                ? es.prayers.now
-                : es.home.officePending;
-          return (
-            <Link
-              key={oficio.time}
-              to={`/orar/oficio/${oficio.time}`}
-              className={`office-row${esAhora ? ' office-row--now' : ''}${hecho ? ' office-row--done' : ''}`}
-            >
-              <Icono size={20} className="office-row__icon" aria-hidden="true" />
-              <span className="office-row__name">
-                {oficio.name}
-                {medida !== 'habitual' ? (
-                  <span className="office-row__length"> · {LENGTH_INFO.get(medida)?.label.toLowerCase()}</span>
-                ) : null}
-              </span>
-              <span className="office-row__state">{estado}</span>
-              <span className="office-row__bar" aria-hidden="true">
-                <span style={{ width: `${Math.round(ratio * 100)}%` }} />
-              </span>
-            </Link>
-          );
-        })}
-      </div>
-    </Section>
+    <nav className="office-chips" aria-label={es.home.rule}>
+      {DAILY_OFFICES.map((oficio) => {
+        const ratio = progreso.data?.get(oficio.time)?.ratio ?? 0;
+        const hecho = ratio >= 1;
+        const esAhora = oficio.time === ahora;
+        const Icono = ICONO_DEL_OFICIO[oficio.time];
+        const estado = hecho
+          ? es.home.officeDone
+          : ratio > 0
+            ? `${Math.round(ratio * 100)} %`
+            : esAhora
+              ? es.prayers.now
+              : es.home.officePending;
+        return (
+          <Link
+            key={oficio.time}
+            to={`/orar/oficio/${oficio.time}`}
+            className={`office-chip${esAhora ? ' office-chip--now' : ''}${hecho ? ' office-chip--done' : ''}`}
+            aria-label={`${oficio.name}: ${estado}`}
+          >
+            <Icono size={16} aria-hidden="true" />
+            <span className="office-chip__name">{corto[oficio.time]}</span>
+            <span className="office-chip__state">{estado}</span>
+          </Link>
+        );
+      })}
+    </nav>
   );
 }

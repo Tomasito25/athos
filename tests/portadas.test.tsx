@@ -61,8 +61,12 @@ describe('Inicio', () => {
 
   it('enseña cada uno de los tres oficios, y no una suma de pasos', async () => {
     montar('/');
+    // En una fila bajo el oficio de la hora, con el nombre entero para quien no ve.
     for (const oficio of DAILY_OFFICES) {
-      await espera(new RegExp(oficio.name, 'i'));
+      await waitFor(
+        () => expect(screen.getAllByRole('link', { name: new RegExp(oficio.name, 'i') }).length).toBeGreaterThan(0),
+        { timeout: 8000 },
+      );
     }
     expect(screen.queryByText(/\d+ de \d+$/)).toBeNull();
   });

@@ -2509,10 +2509,6 @@ input[type='range']:focus-visible::-webkit-slider-thumb {
   color: var(--ink-muted);
 }
 
-.welcome__subtitle {
-  font-size: var(--text-base);
-  margin: var(--sp-4) 0 var(--sp-2);
-}
 
 /* ---------- Los nombres de la lista, en la conmemoración ---------- */
 

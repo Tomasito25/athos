@@ -10,56 +10,26 @@
 
 /* ---------------- Cabecera de sección ---------------- */
 
-/* La portada de cada sección: el medallón, el título grande y una línea que
-   dice qué hay. Plana, con un fondo apenas teñido, para que lo que manda sea
-   el título y no la caja. */
+/* La portada de cada sección: un signo pequeño, el título y una línea. Era una
+   caja con medallón, anillo punteado y cinta, que se comía media pantalla del
+   teléfono antes de enseñar nada. */
 .hub-hero {
-  position: relative;
-  isolation: isolate;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  gap: var(--sp-4);
-  margin: var(--sp-4) 0 var(--sp-5);
-  padding: var(--sp-5) var(--sp-4);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-xl);
-  background:
-    radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, var(--gold) 9%, transparent), transparent 55%),
-    var(--surface);
-  box-shadow: var(--shadow-sm);
-  overflow: hidden;
-}
-
-/* Con ornamentos, la cinta de colores del borde de un mosaico de ábside. */
-:root[data-ornaments='si'] .hub-hero::after {
-  content: '';
-  position: absolute;
-  inset-inline: 0;
-  bottom: 0;
-  height: 3px;
-  background: var(--mosaic-band);
-  opacity: 0.6;
+  gap: var(--sp-3);
+  margin: var(--sp-4) 0 var(--sp-4);
 }
 
 .hub-hero__medal {
-  position: relative;
   display: grid;
   place-items: center;
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
   border-radius: 50%;
   color: var(--gold);
-  background: var(--halo), var(--surface-2);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gold) 34%, transparent);
-}
-
-:root[data-ornaments='si'] .hub-hero__medal::before {
-  content: '';
-  position: absolute;
-  inset: -6px;
-  border-radius: 50%;
-  border: 1.5px dotted color-mix(in srgb, var(--gold) 45%, transparent);
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gold) 30%, transparent);
 }
 
 .hub-hero__title {
@@ -69,9 +39,9 @@
 }
 
 .hub-hero__sub {
-  margin-top: var(--sp-1);
+  margin-top: 2px;
   font-size: var(--text-sm);
-  line-height: 1.5;
+  line-height: 1.45;
   color: var(--ink-soft);
   text-wrap: pretty;
 }
@@ -81,22 +51,8 @@
 }
 
 @media (min-width: 48rem) {
-  .hub-hero {
-    gap: var(--sp-5);
-    padding: var(--sp-6);
-  }
-
-  .hub-hero__medal {
-    width: 4.25rem;
-    height: 4.25rem;
-  }
-
   .hub-hero__title {
     font-size: var(--text-3xl);
-  }
-
-  .hub-hero__sub {
-    font-size: var(--text-base);
   }
 }
 
@@ -240,6 +196,9 @@
   flex: 1;
   min-width: 0;
   font-size: var(--text-base);
+  /* Partir por sílabas y no a media palabra: «Apotegma-s» se leía mal. */
+  overflow-wrap: normal;
+  hyphens: auto;
 }
 
 .tile-grid--compact .tile__hint {
@@ -314,6 +273,58 @@
   margin: 0 auto;
 }
 
+.home-pray {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.office-chips {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-2);
+  width: 100%;
+  max-width: 36rem;
+  margin: 0 auto;
+}
+
+.office-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-height: 3.5rem;
+  padding: var(--sp-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+  text-decoration: none;
+}
+
+.office-chip:hover {
+  border-color: var(--accent-line);
+}
+
+.office-chip__name {
+  color: var(--ink-strong);
+}
+
+.office-chip__state {
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+.office-chip--now {
+  border-color: var(--accent-line);
+  background: linear-gradient(180deg, var(--accent-wash), transparent 80%), var(--surface);
+}
+
+.office-chip--done .office-chip__state {
+  color: var(--accent);
+}
+
 @media (min-width: 80rem) {
   .home-top {
     grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
@@ -323,10 +334,10 @@
   /* El arco ocupa el alto del día que tiene al lado, centrado en su hueco. */
   .home-top .office-invite {
     display: flex;
+    flex: 1;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100%;
     margin-block: 0;
   }
 }
@@ -753,10 +764,8 @@
 /* ---------------- Alto contraste y movimiento ---------------- */
 
 :root[data-contrast='high'] .hub-hero::before,
-:root[data-contrast='high'] .hub-hero::after,
 :root[data-contrast='high'] .today-hero::before,
-:root[data-contrast='high'] .today-hero::after,
-:root[data-contrast='high'] .hub-hero__medal::before {
+:root[data-contrast='high'] .today-hero::after {
   display: none;
 }
 
@@ -1017,52 +1026,11 @@ button.cal-cell:hover {
   font-size: var(--text-xl);
 }
 
-.welcome__list {
-  display: grid;
-  gap: var(--sp-2);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
 
-@media (min-width: 48rem) {
-  .welcome__list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
 
-.welcome__item {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--sp-3);
-  padding: var(--sp-2);
-  border-radius: var(--radius);
-  color: var(--ink-soft);
-  font-size: var(--text-sm);
-  line-height: 1.45;
-  text-decoration: none;
-}
 
-.welcome__item:hover {
-  background: var(--surface-2);
-}
 
-.welcome__item b {
-  font-weight: 600;
-  color: var(--ink-strong);
-}
 
-.welcome__icon {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  color: var(--gold);
-  background: var(--halo);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gold) 32%, transparent);
-}
 
 /* ---------------- Índices largos en rejilla menuda ----------------
    Los libros de la Biblia, las kathismas, las grandes fiestas: decenas de
@@ -1830,23 +1798,13 @@ body:has(.update-banner) .toast-region {
 }
 
 /* ---------------- Lo propio de hoy ---------------- */
-.today-devotions {
-  display: grid;
-  gap: var(--sp-3);
-}
-
-.today-devotions__lead {
+.today-devotions > summary {
   font-family: var(--font-serif);
-  font-size: var(--text-md);
   color: var(--ink-strong);
 }
 
-.today-devotions__lead .eyebrow {
+.today-devotions > summary .eyebrow {
   margin-inline-end: var(--sp-1);
-}
-
-.today-devotions__fold {
-  margin-top: 0;
 }
 
 .today-devotions .day-troparion {
